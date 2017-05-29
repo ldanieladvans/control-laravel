@@ -15,7 +15,7 @@ class User extends Authenticatable
      * @var array
      */
     protected $fillable = [
-        'name', 'email', 'password',
+        'name', 'email', 'password', 'usrc_nick', 'uscr_tel', 'usrc_super', 'usrc_ult_acces', 'usrc_activo', 'usrc_distrib_id'
     ];
 
     /**
@@ -26,4 +26,9 @@ class User extends Authenticatable
     protected $hidden = [
         'password', 'remember_token',
     ];
+
+    public function distributor()
+    {
+        return $this->belongsTo('App\Distributor','usrc_distrib_id');
+    }
 }

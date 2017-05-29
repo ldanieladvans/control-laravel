@@ -22,7 +22,7 @@ class CreateUsersTable extends Migration
             $table->timestamps();
             //Added
             $table->string('usrc_nick',10);
-            $table->string('uscr_tel',15);
+            $table->string('usrc_tel',15);
             $table->boolean('usrc_super');
             $table->timestampTz('usrc_ult_acces')->nullable();
             $table->boolean('usrc_activo');
