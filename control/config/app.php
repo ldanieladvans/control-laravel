@@ -12,7 +12,8 @@ return [
     | any other location as required by the application or its packages.
     */
 
-    'name' => env('APP_NAME', 'Laravel'),
+    //The original value was Laravel
+    'name' => env('APP_NAME', 'Control'),
 
     /*
     |--------------------------------------------------------------------------
@@ -25,7 +26,8 @@ return [
     |
     */
 
-    'env' => env('APP_ENV', 'production'),
+    //The original value was production
+    'env' => env('APP_ENV', 'develop'),
 
     /*
     |--------------------------------------------------------------------------
@@ -38,7 +40,8 @@ return [
     |
     */
 
-    'debug' => env('APP_DEBUG', false),
+    //The original value was false
+    'debug' => env('APP_DEBUG', true),
 
     /*
     |--------------------------------------------------------------------------
@@ -64,7 +67,8 @@ return [
     |
     */
 
-    'timezone' => 'UTC',
+    //The original value was UTC
+    'timezone' => 'America/Merida',
 
     /*
     |--------------------------------------------------------------------------
@@ -77,6 +81,7 @@ return [
     |
     */
 
+    //The original value was UTC
     'locale' => 'en',
 
     /*
@@ -176,6 +181,11 @@ return [
         // App\Providers\BroadcastServiceProvider::class,
         App\Providers\EventServiceProvider::class,
         App\Providers\RouteServiceProvider::class,
+
+        /**
+         * Third Party Service Providers...
+         */
+        Bican\Roles\RolesServiceProvider::class,
 
     ],
 
