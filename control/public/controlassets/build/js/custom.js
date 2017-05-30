@@ -128,8 +128,10 @@ $MENU_TOGGLE.on('click', function() {
 	}).parent().addClass('active');
 
 	// recompute content when resizing
-	$(window).smartresize(function(){  
-		setContentHeight();
+	$(window).smartresize(function(){
+		//TODO This was commented because enter in a infinitum loop  
+		//setContentHeight();
+		console.log("Quit smart resizing");
 	});
 
 	setContentHeight();

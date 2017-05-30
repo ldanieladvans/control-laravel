@@ -1,19 +1,19 @@
 @extends('template.apptemplate')
 
-@section('app_title', 'Control App')
+@section('app_title','Control App')
 
 @section('app_css')
 	@parent
     <!-- iCheck -->
-    <link href="{{ asset(controlassets/vendors/iCheck/skins/flat/green.css) }}" rel="stylesheet">	
+    <link href="{{ asset('controlassets/vendors/iCheck/skins/flat/green.css') }}" rel="stylesheet">	
     <!-- bootstrap-progressbar -->
-    <link href="{{ asset(controlassets/vendors/bootstrap-progressbar/css/bootstrap-progressbar-3.3.4.min.css) }}" rel="stylesheet">
+    <link href="{{ asset('controlassets/vendors/bootstrap-progressbar/css/bootstrap-progressbar-3.3.4.min.css') }}" rel="stylesheet">
     <!-- JQVMap -->
-    <link href="{{ asset(controlassets/vendors/jqvmap/dist/jqvmap.min.css) }}" rel="stylesheet"/>
+    <link href="{{ asset('controlassets/vendors/jqvmap/dist/jqvmap.min.css') }}" rel="stylesheet"/>
     <!-- bootstrap-daterangepicker -->
-    <link href="{{ asset(controlassets/vendors/bootstrap-daterangepicker/daterangepicker.css) }}" rel="stylesheet">
+    <link href="{{ asset('controlassets/vendors/bootstrap-daterangepicker/daterangepicker.css') }}" rel="stylesheet">
     <!-- Custom Theme Style -->
-    <link href="{{ asset(controlassets/build/css/custom.min.css) }}" rel="stylesheet">
+    <link href="{{ asset('controlassets/build/css/custom.min.css') }}" rel="stylesheet">
 @endsection
 
 @section('app_body')
@@ -35,7 +35,7 @@
 					        </div>
 					        <div class="profile_info">
 					          <span>Welcome,</span>
-					          <h2>John Doe</h2>
+					          <h2>{{ Auth::user()->name }}</h2>
 					        </div>
 					      </div>
 					      <!-- /menu profile quick info -->
@@ -175,19 +175,29 @@
 				              <ul class="nav navbar-nav navbar-right">
 				                <li class="">
 				                  <a href="javascript:;" class="user-profile dropdown-toggle" data-toggle="dropdown" aria-expanded="false">
-				                    <img src="images/img.jpg" alt="">John Doe
+				                    <img src="images/img.jpg" alt="">{{ Auth::user()->name }}
 				                    <span class=" fa fa-angle-down"></span>
 				                  </a>
 				                  <ul class="dropdown-menu dropdown-usermenu pull-right">
 				                    <li><a href="javascript:;"> Profile</a></li>
-				                    <li>
-				                      <a href="javascript:;">
-				                        <span class="badge bg-red pull-right">50%</span>
-				                        <span>Settings</span>
-				                      </a>
-				                    </li>
-				                    <li><a href="javascript:;">Help</a></li>
-				                    <li><a href="login.html"><i class="fa fa-sign-out pull-right"></i> Log Out</a></li>
+				                    @if (Auth::guest())
+			                            <li><a href="{{ route('login') }}">Login</a></li>
+			                            <li><a href="{{ route('register') }}">Register</a></li>
+			                        @else
+			                            <li class="dropdown">
+			                                    <li>
+			                                        <a href="{{ route('logout') }}"
+			                                            onclick="event.preventDefault();
+			                                                     document.getElementById('logout-form').submit();">
+			                                            Logout
+			                                        </a>
+
+			                                        <form id="logout-form" action="{{ route('logout') }}" method="POST" style="display: none;">
+			                                            {{ csrf_field() }}
+			                                        </form>
+			                                    </li>
+			                            </li>
+			                        @endif
 				                  </ul>
 				                </li>
 
@@ -262,66 +272,57 @@
 				    <!-- /top navigation -->
 				@show
 
-				@section('app_page_content')
+				
 					<!-- page content -->
 				        <div class="right_col" role="main">
 				 			@yield('app_content')
 				        </div>
 				    <!-- /page content -->
-				@endsection
+				<footer></footer>
 
-				@section('app_footer_content')
-					<!-- footer content -->
-				        <footer>
-				          <div class="pull-right">
-				            Gentelella - Bootstrap Admin Template by <a href="https://colorlib.com">Colorlib</a>
-				          </div>
-				          <div class="clearfix"></div>
-				        </footer>
-        			<!-- /footer content -->
-				@endsection
+				        
 			</div>
 		</div>
 		@section('app_js')
             <!-- jQuery -->
-		    <script src="{{ asset(controlassets/vendors/jquery/dist/jquery.min.js) }}"></script>
+		    <script src="{{ asset('controlassets/vendors/jquery/dist/jquery.min.js') }}"></script>
 		    <!-- Bootstrap -->
-		    <script src="{{ asset(controlassets/vendors/bootstrap/dist/js/bootstrap.min.js) }}"></script>
+		    <script src="{{ asset('controlassets/vendors/bootstrap/dist/js/bootstrap.min.js') }}"></script>
 		    <!-- FastClick -->
-		    <script src="{{ asset(controlassets/vendors/fastclick/lib/fastclick.js) }}"></script>
+		    <script src="{{ asset('controlassets/vendors/fastclick/lib/fastclick.js') }}"></script>
 		    <!-- NProgress -->
-		    <script src="{{ asset(controlassets/vendors/nprogress/nprogress.js) }}"></script>
-		    <!-- Chart.js) }} -->
-		    <script src="{{ asset(controlassets/vendors/Chart.js) }}/dist/Chart.min.js) }}"></script>
-		    <!-- gauge.js) }} -->
-		    <script src="{{ asset(controlassets/vendors/gauge.js) }}/dist/gauge.min.js) }}"></script>
+		    <script src="{{ asset('controlassets/vendors/nprogress/nprogress.js') }}"></script>
+		    <!-- Chart.js') }} -->
+		    <script src="{{ asset('controlassets/vendors/Chart.js') }}/dist/Chart.min.js') }}"></script>
+		    <!-- gauge.js') }} -->
+		    <script src="{{ asset('controlassets/vendors/gauge.js') }}/dist/gauge.min.js') }}"></script>
 		    <!-- bootstrap-progressbar -->
-		    <script src="{{ asset(controlassets/vendors/bootstrap-progressbar/bootstrap-progressbar.min.js) }}"></script>
+		    <script src="{{ asset('controlassets/vendors/bootstrap-progressbar/bootstrap-progressbar.min.js') }}"></script>
 		    <!-- iCheck -->
-		    <script src="{{ asset(controlassets/vendors/iCheck/icheck.min.js) }}"></script>
+		    <script src="{{ asset('controlassets/vendors/iCheck/icheck.min.js') }}"></script>
 		    <!-- Skycons -->
-		    <script src="{{ asset(controlassets/vendors/skycons/skycons.js) }}"></script>
+		    <script src="{{ asset('controlassets/vendors/skycons/skycons.js') }}"></script>
 		    <!-- Flot -->
-		    <script src="{{ asset(controlassets/vendors/Flot/jquery.flot.js) }}"></script>
-		    <script src="{{ asset(controlassets/vendors/Flot/jquery.flot.pie.js) }}"></script>
-		    <script src="{{ asset(controlassets/vendors/Flot/jquery.flot.time.js) }}"></script>
-		    <script src="{{ asset(controlassets/vendors/Flot/jquery.flot.stack.js) }}"></script>
-		    <script src="{{ asset(controlassets/vendors/Flot/jquery.flot.resize.js) }}"></script>
+		    <script src="{{ asset('controlassets/vendors/Flot/jquery.flot.js') }}"></script>
+		    <script src="{{ asset('controlassets/vendors/Flot/jquery.flot.pie.js') }}"></script>
+		    <script src="{{ asset('controlassets/vendors/Flot/jquery.flot.time.js') }}"></script>
+		    <script src="{{ asset('controlassets/vendors/Flot/jquery.flot.stack.js') }}"></script>
+		    <script src="{{ asset('controlassets/vendors/Flot/jquery.flot.resize.js') }}"></script>
 		    <!-- Flot plugins -->
-		    <script src="{{ asset(controlassets/vendors/flot.orderbars/js/jquery.flot.orderBars.js) }}"></script>
-		    <script src="{{ asset(controlassets/vendors/flot-spline/js/jquery.flot.spline.min.js) }}"></script>
-		    <script src="{{ asset(controlassets/vendors/flot.curvedlines/curvedLines.js) }}"></script>
+		    <script src="{{ asset('controlassets/vendors/flot.orderbars/js/jquery.flot.orderBars.js') }}"></script>
+		    <script src="{{ asset('controlassets/vendors/flot-spline/js/jquery.flot.spline.min.js') }}"></script>
+		    <script src="{{ asset('controlassets/vendors/flot.curvedlines/curvedLines.js') }}"></script>
 		    <!-- DateJS -->
-		    <script src="{{ asset(controlassets/vendors/DateJS/build/date.js) }}"></script>
+		    <script src="{{ asset('controlassets/vendors/DateJS/build/date.js') }}"></script>
 		    <!-- JQVMap -->
-		    <script src="{{ asset(controlassets/vendors/jqvmap/dist/jquery.vmap.js) }}"></script>
-		    <script src="{{ asset(controlassets/vendors/jqvmap/dist/maps/jquery.vmap.world.js) }}"></script>
-		    <script src="{{ asset(controlassets/vendors/jqvmap/examples/js/jquery.vmap.sampledata.js) }}"></script>
+		    <script src="{{ asset('controlassets/vendors/jqvmap/dist/jquery.vmap.js') }}"></script>
+		    <script src="{{ asset('controlassets/vendors/jqvmap/dist/maps/jquery.vmap.world.js') }}"></script>
+		    <script src="{{ asset('controlassets/vendors/jqvmap/examples/js/jquery.vmap.sampledata.js') }}"></script>
 		    <!-- bootstrap-daterangepicker -->
-		    <script src="{{ asset(controlassets/vendors/moment/min/moment.min.js) }}"></script>
-		    <script src="{{ asset(controlassets/vendors/bootstrap-daterangepicker/daterangepicker.js) }}"></script>
+		    <script src="{{ asset('controlassets/vendors/moment/min/moment.min.js') }}"></script>
+		    <script src="{{ asset('controlassets/vendors/bootstrap-daterangepicker/daterangepicker.js') }}"></script>
 		    <!-- Custom Theme Scripts -->
-		    <script src="{{ asset(controlassets/build/js/custom.min.js) }}"></script>
+		    <script src="{{ asset('controlassets/build/js/custom.js') }}"></script>
         @show
 	</body>
 @endsection
