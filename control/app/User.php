@@ -31,4 +31,9 @@ class User extends Authenticatable
     {
         return $this->belongsTo('App\Distributor','usrc_distrib_id');
     }
+
+    public function binnacles()
+    {
+        return $this->hasMany('App\Binnacle','bitc_usrc_id');
+    }
 }

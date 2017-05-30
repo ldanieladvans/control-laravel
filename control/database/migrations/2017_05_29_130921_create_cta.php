@@ -19,11 +19,11 @@ class CreateCta extends Migration
             //Added
             $table->integer('cta_cliente_id')->unsigned()->nullable();
             $table->integer('cta_distrib_id')->unsigned()->nullable();
-            $table->string('cta_nomservd',20);
-            $table->string('cta_num',25);
-            $table->time('cta_fecha');
-            $table->string('cta_nom_bd',25);
-            $table->string('cta_estado',20);
+            $table->string('cta_nomservd',20)->nullable();
+            $table->string('cta_num',25)->nullable();
+            $table->time('cta_fecha')->nullable();
+            $table->string('cta_nom_bd',25)->nullable();
+            $table->string('cta_estado',20)->nullable();
         });
     }
 

@@ -19,17 +19,17 @@ class CreateCliente extends Migration
             //Added
             $table->integer('cliente_refer_id')->unsigned()->nullable();
             $table->string('cliente_nom',80);
-            $table->string('cliente_sexo',15);
-            $table->time('cliente_f_nac');
+            $table->string('cliente_sexo',15)->nullable();
+            $table->time('cliente_f_nac')->nullable();
             $table->string('cliente_rfc',13);
-            $table->string('cliente_tipo',15);
-            $table->string('cliente_tel',20);
-            $table->string('cliente_correo',25);
-            $table->string('cliente_nac',20);
-            $table->integer('cliente_sector');
+            $table->string('cliente_tipo',15)->nullable();
+            $table->string('cliente_tel',20)->nullable();
+            $table->string('cliente_correo',25)->nullable();
+            $table->string('cliente_nac',20)->nullable();
+            $table->integer('cliente_sector')->nullable();
             $table->timestampTz('cliente_f_creac')->nullable();
             $table->integer('cliente_dom_id')->unsigned()->nullable();
-            $table->boolean('cliente_activo');
+            $table->boolean('cliente_activo')->default(1);
         });
     }
 

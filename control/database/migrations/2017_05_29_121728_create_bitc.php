@@ -19,13 +19,13 @@ class CreateBitc extends Migration
             //Added
             $table->integer('bitc_usrc_id')->unsigned()->nullable();
             $table->timestampTz('bitc_fecha')->nullable();
-            $table->string('bitc_tipo_op',25);
-            $table->string('bitc_ip',20);
-            $table->string('bitc_naveg',20);
-            $table->string('bitc_modulo',30);
-            $table->text('bitc_result');
-            $table->text('bitc_msj');
-            $table->text('bitc_dat');
+            $table->string('bitc_tipo_op',25)->nullable();
+            $table->string('bitc_ip',20)->nullable();
+            $table->string('bitc_naveg',20)->nullable();
+            $table->string('bitc_modulo',30)->nullable();
+            $table->text('bitc_result')->nullable();
+            $table->text('bitc_msj')->nullable();
+            $table->text('bitc_dat')->nullable();
         });
     }
 

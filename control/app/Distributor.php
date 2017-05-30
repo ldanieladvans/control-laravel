@@ -16,4 +16,25 @@ class Distributor extends Model
     {
         return $this->hasMany('App\User','usrc_distrib_id');
     }
+
+    //Many2many version commented because the extra data
+    /*public function packages()
+    {
+        return $this->belongsToMany('App\Package', 'asigpaq', 'asigpaq_distrib_id', 'asigpaq_paq_id');
+    }*/
+
+    public function packages()
+    {
+        return $this->hasMany('App\Packageassignation','asigpaq_distrib_id');
+    }
+
+    public function accounts()
+    {
+        return $this->hasMany('App\Account','cta_distrib_id');
+    }
+
+    public function domicile()
+    {
+        return $this->belongsTo('App\Domicile','distrib_dom_id');
+    }
 }

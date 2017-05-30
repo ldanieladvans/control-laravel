@@ -19,13 +19,13 @@ class CreateAsigpaq extends Migration
             //Added
             $table->integer('asigpaq_distrib_id')->unsigned()->nullable();
             $table->integer('asigpaq_paq_id')->unsigned()->nullable();
-            $table->float('asigpaq_gig');
-            $table->integer('asigpaq_rfc');
+            $table->float('asigpaq_gig')->nullable();
+            $table->integer('asigpaq_rfc')->nullable();
             $table->timestampTz('asigpaq_f_vent')->nullable();
             $table->timestampTz('asigpaq_f_act')->nullable();
             $table->timestampTz('asigpaq_f_fin')->nullable();
             $table->timestampTz('asigpaq_f_caduc')->nullable();
-            $table->boolean('asigpaq_activo');
+            $table->boolean('asigpaq_activo')->default(1);
         });
     }
 

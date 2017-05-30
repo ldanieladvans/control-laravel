@@ -17,15 +17,15 @@ class CreateUsersTable extends Migration
             $table->increments('id');
             $table->string('name',50);
             $table->string('email',25)->unique();
-            $table->string('password',25);
+            $table->string('password',25)->nullable();
             $table->rememberToken();
             $table->timestamps();
             //Added
             $table->string('usrc_nick',10);
-            $table->string('usrc_tel',15);
-            $table->boolean('usrc_super');
+            $table->string('usrc_tel',15)->nullable();
+            $table->boolean('usrc_super')->default(0);
             $table->timestampTz('usrc_ult_acces')->nullable();
-            $table->boolean('usrc_activo');
+            $table->boolean('usrc_activo')->default(1);
             $table->integer('usrc_distrib_id')->unsigned()->nullable();
         });
     }

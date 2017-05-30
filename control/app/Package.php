@@ -11,4 +11,20 @@ class Package extends Model
     protected $fillable = [
         'paq_nom', 'paq_gig', 'paq_rfc'
     ];
+
+    //Many2many version commented because the extra data
+    /*public function distributors()
+    {
+        return $this->belongsToMany('App\Distributor', 'asigpaq', 'asigpaq_paq_id', 'asigpaq_distrib_id');
+    }*/
+
+    public function distributors()
+    {
+        return $this->hasMany('App\Packageassignation','asigpaq_paq_id');
+    }
+
+    public function accounts()
+    {
+        return $this->hasMany('App\Account','appcta_paq_id');
+    }
 }

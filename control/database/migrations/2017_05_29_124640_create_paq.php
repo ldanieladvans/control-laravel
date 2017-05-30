@@ -18,8 +18,8 @@ class CreatePaq extends Migration
             $table->timestamps();
             //Added
             $table->string('paq_nom',20);
-            $table->float('paq_gig');
-            $table->integer('paq_rfc');;
+            $table->float('paq_gig')->nullable();
+            $table->integer('paq_rfc')->nullable();
         });
     }
 

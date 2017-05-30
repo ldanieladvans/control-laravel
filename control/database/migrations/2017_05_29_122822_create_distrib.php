@@ -19,16 +19,16 @@ class CreateDistrib extends Migration
             //Added
             $table->string('distrib_nom',80);
             $table->string('distrib_rfc',13);
-            $table->time('distrib_f_nac');
-            $table->float('distrib_limitgig');
-            $table->integer('distrib_limitrfc');
-            $table->string('distrib_tel',20);
-            $table->string('distrib_correo',25);
-            $table->string('distrib_sector',30);
-            $table->string('distrib_nac',20);
-            $table->boolean('distrib_sup');
+            $table->time('distrib_f_nac')->nullable();
+            $table->float('distrib_limitgig')->nullable();
+            $table->integer('distrib_limitrfc')->nullable();
+            $table->string('distrib_tel',20)->nullable();
+            $table->string('distrib_correo',25)->nullable();
+            $table->string('distrib_sector',30)->nullable();
+            $table->string('distrib_nac',20)->nullable();
+            $table->boolean('distrib_sup')->default(0);
             $table->timestampTz('distrib_f_creac')->nullable();
-            $table->boolean('distrib_activo');
+            $table->boolean('distrib_activo')->default(1);
             $table->integer('distrib_dom_id')->unsigned()->nullable();
         });
     }

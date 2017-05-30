@@ -18,7 +18,7 @@ class CreateRefer extends Migration
             $table->timestamps();
             //Added
             $table->string('refer_nom',50);
-            $table->string('refer_rfc',13);
+            $table->string('refer_rfc',13)->nullable();
         });
     }
 
