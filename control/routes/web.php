@@ -18,3 +18,10 @@ Route::get('/', function () {
 Auth::routes();
 
 Route::get('/home', 'HomeController@index')->name('home');
+
+/*Route::group(['prefix' => 'cuenta'], function () {
+    Route::resource('account', 'AccountController');
+});*/
+
+Route::resource('account', 'AccountController');
+

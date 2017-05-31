@@ -16,4 +16,10 @@
 </div>
 @endsection
 
+@section('app_js') 
+    @parent
+    <!-- Custom Theme Scripts -->
+    <script src="{{ asset('controlassets/build/js/custom.js') }}"></script>
+@endsection
+
 
