@@ -43,7 +43,7 @@
 					        <div class="menu_section">
 					          <h3>Menus</h3>
 					          <ul class="nav side-menu">
-					            <li><a><i class="fa fa-home"></i> Inicio </span></a>
+					            <li><a href="{{ route('home') }}"><i class="fa fa-home"></i> Inicio </span></a>
 					              
 					            </li>
 					            <li><a href="{{ route('account.index') }}"><i class="fa fa-sitemap"></i> Cuentas </span></a>

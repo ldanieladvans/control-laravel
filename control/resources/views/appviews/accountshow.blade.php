@@ -21,6 +21,7 @@
                     <div class="clearfix"></div>
                   </div>
                   <div class="x_content">
+                    <button type="button" onclick="location.href = 'account/create';" class="btn btn-primary">Agregar</button>
                     <table id="datatable-buttons" class="table table-striped table-bordered">
                       <thead>
                         <tr>
@@ -30,6 +31,7 @@
                           <th>Fecha</th>
                           <th>Base de Datos</th>
                           <th>Estado</th>
+                          <th>Acciones</th>
                         </tr>
                       </thead>
 
@@ -43,6 +45,7 @@
                         	<td>{{ $acc->cta_fecha }}</td>
                         	<td>{{ $acc->cta_nom_bd }}</td>
                         	<td>{{ $acc->cta_estado }}</td>
+                          <td></td>
                         </tr>
                         @endforeach
                       </tbody>

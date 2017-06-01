@@ -35,7 +35,7 @@ class AccountController extends Controller
      */
     public function create()
     {
-        //
+        return view('appviews.accountcreate');
     }
 
     /**
@@ -46,7 +46,14 @@ class AccountController extends Controller
      */
     public function store(Request $request)
     {
-        //
+        $alldata = $request->all();
+        $alldata['cta_fecha'] .= ' '. date('H:i:s');
+        /*echo "<pre>";
+        print_r($alldata);die();
+        echo "</pre>";*/
+        $cta = new Account($alldata);
+        $cta->save();
+        return redirect()->route('account.index');
     }
 
     /**

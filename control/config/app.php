@@ -186,6 +186,7 @@ return [
          * Third Party Service Providers...
          */
         Bican\Roles\RolesServiceProvider::class,
+        Cviebrock\EloquentSluggable\ServiceProvider::class,
 
     ],
 
