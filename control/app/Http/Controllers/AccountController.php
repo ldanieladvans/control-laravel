@@ -3,6 +3,8 @@
 namespace App\Http\Controllers;
 
 use App\Account;
+use App\Client;
+use App\Distributor;
 use Illuminate\Http\Request;
 
 class AccountController extends Controller
@@ -35,7 +37,9 @@ class AccountController extends Controller
      */
     public function create()
     {
-        return view('appviews.accountcreate');
+        $clients = Client::all();
+        $distributors = Distributor::all();
+        return view('appviews.accountcreate',['clients'=>$clients,'distributors'=>$distributors]);
     }
 
     /**
@@ -47,12 +51,13 @@ class AccountController extends Controller
     public function store(Request $request)
     {
         $alldata = $request->all();
-        $alldata['cta_fecha'] .= ' '. date('H:i:s');
+        //$alldata['cta_fecha'] .= ' '. date('H:i:s');
         /*echo "<pre>";
         print_r($alldata);die();
         echo "</pre>";*/
         $cta = new Account($alldata);
         $cta->save();
+        \Session::flash('message','Se ha creado la cuenta: '.$alldata['cta_num']);
         return redirect()->route('account.index');
     }
 
@@ -98,6 +103,11 @@ class AccountController extends Controller
      */
     public function destroy(Account $account)
     {
-        //
+        if (isset($account)){
+            \Session::flash('message','Se ha eliminado la cuenta: '.$account->cta_num);
+            $account->delete();
+
+        }
+        return redirect()->route('account.index');
     }
 }

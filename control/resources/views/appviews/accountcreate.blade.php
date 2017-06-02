@@ -22,6 +22,13 @@
                 </ul>
                 <div class="clearfix"></div>
               </div>
+              	@if (Session::has('message'))
+                  <div class="alert alert-success alert-dismissible fade in" role="alert">
+                    <button type="button" class="close" data-dismiss="alert" aria-label="Close"><span aria-hidden="true">×</span>
+                    </button>
+                    <strong>{{ Session::get('message') }}</strong>
+                  </div>
+                  @endif
               <div class="x_content">
 
                 <form class="form-horizontal form-label-left" novalidate action="{{ route('account.store') }}" method='POST'>
@@ -59,6 +66,30 @@
                     <div class="col-md-6 col-sm-6 col-xs-12">
                       <input id="cta_nom_bd" class="form-control col-md-7 col-xs-12" data-validate-words="1" name="cta_nom_bd" required="required" type="text">
                     </div>
+                  </div>
+
+                  <div class="item form-group">
+                    <label class="control-label col-md-3 col-sm-3 col-xs-12">Cliente</label>
+                        <div class="col-md-6 col-sm-6 col-xs-12">
+                          <select class="select2_single form-control col-md-7 col-xs-12" name="cta_cliente_id">
+                            <option value="null">Seleccione una opción ...</option>
+                            @foreach($clients as $client)
+                            	<option value="{{ $client->id }}">{{ $client->cliente_nom }}</option>
+                            @endforeach
+                          </select>
+                      	</div>
+                  </div>
+
+                  <div class="item form-group">
+                    <label class="control-label col-md-3 col-sm-3 col-xs-12">Distribuidor</label>
+                        <div class="col-md-6 col-sm-6 col-xs-12">
+                          <select class="select2_single form-control col-md-7 col-xs-12" name="cta_distrib_id">
+                            <option value="null">Seleccione una opción ...</option>
+                            @foreach($distributors as $distributor)
+                            	<option value="{{ $distributor->id }}">{{ $distributor->distrib_nom }}</option>
+                            @endforeach
+                          </select>
+                      	</div>
                   </div>
 
                   <div class="item form-group">
