@@ -51,10 +51,6 @@ class AccountController extends Controller
     public function store(Request $request)
     {
         $alldata = $request->all();
-        //$alldata['cta_fecha'] .= ' '. date('H:i:s');
-        /*echo "<pre>";
-        print_r($alldata);die();
-        echo "</pre>";*/
         $cta = new Account($alldata);
         $cta->save();
         \Session::flash('message','Se ha creado la cuenta: '.$alldata['cta_num']);
@@ -69,7 +65,8 @@ class AccountController extends Controller
      */
     public function show(Account $account)
     {
-        //
+        $accounts = Account::all();
+        return view('appviews.accountshow',['accounts'=>$accounts]);
     }
 
     /**
@@ -80,7 +77,10 @@ class AccountController extends Controller
      */
     public function edit(Account $account)
     {
-        //
+        //$clients = Client::where('id', '<>', $account->cta_cliente_id)->get();
+        $clients = Client::all();
+        $distributors = Distributor::all();
+        return view('appviews.accountedit',['account'=>$account,'clients'=>$clients,'distributors'=>$distributors]);
     }
 
     /**
@@ -92,7 +92,16 @@ class AccountController extends Controller
      */
     public function update(Request $request, Account $account)
     {
-        //
+        $account->cta_num = $request->cta_num;
+        $account->cta_nomservd = $request->cta_nomservd;
+        $account->cta_fecha = $request->cta_fecha;
+        $account->cta_nom_bd = $request->cta_nom_bd;
+        $account->cta_cliente_id = $request->cta_cliente_id;
+        $account->cta_distrib_id = $request->cta_distrib_id;
+        $account->cta_estado = $request->cta_estado;
+        $account->save();
+        \Session::flash('message','Se ha actualizado la cuenta: '.$request->cta_num);
+        return redirect()->route('account.index');
     }
 
     /**

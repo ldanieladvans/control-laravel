@@ -22,8 +22,8 @@
                   </div>
 
                   @if (Session::has('message'))
-                  <div class="alert alert-success alert-dismissible fade in" role="alert">
-                    <button type="button" class="close" data-dismiss="alert" aria-label="Close"><span aria-hidden="true">×</span>
+                  <div class="alert alert-success alert-dismissible fade in" role="alert" id="ctams">
+                    <button type="button" id="alertmsgcta" class="close" data-dismiss="alert" aria-label="Close"><span aria-hidden="true">×</span>
                     </button>
                     <strong>{{ Session::get('message') }}</strong>
                   </div>
@@ -61,7 +61,7 @@
 
                           <td class=" last" width="20%">
                                       
-                                    <button href="#" class="btn btn-info btn-xs" type="button"><i class="fa fa-pencil"></i> Editar </button>
+                                    <a href="{{ route('account.edit', $acc) }}" class="btn btn-info btn-xs" type="button"><i class="fa fa-pencil"></i> Editar </a>
 
                                       {{ Form::open(['route' => ['account.destroy', $acc], 'class'=>'pull-right']) }}
                                       {{ Form::hidden('_method', 'DELETE') }}
@@ -103,4 +103,16 @@
     <script src="{{ asset('controlassets/vendors/fastclick/lib/fastclick.js') }}"></script>
     <!-- Custom Theme Scripts -->
     <script src="{{ asset('controlassets/build/js/custom.js') }}"></script>
+
+    <script>
+      $( function() {
+          $('#alertmsgcta').click(function() {
+              console.log('alertmsgcta button clicked');
+          });
+          
+          setTimeout(function() {
+              $('#alertmsgcta').trigger('click');
+          }, 4e3);
+      });
+    </script>
 @endsection
