@@ -8,8 +8,6 @@
     <link href="{{ asset('controlassets/vendors/iCheck/skins/flat/green.css') }}" rel="stylesheet">	
     <!-- bootstrap-progressbar -->
     <link href="{{ asset('controlassets/vendors/bootstrap-progressbar/css/bootstrap-progressbar-3.3.4.min.css') }}" rel="stylesheet">
-    <!-- JQVMap -->
-    <link href="{{ asset('controlassets/vendors/jqvmap/dist/jqvmap.min.css') }}" rel="stylesheet"/>
     <!-- bootstrap-daterangepicker -->
     <link href="{{ asset('controlassets/vendors/bootstrap-daterangepicker/daterangepicker.css') }}" rel="stylesheet">
     <!-- Custom Theme Style -->
@@ -51,7 +49,7 @@
 					            </li>
 					            <li><a><i class="fa fa-group"></i> Directorio <span class="fa fa-chevron-down"></span></a>
 					              <ul class="nav child_menu">
-					                <li><a href="#">Clientes</a></li>
+					                <li><a href="{{ route('client.index') }}">Clientes</a></li>
 					                <li><a href="#">Distribuidores</a></li>
 					                <li><a href="#">Domicilios</a></li>
 					                <li><a href="#">Referencias</a></li>

@@ -25,7 +25,7 @@
 
               <div class="x_content">
 
-                {{ Form::open(['route' => ['package.update', $package->id], 'class'=>'form-horizontal form-label-left']) }}
+                {{ Form::open(['route' => ['package.update', $package], 'class'=>'form-horizontal form-label-left']) }}
 
                 	{{ Form::hidden('_method', 'PUT') }}
 

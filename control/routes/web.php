@@ -25,5 +25,10 @@ Route::group(['prefix' => 'config'], function () {
     Route::resource('package', 'PackageController');
 });
 
+Route::group(['prefix' => 'directory'], function () {
+    Route::resource('client', 'ClientController');
+    Route::post('/csearch', 'ClientController@clientsearch')->name('client.csearch');
+});
+
 
 

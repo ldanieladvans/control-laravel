@@ -55,12 +55,12 @@
               					<td class=" last" width="15%">
                                   <div>
                                     <div class="btn-group">  
-                                      <a data-placement="left" title="Editar" href="{{ route('package.edit', $pack->id) }}" class="btn btn-info btn-xs" type="button"><i class="fa fa-edit fa-2x"></i></a>
+                                      <a data-placement="left" title="Editar" href="{{ route('package.edit', $pack) }}" class="btn btn-info btn-xs" type="button"><i class="fa fa-edit fa-2x"></i></a>
                                     </div>
 
                                     <div class="btn-group">
                                         <p></p>
-                                      {{ Form::open(['route' => ['package.destroy', $pack->id], 'class'=>'pull-right']) }}
+                                      {{ Form::open(['route' => ['package.destroy', $pack], 'class'=>'pull-right']) }}
                                       {{ Form::hidden('_method', 'DELETE') }}
                                       <button data-placement="left" title="Eliminar" onclick="return confirm('¿Está seguro que quiere eliminar esta cuenta?')" class="btn btn-danger btn-xs" type="submit"><i class="fa fa-trash fa-2x"></i></button>
                                       {{ Form::close() }}

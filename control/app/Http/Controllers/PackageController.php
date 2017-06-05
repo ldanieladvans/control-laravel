@@ -75,7 +75,7 @@ class PackageController extends Controller
      */
     public function edit(Package $package)
     {
-        $package = Package::findOrFail($id);
+        //$package = Package::findOrFail($id);
         return view('appviews.packageedit',['package'=>$package]);
     }
 
@@ -86,9 +86,9 @@ class PackageController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function update(Request $request, $id)
+    public function update(Request $request, Package $package)
     {
-        $package = Package::findOrFail($id);
+        //$package = Package::findOrFail($id);
         $package->paq_nom = $request->paq_nom;
         $package->paq_gig = $request->paq_gig;
         $package->paq_rfc = $request->paq_rfc;
@@ -105,10 +105,10 @@ class PackageController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function destroy($id,Request $request)
+    public function destroy(Package $package,Request $request)
     {
         if (isset($id)){
-            $package = Package::findOrFail($id);
+            //$package = Package::findOrFail($id);
             $fmessage = 'Se ha eliminado el paquete: '.$package->paq_nom;
             \Session::flash('message',$fmessage);
             $this->registeredBinnacle($request,'delete',$fmessage);
