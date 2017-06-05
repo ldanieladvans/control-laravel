@@ -23,13 +23,14 @@ var validator = (function($){
         number_min      : 'too low',
         number_max      : 'too high',
         url             : 'invalid URL',
-        number          : 'not a number',
+        number          : 'Campo numérico',
         email           : 'email address is invalid',
         email_repeat    : 'emails do not match',
         password_repeat : 'passwords do not match',
         repeat          : 'no match',
         complete        : 'Texto incorrecto. No debe tener espacios',
-        select          : 'Please select an option'
+        select          : 'Please select an option',
+        notint          : 'El número debe ser entero'
     };
 
     if(!window.console){
@@ -172,6 +173,37 @@ var validator = (function($){
             }
             return true;
         },
+        numberint : function(a){
+            // if not not a number
+            if( isNaN(parseFloat(a)) && !isFinite(a) ){
+                alertTxt = message.number;
+                return false;
+            }
+            // not a integer
+            else if(!isInt(a)){
+                alertTxt = message.notint;
+                return false;
+            }
+            // not enough numbers
+            else if( lengthRange && a.length < lengthRange[0] ){
+                alertTxt = message.min;
+                return false;
+            }
+            // check if there is max length & field length is greater than the allowed
+            else if( lengthRange && lengthRange[1] && a.length > lengthRange[1] ){
+                alertTxt = message.max;
+                return false;
+            }
+            else if( minmax[0] && (a|0) < minmax[0] ){
+                alertTxt = message.number_min;
+                return false;
+            }
+            else if( minmax[1] && (a|0) > minmax[1] ){
+                alertTxt = message.number_max;
+                return false;
+            }
+            return true;
+        },
         // Date is validated in European format (day,month,year)
         date : function(a){
             var day, A = a.split(/[-./]/g), i;
@@ -271,6 +303,10 @@ var validator = (function($){
              .find('.'+ defaults.classes.alert).remove();
     };
 
+    function isInt(value) {
+        return !isNaN(value) && (function(x) { return (x | 0) === x; })(parseFloat(value))
+    }
+
     function testByType(type, value){
         if( type == 'tel' )
             pattern = pattern || 'phone';
@@ -308,6 +344,7 @@ var validator = (function($){
         if( this.type !='hidden' && $(this).is(':hidden') )
             return true;
 
+        
         prepareFieldData(this);
 
         field.data( 'val', field[0].value.replace(/^\s+|\s+$/g, "") );  // cache the value of the field and trim it
@@ -315,6 +352,8 @@ var validator = (function($){
 
         // Check if there is a specific error message for that field, if not, use the default 'invalid' message
         alertTxt = message[field.prop('name')] || message.invalid;
+
+
 
         // Special treatment
         if( field[0].nodeName.toLowerCase() === "select" ){
@@ -332,6 +371,8 @@ var validator = (function($){
 
         data.valid = tests.hasValue(data.val);
 
+
+
         if( field.hasClass('optional') && !data.valid )
             data.valid = true;
 
@@ -348,26 +389,35 @@ var validator = (function($){
             * this is needed when fixing the placeholders for older browsers which does not support them.
             * in this case, make sure the "placeholder" jQuery plugin was even used before proceeding
             */
+
             if( tests.sameAsPlaceholder(field) ){
                 alertTxt = message.empty;
                 data.valid = false;
+
             }
 
             // if this field is linked to another field (their values should be the same)
             if( data.validateLinked ){
                 var linkedTo = data['validateLinked'].indexOf('#') == 0 ? $(data['validateLinked']) : $(':input[name=' + data['validateLinked'] + ']');
                 data.valid = tests.linked( data.val, linkedTo.val() );
+
             }
             /* validate by type of field. use 'attr()' is proffered to get the actual value and not what the browsers sees for unsupported types.
             */
-            else if( data.valid || data.type == 'select' )
+            else if( data.valid || data.type == 'select' ){
+
                 data.valid = testByType(data.type, data.val);
+            }
+
+
 
         }
 
         // mark / unmark the field, and set the general 'submit' flag accordingly
-        if( data.valid )
+        if( data.valid ){
+
             unmark( field );
+        }
         else{
             mark( field, alertTxt );
             submit = false;
@@ -390,7 +440,6 @@ var validator = (function($){
             submit = true, // save the scope
             // get all the input/textareas/select fields which are required or optional (meaning, they need validation only if they were filled)
             fieldsToCheck = $form.find(':input').filter('[required=required], .required, .optional').not('[disabled=disabled]');
-            console.log(fieldsToCheck);
         fieldsToCheck.each(function(){
             // use an AND operation, so if any of the fields returns 'false' then the submitted result will be also FALSE
             submit = submit * checkField.apply(this);

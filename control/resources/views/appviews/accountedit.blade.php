@@ -110,8 +110,7 @@
                   <div class="ln_solid"></div>
                   <div class="form-group">
                     <div class="col-md-6 col-md-offset-3">
-                      <button type="reset" class="btn btn-primary">Borrar Datos</button>
-                      <button id="send" type="submit" class="btn btn-success">Guardar</button>
+                      <!--<button type="reset" class="btn btn-primary">Borrar Datos</button>-->                                                                                                                   <button id="send" type="submit" class="btn btn-success">Guardar</button>
                     </div>
                   </div>
                 {{ Form::close() }}

@@ -53,7 +53,9 @@ class AccountController extends Controller
         $alldata = $request->all();
         $cta = new Account($alldata);
         $cta->save();
-        \Session::flash('message','Se ha creado la cuenta: '.$alldata['cta_num']);
+        $fmessage = 'Se ha creado la cuenta: '.$alldata['cta_num'];
+        \Session::flash('message',$fmessage);
+        $this->registeredBinnacle($request,'create',$fmessage);
         return redirect()->route('account.index');
     }
 
@@ -100,7 +102,9 @@ class AccountController extends Controller
         $account->cta_distrib_id = $request->cta_distrib_id;
         $account->cta_estado = $request->cta_estado;
         $account->save();
-        \Session::flash('message','Se ha actualizado la cuenta: '.$request->cta_num);
+        $fmessage = 'Se ha actualizado la cuenta: '.$request->cta_num;
+        \Session::flash('message',$fmessage);
+        $this->registeredBinnacle($request,'update',$fmessage);
         return redirect()->route('account.index');
     }
 
@@ -110,10 +114,12 @@ class AccountController extends Controller
      * @param  \App\Account  $account
      * @return \Illuminate\Http\Response
      */
-    public function destroy(Account $account)
+    public function destroy(Account $account,Request $request)
     {
         if (isset($account)){
-            \Session::flash('message','Se ha eliminado la cuenta: '.$account->cta_num);
+            $fmessage = 'Se ha eliminado la cuenta: '.$account->cta_num;
+            \Session::flash('message',$fmessage);
+            $this->registeredBinnacle($request,'delete',$fmessage);
             $account->delete();
 
         }

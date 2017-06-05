@@ -61,7 +61,7 @@
 
 					            <li><a><i class="fa fa-gears"></i> Configuración <span class="fa fa-chevron-down"></span></a>
 					              <ul class="nav child_menu">
-					                <li><a href="#">Paquetes</a></li>
+					                <li><a href="{{ route('package.index') }}">Paquetes</a></li>
 					              </ul>
 					            </li>
 					            <li><a><i class="fa fa-unlock-alt"></i> Seguridad <span class="fa fa-chevron-down"></span></a>

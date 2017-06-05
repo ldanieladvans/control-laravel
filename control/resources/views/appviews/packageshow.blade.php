@@ -16,7 +16,7 @@
         <div class="col-md-12 col-sm-12 col-xs-12">
                 <div class="x_panel">
                   <div class="x_title">
-                    <h2>Cuentas</h2>
+                    <h2>Paquetes</h2>
                     
                     <div class="clearfix"></div>
                   </div>
@@ -30,44 +30,37 @@
                   @endif
 
                   <div class="x_content">
-                    <button type="button" onclick="location.href = 'account/create';" class="btn btn-primary">Agregar</button>
+                    <button type="button" onclick="location.href = 'package/create';" class="btn btn-primary">Agregar</button>
                     <table id="datatable-buttons" class="table table-striped table-bordered">
                       <thead>
                         <tr>
                           <th>Id</th>
-                          <th>Número de Cuenta</th>
-                          <th>Servidor</th>
-                          <th>Fecha</th>
-                          <th>Base de Datos</th>
-                          <th>Cliente</th>
-                          <th>Distribuidor</th>
-                          <th>Estado</th>
+                          <th>Nombre</th>
+                          <th>Gigas</th>
+                          <th>RFCs</th>
                           <th>Acciones</th>
                         </tr>
                       </thead>
 
 
                       <tbody>
-                        @foreach($accounts as $acc)
+                        @foreach($packages as $pack)
                         <tr>
-                        	<td>{{ $acc->id }}</td>
-                        	<td>{{ $acc->cta_num }}</td>
-                        	<td>{{ $acc->cta_nomservd }}</td>
-                        	<td>{{ $acc->cta_fecha }}</td>
-                        	<td>{{ $acc->cta_nom_bd }}</td>
-                          <td>{{ $acc->client ?  $acc->client->cliente_nom : '' }}</td>
-                          <td>{{ $acc->distributor ? $acc->distributor->distrib_nom : '' }}</td>
-                        	<td>{{ $acc->cta_estado }}</td>
+                        	<td>{{ $pack->id }}</td>
+                        	<td>{{ $pack->paq_nom }}</td>
+                        	<td>{{ $pack->paq_gig }}</td>
+                        	<td>{{ $pack->paq_rfc }}</td>
 
-                          <td class=" last" width="15%">
+
+              					<td class=" last" width="15%">
                                   <div>
                                     <div class="btn-group">  
-                                      <a data-placement="left" title="Editar" href="{{ route('account.edit', $acc) }}" class="btn btn-info btn-xs" type="button"><i class="fa fa-edit fa-2x"></i></a>
+                                      <a data-placement="left" title="Editar" href="{{ route('package.edit', $pack->id) }}" class="btn btn-info btn-xs" type="button"><i class="fa fa-edit fa-2x"></i></a>
                                     </div>
 
                                     <div class="btn-group">
                                         <p></p>
-                                      {{ Form::open(['route' => ['account.destroy', $acc], 'class'=>'pull-right']) }}
+                                      {{ Form::open(['route' => ['package.destroy', $pack->id], 'class'=>'pull-right']) }}
                                       {{ Form::hidden('_method', 'DELETE') }}
                                       <button data-placement="left" title="Eliminar" onclick="return confirm('¿Está seguro que quiere eliminar esta cuenta?')" class="btn btn-danger btn-xs" type="submit"><i class="fa fa-trash fa-2x"></i></button>
                                       {{ Form::close() }}
@@ -89,6 +82,7 @@
                                      </div>
                                    </div>
                             </td>
+
 
                         </tr>
                         @endforeach
