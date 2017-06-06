@@ -53,7 +53,7 @@
                         	<td>{{ $client->id }}</td>
                         	<td>{{ $client->cliente_nom }}</td>
                         	<td>{{ $client->cliente_sexo }}</td>
-                        	<td>{{ $client->cliente_f_nac }}</td>
+                        	<td>{{ $client->cliente_nac }}</td>
                         	<td>{{ $client->cliente_rfc }}</td>
                         	<td>{{ $client->cliente_correo }}</td>
                         	<td>{{ $client->cliente_tel }}</td>
@@ -70,7 +70,7 @@
                                         <p></p>
                                       {{ Form::open(['route' => ['client.destroy', $client], 'class'=>'pull-right']) }}
                                       {{ Form::hidden('_method', 'DELETE') }}
-                                      <button data-placement="left" title="Eliminar" onclick="return confirm('¿Está seguro que quiere eliminar esta cuenta?')" class="btn btn-danger btn-xs" type="submit"><i class="fa fa-trash fa-2x"></i></button>
+                                      <button data-placement="left" title="Eliminar" onclick="return confirm('¿Está seguro que quiere eliminar este cliente?')" class="btn btn-danger btn-xs" type="submit"><i class="fa fa-trash fa-2x"></i></button>
                                       {{ Form::close() }}
                                     </div>
                                       

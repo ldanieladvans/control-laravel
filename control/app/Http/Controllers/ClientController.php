@@ -50,7 +50,79 @@ class ClientController extends Controller
      */
     public function store(Request $request)
     {
-        //
+        $alldata = $request->all();
+
+
+
+        $dom_vals = array();
+        $refer_vals = array();
+        $client_vals = array();
+        $domicile_id = array_key_exists('cliente_dom_id',$alldata) ? $alldata['cliente_dom_id'] : false;
+        $refer_id = array_key_exists('cliente_refer_id',$alldata) ? $alldata['cliente_refer_id'] : false;
+        if (array_key_exists('checkdom',$alldata)){           
+            if (array_key_exists('dom_calle',$alldata) && isset($alldata['dom_calle'])){
+
+                $dom_vals['dom_calle'] = $alldata['dom_calle'];
+                if (array_key_exists('dom_col',$alldata)){
+                $dom_vals['dom_col'] = $alldata['dom_col'];
+                }
+                if (array_key_exists('dom_ciudad',$alldata)){
+                    $dom_vals['dom_ciudad'] = $alldata['dom_ciudad'];
+                }
+                if (array_key_exists('dom_munic',$alldata)){
+                    $dom_vals['dom_munic'] = $alldata['dom_munic'];
+                }
+                if (array_key_exists('dom_estado',$alldata)){
+                    $dom_vals['dom_estado'] = $alldata['dom_estado'];
+                }
+                if (array_key_exists('dom_pais',$alldata)){
+                    $dom_vals['dom_pais'] = $alldata['dom_pais'];
+                }
+                $domicile = new Domicile($dom_vals);
+                $domicile->save();
+                $domicile_id = $domicile->id;
+                }
+        }
+
+        if (array_key_exists('checkrefer',$alldata) && isset($alldata['refer_nom'])){
+            
+            if (array_key_exists('refer_nom',$alldata)){
+                $refer_vals['refer_nom'] = $alldata['refer_nom'];
+                if (array_key_exists('refer_rfc',$alldata)){
+                $refer_vals['refer_rfc'] = $alldata['refer_rfc'];
+                }
+                $refer = new Reference($refer_vals);
+                $refer->save();
+                $refer_id = $refer->id;
+            }
+        }
+
+        $client_vals['cliente_nom'] = $alldata['cliente_nom'];
+        $client_vals['cliente_correo'] = $alldata['cliente_correo'];
+        $client_vals['cliente_tel'] = $alldata['cliente_tel'];
+        $client_vals['cliente_rfc'] = $alldata['cliente_rfc'];
+        $client_vals['cliente_nac'] = $alldata['cliente_nac'];
+        $client_vals['cliente_tipo'] = $alldata['cliente_tipo'];
+        $client_vals['cliente_sexo'] = $alldata['gender'];
+
+        $client = new Client($client_vals);
+
+        if ($domicile_id != "null"){
+            $client->cliente_dom_id = $domicile_id;
+        }
+        if ($refer_id != "null"){
+            $client->cliente_refer_id = $refer_id;
+        }
+        
+        
+        $client->save();
+
+        
+
+        $fmessage = 'Se ha creado el cliente: '.$alldata['cliente_nom'];
+        \Session::flash('message',$fmessage);
+        $this->registeredBinnacle($request,'create',$fmessage);
+        return redirect()->route('client.index');
     }
 
     /**
@@ -70,9 +142,11 @@ class ClientController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function edit($id)
+    public function edit(Client $client)
     {
-        //
+        $references = Reference::all();
+        $domiciles = Domicile::all();
+        return view('appviews.clientedit',['client'=>$client,'references'=>$references,'domiciles'=>$domiciles]);
     }
 
     /**
@@ -93,9 +167,16 @@ class ClientController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function destroy($id)
+    public function destroy(Client $client,Request $request)
     {
-        //
+        if (isset($client)){
+            $fmessage = 'Se ha eliminado el cliente: '.$client->cliente_nom;
+            \Session::flash('message',$fmessage);
+            $this->registeredBinnacle($request,'delete',$fmessage);
+            $client->delete();
+
+        }
+        return redirect()->route('client.index');
     }
 
     /**

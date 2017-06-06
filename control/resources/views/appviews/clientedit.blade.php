@@ -14,7 +14,7 @@
         <div class="col-md-12 col-sm-12 col-xs-12">
             <div class="x_panel">
               <div class="x_title">
-                <h2>Nuevo Cliente</h2>
+                <h2>Editar Cliente</h2>
                 <ul class="nav navbar-right panel_toolbox">
                   <li><a class="collapse-link"><i class="fa fa-chevron-up"></i></a>
                   </li>
@@ -32,41 +32,42 @@
               <div class="x_content">
 
                 <!--<form class="form-horizontal form-label-left input_mask">-->
-                <form class="form-horizontal form-label-left" novalidate action="{{ route('client.store') }}" method='POST'>
+                {{ Form::open(['route' => ['client.update', $client], 'class'=>'form-horizontal form-label-left']) }}
 
-                	  {{ csrf_field() }}
+                	{{ Form::hidden('_method', 'PUT') }}
+
 
                       <div class="item form-group">	                    
 	                    <div class="col-md-9 col-sm-9 col-xs-12">
-	                      <input id="cliente_nom" class="form-control has-feedback-left" name="cliente_nom" placeholder="Nombre del Cliente *" required="required" type="text">
+	                      <input id="cliente_nom" class="form-control has-feedback-left" name="cliente_nom" placeholder="Nombre del Cliente *" required="required" type="text" value="{{ $client->cliente_nom }}">
 	                      <span class="fa fa-user form-control-feedback left" aria-hidden="true"></span>
 	                    </div>
 	                  </div>
 
 	                  <div class="item form-group">	                    
 	                    <div class="col-md-9 col-sm-9 col-xs-12">
-	                      <input id="cliente_correo" class="form-control has-feedback-left" name="cliente_correo" placeholder="Correo *" required="required" type="email">
+	                      <input id="cliente_correo" class="form-control has-feedback-left" name="cliente_correo" placeholder="Correo *" required="required" type="email" value="{{ $client->cliente_correo }}">
 	                      <span class="fa fa-envelope form-control-feedback left" aria-hidden="true"></span>
 	                    </div>
 	                  </div>
 
 	                  <div class="item form-group">	                    
 	                    <div class="col-md-9 col-sm-9 col-xs-12">
-	                      <input id="cliente_tel" class="form-control has-feedback-left" name="cliente_tel" placeholder="Teléfono *" required="required" type="tel">
+	                      <input id="cliente_tel" class="form-control has-feedback-left" name="cliente_tel" placeholder="Teléfono *" required="required" type="tel" value="{{ $client->cliente_tel }}">
 	                      <span class="fa fa-phone form-control-feedback left" aria-hidden="true"></span>
 	                    </div>
 	                  </div>
 
 	                  <div class="item form-group">	                    
 	                    <div class="col-md-9 col-sm-9 col-xs-12">
-	                      <input id="cliente_rfc" class="form-control has-feedback-left" name="cliente_rfc" placeholder="RFC *" required="required" type="text" data-validate-words="1">
+	                      <input id="cliente_rfc" class="form-control has-feedback-left" name="cliente_rfc" placeholder="RFC *" required="required" type="text" data-validate-words="1" value="{{ $client->cliente_rfc }}">
 	                      <span class="fa fa-institution form-control-feedback left" aria-hidden="true"></span>
 	                    </div>
 	                  </div>
 
 	                  <div class="item form-group">	                    
 	                    <div class="col-md-9 col-sm-9 col-xs-12">
-	                      <input id="cliente_nac" class="form-control has-feedback-left" name="cliente_nac" placeholder="Nacionalidad" type="text">
+	                      <input id="cliente_nac" class="form-control has-feedback-left" name="cliente_nac" placeholder="Nacionalidad" type="text" value="{{ $client->cliente_nac }}">
 	                      <span class="fa fa-globe form-control-feedback left" aria-hidden="true"></span>
 	                    </div>
 	                  </div>
@@ -76,8 +77,8 @@
 		                    <div class="col-md-3 col-sm-3 col-xs-12">
 		                      <select class="select2_single form-control col-md-7 col-xs-12" name="cliente_tipo">
 		                        <option value="null">Seleccione una opción ...</option>
-		                        <option value="one">Option one</option>
-                            	<option value="two">Option two</option>
+		                        <option value="one" {{$client->cliente_tipo == 'one' ? 'selected':''}} >Option one</option>
+                            	<option value="two" {{$client->cliente_tipo == 'two' ? 'selected':''}}>Option two</option>
 		                      </select>
 		                  	</div>
 
@@ -85,11 +86,10 @@
 	                      <div class="col-md-3 col-sm-3 col-xs-12">
 	                       <p></p>
 	                        M:
-	                        <input type="radio" class="flat" name="gender" id="genderM" value="M" checked="" required /> F:
-	                        <input type="radio" class="flat" name="gender" id="genderF" value="F" />
+	                        <input type="radio" class="flat" name="gender" id="genderM" value="M" {{$client->cliente_sexo == 'M' ? 'checked':''}} /> F:
+	                        <input type="radio" class="flat" name="gender" id="genderF" value="F" {{$client->cliente_sexo == 'F' ? 'checked':''}}/>
 	                      </div>
 		              </div>
-
 
                   	<div class="x_content">
                       <div class="" role="tabpanel" data-example-id="togglable-tabs">
@@ -107,7 +107,7 @@
 		                        <div class="col-md-7 col-sm-7 col-xs-12">
 		                          <div class="">
 		                            <label>
-		                              <input type="checkbox" id="checkdom" name="checkdom" onchange="toggleCheckbox(this)" class="js-switch" checked="checked" />
+		                              <input type="checkbox" id="checkdom" name="checkdom" onchange="toggleCheckbox(this)" class="js-switch" {{$client->cliente_dom_id ? '':'checked'}} />
 		                            </label>
 		                          </div>
 		                          
@@ -117,7 +117,7 @@
                         	  </br>
                         	  </br>
 
-                        	  <div id="dom_exits_data" hidden>
+                        	  <div id="dom_exits_data" {{$client->cliente_dom_id ? '':'hidden'}}>
                         	  	<div class="col-md-12 col-sm-12 col-xs-12 form-group ">
 			                        <label class="control-label col-md-1 col-sm-1 col-xs-12">Domicilio: </label>
 			                        <div class="col-md-11 col-sm-11 col-xs-12">
@@ -131,7 +131,7 @@
 			                      </div>
                         	  </div>
 
-                        	  <div id="dom_new_data">
+                        	  <div id="dom_new_data" {{$client->cliente_dom_id ? 'hidden':''}}>
 
 		                          <div class="item form-group">	                    
 				                    <div class="col-md-9 col-sm-9 col-xs-12">
@@ -295,12 +295,11 @@
                       <div class="ln_solid"></div>
                       <div class="form-group">
                         <div class="col-md-9 col-sm-9 col-xs-12 col-md-offset-3">
-                          <button type="reset" class="btn btn-primary">Borrar Datos</button>
                   		  <button id="send" type="submit" class="btn btn-success">Guardar</button>
                         </div>
                       </div>
 
-                    </form>
+                    {{ Form::close() }}
 
               </div>
             </div>
