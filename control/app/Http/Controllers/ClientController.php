@@ -4,6 +4,8 @@ namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
 use App\Client;
+use App\Reference;
+use App\Domicile;
 
 class ClientController extends Controller
 {
@@ -35,7 +37,9 @@ class ClientController extends Controller
      */
     public function create()
     {
-        //
+        $references = Reference::all();
+        $domiciles = Domicile::all();
+        return view('appviews.clientcreate',['references'=>$references,'domiciles'=>$domiciles]);
     }
 
     /**
