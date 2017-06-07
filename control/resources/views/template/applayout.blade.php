@@ -50,9 +50,9 @@
 					            <li><a><i class="fa fa-group"></i> Directorio <span class="fa fa-chevron-down"></span></a>
 					              <ul class="nav child_menu">
 					                <li><a href="{{ route('client.index') }}">Clientes</a></li>
-					                <li><a href="#">Distribuidores</a></li>
-					                <li><a href="#">Domicilios</a></li>
-					                <li><a href="#">Referencias</a></li>
+					                <li><a href="{{ route('distributor.index') }}">Distribuidores</a></li>
+					                <!--<li><a href="#">Domicilios</a></li>
+					                <li><a href="#">Referencias</a></li>-->
 					              </ul>
 					            </li>
 

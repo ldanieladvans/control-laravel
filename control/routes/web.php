@@ -27,7 +27,8 @@ Route::group(['prefix' => 'config'], function () {
 
 Route::group(['prefix' => 'directory'], function () {
     Route::resource('client', 'ClientController');
-    Route::post('/csearch', 'ClientController@clientsearch')->name('client.csearch');
+    Route::resource('distributor', 'DistributorController');
+    //Route::post('/csearch', 'ClientController@clientsearch')->name('client.csearch');
 });
 
 
