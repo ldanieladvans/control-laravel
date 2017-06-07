@@ -51,6 +51,16 @@ class AccountController extends Controller
     public function store(Request $request)
     {
         $alldata = $request->all();
+        if(array_key_exists('cta_distrib_id',$alldata)){
+            if($alldata['cta_distrib_id']=='null'){
+                unset($alldata['cta_distrib_id']);
+            }
+        }
+        if(array_key_exists('cta_cliente_id',$alldata)){
+            if($alldata['cta_cliente_id']=='null'){
+                unset($alldata['cta_cliente_id']);
+            }
+        }
         $cta = new Account($alldata);
         $cta->save();
         $fmessage = 'Se ha creado la cuenta: '.$alldata['cta_num'];

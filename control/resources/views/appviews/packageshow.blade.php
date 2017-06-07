@@ -52,36 +52,38 @@
                         	<td>{{ $pack->paq_rfc }}</td>
 
 
-              					<td class=" last" width="15%">
-                                  <div>
-                                    <div class="btn-group">  
-                                      <a data-placement="left" title="Editar" href="{{ route('package.edit', $pack) }}" class="btn btn-info btn-xs" type="button"><i class="fa fa-edit fa-2x"></i></a>
-                                    </div>
-
-                                    <div class="btn-group">
-                                        <p></p>
-                                      {{ Form::open(['route' => ['package.destroy', $pack], 'class'=>'pull-right']) }}
-                                      {{ Form::hidden('_method', 'DELETE') }}
-                                      <button data-placement="left" title="Eliminar" onclick="return confirm('¿Está seguro que quiere eliminar esta cuenta?')" class="btn btn-danger btn-xs" type="submit"><i class="fa fa-trash fa-2x"></i></button>
-                                      {{ Form::close() }}
-                                    </div>
+                          <td class=" last" width="13%">
                                       
-                                    <div class="btn-group">
-                                        <button data-placement="left" title="Más" data-toggle="dropdown" class="fa fa-plus-square fa-2x btn btn-success dropdown-toggle btn-sm btn-xs right" type="button" aria-expanded="false"><span class="caret"></span>
-                                        </button>
-                                        <ul role="menu" class="dropdown-menu">
-                                          <li><a href="#">Action</a>
-                                          </li>
-                                          <li><a href="#">Another action</a>
-                                          </li>
-                                          <li><a href="#">Something else here</a>
-                                          </li>
-                                          <li><a href="#">Separated link</a>
-                                          </li>
-                                        </ul>
-                                     </div>
-                                   </div>
-                            </td>
+                                      
+                                      <div class="btn-group">
+                                          <div class="btn-group">
+                                              <button onclick="location.href = 'package/{{$pack->id}}/edit';" class="btn btn-xs" data-placement="left" title="Editar" style=" color:#790D4E "><i class="fa fa-edit fa-2x"></i> </button>
+                                          </div>
+
+                                        <div class="btn-group">
+                                              <button onclick="" data-toggle="dropdown" class="btn btn-xs dropdown-toggle" data-placement="left" title="Más" style=" color:#790D4E "><i class="fa fa-plus-square fa-2x"></i> </button>
+                                                <ul role="menu" class="dropdown-menu">
+                                                  <li><a href="#">Action</a>
+                                                  </li>
+                                                  <li><a href="#">Another action</a>
+                                                  </li>
+                                                  <li><a href="#">Something else here</a>
+                                                  </li>
+                                                  <li><a href="#">Separated link</a>
+                                                  </li>
+                                                </ul>
+                                          </div>
+
+                                              
+                                              {{ Form::open(['route' => ['package.destroy', $pack], 'class'=>'pull-right']) }}
+                                              {{ Form::hidden('_method', 'DELETE') }}
+                                              <button  href="#" class="btn btn-xs" onclick="return confirm('¿Está seguro que quiere eliminar este registro?')" type="submit" data-placement="left" title="Borrar" style=" color:#790D4E "><i class="fa fa-trash fa-2x"></i></button>
+                                            {{ Form::close() }}
+
+                                          </div>
+
+
+                                  </td>
 
 
                         </tr>

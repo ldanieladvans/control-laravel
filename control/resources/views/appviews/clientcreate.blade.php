@@ -135,7 +135,7 @@
 
 		                          <div class="item form-group">	                    
 				                    <div class="col-md-9 col-sm-9 col-xs-12">
-				                      <input id="dom_calle" class="form-control has-feedback-left" name="dom_calle" placeholder="Calle *" required="required" type="text">
+				                      <input id="dom_calle" class="form-control has-feedback-left" name="dom_calle" placeholder="Calle" required type="text">
 				                      <span class="fa fa-home form-control-feedback left" aria-hidden="true"></span>
 				                    </div>
 				                  </div>
@@ -273,7 +273,7 @@
                         	  <div id="refer_new_data">
 	                        	  <div class="item form-group">	                    
 				                    <div class="col-md-9 col-sm-9 col-xs-12">
-				                      <input id="refer_nom" class="form-control has-feedback-left" name="refer_nom" placeholder="Nombre" required="required" type="text">
+				                      <input id="refer_nom" class="form-control has-feedback-left" name="refer_nom" placeholder="Nombre" required type="text">
 				                      <span class="fa fa-user form-control-feedback left" aria-hidden="true"></span>
 				                    </div>
 				                  </div>
@@ -332,9 +332,11 @@
 		   if (element.checked){
 	   			$("#dom_new_data").show();
 	   			$("#dom_exits_data").hide();
+	   			document.getElementById("dom_calle").required = true;
 		   }else{
 		   		$("#dom_new_data").hide();
 		   		$("#dom_exits_data").show();
+		   		document.getElementById("dom_calle").required = false;
 		   }
 		   
 		 }
@@ -344,9 +346,11 @@
 		   if (element.checked){
 	   			$("#refer_new_data").show();
 	   			$("#refer_exits_data").hide();
+	   			document.getElementById("refer_nom").required = true;
 		   }else{
 		   		$("#refer_new_data").hide();
 		   		$("#refer_exits_data").show();
+		   		document.getElementById("refer_nom").required = false;
 		   }
 		   
 		 }

@@ -124,7 +124,7 @@
 			                          <select class="form-control" name="cliente_dom_id">
 			                            <option value="null">Seleccione ...</option>
 			                            @foreach($domiciles as $domicile)
-			                            	<option value="{{ $domicile->id }}">{{ $domicile->dom_calle }} - {{ $domicile->dom_col }} - {{ $domicile->dom_numetx ? $domicile->dom_numetx : $domicile->dom_numint }}</option>
+			                            	<option value="{{ $domicile->id }}" {{$client->cliente_dom_id == $domicile->id ? 'selected':''}}>{{ $domicile->dom_calle }} - {{ $domicile->dom_col }} - {{ $domicile->dom_numetx ? $domicile->dom_numetx : $domicile->dom_numint }}</option>
 			                            @endforeach
 			                          </select>
 			                        </div>
@@ -135,7 +135,7 @@
 
 		                          <div class="item form-group">	                    
 				                    <div class="col-md-9 col-sm-9 col-xs-12">
-				                      <input id="dom_calle" class="form-control has-feedback-left" name="dom_calle" placeholder="Calle *" required="required" type="text">
+				                      <input id="dom_calle" class="form-control has-feedback-left" name="dom_calle" placeholder="Calle" type="text">
 				                      <span class="fa fa-home form-control-feedback left" aria-hidden="true"></span>
 				                    </div>
 				                  </div>
@@ -245,7 +245,7 @@
 		                        <div class="col-md-7 col-sm-7 col-xs-12">
 		                          <div class="">
 		                            <label>
-		                              <input type="checkbox" id="checkrefer" name="checkrefer" onchange="toggleCheckboxRefer(this)" class="js-switch" checked="checked" />
+		                              <input type="checkbox" id="checkrefer" name="checkrefer" onchange="toggleCheckboxRefer(this)" class="js-switch" {{$client->cliente_refer_id ? '':'checked'}} />
 		                            </label>
 		                          </div>
 		                          
@@ -255,14 +255,14 @@
                         	  </br>
                         	  </br>
 
-                        	  <div id="refer_exits_data" hidden>
+                        	  <div id="refer_exits_data" {{$client->cliente_refer_id ? '':'hidden'}}>
                         	  	<div class="col-md-12 col-sm-12 col-xs-12 form-group ">
 			                        <label class="control-label col-md-1 col-sm-1 col-xs-12">Referencia: </label>
 			                        <div class="col-md-11 col-sm-11 col-xs-12">
 			                          <select class="form-control" name="cliente_refer_id">
 			                            <option value="null">Seleccione ...</option>
 			                            @foreach($references as $reference)
-			                            	<option value="{{ $reference->id }}">{{ $reference->refer_nom }} - {{ $reference->refer_rfc }}</option>
+			                            	<option value="{{ $reference->id }}" {{$client->cliente_refer_id == $reference->id ? 'selected':''}}>{{ $reference->refer_nom }} - {{ $reference->refer_rfc }}</option>
 			                            @endforeach
 			                          </select>
 			                        </div>
@@ -270,10 +270,10 @@
                         	  </div>
 
                         	  
-                        	  <div id="refer_new_data">
+                        	  <div id="refer_new_data" {{$client->cliente_refer_id ? 'hidden':''}}>
 	                        	  <div class="item form-group">	                    
 				                    <div class="col-md-9 col-sm-9 col-xs-12">
-				                      <input id="refer_nom" class="form-control has-feedback-left" name="refer_nom" placeholder="Nombre" required="required" type="text">
+				                      <input id="refer_nom" class="form-control has-feedback-left" name="refer_nom" placeholder="Nombre" type="text">
 				                      <span class="fa fa-user form-control-feedback left" aria-hidden="true"></span>
 				                    </div>
 				                  </div>
@@ -331,9 +331,11 @@
 		   if (element.checked){
 	   			$("#dom_new_data").show();
 	   			$("#dom_exits_data").hide();
+	   			document.getElementById("dom_calle").required = true;
 		   }else{
 		   		$("#dom_new_data").hide();
 		   		$("#dom_exits_data").show();
+		   		document.getElementById("dom_calle").required = false;
 		   }
 		   
 		 }
@@ -343,9 +345,11 @@
 		   if (element.checked){
 	   			$("#refer_new_data").show();
 	   			$("#refer_exits_data").hide();
+	   			document.getElementById("refer_nom").required = true;
 		   }else{
 		   		$("#refer_new_data").hide();
 		   		$("#refer_exits_data").show();
+		   		document.getElementById("refer_nom").required = false;
 		   }
 		   
 		 }
