@@ -64,7 +64,7 @@
 					            </li>
 					            <li><a><i class="fa fa-unlock-alt"></i> Seguridad <span class="fa fa-chevron-down"></span></a>
 					              <ul class="nav child_menu">
-					                <li><a href="chartjs.html">Usuarios</a></li>
+					                <li><a href="{{ route('user.index') }}">Usuarios</a></li>
 					                <li><a href="chartjs2.html">Roles</a></li>
 					                <li><a href="morisjs.html">Permisos</a></li>
 					              </ul>
