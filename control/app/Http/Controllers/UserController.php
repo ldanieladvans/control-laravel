@@ -5,6 +5,10 @@ namespace App\Http\Controllers;
 use Illuminate\Http\Request;
 use App\Distributor;
 use App\User;
+use Bican\Roles\Models\Role;
+use Bican\Roles\Models\Permission;
+use Illuminate\Support\Facades\Validator;
+use Illuminate\Foundation\Auth\RegistersUsers;
 
 class UserController extends Controller
 {
@@ -16,6 +20,19 @@ class UserController extends Controller
     public function __construct()
     {
         $this->middleware('auth');
+    }
+
+
+    public function customregister($values)
+    {
+        $this->validator($values)->validate();
+
+        event(new Registered($user = $this->create($request->all())));
+
+        $this->guard()->login($user);
+
+        return $this->registered($request, $user)
+                        ?: redirect($this->redirectPath());
     }
 
     /**
@@ -36,7 +53,10 @@ class UserController extends Controller
      */
     public function create()
     {
-        //
+        $distributors = Distributor::all();
+        $roles = Role::all();
+        $permissions = Permission::all();
+        return view('appviews.usercreate',['distributors'=>$distributors,'roles'=>$roles,'permissions'=>$permissions]);
     }
 
     /**
@@ -47,7 +67,16 @@ class UserController extends Controller
      */
     public function store(Request $request)
     {
-        //
+        $alldata = $request->all();
+        /*echo "<pre>";
+        print_r($alldata['roles']);die();
+        echo "</pre>";*/
+        $user = new User($alldata);
+        $user->save();
+        $fmessage = 'Se ha creado el usuario: '.$alldata['name'];
+        \Session::flash('message',$fmessage);
+        $this->registeredBinnacle($request,'create',$fmessage);
+        return redirect()->route('user.index');
     }
 
     /**
