@@ -57,9 +57,9 @@
               <div class="x_content">
 
                 <!--<form class="form-horizontal form-label-left input_mask">-->
-                <form id="usercreateform" class="form-horizontal form-label-left" novalidate action="{{ route('user.store') }}" method='POST' enctype="multipart/form-data">
+                {{ Form::open(['route' => ['user.update', $user], 'class'=>'form-horizontal form-label-left']) }}
 
-                	  {{ csrf_field() }}
+                	{{ Form::hidden('_method', 'PUT') }}
 
 
                 	<div id="invimg">
@@ -78,8 +78,6 @@
 					        <div class="col-md-3 col-sm-3 col-xs-12">
 					            <div class="kv-avatar center-block text-center" style="width:200px">
 					                <input id="avatar-2" name="usrc_pic" type="file" class="file-loading">
-
-					                
 					            </div>
 					        </div>
 
@@ -213,7 +211,7 @@
                         </div>
                       </div>
 
-                    </form>
+                    {{ Form::close() }}
 
               </div>
             </div>
@@ -278,8 +276,6 @@
 		 }
 
 		 var imgdiv = document.getElementById("invimg");
-		 var form = document.getElementById("usercreateform");
-		 form.reset();
 		 imgdiv.style.display='none';
 
 		 $("#avatar-2").fileinput({

@@ -89,6 +89,7 @@ class UserController extends Controller
      */
     public function create()
     {
+        
         $distributors = Distributor::all();
         $roles = Role::all();
         $permissions = Permission::all();
@@ -106,16 +107,25 @@ class UserController extends Controller
         $alldata = $request->all();
 
         $user = $this->customregister($request,$alldata);
-        $file     = request()->file('usrc_pic');
+
+        /*echo "<pre>";
+        print_r($user->id);die();
+        echo "</pre>";*/
+
+        
+        $file     = false;
         if(array_key_exists('usrc_pic',$alldata)){
+            $file     = request()->file('usrc_pic');
             $path = $request->file('usrc_pic')->storeAs(
             'public', $user->id.'.'.$file->getClientOriginalName()
         );
         }
+
+
         
 
-        if($path!=false){
-            $user->usrc_pic = $file->getClientOriginalName();
+        if($file!=false){
+            $user->usrc_pic = $user->id.'.'.$file->getClientOriginalName();
         }
 
         if(array_key_exists('usrc_tel',$alldata) && isset($alldata['usrc_tel'])){
@@ -127,7 +137,9 @@ class UserController extends Controller
         }
 
         if(array_key_exists('usrc_distrib_id',$alldata) && isset($alldata['usrc_distrib_id'])){
-            $user->usrc_distrib_id = $alldata['usrc_distrib_id'];
+            if($alldata['usrc_distrib_id'] != 'null'){
+                $user->usrc_distrib_id = $alldata['usrc_distrib_id'];
+            }           
         }
 
         $user->save();
@@ -189,9 +201,63 @@ class UserController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function update(Request $request, $id)
+    public function update(Request $request, User $user)
     {
-        //
+        $alldata = $request->all();
+
+        $file     = false;
+        if(array_key_exists('usrc_pic',$alldata)){
+            $file     = request()->file('usrc_pic');
+            $path = $request->file('usrc_pic')->storeAs(
+            'public', $user->id.'.'.$file->getClientOriginalName()
+        );
+        }
+        
+
+        if($file!=false){
+            $user->usrc_pic = $file->getClientOriginalName();
+        }
+
+        if(array_key_exists('usrc_tel',$alldata) && isset($alldata['usrc_tel'])){
+            $user->usrc_tel = $alldata['usrc_tel'];
+        }
+
+        if(array_key_exists('usrc_super',$alldata) && isset($alldata['usrc_super'])){
+            $user->usrc_super = $alldata['usrc_super'];
+        }
+
+        if(array_key_exists('usrc_distrib_id',$alldata) && isset($alldata['usrc_distrib_id'])){
+            if($alldata['usrc_distrib_id'] != 'null'){
+                $user->usrc_distrib_id = $alldata['usrc_distrib_id'];
+            }           
+        }
+
+        $user->save();
+
+
+
+        if(array_key_exists('roles',$alldata)){
+            $user->detachAllRoles();
+            foreach ($alldata['roles'] as $rol) {
+                $rolobj = Role::find($rol);
+                $user->attachRole($rolobj);
+            }
+        }
+
+
+        if(array_key_exists('permisos',$alldata)){
+            $user->detachAllPermissions();
+            foreach ($alldata['permisos'] as $perm) {
+                $permobj = Permission::find($perm);
+                $user->attachPermission($permobj);
+            }
+        }
+
+        
+        $fmessage = 'Se ha modificado el usuario: '.$alldata['name'];
+        \Session::flash('message',$fmessage);
+        $this->registeredBinnacle($request,'create',$fmessage);
+        return redirect()->route('user.index');
     }
 
     /**
@@ -200,8 +266,42 @@ class UserController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function destroy($id)
+    public function destroy(User $user,Request $request)
     {
-        //
+        if (isset($user)){
+            $fmessage = 'Se ha eliminado el usuario: '.$user->name;
+            \Session::flash('message',$fmessage);
+            $this->registeredBinnacle($request,'delete',$fmessage);
+            $user->delete();
+
+        }
+        return redirect()->route('user.index');
+    }
+
+    public function permsbyroles(Request $request)
+    {
+        $alldata = $request->all();
+        $return_array = array();
+        if(array_key_exists('selected',$alldata) && isset($alldata['selected'])){
+            foreach ($alldata['selected'] as $select) {
+                $role = Role::find((int)$select);
+                $tests = false;
+                if (isset($role)){
+                    $tests = $role->permissions()->get();
+                    foreach ($tests as $test) {
+                        array_push($return_array, $test->id);
+                    }
+                }
+
+                
+            }
+        }
+
+        $response = array(
+            'status' => 'success',
+            'msg' => 'Setting created successfully',
+            'roles' => $return_array,
+        );
+        return \Response::json($response);
     }
 }

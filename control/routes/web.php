@@ -34,6 +34,9 @@ Route::group(['prefix' => 'security'], function () {
     Route::resource('user', 'UserController');
 });
 
+//Ajax routes
+Route::post('/security/user/permsbyroles', 'UserController@permsbyroles');
+
 
 
 
