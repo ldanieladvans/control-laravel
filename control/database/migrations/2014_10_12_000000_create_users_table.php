@@ -27,7 +27,7 @@ class CreateUsersTable extends Migration
             $table->timestampTz('usrc_ult_acces')->nullable();
             $table->boolean('usrc_activo')->default(1);
             $table->integer('usrc_distrib_id')->unsigned()->nullable();
-            $table->binary('usrc_pic')->nullable();
+            $table->string('usrc_pic')->nullable();
         });
     }
 
