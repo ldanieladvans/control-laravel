@@ -102,7 +102,7 @@
 				                    <span class=" fa fa-angle-down"></span>
 				                  </a>
 				                  <ul class="dropdown-menu dropdown-usermenu pull-right">
-				                    <li><a href="javascript:;"> Profile</a></li>
+				                    <li><a href="{{ route('user.edit',Auth::user()->id) }}"> Perfil</a></li>
 				                    @if (Auth::guest())
 			                            <li><a href="{{ route('login') }}">Login</a></li>
 			                            <li><a href="{{ route('register') }}">Register</a></li>
@@ -112,7 +112,7 @@
 			                                        <a href="{{ route('logout') }}"
 			                                            onclick="event.preventDefault();
 			                                                     document.getElementById('logout-form').submit();">
-			                                            Logout
+			                                            Salir
 			                                        </a>
 
 			                                        <form id="logout-form" action="{{ route('logout') }}" method="POST" style="display: none;">
