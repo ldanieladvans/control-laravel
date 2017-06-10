@@ -156,6 +156,7 @@
         },
         clear: function (e) {
             var self = this;
+            console.log('bbb');
             if (e) {
                 e.preventDefault();
             }
@@ -168,12 +169,21 @@
                 self.$element.trigger('change');
                 self.$element.trigger('fileclear');
             }
-            self.$preview.html('');
+            var img2 = document.getElementById("imageiddef");
+            document.getElementById("deleted_pic").value='1';
+            var canvas = document.createElement("canvas");
+            canvas.width = img2.width;
+            canvas.height = img2.height;
+            var ctx = canvas.getContext("2d");
+            ctx.drawImage(img2, 0, 0);
+            var dataURL2 = canvas.toDataURL("image/png");
+            self.$preview.html('<div class="file-preview-frame"><img src="' + dataURL2 + '" class="file-preview-image" title="eee" alt="eee"></div>');
             self.$caption.html('');
             self.$container.removeClass('file-input-new');
         },
         reset: function (e) {
             var self = this;
+            console.log('aaa');
             self.clear(false);
             self.$hidden.val(self.original.hiddenVal);
             self.$preview.html(self.original.preview);
@@ -225,6 +235,7 @@
                             }
                             else {
                                 content = '<div class="file-preview-frame"><img src="' + theFile.target.result + '" class="file-preview-image" title="' + caption + '" alt="' + caption + '"></div>';
+                                document.getElementById("deleted_pic").value='0';
                             }
                             preview.append("\n" + content);
                             if (i >= total - 1) {

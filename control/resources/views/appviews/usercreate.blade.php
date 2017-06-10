@@ -62,7 +62,9 @@
                 	  {{ csrf_field() }}
 
                 	<div id="invimg">
-                		<img id=imageid src="{{asset('default_avatar_male.jpg')}}">
+                		<img id='imageiddef' src="{{asset('default_avatar_male.jpg')}}">
+                		<img id='imageid' src="{{asset('default_avatar_male.jpg')}}">
+                		<input id="deleted_pic" name="deleted_pic" type="text" value="0">
                 	</div>
 
                 	<table border="0" class="col-md-12 col-sm-12 col-xs-12">

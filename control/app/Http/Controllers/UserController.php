@@ -191,6 +191,8 @@ class UserController extends Controller
         $distributors = Distributor::all();
         $roles = Role::all();
         $permissions = Permission::all();
+
+
         return view('appviews.useredit',['distributors'=>$distributors,'roles'=>$roles,'permissions'=>$permissions,'user'=>$user]);
     }
 
@@ -205,17 +207,27 @@ class UserController extends Controller
     {
         $alldata = $request->all();
 
+        /*echo "<pre>";
+        print_r($alldata);die();
+        echo "</pre>";*/
+
         $file     = false;
         if(array_key_exists('usrc_pic',$alldata)){
             $file     = request()->file('usrc_pic');
             $path = $request->file('usrc_pic')->storeAs(
             'public', $user->id.'.'.$file->getClientOriginalName()
         );
+        }else{
+            if(array_key_exists('deleted_pic',$alldata)){
+                if($alldata['deleted_pic']=='1'){
+                    $user->usrc_pic = 'default_avatar_male.jpg';
+                }
+            }
         }
         
 
         if($file!=false){
-            $user->usrc_pic = $file->getClientOriginalName();
+            $user->usrc_pic = $user->id.'.'.$file->getClientOriginalName();
         }
 
         if(array_key_exists('usrc_tel',$alldata) && isset($alldata['usrc_tel'])){
@@ -247,12 +259,16 @@ class UserController extends Controller
 
         if(array_key_exists('permisos',$alldata)){
             $user->detachAllPermissions();
-            foreach ($alldata['permisos'] as $perm) {
+            foreach ($alldata['permisos'] as $perm) {                
                 $permobj = Permission::find($perm);
                 $user->attachPermission($permobj);
+
             }
         }
 
+
+        
+        
         
         $fmessage = 'Se ha modificado el usuario: '.$alldata['name'];
         \Session::flash('message',$fmessage);

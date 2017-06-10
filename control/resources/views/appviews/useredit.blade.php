@@ -57,17 +57,20 @@
               <div class="x_content">
 
                 <!--<form class="form-horizontal form-label-left input_mask">-->
-                {{ Form::open(['route' => ['user.update', $user], 'class'=>'form-horizontal form-label-left']) }}
+                {{ Form::open(['route' => ['user.update', $user], 'enctype'=>'multipart/form-data', 'class'=>'form-horizontal form-label-left']) }}
 
                 	{{ Form::hidden('_method', 'PUT') }}
 
 
                 	<div id="invimg">
+                		<img id='imageiddef' src="{{asset('default_avatar_male.jpg')}}">
                 		@if (count($user->usrc_pic) >= 1)
-						    <img id=imageid src="{{asset('storage/'.$user->usrc_pic)}}">
+						    <img id='imageid' src="{{asset('storage/'.$user->usrc_pic)}}">
 						@else
-						    <img id=imageid src="{{asset('default_avatar_male.jpg')}}">
+						    <img id='imageid' src="{{asset('default_avatar_male.jpg')}}">
 						@endif
+
+						<input id="deleted_pic" name="deleted_pic" type="text" value="0">
 
                 	</div>
 
@@ -176,7 +179,7 @@
 
 								<div class="item form-group">
 					                    <div class="col-md-10 col-sm-10 col-xs-12">
-					                      <select id="roles" name="roles[]" tabindex="1" data-placeholder="Seleccione los roles ..." name="rolesapp" class="chosen-select form-control" multiple="multiple">
+					                      <select id="roles" name="roles[]" tabindex="1" data-placeholder="Seleccione los roles ..." name="rolesapp" class="chosen-select form-control" onchange="onSelectUserCreate(this)" multiple="multiple">
 					                        @foreach($roles as $role)
 												<option value="{{ $role->id }}" {{$user->hasRole($role->id) ? 'selected':''}} >{{ $role->name }}</option>
 											@endforeach
@@ -189,7 +192,7 @@
 					                      <select id="permisos" name="permisos[]" tabindex="2" data-placeholder="Seleccione los permisos ..." name="rolesapp" class="chosen-select form-control" multiple="multiple">
 					                      
 											@foreach($permissions as $permission)
-				                            	<option value="{{ $permission->id }}" {{$user->hasPermission($permission->id) ? 'selected':''}} >{{ $permission->name }}</option>
+				                            	<option value="{{ $permission->id }}" {{$user->customGetUserPerms($permission->id,true) ? 'selected':''}} >{{ $permission->name }}</option>
 				                            @endforeach
 					                      </select>
 					                  	</div>
@@ -247,32 +250,54 @@
 
     <script type="text/javascript">
 
-		function toggleCheckbox(element){
-		   element.checked = !element.checked;
-		   if (element.checked){
-	   			$("#dom_new_data").show();
-	   			$("#dom_exits_data").hide();
-	   			document.getElementById("dom_calle").required = true;
-		   }else{
-		   		$("#dom_new_data").hide();
-		   		$("#dom_exits_data").show();
-		   		document.getElementById("dom_calle").required = false;
-		   }
-		   
-		 }
+		function getSelectValues(select) {
+		  var result = [];
+		  var options = select && select.options;
+		  var opt;
 
-		function toggleCheckboxRefer(element){
-		   element.checked = !element.checked;
-		   if (element.checked){
-	   			$("#refer_new_data").show();
-	   			$("#refer_exits_data").hide();
-	   			document.getElementById("refer_nom").required = true;
-		   }else{
-		   		$("#refer_new_data").hide();
-		   		$("#refer_exits_data").show();
-		   		document.getElementById("refer_nom").required = false;
-		   }
-		   
+		  for (var i=0, iLen=options.length; i<iLen; i++) {
+		    opt = options[i];
+
+		    if (opt.selected) {
+		      result.push(opt.value || opt.text);
+		    }
+		  }
+		  return result;
+		}
+		 
+
+		 function onSelectUserCreate(element){
+		 	var selected = getSelectValues(element);
+		 	
+		 	var CSRF_TOKEN = $('meta[name="csrf-token"]').attr('content');
+
+		 	console.log(CSRF_TOKEN);
+
+		 	$.ajax({
+			    url: 'permsbyroles',
+			    type: 'POST',
+			    data: {_token: CSRF_TOKEN,selected:selected},
+			    dataType: 'JSON',
+			    success: function (data) {
+			    	var roles = [];
+			    	var perms = document.getElementById('permisos').options;
+			    	data['roles'].forEach(function(entry) {
+			    		roles.push(entry);
+					    for(var i=0;i<perms.length;i++){
+
+					    	if(String(perms[i].value)==String(entry)){
+					    		console.log(perms[i]);
+				    			perms[i].selected=true;
+				    			
+				    			
+					    	}
+					    }
+					});
+			    	console.log(perms);
+			    	$('#permisos').trigger("chosen:updated");
+			        
+			    }
+			});
 		 }
 
 		 var imgdiv = document.getElementById("invimg");
