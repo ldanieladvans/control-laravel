@@ -32,6 +32,8 @@ Route::group(['prefix' => 'directory'], function () {
 
 Route::group(['prefix' => 'security'], function () {
     Route::resource('user', 'UserController');
+    Route::resource('role', 'RoleController');
+    Route::resource('permission', 'PermissionController');
 });
 
 //Ajax routes

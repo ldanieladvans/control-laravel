@@ -65,8 +65,8 @@
 					            <li><a><i class="fa fa-unlock-alt"></i> Seguridad <span class="fa fa-chevron-down"></span></a>
 					              <ul class="nav child_menu">
 					                <li><a href="{{ route('user.index') }}">Usuarios</a></li>
-					                <li><a href="chartjs2.html">Roles</a></li>
-					                <li><a href="morisjs.html">Permisos</a></li>
+					                <li><a href="{{ route('role.index') }}">Roles</a></li>
+					                <li><a href="{{ route('permission.index') }}">Permisos</a></li>
 					              </ul>
 					            </li>
 					           
@@ -98,7 +98,7 @@
 				              <ul class="nav navbar-nav navbar-right">
 				                <li class="">
 				                  <a href="javascript:;" class="user-profile dropdown-toggle" data-toggle="dropdown" aria-expanded="false">
-				                    <img src="" alt="">{{ Auth::user()->name }}
+				                    <img src="{{ Auth::user()->usrc_pic ? asset('storage/'.Auth::user()->usrc_pic) : asset('default_avatar_male.jpg')}}" alt="">{{ Auth::user()->name }}
 				                    <span class=" fa fa-angle-down"></span>
 				                  </a>
 				                  <ul class="dropdown-menu dropdown-usermenu pull-right">
