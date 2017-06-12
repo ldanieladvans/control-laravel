@@ -8,11 +8,12 @@ use Bican\Roles\Traits\HasRoleAndPermission;
 use Bican\Roles\Contracts\HasRoleAndPermission as HasRoleAndPermissionContract;
 use InvalidArgumentException;
 use Illuminate\Support\Facades\DB;
+use Laravel\Passport\HasApiTokens;
 
 
 class User extends Authenticatable implements HasRoleAndPermissionContract
 {
-    use Notifiable, HasRoleAndPermission;
+    use Notifiable, HasRoleAndPermission, HasApiTokens;
 
     /**
      * The attributes that are mass assignable.

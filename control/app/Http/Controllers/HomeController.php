@@ -23,6 +23,9 @@ class HomeController extends Controller
      */
     public function index()
     {
+        /*echo "<pre>";
+        print_r($_REQUEST);die();
+        echo "</pre>";*/
         return view('home');
     }
 

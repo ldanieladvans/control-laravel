@@ -188,6 +188,7 @@ return [
         Bican\Roles\RolesServiceProvider::class,
         Cviebrock\EloquentSluggable\ServiceProvider::class,
         Collective\Html\HtmlServiceProvider::class,
+        Laravel\Passport\PassportServiceProvider::class,
 
     ],
 

@@ -36,6 +36,23 @@ Route::group(['prefix' => 'security'], function () {
     Route::resource('permission', 'PermissionController');
 });
 
+
+Route::get('/redirect', function () {
+
+    $client = new \GuzzleHttp\Client();
+
+
+    $r = $client->post('http://wp.dev/index.php/wp-json/wp/v2/posts', 
+        ['json' => [
+            "access_token" =>csrf_token(),
+            "another_payload" => 'www'
+        ]]);
+    dd($r);
+
+	echo json_decode((string) $r->getBody(), true);
+});
+
+
 //Ajax routes
 Route::post('/security/user/permsbyroles', 'UserController@permsbyroles');
 Route::post('/security/user/{user_id}/permsbyroles', 'UserController@permsbyroles');
