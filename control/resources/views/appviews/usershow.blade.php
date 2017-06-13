@@ -71,15 +71,59 @@
                                         <div class="btn-group">
                                               <button onclick="" data-toggle="dropdown" class="btn btn-xs dropdown-toggle" data-placement="left" title="Más" style=" color:#790D4E "><i class="fa fa-plus-square fa-2x"></i> </button>
                                                 <ul role="menu" class="dropdown-menu">
-                                                  <li><a href="#">Action</a>
-                                                  </li>
-                                                  <li><a href="#">Another action</a>
-                                                  </li>
-                                                  <li><a href="#">Something else here</a>
-                                                  </li>
-                                                  <li><a href="#">Separated link</a>
+                                                  <li><a id="passmodallink{{$user->id}}" onclick="showModal({{$user->id}})">Cambiar contraseña</a>
                                                   </li>
                                                 </ul>
+
+                                                <!--<div id="passmodal" class="modal fade bd-example-modal-lg" tabindex="-1" role="dialog" aria-labelledby="myLargeModalLabel" aria-hidden="true">
+                                                  <div class="modal-dialog modal-lg">
+                                                    <div class="modal-content">
+                                                      
+
+
+
+
+
+
+                                                    </div>
+                                                  </div>
+                                                </div>-->
+
+
+
+                                               <div class="modal fade" id="passmodal{{$user->id}}" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+                                                <div class="modal-dialog" role="document">
+                                                  <div class="modal-content">
+                                                    <div class="modal-header">
+                                                      <h5 class="modal-title" id="exampleModalLabel">Cambio de contraseña: {{$user->name}}</h5>
+                                                      <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                                                        <span aria-hidden="true">&times;</span>
+                                                      </button>
+                                                    </div>
+                                                    <div class="modal-body">
+                                                      <form>
+                                                        <div class="form-group">
+                                                          <input placeholder="Contraseña" required="required" type="password" class="form-control" id="password{{$user->id}}">
+                                                        </div>
+                                                      </form>
+
+                                                      <div id="result_failure{{$user->id}}"></div>
+
+                                                    </div>
+                                                    <div class="modal-footer">
+                                                      <button type="button" class="btn btn-secondary" data-dismiss="modal">Cerrar</button>
+                                                      <button type="button"  onclick="changePass({{$user->id}});" class="btn btn-primary">Ok</button>
+                                                    </div>
+                                                  </div>
+                                                </div>
+                                              </div>
+
+
+
+
+
+
+
                                           </div>
 
                                               
@@ -103,6 +147,7 @@
               </div>
     </div>
 </div>
+
 @endsection
 
 @section('app_js') 
@@ -115,6 +160,58 @@
     <script src="{{ asset('controlassets/build/js/custom.js') }}"></script>
 
     <script>
+
+        function showModal(user) {
+          var modalid = "passmodal"+user;
+          $("#"+modalid).modal('show');
+        }
+
+        function hideModal(user) {
+          var modalid = "passmodal"+user;
+          $("#"+modalid).modal('hide');
+        }
+
+
+        function changePass(user){
+
+            var CSRF_TOKEN = $('meta[name="csrf-token"]').attr('content');
+
+            var passid = "password"+user;
+
+            var password = document.getElementById(passid).value;
+
+
+
+            if(password){
+              $.ajax({
+                url: 'user/changepass',
+                type: 'POST',
+                data: {_token: CSRF_TOKEN,password:password,user:user},
+                dataType: 'JSON',
+                success: function (data) {
+
+                  //console.log(data);
+                  hideModal(data['user']);
+                    
+                },
+                error: function(XMLHttpRequest, textStatus, errorThrown) { 
+                    //alert("Status: " + textStatus); alert("Error: " + errorThrown); 
+                    $("#result_failure"+user).html('<p><strong>Ocurrió un error: '+errorThrown+'</strong></p>');
+                }
+            });
+            }else{
+              $("#result_failure"+user).html('<p><strong>La contraseña es obligatoria</strong></p>');
+              
+            }
+
+            
+
+            
+    }
+
+
+    
+
       $( function() {
           $('#alertmsgcta').click(function() {
               console.log('alertmsgcta button clicked');

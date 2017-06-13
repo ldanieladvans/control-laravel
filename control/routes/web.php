@@ -101,6 +101,7 @@ Route::get('/callback', function (Request $request) {
 //Ajax routes
 Route::post('/security/user/permsbyroles', 'UserController@permsbyroles');
 Route::post('/security/user/{user_id}/permsbyroles', 'UserController@permsbyroles');
+Route::post('/security/user/changepass', 'UserController@changepass');
 
 
 

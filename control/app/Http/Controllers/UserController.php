@@ -320,4 +320,30 @@ class UserController extends Controller
         );
         return \Response::json($response);
     }
+
+    public function changepass(Request $request)
+    {
+        $alldata = $request->all();
+        $return_array = array();
+        $user = false;
+
+        if(array_key_exists('user',$alldata) && isset($alldata['user'])){
+            $user = User::find($alldata['user']);
+        }
+
+        if($user!=false){
+            if(array_key_exists('password',$alldata) && isset($alldata['password'])){
+                $user->password = bcrypt($alldata['password']);
+            }
+        }
+
+        $user->save();
+
+        $response = array(
+            'status' => 'success',
+            'msg' => 'Se cambió la contraseña satisfactoriamente',
+            'user' => $alldata['user'],
+        );
+        return \Response::json($response);
+    }
 }
