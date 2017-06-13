@@ -11,6 +11,8 @@
 |
 */
 
+use Illuminate\Http\Request;
+
 Route::get('/', function () {
     return view('welcome');
 });
@@ -38,18 +40,61 @@ Route::group(['prefix' => 'security'], function () {
 
 
 Route::get('/redirect', function () {
+    $query = http_build_query([
+        'client_id' => '3',
+        'redirect_uri' => 'http://advans.control.mx/callback',
+        'response_type' => 'code',
+        'scope' => '',
+    ]);
 
-    $client = new \GuzzleHttp\Client();
+    return redirect('http://advans.control.mx/oauth/authorize?'.$query);
+});
 
 
-    $r = $client->post('http://wp.dev/index.php/wp-json/wp/v2/posts', 
-        ['json' => [
-            "access_token" =>csrf_token(),
-            "another_payload" => 'www'
-        ]]);
-    dd($r);
+Route::get('/redirect', function () {
+    $query = http_build_query([
+        'client_id' => '3',
+        'redirect_uri' => 'http://advans.control.mx/callback',
+        'response_type' => 'code',
+        'scope' => '',
+    ]);
 
-	echo json_decode((string) $r->getBody(), true);
+    return redirect('http://advans.control.mx/oauth/authorize?'.$query);
+});
+
+
+Route::get('/callback', function (Request $request) {
+    $http = new GuzzleHttp\Client;
+
+    $response = $http->post('http://advans.control.mx/oauth/token', [
+        'form_params' => [
+            'grant_type' => 'authorization_code',
+            'client_id' => '3',
+            'client_secret' => 'WCnCTZ7gyWObzN4DgGyP6pVB2YO18QYIMnMPLP6o',
+            'redirect_uri' => 'http://advans.control.mx/callback',
+            'code' => $request->code,
+        ],
+    ]);
+
+    $auth = json_decode($response->getBody());
+    
+    $response = $http->get('http://advans.control.mx/api/user', [
+        'headers' => [
+            'Authorization' => 'Bearer '.$auth->access_token,
+        ]
+    ]);
+
+    $todos = json_decode( (string) $response->getBody() );
+
+    dd($todos);
+    
+    $todoList = "";
+    foreach ($todos as $todo) {
+        $todoList .= "<li>{$todo->task}".($todo->done ? '✅' : '')."</li>";
+    }
+
+    echo "<ul>{$todoList}</ul>";
+
 });
 
 
