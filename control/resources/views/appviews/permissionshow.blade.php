@@ -57,17 +57,7 @@
                                       <div class="btn-group">
 
                                         <div class="btn-group">
-                                              <button onclick="" data-toggle="dropdown" class="btn btn-xs dropdown-toggle" data-placement="left" title="Más" style=" color:#790D4E "><i class="fa fa-plus-square fa-2x"></i> </button>
-                                                <ul role="menu" class="dropdown-menu">
-                                                  <li><a href="#">Action</a>
-                                                  </li>
-                                                  <li><a href="#">Another action</a>
-                                                  </li>
-                                                  <li><a href="#">Something else here</a>
-                                                  </li>
-                                                  <li><a href="#">Separated link</a>
-                                                  </li>
-                                                </ul>
+                                              <button onclick="location.href = 'permission/{{$permission->id}}/edit';" class="btn btn-xs" data-placement="left" title="Editar" style=" color:#790D4E "><i class="fa fa-edit fa-2x"></i> </button>
                                           </div>
 
 

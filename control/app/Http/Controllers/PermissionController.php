@@ -69,7 +69,8 @@ class PermissionController extends Controller
      */
     public function edit($id)
     {
-        //
+        $permission = Permission::findOrFail($id);
+        return view('appviews.permedit',['permission'=>$permission]);
     }
 
     /**
@@ -81,7 +82,17 @@ class PermissionController extends Controller
      */
     public function update(Request $request, $id)
     {
-        //
+        $alldata = $request->all();
+        $permission = Permission::findOrFail($id);
+        $permission->name = $alldata['name'];
+        $permission->description = $alldata['description'];
+
+        $permission->save();
+
+        $fmessage = 'Se ha modificado el permiso: '.$alldata['name'];
+        \Session::flash('message',$fmessage);
+        $this->registeredBinnacle($request,'create',$fmessage);
+        return redirect()->route('permission.index');
     }
 
     /**

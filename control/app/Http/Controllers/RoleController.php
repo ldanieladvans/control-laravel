@@ -26,7 +26,8 @@ class RoleController extends Controller
     public function index()
     {
         $roles = Role::all();
-        return view('appviews.roleshow',['roles'=>$roles]);
+        $permissions = Permission::all();
+        return view('appviews.roleshow',['roles'=>$roles,'permissions'=>$permissions]);
     }
 
     /**
@@ -36,7 +37,8 @@ class RoleController extends Controller
      */
     public function create()
     {
-        //
+        $permissions = Permission::all();
+        return view('appviews.rolecreate',['permissions'=>$permissions]);
     }
 
     /**
@@ -47,7 +49,29 @@ class RoleController extends Controller
      */
     public function store(Request $request)
     {
-        //
+        $alldata = $request->all();
+
+        $permisos = false;
+
+        if(array_key_exists('permisos',$alldata)){
+            $permisos = $alldata['permisos'];
+            unset($alldata['permisos']);
+        }
+
+        $rol = new Role($alldata);
+        $rol->save();
+
+        if($permisos != false){
+            foreach ($permisos as $perm) {
+                $permobj = Permission::find($perm);
+                $rol->attachPermission($permobj);
+            }
+        }
+
+        $fmessage = 'Se ha creado el rol: '.$alldata['name'];
+        \Session::flash('message',$fmessage);
+        $this->registeredBinnacle($request,'create',$fmessage);
+        return redirect()->route('role.index');
     }
 
     /**
@@ -69,7 +93,11 @@ class RoleController extends Controller
      */
     public function edit($id)
     {
-        //
+        $rol = Role::findOrFail($id);
+        $permissions = Permission::all();
+
+
+        return view('appviews.roledit',['permissions'=>$permissions,'rol'=>$rol]);
     }
 
     /**
@@ -79,9 +107,36 @@ class RoleController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function update(Request $request, $id)
+    public function update(Request $request,$rol_id)
     {
-        //
+        $alldata = $request->all();
+
+        $permisos = false;
+
+        if(array_key_exists('permisos',$alldata)){
+            $permisos = $alldata['permisos'];
+            unset($alldata['permisos']);
+        }
+
+        $rol = Role::findOrFail($rol_id);
+        $rol->name = $alldata['name'];
+        $rol->slug = $alldata['slug'];
+        $rol->description = $alldata['description'];
+
+        $rol->save();
+
+        if($permisos != false){
+            $rol->detachAllPermissions();
+            foreach ($permisos as $perm) {
+                $permobj = Permission::find($perm);
+                $rol->attachPermission($permobj);
+            }
+        }
+
+        $fmessage = 'Se ha actualizado el rol: '.$alldata['name'];
+        \Session::flash('message',$fmessage);
+        $this->registeredBinnacle($request,'update',$fmessage);
+        return redirect()->route('role.index');
     }
 
     /**
@@ -90,8 +145,40 @@ class RoleController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function destroy($id)
+    public function destroy($rol_id,Request $request)
     {
-        //
+        if (isset($rol_id)){
+            $rol = Role::findOrFail($rol_id);
+            $fmessage = 'Se ha eliminado el rol: '.$rol->name;
+            \Session::flash('message',$fmessage);
+            $this->registeredBinnacle($request,'delete',$fmessage);
+            $rol->delete();
+
+        }
+        return redirect()->route('role.index');
+    }
+
+    public function assignPerm(Request $request)
+    {
+        $alldata = $request->all();
+        $return_array = array();
+        //print_r($alldata);
+        if(array_key_exists('rol',$alldata) && isset($alldata['rol'])){
+            $role = Role::find($alldata['rol']);
+            $role->detachAllPermissions();
+            if(array_key_exists('selected',$alldata) && isset($alldata['selected'])){
+                
+                foreach ($alldata['selected'] as $select) {
+                    $role->attachPermission($select);
+                }
+            }
+        }
+
+        $response = array(
+            'status' => 'success',
+            'msg' => 'Se asignaron los permisos satisfactoriamente',
+            'rol' => $alldata['rol'] ? $alldata['rol']:'false',
+        );
+        return \Response::json($response);
     }
 }

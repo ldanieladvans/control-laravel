@@ -8,6 +8,14 @@
     <link href="{{ asset('controlassets/vendors/datatables.net-fixedheader-bs/css/fixedHeader.bootstrap.min.css') }}" rel="stylesheet">
     <link href="{{ asset('controlassets/vendors/datatables.net-responsive-bs/css/responsive.bootstrap.min.css') }}" rel="stylesheet">
     <link href="{{ asset('controlassets/vendors/datatables.net-scroller-bs/css/scroller.bootstrap.min.css') }}" rel="stylesheet">
+
+    <!-- Chosen -->
+    
+    <link href="{{ asset('controlassets/vendors/chosen/chosen.css') }}" rel="stylesheet" type="text/css" />
+
+    <style>
+
+   </style>
 @endsection
 
 @section('app_content')
@@ -30,6 +38,7 @@
                   @endif
 
                   <div class="x_content">
+                  <button type="button" onclick="location.href = 'role/create';" class="btn btn-primary">Agregar</button>
                     <table id="datatable-buttons" class="table table-striped table-bordered">
                       <thead>
                         <tr>
@@ -53,23 +62,59 @@
                                       
                                       
                                       <div class="btn-group">
+                                        <div class="btn-group">
+                                              <button onclick="location.href = 'role/{{$rol->id}}/edit';" class="btn btn-xs" data-placement="left" title="Editar" style=" color:#790D4E "><i class="fa fa-edit fa-2x"></i> </button>
+                                          </div>
 
                                         <div class="btn-group">
                                               <button onclick="" data-toggle="dropdown" class="btn btn-xs dropdown-toggle" data-placement="left" title="Más" style=" color:#790D4E "><i class="fa fa-plus-square fa-2x"></i> </button>
                                                 <ul role="menu" class="dropdown-menu">
-                                                  <li><a href="#">Action</a>
-                                                  </li>
-                                                  <li><a href="#">Another action</a>
-                                                  </li>
-                                                  <li><a href="#">Something else here</a>
-                                                  </li>
-                                                  <li><a href="#">Separated link</a>
+                                                  <li><a id="permsmodallink{{$rol->id}}" onclick="showModal({{$rol->id}})">Asignar permisos</a>
                                                   </li>
                                                 </ul>
+
+                                                <div class="modal fade" id="permsmodal{{$rol->id}}" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+                                                <div class="modal-dialog" role="document">
+                                                  <div class="modal-content">
+                                                    <div class="modal-header">
+                                                      <h5 class="modal-title" id="exampleModalLabel">Asignación de permisos: {{$rol->name}}</h5>
+                                                      <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                                                        <span aria-hidden="true">&times;</span>
+                                                      </button>
+                                                    </div>
+                                                    <div class="modal-body">
+                                                      <form>
+                                                        <div class="item form-group">
+                                                              <div class="col-md-10 col-sm-10 col-xs-12">
+                                                                <select id="permisos" name="permisos[]" tabindex="2" data-placeholder="Seleccione los permisos ..." name="rolesapp" class="chosen-select form-control" onchange="onSelectAssignPerm(this)" multiple="multiple">
+                                                                
+                                                                    @foreach($permissions as $permission)
+                                                                      <option value="{{ $permission->id }}" {{Auth::user()->customGetRolePerms($rol->id,$permission->id,true) > 0 ? 'selected':''}} >{{ $permission->name }}</option>
+                                                                    @endforeach
+                                                                </select>
+                                                              </div>
+                                                        </div>
+                                                      </form>
+
+                                                      <div id="result_failure{{$rol->id}}"></div>
+
+                                                    </div>
+                                                    <div class="modal-footer">
+                                                      <button type="button" class="btn btn-secondary" data-dismiss="modal">Cerrar</button>
+                                                      <button type="button"  onclick="assignPerm({{$rol->id}});" class="btn btn-primary">Ok</button>
+                                                    </div>
+                                                  </div>
+                                                </div>
+                                              </div>
+
                                           </div>
 
+                                          {{ Form::open(['route' => ['role.destroy', $rol->id], 'class'=>'pull-right']) }}
+                                              {{ Form::hidden('_method', 'DELETE') }}
+                                              <button  href="#" class="btn btn-xs" onclick="return confirm('¿Está seguro que quiere eliminar este registro?')" type="submit" data-placement="left" title="Borrar" style=" color:#790D4E "><i class="fa fa-trash fa-2x"></i></button>
+                                            {{ Form::close() }}
 
-                                          </div>
+                                        </div>
 
 
                                   </td>
@@ -94,7 +139,79 @@
     <!-- Custom Theme Scripts -->
     <script src="{{ asset('controlassets/build/js/custom.js') }}"></script>
 
+    <!-- Chosen -->
+  <script src="{{ asset('controlassets/vendors/chosen/chosen.jquery.js') }}" type="text/javascript"></script>
+  <script src="{{ asset('controlassets/vendors/chosen/docsupport/prism.js') }}" type="text/javascript" charset="utf-8"></script>
+  <script src="{{ asset('controlassets/vendors/chosen/docsupport/init.js') }}" type="text/javascript" charset="utf-8"></script>
+
     <script>
+
+      var selected = [];
+
+      function showModal(rol) {
+          var modalid = "permsmodal"+rol;
+          $("#"+modalid).modal('show');
+          $("#"+modalid).on('shown.bs.modal', function () {
+            $('.chosen-select', this).chosen('destroy').chosen();
+          });
+        }
+
+        function hideModal(rol) {
+          var modalid = "permsmodal"+rol;
+          //console.log(modalid);
+          $("#"+modalid).modal('hide');
+        }
+
+      function getSelectValues(select) {
+        var result = [];
+        var options = select && select.options;
+        var opt;
+
+        for (var i=0, iLen=options.length; i<iLen; i++) {
+          opt = options[i];
+
+          if (opt.selected) {
+            result.push(opt.value || opt.text);
+          }
+        }
+        return result;
+      }
+
+      function onSelectAssignPerm(element){
+      selected = getSelectValues(element);
+
+     }
+
+      function assignPerm(rol){
+
+            var CSRF_TOKEN = $('meta[name="csrf-token"]').attr('content');
+
+            //alert(selected);
+
+
+            if(selected){
+              $.ajax({
+                url: 'role/assignPerm ',
+                type: 'POST',
+                data: {_token: CSRF_TOKEN,selected:selected,rol:rol},
+                dataType: 'JSON',
+                success: function (data) {
+
+                  hideModal(data['rol']);
+                    
+                },
+                error: function(XMLHttpRequest, textStatus, errorThrown) { 
+                    //alert("Status: " + textStatus); alert("Error: " + errorThrown); 
+                    $("#result_failure"+rol).html('<p><strong>Ocurrió un error: '+errorThrown+'</strong></p>');
+                }
+            });
+            }else{
+              $("#result_failure"+user).html('<p><strong>sss</strong></p>');
+              
+            }
+            
+    }
+
       $( function() {
           $('#alertmsgcta').click(function() {
               console.log('alertmsgcta button clicked');

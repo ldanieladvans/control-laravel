@@ -75,21 +75,6 @@
                                                   </li>
                                                 </ul>
 
-                                                <!--<div id="passmodal" class="modal fade bd-example-modal-lg" tabindex="-1" role="dialog" aria-labelledby="myLargeModalLabel" aria-hidden="true">
-                                                  <div class="modal-dialog modal-lg">
-                                                    <div class="modal-content">
-                                                      
-
-
-
-
-
-
-                                                    </div>
-                                                  </div>
-                                                </div>-->
-
-
 
                                                <div class="modal fade" id="passmodal{{$user->id}}" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
                                                 <div class="modal-dialog" role="document">
