@@ -3,9 +3,9 @@
 namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
-use App\Binnacle;
+use App\Packageassignation;
 
-class BinnacleController extends Controller
+class PackageassignationController extends Controller
 {
     /**
      * Create a new controller instance.
@@ -24,8 +24,8 @@ class BinnacleController extends Controller
      */
     public function index()
     {
-        $binnacles = Binnacle::all();
-        return view('appviews.binnacleshow',['binnacles'=>$binnacles]);
+        $appctas = Packageassignation::all();
+        return view('appviews.packassigshow',['appctas'=>$appctas]);
     }
 
     /**

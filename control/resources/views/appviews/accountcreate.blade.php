@@ -6,6 +6,10 @@
     <link href="{{ asset('controlassets/build/css/custom.css') }}" rel="stylesheet">
     <!-- Datetime -->
     <link href="{{ asset('controlassets/vendors/datetime/css/bootstrap-datetimepicker.min.css') }}" rel="stylesheet" media="screen">
+
+    <!-- Chosen -->
+    
+    <link href="{{ asset('controlassets/vendors/chosen/chosen.css') }}" rel="stylesheet" type="text/css" />
 @endsection
 
 @section('app_content')
@@ -35,75 +39,93 @@
 
                 	{{ csrf_field() }}
 
-                  <div class="item form-group">
-                    <label class="control-label col-md-3 col-sm-3 col-xs-12" for="cta_nomservd">Servidor <span class="required">*</span>
-                    </label>
-                    <div class="col-md-6 col-sm-6 col-xs-12">
-                      <input id="cta_nomservd" class="form-control col-md-7 col-xs-12" data-validate-words="1" name="cta_nomservd" placeholder="Identificador del servidor" required="required" type="text">
+                  <div class="item form-group">                     
+                      <div class="col-md-9 col-sm-9 col-xs-12">
+                        <input id="cta_nomservd" title="Identificador del servidor" class="form-control has-feedback-left" name="cta_nomservd" placeholder="Identificador del servidor *" required="required" type="text">
+                        <span class="fa fa-info form-control-feedback left" aria-hidden="true"></span>
+                      </div>
                     </div>
-                  </div>
 
-                  <div class="item form-group">
-                    <label class="control-label col-md-3 col-sm-3 col-xs-12" for="cta_num">Número de Cuenta <span class="required">*</span>
-                    </label>
-                    <div class="col-md-6 col-sm-6 col-xs-12">
-                      <input type="number" id="cta_num" name="cta_num" required="required" data-validate-minmax="1,10000000000" class="form-control col-md-7 col-xs-12">
+
+                  <div class="item form-group">                     
+                      <div class="col-md-9 col-sm-9 col-xs-12">
+                        <input id="cta_num" title="Número de Cuenta" class="form-control has-feedback-left" name="cta_num" placeholder="Número de Cuenta *" type="number">
+                        <span class="fa fa-bar-chart form-control-feedback left" aria-hidden="true"></span>
+                      </div>
                     </div>
-                  </div>
 
-                  <div class="item form-group">
-                    <label for="cta_fecha" class="control-label col-md-3 col-sm-3 col-xs-12">Fecha <span class="required">*</span></label>
-	                <div class="col-md-6 col-sm-6 col-xs-12">
-                      <input id="cta_fecha" type="date" name="cta_fecha" class="optional datetime-picker form-control col-md-7 col-xs-12">
+                  <div class="item form-group">                     
+                      <div class="col-md-9 col-sm-9 col-xs-12">
+                        <input id="cta_fecha" title="Fecha" class="form-control has-feedback-left" name="cta_fecha" placeholder="Fecha" required="required" type="date">
+                        <span class="fa fa-calendar form-control-feedback left" aria-hidden="true"></span>
+                      </div>
                     </div>
-					<br/>
 
-                  </div>
-
-                  <div class="item form-group">
-                    <label class="control-label col-md-3 col-sm-3 col-xs-12" for="cta_nom_bd">Nombre Base de Datos <span class="required">*</span>
-                    </label>
-                    <div class="col-md-6 col-sm-6 col-xs-12">
-                      <input id="cta_nom_bd" class="form-control col-md-7 col-xs-12" data-validate-words="1" name="cta_nom_bd" required="required" type="text">
+                  <div class="item form-group">                     
+                      <div class="col-md-9 col-sm-9 col-xs-12">
+                        <input id="cta_nom_bd" title="Nombre Base de Datos" class="form-control has-feedback-left" name="cta_nom_bd" placeholder="Nombre Base de Datos *" required="required" type="text">
+                        <span class="fa fa-laptop form-control-feedback left" aria-hidden="true"></span>
+                      </div>
                     </div>
-                  </div>
 
-                  <div class="item form-group">
-                    <label class="control-label col-md-3 col-sm-3 col-xs-12">Cliente</label>
-                        <div class="col-md-6 col-sm-6 col-xs-12">
-                          <select class="select2_single form-control col-md-7 col-xs-12" name="cta_cliente_id">
-                            <option value="null">Seleccione una opción ...</option>
-                            @foreach($clients as $client)
-                            	<option value="{{ $client->id }}">{{ $client->cliente_nom }}</option>
-                            @endforeach
-                          </select>
-                      	</div>
-                  </div>
-
-                  <div class="item form-group">
-                    <label class="control-label col-md-3 col-sm-3 col-xs-12">Distribuidor</label>
-                        <div class="col-md-6 col-sm-6 col-xs-12">
-                          <select class="select2_single form-control col-md-7 col-xs-12" name="cta_distrib_id">
-                            <option value="null">Seleccione una opción ...</option>
-                            @foreach($distributors as $distributor)
-                            	<option value="{{ $distributor->id }}">{{ $distributor->distrib_nom }}</option>
-                            @endforeach
-                          </select>
-                      	</div>
-                  </div>
-
-                  <div class="item form-group">
-                    <label class="control-label col-md-3 col-sm-3 col-xs-12" for="cta_estado">Estado <span class="required">*</span>
-                    </label>
-                    <div class="col-md-6 col-sm-6 col-xs-12">
-                      <input type="text" id="cta_estado" name="cta_estado" readonly="readonly" data-validate-words="1" required="required" value="Borrador" class="form-control col-md-7 col-xs-12">
+                  <div class="item form-group">                     
+                      <div class="col-md-9 col-sm-9 col-xs-12">
+                        <input id="cta_estado" title="Estado" class="form-control has-feedback-left" name="cta_estado" placeholder="Estado *" required="required" type="text" readonly="readonly" value="Borrador">
+                        <span class="fa fa-certificate form-control-feedback left" aria-hidden="true"></span>
+                      </div>
                     </div>
+
+
+                  <div class="x_content">
+                      <div class="" role="tabpanel" data-example-id="togglable-tabs">
+                        <ul id="myTab" class="nav nav-tabs bar_tabs" role="tablist">
+                          <li role="presentation" class="active"><a href="#tab_content1" id="home-tab" role="tab" data-toggle="tab" aria-expanded="true">Cliente - Distribuidor</a>
+                          </li>
+                        </ul>
+
+                        <div id="myTabContent" class="tab-content">
+
+                          <div role="tabpanel" class="tab-pane fade active in" id="tab_content1" aria-labelledby="home-tab">
+
+                            <div class="item form-group">
+                              <label class="control-label col-md-1 col-sm-1 col-xs-12">Cliente</label>
+                                  <div class="col-md-5 col-sm-5 col-xs-12">
+                                    <select class="select2_single form-control col-md-7 col-xs-12" name="cta_cliente_id">
+                                      <option value="null">Seleccione una opción ...</option>
+                                      @foreach($clients as $client)
+                                        <option value="{{ $client->id }}">{{ $client->cliente_nom }}</option>
+                                      @endforeach
+                                    </select>
+                                  </div>
+
+                              <label class="control-label col-md-1 col-sm-1 col-xs-12">Distribuidor</label>
+                                  <div class="col-md-5 col-sm-5 col-xs-12">
+                                    <select class="select2_single form-control col-md-7 col-xs-12" name="cta_distrib_id">
+                                      <option value="null">Seleccione una opción ...</option>
+                                      @foreach($distributors as $distributor)
+                                        <option value="{{ $distributor->id }}">{{ $distributor->distrib_nom }}</option>
+                                      @endforeach
+                                    </select>
+                                  </div>
+
+                            </div>
+                            
+                          </div>
+
+                          
+
+                              
+                        </div>
+
+                      </div>
+
                   </div>
 
 
                   <div class="ln_solid"></div>
                   <div class="form-group">
                     <div class="col-md-6 col-md-offset-3">
+                      <button id="cancel" type="button" onclick="location.href = '/account/account';" class="btn btn-info">Cancelar</button>
                       <button type="reset" class="btn btn-primary">Borrar Datos</button>
                       <button id="send" type="submit" class="btn btn-success">Guardar</button>
                     </div>
@@ -119,6 +141,11 @@
 @section('app_js') 
 	@parent
 
+    <!-- Chosen -->
+  <script src="{{ asset('controlassets/vendors/chosen/chosen.jquery.js') }}" type="text/javascript"></script>
+  <script src="{{ asset('controlassets/vendors/chosen/docsupport/prism.js') }}" type="text/javascript" charset="utf-8"></script>
+  <script src="{{ asset('controlassets/vendors/chosen/docsupport/init.js') }}" type="text/javascript" charset="utf-8"></script>
+
     <!-- validator -->
     <script src="{{ asset('controlassets/vendors/validator/control.validator.js') }}"></script>
 
@@ -130,6 +157,7 @@
 	<script type="text/javascript" src="{{ asset('controlassets/vendors/datetime/js/locales/bootstrap-datetimepicker.es.js') }}" charset="UTF-8"></script>
 
 	<script type="text/javascript">
+
 	    $('.form_datetime').datetimepicker({
 	        language:  'es',
 	        weekStart: 1,

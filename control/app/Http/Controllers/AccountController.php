@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\Account;
 use App\Client;
 use App\Distributor;
+use App\Package;
 use Illuminate\Http\Request;
 
 class AccountController extends Controller
@@ -27,7 +28,8 @@ class AccountController extends Controller
     public function index()
     {
         $accounts = Account::all();
-        return view('appviews.accountshow',['accounts'=>$accounts]);
+        $packages = Package::all();
+        return view('appviews.accountshow',['accounts'=>$accounts,'packages'=>$packages]);
     }
 
     /**
@@ -39,7 +41,8 @@ class AccountController extends Controller
     {
         $clients = Client::all();
         $distributors = Distributor::all();
-        return view('appviews.accountcreate',['clients'=>$clients,'distributors'=>$distributors]);
+        $packages = Package::all();
+        return view('appviews.accountcreate',['clients'=>$clients,'distributors'=>$distributors,'packages'=>$packages]);
     }
 
     /**
@@ -92,7 +95,8 @@ class AccountController extends Controller
         //$clients = Client::where('id', '<>', $account->cta_cliente_id)->get();
         $clients = Client::all();
         $distributors = Distributor::all();
-        return view('appviews.accountedit',['account'=>$account,'clients'=>$clients,'distributors'=>$distributors]);
+        $packages = Package::all();
+        return view('appviews.accountedit',['account'=>$account,'clients'=>$clients,'distributors'=>$distributors,'packages'=>$packages]);
     }
 
     /**

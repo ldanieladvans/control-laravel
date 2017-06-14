@@ -146,6 +146,7 @@
                       <div class="ln_solid"></div>
                       <div class="form-group">
                         <div class="col-md-9 col-sm-9 col-xs-12 col-md-offset-3">
+                          <button id="cancel" type="button" onclick="location.href = '/security/role';" class="btn btn-info">Cancelar</button>
                           <button type="reset" class="btn btn-primary">Borrar Datos</button>
                   		  <button id="send" type="submit" class="btn btn-success">Guardar</button>
                         </div>

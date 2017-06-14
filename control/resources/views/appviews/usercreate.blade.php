@@ -191,7 +191,7 @@
 
 								<div class="item form-group">
 					                    <div class="col-md-10 col-sm-10 col-xs-12">
-					                      <select id="roles" name="roles[]" tabindex="1" data-placeholder="Seleccione los roles ..." name="rolesapp" class="chosen-select form-control" onchange="onSelectUserCreate(this)" multiple="multiple">
+					                      <select id="roles" name="roles[]" tabindex="1" data-placeholder="Seleccione los roles ..." class="chosen-select form-control" onchange="onSelectUserCreate(this)" multiple="multiple">
 					                        @foreach($roles as $role)
 												<option value="{{ $role->id }}">{{ $role->name }}</option>
 											@endforeach
@@ -201,7 +201,7 @@
 
 					              <div class="item form-group">
 					                    <div class="col-md-10 col-sm-10 col-xs-12">
-					                      <select id="permisos" name="permisos[]" tabindex="2" data-placeholder="Seleccione los permisos ..." name="rolesapp" class="chosen-select form-control" multiple="multiple">
+					                      <select id="permisos" name="permisos[]" tabindex="2" data-placeholder="Seleccione los permisos ..." class="chosen-select form-control" multiple="multiple">
 					                      
 											@foreach($permissions as $permission)
 				                            	<option value="{{ $permission->id }}">{{ $permission->name }}</option>
@@ -222,6 +222,7 @@
                       <div class="ln_solid"></div>
                       <div class="form-group">
                         <div class="col-md-9 col-sm-9 col-xs-12 col-md-offset-3">
+                          <button id="cancel" type="button" onclick="location.href = '/security/user';" class="btn btn-info">Cancelar</button>
                           <button type="reset" class="btn btn-primary">Borrar Datos</button>
                   		  <button id="send" type="submit" class="btn btn-success">Guardar</button>
                         </div>

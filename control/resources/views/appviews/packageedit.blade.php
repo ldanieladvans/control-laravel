@@ -14,7 +14,7 @@
         <div class="col-md-12 col-sm-12 col-xs-12">
             <div class="x_panel">
               <div class="x_title">
-                <h2>Editar Cuenta</h2>
+                <h2>Editar Paquete</h2>
                 <ul class="nav navbar-right panel_toolbox">
                   <li><a class="collapse-link"><i class="fa fa-chevron-up"></i></a>
                   </li>
@@ -58,7 +58,8 @@
                   <div class="ln_solid"></div>
                   <div class="form-group">
                     <div class="col-md-6 col-md-offset-3">
-                      <!--<button type="reset" class="btn btn-primary">Borrar Datos</button>-->                                                                                                                   <button id="send" type="submit" class="btn btn-success">Guardar</button>
+                      <button id="cancel" type="button" onclick="location.href = '/config/package';" class="btn btn-info">Cancelar</button>                                                                           
+                      <button id="send" type="submit" class="btn btn-success">Guardar</button>
                     </div>
                   </div>
                 {{ Form::close() }}

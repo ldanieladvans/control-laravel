@@ -21,7 +21,10 @@ Auth::routes();
 
 Route::get('/home', 'HomeController@index')->name('home');
 
-Route::resource('account', 'AccountController');
+Route::group(['prefix' => 'account'], function () {
+    Route::resource('account', 'AccountController');
+    Route::resource('accpack', 'PackageassignationController');
+});
 
 Route::group(['prefix' => 'config'], function () {
     Route::resource('package', 'PackageController');

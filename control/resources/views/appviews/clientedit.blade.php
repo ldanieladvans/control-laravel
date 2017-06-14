@@ -39,7 +39,7 @@
 
                       <div class="item form-group">	                    
 	                    <div class="col-md-9 col-sm-9 col-xs-12">
-	                      <input id="cliente_nom" class="form-control has-feedback-left" name="cliente_nom" placeholder="Nombre del Cliente *" required="required" type="text" value="{{ $client->cliente_nom }}">
+	                      <input id="cliente_nom" title="Nombre del Cliente" class="form-control has-feedback-left" name="cliente_nom" placeholder="Nombre del Cliente *" required="required" type="text" value="{{ $client->cliente_nom }}">
 	                      <span class="fa fa-user form-control-feedback left" aria-hidden="true"></span>
 	                    </div>
 	                  </div>
@@ -295,6 +295,7 @@
                       <div class="ln_solid"></div>
                       <div class="form-group">
                         <div class="col-md-9 col-sm-9 col-xs-12 col-md-offset-3">
+                          <button id="cancel" type="button" onclick="location.href = '/directory/client';" class="btn btn-info">Cancelar</button>
                   		  <button id="send" type="submit" class="btn btn-success">Guardar</button>
                         </div>
                       </div>
