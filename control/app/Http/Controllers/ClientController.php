@@ -121,7 +121,7 @@ class ClientController extends Controller
 
         $fmessage = 'Se ha creado el cliente: '.$alldata['cliente_nom'];
         \Session::flash('message',$fmessage);
-        $this->registeredBinnacle($request,'create',$fmessage);
+        $this->registeredBinnacle($request,'store',$fmessage);
         return redirect()->route('client.index');
     }
 
@@ -226,7 +226,7 @@ class ClientController extends Controller
 
         $fmessage = 'Se ha actualizado el cliente: '.$alldata['cliente_nom'];
         \Session::flash('message',$fmessage);
-        $this->registeredBinnacle($request,'create',$fmessage);
+        $this->registeredBinnacle($request,'update',$fmessage);
         return redirect()->route('client.index');
     }
 
@@ -241,7 +241,7 @@ class ClientController extends Controller
         if (isset($client)){
             $fmessage = 'Se ha eliminado el cliente: '.$client->cliente_nom;
             \Session::flash('message',$fmessage);
-            $this->registeredBinnacle($request,'delete',$fmessage);
+            $this->registeredBinnacle($request,'destroy',$fmessage);
             $client->delete();
 
         }
@@ -256,9 +256,6 @@ class ClientController extends Controller
      */
     public function clientsearch(Request $request)
     {
-        /*echo "<pre>";
-        print_r($request->csearch);die();
-        echo "</pre>";*/
         $fname = (string)$request->csearch;
         $clients = Client::where('cliente_nom', 'like', '%'.$fname.'%')->get();
         return view('appviews.clientshow',['clients'=>$clients]);

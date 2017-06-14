@@ -102,7 +102,7 @@ class DistributorController extends Controller
 
         $fmessage = 'Se ha creado el distribuidor: '.$alldata['distrib_nom'];
         \Session::flash('message',$fmessage);
-        $this->registeredBinnacle($request,'create',$fmessage);
+        $this->registeredBinnacle($request,'store',$fmessage);
         return redirect()->route('distributor.index');
     }
 
@@ -190,7 +190,7 @@ class DistributorController extends Controller
 
         $fmessage = 'Se ha actualizado el distribuidor: '.$alldata['distrib_nom'];
         \Session::flash('message',$fmessage);
-        $this->registeredBinnacle($request,'create',$fmessage);
+        $this->registeredBinnacle($request,'update',$fmessage);
         return redirect()->route('distributor.index');
     }
 
@@ -205,7 +205,7 @@ class DistributorController extends Controller
         if (isset($distributor)){
             $fmessage = 'Se ha eliminado el distribuidor: '.$distributor->distrib_nom;
             \Session::flash('message',$fmessage);
-            $this->registeredBinnacle($request,'delete',$fmessage);
+            $this->registeredBinnacle($request,'destroy',$fmessage);
             $distributor->delete();
 
         }

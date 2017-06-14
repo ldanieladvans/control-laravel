@@ -67,6 +67,7 @@
 					                <li><a href="{{ route('user.index') }}">Usuarios</a></li>
 					                <li><a href="{{ route('role.index') }}">Roles</a></li>
 					                <li><a href="{{ route('permission.index') }}">Permisos</a></li>
+					                <li><a href="{{ route('binnacle.index') }}">Bitácora</a></li>
 					              </ul>
 					            </li>
 					           

@@ -36,6 +36,7 @@ Route::group(['prefix' => 'security'], function () {
     Route::resource('user', 'UserController');
     Route::resource('role', 'RoleController');
     Route::resource('permission', 'PermissionController');
+    Route::resource('binnacle', 'BinnacleController');
 });
 
 
@@ -99,6 +100,8 @@ Route::get('/callback', function (Request $request) {
 
 
 //Ajax routes
+Route::post('/security/user/assignroles', 'UserController@assignroles');
+Route::post('/security/user/assignperms', 'UserController@assignperms');
 Route::post('/security/user/permsbyroles', 'UserController@permsbyroles');
 Route::post('/security/user/{user_id}/permsbyroles', 'UserController@permsbyroles');
 Route::post('/security/user/changepass', 'UserController@changepass');

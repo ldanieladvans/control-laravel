@@ -70,7 +70,7 @@ class RoleController extends Controller
 
         $fmessage = 'Se ha creado el rol: '.$alldata['name'];
         \Session::flash('message',$fmessage);
-        $this->registeredBinnacle($request,'create',$fmessage);
+        $this->registeredBinnacle($request,'store',$fmessage);
         return redirect()->route('role.index');
     }
 
@@ -151,7 +151,7 @@ class RoleController extends Controller
             $rol = Role::findOrFail($rol_id);
             $fmessage = 'Se ha eliminado el rol: '.$rol->name;
             \Session::flash('message',$fmessage);
-            $this->registeredBinnacle($request,'delete',$fmessage);
+            $this->registeredBinnacle($request,'destroy',$fmessage);
             $rol->delete();
 
         }

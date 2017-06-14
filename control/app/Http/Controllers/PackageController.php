@@ -51,7 +51,7 @@ class PackageController extends Controller
         $pack->save();
         $fmessage = 'Se ha creado el paquete: '.$alldata['paq_nom'];
         \Session::flash('message',$fmessage);
-        $this->registeredBinnacle($request,'create',$fmessage);
+        $this->registeredBinnacle($request,'store',$fmessage);
         return redirect()->route('package.index');
     }
 
@@ -111,7 +111,7 @@ class PackageController extends Controller
             //$package = Package::findOrFail($id);
             $fmessage = 'Se ha eliminado el paquete: '.$package->paq_nom;
             \Session::flash('message',$fmessage);
-            $this->registeredBinnacle($request,'delete',$fmessage);
+            $this->registeredBinnacle($request,'destroy',$fmessage);
             $package->delete();
 
         }

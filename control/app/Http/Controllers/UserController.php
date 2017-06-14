@@ -11,6 +11,7 @@ use Illuminate\Support\Facades\Validator;
 use Illuminate\Foundation\Auth\RegistersUsers;
 use Illuminate\Auth\Events\Registered;
 use Illuminate\Support\Facades\Storage;
+use Illuminate\Support\Facades\DB;
 
 class UserController extends Controller
 {
@@ -79,7 +80,9 @@ class UserController extends Controller
     public function index()
     {
         $users = User::all();
-        return view('appviews.usershow',['users'=>$users]);
+        $roles = Role::all();
+        $permissions = Permission::all();
+        return view('appviews.usershow',['users'=>$users,'roles'=>$roles,'permissions'=>$permissions]);
     }
 
     /**
@@ -108,11 +111,6 @@ class UserController extends Controller
 
         $user = $this->customregister($request,$alldata);
 
-        /*echo "<pre>";
-        print_r($user->id);die();
-        echo "</pre>";*/
-
-        
         $file     = false;
         if(array_key_exists('usrc_pic',$alldata)){
             $file     = request()->file('usrc_pic');
@@ -120,9 +118,6 @@ class UserController extends Controller
             'public', $user->id.'.'.$file->getClientOriginalName()
         );
         }
-
-
-        
 
         if($file!=false){
             $user->usrc_pic = $user->id.'.'.$file->getClientOriginalName();
@@ -164,7 +159,7 @@ class UserController extends Controller
         
         $fmessage = 'Se ha creado el usuario: '.$alldata['name'];
         \Session::flash('message',$fmessage);
-        $this->registeredBinnacle($request,'create',$fmessage);
+        $this->registeredBinnacle($request,'store',$fmessage);
         return redirect()->route('user.index');
     }
 
@@ -207,10 +202,6 @@ class UserController extends Controller
     {
         $alldata = $request->all();
 
-        /*echo "<pre>";
-        print_r($alldata);die();
-        echo "</pre>";*/
-
         $file     = false;
         if(array_key_exists('usrc_pic',$alldata)){
             $file     = request()->file('usrc_pic');
@@ -248,8 +239,9 @@ class UserController extends Controller
 
 
 
+        $user->detachAllRoles();
         if(array_key_exists('roles',$alldata)){
-            $user->detachAllRoles();
+            
             foreach ($alldata['roles'] as $rol) {
                 $rolobj = Role::find($rol);
                 $user->attachRole($rolobj);
@@ -257,8 +249,9 @@ class UserController extends Controller
         }
 
 
+        $user->detachAllPermissions();
         if(array_key_exists('permisos',$alldata)){
-            $user->detachAllPermissions();
+            
             foreach ($alldata['permisos'] as $perm) {                
                 $permobj = Permission::find($perm);
                 $user->attachPermission($permobj);
@@ -267,12 +260,9 @@ class UserController extends Controller
         }
 
 
-        
-        
-        
-        $fmessage = 'Se ha modificado el usuario: '.$alldata['name'];
+        $fmessage = 'Se ha actualizado el usuario: '.$alldata['name'];
         \Session::flash('message',$fmessage);
-        $this->registeredBinnacle($request,'create',$fmessage);
+        $this->registeredBinnacle($request,'update',$fmessage);
         return redirect()->route('user.index');
     }
 
@@ -287,7 +277,7 @@ class UserController extends Controller
         if (isset($user)){
             $fmessage = 'Se ha eliminado el usuario: '.$user->name;
             \Session::flash('message',$fmessage);
-            $this->registeredBinnacle($request,'delete',$fmessage);
+            $this->registeredBinnacle($request,'destroy',$fmessage);
             $user->delete();
 
         }
@@ -296,22 +286,30 @@ class UserController extends Controller
 
     public function permsbyroles(Request $request)
     {
+        $rolestr = '';
+        $permstr = '';
         $alldata = $request->all();
         $return_array = array();
         if(array_key_exists('selected',$alldata) && isset($alldata['selected'])){
             foreach ($alldata['selected'] as $select) {
                 $role = Role::find((int)$select);
+                $rolestr = $rolestr + $role->name + ',';
                 $tests = false;
                 if (isset($role)){
                     $tests = $role->permissions()->get();
                     foreach ($tests as $test) {
                         array_push($return_array, $test->id);
+                        $permstr = $permstr . $test->name . ',';
                     }
                 }
 
                 
             }
         }
+
+        $fmessage = 'Se han asignado los permisos: '.$permstr.' a los roles: '.$rolestr;
+        //\Session::flash('message',$fmessage);
+        $this->registeredBinnacle($request,'permsbyroles',$fmessage);
 
         $response = array(
             'status' => 'success',
@@ -339,9 +337,93 @@ class UserController extends Controller
 
         $user->save();
 
+        $fmessage = 'Se ha cambiado la contraseña del usuario: '.$user->name;
+        \Session::flash('message',$fmessage);
+        $this->registeredBinnacle($request,'changepass',$fmessage);
+
         $response = array(
             'status' => 'success',
             'msg' => 'Se cambió la contraseña satisfactoriamente',
+            'user' => $alldata['user'],
+        );
+        return \Response::json($response);
+    }
+
+    public function assignroles(Request $request)
+    {
+        $rolestr = '';
+        $permstr = '';
+        $alldata = $request->all();
+        $return_array = array();
+
+        $user = false;
+        $perms = false;
+
+        if(array_key_exists('user',$alldata) && isset($alldata['user'])){
+            $user = User::find($alldata['user']);
+        }
+
+        if($user!=false){
+            $user->detachAllRoles();
+            if(array_key_exists('selected',$alldata) && isset($alldata['selected'])){  
+                foreach ($alldata['selected'] as $rol) {
+                    $role = Role::find($rol);
+                    $rolestr = $rolestr . $role->name . ',';
+                    $user->attachRole($role);
+                    $perms = $role->permissions()->get();
+                    foreach ($perms as $perm) {
+                        $user->attachPermission($perm);
+                    }
+                }
+            }
+        }
+        
+        $fmessage = 'Se han asignado los roles: '.$rolestr.' al usuario: '.($user ? $user->name : '');
+        //\Session::flash('message',$fmessage);
+        $this->registeredBinnacle($request,'assignroles',$fmessage);
+
+        $response = array(
+            'status' => 'success',
+            'msg' => 'Setting created successfully',
+            'user' => $alldata['user'],
+        );
+        return \Response::json($response);
+    }
+
+    public function assignperms(Request $request)
+    {
+        $permstr = '';
+        $alldata = $request->all();
+        $return_array = array();
+
+        $user = false;
+
+        if(array_key_exists('user',$alldata) && isset($alldata['user'])){
+            $user = User::find($alldata['user']);
+        }
+
+        if($user!=false){
+            $user->detachAllPermissions();
+            if(array_key_exists('selected',$alldata) && isset($alldata['selected'])){  
+                foreach ($alldata['selected'] as $perm) {
+                    $permobj = Permission::find($perm);
+                    $permstr = $permstr . $permobj->name . ',';
+                    //TODO Dont know why here doesnt work
+                    //$user->attachPermission($permobj);
+                    DB::table('permission_user')->insert([
+                        ['permission_id' => $permobj->id, 'user_id' => $user->id, 'created_at'=>date("Y-m-d H:i:s"),'updated_at'=>date("Y-m-d H:i:s")]
+                    ]);
+                }
+            }
+        }
+        
+        $fmessage = 'Se han asignado los permisos: '.$permstr.' al usuario: '.($user ? $user->name : '');
+        //\Session::flash('message',$fmessage);
+        $this->registeredBinnacle($request,'assignperms',$fmessage);
+
+        $response = array(
+            'status' => 'success',
+            'msg' => 'Setting created successfully',
             'user' => $alldata['user'],
         );
         return \Response::json($response);

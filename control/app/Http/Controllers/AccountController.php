@@ -65,7 +65,7 @@ class AccountController extends Controller
         $cta->save();
         $fmessage = 'Se ha creado la cuenta: '.$alldata['cta_num'];
         \Session::flash('message',$fmessage);
-        $this->registeredBinnacle($request,'create',$fmessage);
+        $this->registeredBinnacle($request,'store',$fmessage);
         return redirect()->route('account.index');
     }
 
@@ -129,7 +129,7 @@ class AccountController extends Controller
         if (isset($account)){
             $fmessage = 'Se ha eliminado la cuenta: '.$account->cta_num;
             \Session::flash('message',$fmessage);
-            $this->registeredBinnacle($request,'delete',$fmessage);
+            $this->registeredBinnacle($request,'destroy',$fmessage);
             $account->delete();
 
         }
