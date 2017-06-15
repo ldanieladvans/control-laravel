@@ -22,10 +22,10 @@ class CreateAppcta extends Migration
             $table->integer('appcta_paq_id')->unsigned()->nullable();
             $table->float('appcta_gig')->nullable();
             $table->integer('appcta_rfc')->nullable();
-            $table->timestampTz('appcta_f_vent')->nullable();
-            $table->timestampTz('appcta_f_act')->nullable();
-            $table->timestampTz('appcta_f_fin')->nullable();
-            $table->timestampTz('appcta_f_caduc')->nullable();
+            $table->date('appcta_f_vent')->nullable();
+            $table->date('appcta_f_act')->nullable();
+            $table->date('appcta_f_fin')->nullable();
+            $table->date('appcta_f_caduc')->nullable();
             $table->boolean('appcta_activo')->default(1);
         });
     }

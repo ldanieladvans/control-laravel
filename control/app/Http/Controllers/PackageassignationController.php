@@ -4,6 +4,8 @@ namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
 use App\Packageassignation;
+use App\Package;
+use App\Account;
 
 class PackageassignationController extends Controller
 {
@@ -24,8 +26,8 @@ class PackageassignationController extends Controller
      */
     public function index()
     {
-        $appctas = Packageassignation::all();
-        return view('appviews.packassigshow',['appctas'=>$appctas]);
+        $asigpaqs = Packageassignation::all();
+        return view('appviews.packassigshow',['asigpaqs'=>$asigpaqs]);
     }
 
     /**
@@ -35,7 +37,7 @@ class PackageassignationController extends Controller
      */
     public function create()
     {
-        //
+        
     }
 
     /**
@@ -46,7 +48,7 @@ class PackageassignationController extends Controller
      */
     public function store(Request $request)
     {
-        //
+        
     }
 
     /**

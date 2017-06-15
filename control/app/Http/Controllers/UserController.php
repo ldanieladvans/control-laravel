@@ -338,7 +338,7 @@ class UserController extends Controller
         $user->save();
 
         $fmessage = 'Se ha cambiado la contraseña del usuario: '.$user->name;
-        \Session::flash('message',$fmessage);
+        //\Session::flash('message',$fmessage);
         $this->registeredBinnacle($request,'changepass',$fmessage);
 
         $response = array(

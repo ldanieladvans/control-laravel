@@ -44,20 +44,20 @@
 					            <li><a href="{{ route('home') }}"><i class="fa fa-home"></i> Inicio </span></a>
 					              
 					            </li>
-					            <li><a><i class="fa fa-group"></i> Cuentas <span class="fa fa-chevron-down"></span></a>
-					            	<ul class="nav child_menu">
-						            	<li><a href="{{ route('account.index') }}">Cuentas</a></li>
-						                <li><a href="{{ route('accpack.index') }}">Asignación Cuenta-Paquete</a></li>
-					                </ul>
-					            </li>
 					            <li><a><i class="fa fa-group"></i> Directorio <span class="fa fa-chevron-down"></span></a>
 					              <ul class="nav child_menu">
 					                <li><a href="{{ route('client.index') }}">Clientes</a></li>
 					                <li><a href="{{ route('distributor.index') }}">Distribuidores</a></li>
-					                <!--<li><a href="#">Domicilios</a></li>
-					                <li><a href="#">Referencias</a></li>-->
 					              </ul>
 					            </li>
+					            <li><a><i class="fa fa-exchange"></i> Asignaciones <span class="fa fa-chevron-down"></span></a>
+					            	<ul class="nav child_menu">
+						            	<li><a href="{{ route('account.index') }}">Cuentas</a></li>
+						            	<li><a href="{{ route('asigpaq.index') }}">Asignación a Distribuidores</a></li>
+						                <li><a href="{{ route('appcta.index') }}">Asignación a Clientes</a></li>
+					                </ul>
+					            </li>
+					            
 
 
 					            <li><a><i class="fa fa-gears"></i> Configuración <span class="fa fa-chevron-down"></span></a>

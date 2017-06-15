@@ -88,26 +88,30 @@
                           <div role="tabpanel" class="tab-pane fade active in" id="tab_content1" aria-labelledby="home-tab">
 
                             <div class="item form-group">
-                              <label class="control-label col-md-1 col-sm-1 col-xs-12">Cliente</label>
-                                  <div class="col-md-5 col-sm-5 col-xs-12">
-                                    <select class="select2_single form-control col-md-7 col-xs-12" name="cta_cliente_id">
-                                      <option value="null">Seleccione una opción ...</option>
+                              <label class="control-label col-md-1 col-sm-1 col-xs-12">Cliente*</label>
+                                  <div class="col-md-8 col-sm-8 col-xs-12">
+                                    <select class="select2_single form-control col-md-7 col-xs-12" name="cta_cliente_id" required>
+                                      <option value="">Seleccione una opción ...</option>
                                       @foreach($clients as $client)
                                         <option value="{{ $client->id }}">{{ $client->cliente_nom }}</option>
                                       @endforeach
                                     </select>
                                   </div>
 
-                              <label class="control-label col-md-1 col-sm-1 col-xs-12">Distribuidor</label>
-                                  <div class="col-md-5 col-sm-5 col-xs-12">
-                                    <select class="select2_single form-control col-md-7 col-xs-12" name="cta_distrib_id">
-                                      <option value="null">Seleccione una opción ...</option>
+                              
+
+                            </div>
+
+                            <div class="item form-group">
+                              <label class="control-label col-md-1 col-sm-1 col-xs-12">Distribuidor*</label>
+                                  <div class="col-md-8 col-sm-8 col-xs-12">
+                                    <select class="select2_single form-control col-md-7 col-xs-12" name="cta_distrib_id" required>
+                                      <option value="">Seleccione una opción ...</option>
                                       @foreach($distributors as $distributor)
                                         <option value="{{ $distributor->id }}">{{ $distributor->distrib_nom }}</option>
                                       @endforeach
                                     </select>
                                   </div>
-
                             </div>
                             
                           </div>
