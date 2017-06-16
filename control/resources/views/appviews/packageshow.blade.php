@@ -60,7 +60,7 @@
                                               <button onclick="location.href = 'package/{{$pack->id}}/edit';" class="btn btn-xs" data-placement="left" title="Editar" style=" color:#790D4E "><i class="fa fa-edit fa-2x"></i> </button>
                                           </div>
 
-                                        <div class="btn-group">
+                                        <!--<div class="btn-group">
                                               <button onclick="" data-toggle="dropdown" class="btn btn-xs dropdown-toggle" data-placement="left" title="Más" style=" color:#790D4E "><i class="fa fa-plus-square fa-2x"></i> </button>
                                                 <ul role="menu" class="dropdown-menu">
                                                   <li><a href="#">Action</a>
@@ -72,7 +72,7 @@
                                                   <li><a href="#">Separated link</a>
                                                   </li>
                                                 </ul>
-                                          </div>
+                                          </div>-->
 
                                               
                                               {{ Form::open(['route' => ['package.destroy', $pack], 'class'=>'pull-right']) }}

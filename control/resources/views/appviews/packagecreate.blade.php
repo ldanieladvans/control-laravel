@@ -35,30 +35,6 @@
 
                 	{{ csrf_field() }}
 
-                  <!--<div class="item form-group">
-                    <label class="control-label col-md-3 col-sm-3 col-xs-12" for="paq_nom">Nombre <span class="required">*</span>
-                    </label>
-                    <div class="col-md-6 col-sm-6 col-xs-12">
-                      <input id="paq_nom" class="form-control col-md-7 col-xs-12" name="paq_nom" placeholder="Nombre del Paquete" required="required" type="text">
-                    </div>
-                  </div>
-
-                  <div class="item form-group">
-                    <label class="control-label col-md-3 col-sm-3 col-xs-12" for="paq_gig">Cantidad de Gigas <span class="required">*</span>
-                    </label>
-                    <div class="col-md-6 col-sm-6 col-xs-12">
-                      <input type="number" id="paq_gig" name="paq_gig" required="required" data-validate-minmax="1,10000000000" class="form-control col-md-7 col-xs-12">
-                    </div>
-                  </div>
-
-                  <div class="item form-group">
-                    <label class="control-label col-md-3 col-sm-3 col-xs-12" for="paq_rfc">Cantidad de RFCs <span class="required">*</span>
-                    </label>
-                    <div class="col-md-6 col-sm-6 col-xs-12">
-                      <input type="numberint" id="paq_rfc" name="paq_rfc" required="required" data-validate-minmax="1,10000000000" class="form-control col-md-7 col-xs-12">
-                    </div>
-                  </div>-->
-
                     <div class="item form-group">                     
                       <div class="col-md-9 col-sm-9 col-xs-12">
                         <input id="paq_nom" class="form-control has-feedback-left" title="Nombre del Paquete" name="paq_nom" placeholder="Nombre del Paquete *" required="required" type="text">

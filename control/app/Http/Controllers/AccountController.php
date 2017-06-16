@@ -139,4 +139,33 @@ class AccountController extends Controller
         }
         return redirect()->route('account.index');
     }
+
+
+    public function changeAccState(Request $request)
+    {
+        $account = false;
+        $alldata = $request->all();
+        $return_array = array();
+        if(array_key_exists('accid',$alldata) && isset($alldata['accid'])){
+            $account = Account::findOrFail($alldata['accid']);
+            $accid = $alldata['accid'];
+            if(array_key_exists('accstate',$alldata) && isset($alldata['accstate'])){
+                
+                $account->cta_estado = $alldata['accstate'];
+            }
+        }
+        $account->save();
+        if($account!=false){
+            $fmessage = 'El estado de la cuenta: '.$account->cta_num.' cambió a: '.$account->cta_estado;
+            \Session::flash('message',$fmessage);
+            $this->registeredBinnacle($request,'update',$fmessage);
+        }
+        
+
+        $response = array(
+            'status' => 'success',
+            'msg' => 'Se cambió el estado de la cuenta satisfactoriamente',
+        );
+        return \Response::json($response);
+    }
 }

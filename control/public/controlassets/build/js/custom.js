@@ -415,6 +415,29 @@ if (typeof NProgress != 'undefined') {
 		  chart_plot_02_data.push([new Date(Date.today().add(i).days()).getTime(), randNum() + i + i + 10]);
 		}
 		
+
+
+
+		chart_asigpaqs = jQuery.parseJSON(document.getElementById('asigpaqs').value);
+		chart_appctas = jQuery.parseJSON(document.getElementById('appctas').value);
+
+		chart_asigpaqs_show = [];
+		chart_appctas_show = [];
+		max_chart_asigpaqs_show = new Date(Date.today().add(1).days()).getTime();
+		var aux_today = new Date();
+		aux_today.setMonth(aux_today.getMonth() - 1);
+		min_chart_asigpaqs_show = aux_today.getTime();
+
+		for (var i = 0; i < chart_asigpaqs.length; i++) {
+		  chart_asigpaqs_show.push([new Date(chart_asigpaqs[i][0]).getTime(), chart_asigpaqs[i][1]]);
+		}
+
+		for (var i = 0; i < chart_appctas.length; i++) {
+		  
+		  chart_appctas_show.push([new Date(chart_appctas[i][0]).getTime(), chart_appctas[i][1]]);
+		}
+
+		console.log(max_chart_asigpaqs_show);
 		
 		var chart_plot_01_settings = {
           series: {
@@ -514,14 +537,16 @@ if (typeof NProgress != 'undefined') {
 			defaultTheme: false
 			},
 			yaxis: {
-				min: 0
+				min: 0,
 			},
 			xaxis: {
 				mode: "time",
 				minTickSize: [1, "day"],
 				timeformat: "%d/%m/%y",
-				min: chart_plot_02_data[0][0],
-				max: chart_plot_02_data[20][0]
+				min: min_chart_asigpaqs_show,
+				max: max_chart_asigpaqs_show
+				//min: chart_plot_02_data[0][0],
+				//max: chart_plot_02_data[20][0]
 			}
 		};	
 	
@@ -561,8 +586,16 @@ if (typeof NProgress != 'undefined') {
 			
 			$.plot( $("#chart_plot_02"), 
 			[{ 
-				label: "Email Sent", 
-				data: chart_plot_02_data, 
+				label: "Asignaciones a Distribuidores", 
+				data: chart_asigpaqs_show, 
+				lines: { 
+					fillColor: "rgba(150, 202, 89, 0.12)" 
+				}, 
+				points: { 
+					fillColor: "#fff" } 
+			},{ 
+				label: "Asignaciones a Clientes", 
+				data: chart_appctas_show, 
 				lines: { 
 					fillColor: "rgba(150, 202, 89, 0.12)" 
 				}, 

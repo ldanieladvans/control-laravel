@@ -70,7 +70,7 @@
 
                   <div class="item form-group">                     
                       <div class="col-md-9 col-sm-9 col-xs-12">
-                        <input id="cta_estado" title="Estado" class="form-control has-feedback-left" name="cta_estado" placeholder="Estado *" required="required" type="text" readonly="readonly" value="Borrador">
+                        <input id="cta_estado" title="Estado" class="form-control has-feedback-left" name="cta_estado" placeholder="Estado *" required="required" type="text" readonly="readonly" value="Inactiva">
                         <span class="fa fa-certificate form-control-feedback left" aria-hidden="true"></span>
                       </div>
                     </div>

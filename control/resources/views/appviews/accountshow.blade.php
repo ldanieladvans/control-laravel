@@ -8,6 +8,10 @@
     <link href="{{ asset('controlassets/vendors/datatables.net-fixedheader-bs/css/fixedHeader.bootstrap.min.css') }}" rel="stylesheet">
     <link href="{{ asset('controlassets/vendors/datatables.net-responsive-bs/css/responsive.bootstrap.min.css') }}" rel="stylesheet">
     <link href="{{ asset('controlassets/vendors/datatables.net-scroller-bs/css/scroller.bootstrap.min.css') }}" rel="stylesheet">
+    <!-- PNotify -->
+    <link href="{{ asset('controlassets/pnotify/pnotify.custom.min.css') }}" rel="stylesheet" type="text/css" />
+    <!-- Animate -->
+    <link href="{{ asset('controlassets/animate.css') }}" rel="stylesheet" type="text/css" />
 @endsection
 
 @section('app_content')
@@ -71,14 +75,14 @@
                                         <div class="btn-group">
                                               <button onclick="" data-toggle="dropdown" class="btn btn-xs dropdown-toggle" data-placement="left" title="Más" style=" color:#790D4E "><i class="fa fa-plus-square fa-2x"></i> </button>
                                                 <ul role="menu" class="dropdown-menu">
-                                                  <li><a href="#">Action</a>
-                                                  </li>
-                                                  <li><a href="#">Another action</a>
-                                                  </li>
-                                                  <li><a href="#">Something else here</a>
-                                                  </li>
-                                                  <li><a href="#">Separated link</a>
-                                                  </li>
+                                                  @if ($acc->cta_estado == 'Inactiva')
+                                                      <li><a onclick="changeAccountState('Activa',{{Auth::user()->id}},{{$acc->id}})">Activar Cuenta</a>
+                                                      </li>
+                                                  @else
+                                                      <li><a onclick="changeAccountState('Inactiva',{{Auth::user()->id}},{{$acc->id}})">Inactivar Cuenta</a>
+                                                      </li>
+                                                  @endif
+
                                                 </ul>
                                           </div>
 
@@ -112,6 +116,11 @@
     <script src="{{ asset('controlassets/vendors/fastclick/lib/fastclick.js') }}"></script>
     <!-- Custom Theme Scripts -->
     <script src="{{ asset('controlassets/build/js/custom.js') }}"></script>
+    <!-- PNotify -->
+    <script src="{{ asset('controlassets/vendors/pnotify/dist/pnotify.js') }}"></script>
+    <script src="{{ asset('controlassets/vendors/pnotify/dist/pnotify.buttons.js') }}"></script>
+    <script src="{{ asset('controlassets/vendors/pnotify/dist/pnotify.nonblock.js') }}"></script>
+    <!--<script src="{{ asset('controlassets/pnotify/pnotify.custom.min.js') }}"></script>-->
 
     <script>
       $( function() {
@@ -123,5 +132,33 @@
               $('#alertmsgcta').trigger('click');
           }, 4e3);
       });
+
+      function changeAccountState(accstate,user,accid){
+
+            var CSRF_TOKEN = $('meta[name="csrf-token"]').attr('content');
+
+              $.ajax({
+                url: 'account/changeAccState',
+                type: 'POST',
+                data: {_token: CSRF_TOKEN,accstate:accstate,user:user,accid:accid},
+                dataType: 'JSON',
+                success: function (data) {
+                  window.location.href = window.location.href;
+                    
+                },
+                error: function(XMLHttpRequest, textStatus, errorThrown) { 
+                    new PNotify({
+                    title: "Notificación",
+                    type: "info",
+                    text: "Ha ocurrido un error. No se ha podido cambiar el estado de la cuenta",
+                    nonblock: {
+                      nonblock: true
+                    },
+                    addclass: 'dark',
+                    styling: 'bootstrap3'
+                  });
+                }
+            });       
+        }
     </script>
 @endsection
