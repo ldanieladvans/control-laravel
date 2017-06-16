@@ -41,36 +41,36 @@
 					        <div class="menu_section">
 					          <h3>Menus</h3>
 					          <ul class="nav side-menu">
-					            <li><a href="{{ route('home') }}"><i class="fa fa-home"></i> Inicio </span></a>
+					            <li><a href="{{ route('home') }}"><i class="fa fa-home"></i> <strong>INICIO</strong> </span></a>
 					              
 					            </li>
-					            <li><a><i class="fa fa-group"></i> Directorio <span class="fa fa-chevron-down"></span></a>
+					            <li><a><i class="fa fa-group"></i> <strong>DIRECTORIO</strong> <span class="fa fa-chevron-down"></span></a>
 					              <ul class="nav child_menu">
-					                <li><a href="{{ route('client.index') }}">Clientes</a></li>
-					                <li><a href="{{ route('distributor.index') }}">Distribuidores</a></li>
+					                <li><a href="{{ route('client.index') }}"><strong>CLIENTES</strong></a></li>
+					                <li><a href="{{ route('distributor.index') }}"><strong>DISTRIBUIDORES</strong></a></li>
 					              </ul>
 					            </li>
-					            <li><a><i class="fa fa-exchange"></i> Asignaciones <span class="fa fa-chevron-down"></span></a>
+					            <li><a><i class="fa fa-exchange"></i> <strong>ASIGNACIONES</strong> <span class="fa fa-chevron-down"></span></a>
 					            	<ul class="nav child_menu">
-						            	<li><a href="{{ route('account.index') }}">Cuentas</a></li>
-						            	<li><a href="{{ route('asigpaq.index') }}">Asignación a Distribuidores</a></li>
-						                <li><a href="{{ route('appcta.index') }}">Asignación a Clientes</a></li>
+						            	<li><a href="{{ route('account.index') }}"><strong>CUENTAS</strong></a></li>
+						            	<li><a href="{{ route('asigpaq.index') }}"><strong>ASIGNACIÓN DISTRIBUIDORES</strong></a></li>
+						                <li><a href="{{ route('appcta.index') }}"><strong>ASIGNACIÓN CLIENTES</strong></a></li>
 					                </ul>
 					            </li>
 					            
 
 
-					            <li><a><i class="fa fa-gears"></i> Configuración <span class="fa fa-chevron-down"></span></a>
+					            <li><a><i class="fa fa-gears"></i> <strong>CONFIGURACIÓN</strong> <span class="fa fa-chevron-down"></span></a>
 					              <ul class="nav child_menu">
-					                <li><a href="{{ route('package.index') }}">Paquetes</a></li>
+					                <li><a href="{{ route('package.index') }}"><strong>PAQUETES</strong></a></li>
 					              </ul>
 					            </li>
-					            <li><a><i class="fa fa-unlock-alt"></i> Seguridad <span class="fa fa-chevron-down"></span></a>
+					            <li><a><i class="fa fa-unlock-alt"></i> <strong>SEGURIDAD</strong> <span class="fa fa-chevron-down"></span></a>
 					              <ul class="nav child_menu">
-					                <li><a href="{{ route('user.index') }}">Usuarios</a></li>
-					                <li><a href="{{ route('role.index') }}">Roles</a></li>
-					                <li><a href="{{ route('permission.index') }}">Permisos</a></li>
-					                <li><a href="{{ route('binnacle.index') }}">Bitácora</a></li>
+					                <li><a href="{{ route('user.index') }}"><strong>USUARIOS</strong></a></li>
+					                <li><a href="{{ route('role.index') }}"><strong>ROLES</strong></a></li>
+					                <li><a href="{{ route('permission.index') }}"><strong>PERMISOS</strong></a></li>
+					                <li><a href="{{ route('binnacle.index') }}"><strong>BITÁCORA</strong></a></li>
 					              </ul>
 					            </li>
 					           

@@ -16,7 +16,7 @@
         <div class="col-md-12 col-sm-12 col-xs-12">
                 <div class="x_panel">
                   <div class="x_title">
-                    <h2>Asignaciones a Clientes</h2>
+                    <h2>Asignaciones a Distribuidores</h2>
                     
                     <div class="clearfix"></div>
                   </div>
@@ -37,8 +37,8 @@
                           <th>Id</th>
                           <th>RFCs</th>
                           <th>Gigas</th>
+                          <th>Distribuidor</th>
                           <th>Paquete</th>
-                          <th>Cuenta</th>
                           <th>Fecha Venta</th>
                           <th>Fecha Act.</th>
                           <th>Fecha Fin</th>

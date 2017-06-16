@@ -35,7 +35,7 @@
 
                 	{{ csrf_field() }}
 
-                  <div class="item form-group">
+                  <!--<div class="item form-group">
                     <label class="control-label col-md-3 col-sm-3 col-xs-12" for="paq_nom">Nombre <span class="required">*</span>
                     </label>
                     <div class="col-md-6 col-sm-6 col-xs-12">
@@ -57,7 +57,28 @@
                     <div class="col-md-6 col-sm-6 col-xs-12">
                       <input type="numberint" id="paq_rfc" name="paq_rfc" required="required" data-validate-minmax="1,10000000000" class="form-control col-md-7 col-xs-12">
                     </div>
-                  </div>
+                  </div>-->
+
+                    <div class="item form-group">                     
+                      <div class="col-md-9 col-sm-9 col-xs-12">
+                        <input id="paq_nom" class="form-control has-feedback-left" title="Nombre del Paquete" name="paq_nom" placeholder="Nombre del Paquete *" required="required" type="text">
+                        <span class="fa fa-suitcase form-control-feedback left" aria-hidden="true"></span>
+                      </div>
+                    </div>
+
+                    <div class="item form-group">                     
+                      <div class="col-md-9 col-sm-9 col-xs-12">
+                        <input id="paq_rfc" class="form-control has-feedback-left" name="paq_rfc" title="Cantidad de RFCs" placeholder="Cantidad RFC *" required="required" type="numberint">
+                        <span class="fa fa-bank form-control-feedback left" aria-hidden="true"></span>
+                      </div>
+                    </div>
+
+                    <div class="item form-group">                     
+                      <div class="col-md-9 col-sm-9 col-xs-12">
+                        <input id="paq_gig" class="form-control has-feedback-left" name="paq_gig" placeholder="Cantidad Gigas *" required="required" type="number" title="Almacenamiento en Gigas">
+                        <span class="fa fa-archive form-control-feedback left" aria-hidden="true"></span>
+                      </div>
+                    </div>
 
 
                   <div class="ln_solid"></div>

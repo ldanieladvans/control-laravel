@@ -23,7 +23,7 @@
         <div class="col-md-12 col-sm-12 col-xs-12">
             <div class="x_panel">
               <div class="x_title">
-                <h2>Nueva Asignación Cuenta-Paquete</h2>
+                <h2>Nueva Asignación a Distribuidor</h2>
                 <ul class="nav navbar-right panel_toolbox">
                   <li><a class="collapse-link"><i class="fa fa-chevron-up"></i></a>
                   </li>
@@ -41,27 +41,21 @@
               <div class="x_content">
 
                 <!--<form class="form-horizontal form-label-left input_mask">-->
-                <form id="packassigform" class="form-horizontal form-label-left" novalidate action="{{ route('accpack.store') }}" method='POST'>
+                <form id="packassigform" class="form-horizontal form-label-left" novalidate action="{{ route('asigpaq.store') }}" method='POST'>
 
                 	  {{ csrf_field() }}
 
-                      <div class="item form-group">	                    
-	                    <div class="col-md-9 col-sm-9 col-xs-12">
-	                      <input id="appcta_app" class="form-control has-feedback-left" title="Nombre del Recurso o Aplicación" name="appcta_app" placeholder="Aplicación *" required="required" type="text">
-	                      <span class="fa fa-laptop form-control-feedback left" aria-hidden="true"></span>
-	                    </div>
-	                  </div>
 
 	                  <div class="item form-group">	                    
 	                    <div class="col-md-9 col-sm-9 col-xs-12">
-	                      <input id="appcta_rfc" class="form-control has-feedback-left" name="appcta_rfc" title="Cantidad de RFCs" placeholder="Cantidad RFC *" required="required" type="numberint">
+	                      <input id="asigpaq_rfc" class="form-control has-feedback-left" name="asigpaq_rfc" title="Cantidad de RFCs" placeholder="Cantidad RFC *" required="required" type="numberint">
 	                      <span class="fa fa-bank form-control-feedback left" aria-hidden="true"></span>
 	                    </div>
 	                  </div>
 
 	                  <div class="item form-group">	                    
 	                    <div class="col-md-9 col-sm-9 col-xs-12">
-	                      <input id="appcta_gig" class="form-control has-feedback-left" name="appcta_gig" placeholder="Cantidad Gigas *" required="required" type="number" title="Almacenamiento en Gigas">
+	                      <input id="asigpaq_gig" class="form-control has-feedback-left" name="asigpaq_gig" placeholder="Cantidad Gigas *" required="required" type="number" title="Almacenamiento en Gigas">
 	                      <span class="fa fa-archive form-control-feedback left" aria-hidden="true"></span>
 	                    </div>
 	                  </div>
@@ -71,7 +65,7 @@
                   	<div class="x_content">
                       <div class="" role="tabpanel" data-example-id="togglable-tabs">
 	                      <ul id="myTab" class="nav nav-tabs bar_tabs" role="tablist">
-	                        <li role="presentation" class="active"><a href="#tab_content1" id="home-tab" role="tab" data-toggle="tab" aria-expanded="true">Cuenta-Paquete</a>
+	                        <li role="presentation" class="active"><a href="#tab_content1" id="home-tab" role="tab" data-toggle="tab" aria-expanded="true">Distributor-Paquete</a>
 	                        </li>
 	                        <li role="presentation" class=""><a href="#tab_content2" role="tab" id="profile-tab" data-toggle="tab" aria-expanded="false">Fechas</a>
 	                        </li>
@@ -79,40 +73,32 @@
 	                      <div id="myTabContent" class="tab-content">
 	                        <div role="tabpanel" class="tab-pane fade active in" id="tab_content1" aria-labelledby="home-tab">
 
-                        	  <div>
-                        	  	<div class="col-md-12 col-sm-12 col-xs-12 form-group ">
-			                        <label class="control-label col-md-1 col-sm-1 col-xs-12">Cuenta: </label>
-			                        <div class="col-md-8 col-sm-8 col-xs-12">
-			                          <select class="form-control errorType" name="packacc_acc_id" id="packacc_acc_id" required>
-			                            <option value="null" selected="selected">Seleccione ...</option>
-			                            @foreach($accounts as $account)
-			                            	<option value="{{ $account->id }}">{{ $account->cta_num }}</option>
+                        	  <div class="item form-group">
+                              <label class="control-label col-md-1 col-sm-1 col-xs-12">Cuenta*</label>
+                                  <div class="col-md-8 col-sm-8 col-xs-12">
+                                    <select class="select2_single form-control col-md-7 col-xs-12" id="asigpaq_distrib_id" name="asigpaq_distrib_id" required>
+                                      <option value="">Seleccione una opción ...</option>
+                                      @foreach($distributors as $distributor)
+			                            	<option value="{{ $distributor->id }}">{{ $distributor->distrib_nom }}</option>
 			                            @endforeach
-			                          </select>
-			                        </div>
+                                    </select>
+                                  </div>
 
-			                      </div>
-                        	  </div>
+                              
 
-                        	  <div>
-                        	  	<div class="col-md-12 col-sm-12 col-xs-12 form-group ">
-			                        <label class="control-label col-md-1 col-sm-1 col-xs-12">Paquete: </label>
-			                        <div class="col-md-8 col-sm-8 col-xs-12">
-			                          <input type="hidden" name="hidden_pack" value="none" required>
-			                          <select class="form-control" name="packacc_pack_id" id="packacc_pack_id">
-			                            <option value="null">Seleccione ...</option>
-			                            @foreach($packages as $package)
+                            </div>
+
+                            <div class="item form-group">
+                              <label class="control-label col-md-1 col-sm-1 col-xs-12">Paquete*</label>
+                                  <div class="col-md-8 col-sm-8 col-xs-12">
+                                    <select class="select2_single form-control col-md-7 col-xs-12" name="asigpaq_paq_id" id="asigpaq_paq_id" required>
+                                      <option value="">Seleccione una opción ...</option>
+                                      @foreach($packages as $package)
 			                            	<option value="{{ $package->id }}">{{ $package->paq_nom }}</option>
 			                            @endforeach
-			                          </select>
-			                        </div>
-
-
-
-			                      </div>
-
-			                      
-                        	  </div>
+                                    </select>
+                                  </div>
+                            </div>
 
                         	  
 	                        </div>
@@ -121,28 +107,28 @@
 
 	                        	<div class="item form-group">                     
 			                      <div class="col-md-9 col-sm-9 col-xs-12">
-			                        <input id="appcta_f_vent" title="Fecha de Venta o Asignación" class="form-control has-feedback-left" name="appcta_f_vent" placeholder="Fecha Venta" required="required" type="date">
+			                        <input id="asigpaq_f_vent" title="Fecha de Venta o Asignación" class="form-control has-feedback-left" name="asigpaq_f_vent" placeholder="Fecha Venta" required="required" type="date">
 			                        <span class="fa fa-calendar form-control-feedback left" aria-hidden="true"></span>
 			                      </div>
 			                    </div>
 
 			                    <div class="item form-group">                     
 			                      <div class="col-md-9 col-sm-9 col-xs-12">
-			                        <input id="appcta_f_act" title="Fecha de Actualización" class="form-control has-feedback-left" name="appcta_f_act" placeholder="Fecha Actualización" required="required" type="date">
+			                        <input id="asigpaq_f_act" title="Fecha de Actualización" class="form-control has-feedback-left" name="asigpaq_f_act" placeholder="Fecha Actualización" required="required" type="date">
 			                        <span class="fa fa-calendar form-control-feedback left" aria-hidden="true"></span>
 			                      </div>
 			                    </div>
 
 			                    <div class="item form-group">                     
 			                      <div class="col-md-9 col-sm-9 col-xs-12">
-			                        <input id="appcta_f_fin" title="Fecha de Fin" class="form-control has-feedback-left" name="appcta_f_fin" placeholder="Fecha Fin" required="required" type="date">
+			                        <input id="asigpaq_f_fin" title="Fecha de Fin" class="form-control has-feedback-left" name="asigpaq_f_fin" placeholder="Fecha Fin" required="required" type="date">
 			                        <span class="fa fa-calendar form-control-feedback left" aria-hidden="true"></span>
 			                      </div>
 			                    </div>
 
 			                    <div class="item form-group">                     
 			                      <div class="col-md-9 col-sm-9 col-xs-12">
-			                        <input id="appcta_f_caduc" title="Fecha de Caducidad" class="form-control has-feedback-left" name="appcta_f_caduc" placeholder="Fecha Caducidad" required="required" type="date">
+			                        <input id="asigpaq_f_caduc" title="Fecha de Caducidad" class="form-control has-feedback-left" name="asigpaq_f_caduc" placeholder="Fecha Caducidad" required="required" type="date">
 			                        <span class="fa fa-calendar form-control-feedback left" aria-hidden="true"></span>
 			                      </div>
 			                    </div>
@@ -156,7 +142,7 @@
                       <div class="ln_solid"></div>
                       <div class="form-group">
                         <div class="col-md-9 col-sm-9 col-xs-12 col-md-offset-3">
-                          <button id="cancel" type="button" onclick="location.href = '/directory/client';" class="btn btn-info">Cancelar</button>
+                          <button id="cancel" type="button" onclick="location.href = '/account/asigpaq';" class="btn btn-info">Cancelar</button>
                           <button type="reset" class="btn btn-primary">Borrar Datos</button>
                   		  <button id="send" type="submit" class="btn btn-success">Guardar</button>
                         </div>
@@ -194,30 +180,30 @@
 
     <script type="text/javascript">
 
-    var selectedval = false;
+   /*var selectedval = false;
     var selectobj = false;
    
     $('select').on('change', function() {
     	console.log('sd');
-	  if(this.name=='packacc_acc_id'){
+	  if(this.name=='appcta_cuenta_id'){
 	  	selectobj = this;
 	  	selectedval = this.value;
-	  	if(this.value=='null'){
+	  	if(this.value==''){
 	  		$(this).addClass('errorType');
 	  	}else{
 	  		$(this).removeClass('errorType');
 	  	}
 	  }
 	  
-	});
+	});*/
 
-	$("#packacc_acc_id").trigger("change");
+	//$("#appcta_cuenta_id").trigger("change");
 
 	$( "#packassigform" ).submit(function( event ) {
 	  
 	  event.preventDefault()
 
-	  	if($(selectobj).hasClass('errorType')){
+	  	/*if($(selectobj).hasClass('errorType')){
 	  		new PNotify({
                     title: "Error",
                     type: "error",
@@ -227,12 +213,12 @@
                     },
                     styling: 'bootstrap3'
                   });
-	  	}
-	  	if(document.getElementById('appcta_f_vent').value=='' || document.getElementById('appcta_f_act').value=='' || document.getElementById('appcta_f_fin').value=='' || document.getElementById('appcta_f_caduc').value==''){
+	  	}*/
+	  	if(document.getElementById('asigpaq_f_vent').value=='' || document.getElementById('asigpaq_f_act').value=='' || document.getElementById('asigpaq_f_fin').value=='' || document.getElementById('asigpaq_f_caduc').value==''){
 	  		new PNotify({
                     title: "Error",
                     type: "error",
-                    text: "Las fechas son obligatorios",
+                    text: "Todas las fechas son obligatorias. Consulte el Tab Fechas",
                     nonblock: {
                       nonblock: true
                     },
