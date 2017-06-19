@@ -12,6 +12,11 @@ class Package extends Model
         'paq_nom', 'paq_gig', 'paq_rfc'
     ];
 
+    public function __construct()
+    {
+        $this->connection = \Session::get('selected_database','mysql');
+    }
+
     //Many2many version commented because the extra data
     /*public function distributors()
     {

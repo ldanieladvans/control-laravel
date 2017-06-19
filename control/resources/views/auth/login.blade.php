@@ -25,6 +25,25 @@
                             </div>
                         </div>-->
 
+                        
+
+                        <!-- TODO Uncomment for multiple BD Con -->
+                        <!--{{ Session::pull('midred') }}
+
+                        <div class="form-group{{ Session::get('loginrfcerr') ? ' has-error' : '' }}">
+                            <label for="login_rfc" class="col-md-4 control-label">RFC</label>
+
+                            <div class="col-md-6">
+                                <input id="login_rfc" type="text" class="form-control" value="{{ Session::get('login_rfc') }}" name="login_rfc" required>
+
+                                @if (Session::has('loginrfcerr'))
+                                    <span class="help-block">
+                                        <strong>{{ Session::get('loginrfcerr') }}</strong>
+                                    </span>
+                                @endif
+                            </div>
+                        </div>-->
+
                         <div class="form-group{{ $errors->has('usrc_nick') ? ' has-error' : '' }}">
                             <label for="usrc_nick" class="col-md-4 control-label">Usuario</label>
 

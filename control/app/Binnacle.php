@@ -12,6 +12,11 @@ class Binnacle extends Model
         'bitc_usrc_id', 'bitc_fecha', 'bitc_tipo_op', 'bitc_ip', 'bitc_naveg', 'bitc_modulo', 'bitc_result', 'bitc_msj', 'bitc_dat'
     ];
 
+    public function __construct()
+    {
+        $this->connection = \Session::get('selected_database','mysql');
+    }
+
     public function user()
     {
         return $this->belongsTo('App\User','bitc_usrc_id');

@@ -11,7 +11,7 @@
     <!-- PNotify -->
     <link href="{{ asset('controlassets/pnotify/pnotify.custom.min.css') }}" rel="stylesheet" type="text/css" />
     <!-- Animate -->
-    <link href="{{ asset('controlassets/animate.css') }}" rel="stylesheet" type="text/css" />
+    <!--<link href="{{ asset('controlassets/animate.css') }}" rel="stylesheet" type="text/css" />-->
 @endsection
 
 @section('app_content')

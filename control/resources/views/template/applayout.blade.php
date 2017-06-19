@@ -12,12 +12,136 @@
     <link href="{{ asset('controlassets/vendors/bootstrap-daterangepicker/daterangepicker.css') }}" rel="stylesheet">
     <!-- Custom Theme Style -->
     <link href="{{ asset('controlassets/build/css/custom.css') }}" rel="stylesheet">
+    <!-- Animate -->
+    <link href="{{ asset('controlassets/animate.css') }}" rel="stylesheet" type="text/css" />
+    <!-- Mask -->
+    <link href="{{ asset('controlassets/jquery-loadmask-master/jquery.loadmask.css') }}" rel="stylesheet" type="text/css" />
+
+    <style type="text/css">
+    	.lmask {
+		  position: absolute;
+		  height: 100%;
+		  width: 100%; 
+		  background-color: #000;
+		  bottom: 0;
+		  left: 0;
+		  right: 0;
+		  top: 0;
+		  z-index: 9999;;
+		  opacity: 0.4;
+		  &.fixed {
+		    position: fixed;
+		  }
+		  &:before {
+		    content: '';
+		    background-color: rgba(0,0,0,0);
+		    border: 5px solid rgba(0,183,229,0.9);
+		    opacity: .9;
+		    border-right: 5px solid rgba(0,0,0,0);
+		    border-left: 5px solid rgba(0,0,0,0);
+		    border-radius: 50px;
+		    box-shadow: 0 0 35px #2187e7;
+		    width: 50px;
+		    height: 50px;
+		    -moz-animation: spinPulse 1s infinite ease-in-out;
+		    -webkit-animation: spinPulse 1s infinite linear;
+
+		    margin: -25px 0 0 -25px;
+		    position: absolute;
+		    top: 50%;
+		    left: 50%;
+		  }
+		  &:after {
+		    content: '';
+		    background-color: rgba(0,0,0,0);
+		    border: 5px solid rgba(0,183,229,0.9);
+		    opacity: .9;
+		    border-left: 5px solid rgba(0,0,0,0);
+		    border-right: 5px solid rgba(0,0,0,0);
+		    border-radius: 50px;
+		    box-shadow: 0 0 15px #2187e7;
+		    width: 30px;
+		    height: 30px;
+		    -moz-animation: spinoffPulse 1s infinite linear;
+		    -webkit-animation: spinoffPulse 1s infinite linear;
+
+		    margin: -15px 0 0 -15px;
+		    position: absolute;
+		    top: 50%;
+		    left: 50%;
+		  }
+		}
+
+		@-moz-keyframes spinPulse {
+		  0% {
+		    -moz-transform:rotate(160deg);
+		    opacity: 0;
+		    box-shadow: 0 0 1px #2187e7;
+		  }
+		  50% {
+		    -moz-transform: rotate(145deg);
+		    opacity: 1;
+		  }
+		  100% {
+		    -moz-transform: rotate(-320deg);
+		    opacity: 0;
+		  }
+		}
+		@-moz-keyframes spinoffPulse {
+		  0% {
+		    -moz-transform: rotate(0deg);
+		  }
+		  100% {
+		    -moz-transform: rotate(360deg);
+		  }
+		}
+		@-webkit-keyframes spinPulse {
+		  0% {
+		    -webkit-transform: rotate(160deg);
+		    opacity: 0;
+		    box-shadow: 0 0 1px #2187e7;
+		  }
+		  50% {
+		    -webkit-transform: rotate(145deg);
+		    opacity: 1;
+		  }
+		  100% {
+		    -webkit-transform: rotate(-320deg);
+		    opacity: 0;
+		  }
+		}
+		@-webkit-keyframes spinoffPulse {
+		  0% {
+		    -webkit-transform: rotate(0deg);
+		  }
+		  100% {
+		    -webkit-transform: rotate(360deg);
+		  }
+		}
+    </style>
 @endsection
 
 @section('app_body')
 	<body class="nav-md">
 		<div class="container body">
 			<div class="main_container">
+
+
+			    <!-- Modal -->
+			    <div class="modal fade bs-example-modal-sm" tabindex="-1" role="dialog" aria-hidden="true" id="loadingmodal">
+                    <div class="modal-dialog modal-sm">
+                      <div class="modal-content">
+
+                        <div class="modal-header">
+                          <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">×</span>
+                          </button>
+                          <h4 class="modal-title" id="myModalLabel2">Cargando ...</h4>
+                        </div>
+
+                      </div>
+                    </div>
+                  </div>
+
 				
 				@section('app_left_menu')
 		            <div class="col-md-3 left_col">
@@ -160,6 +284,8 @@
 		    <script src="{{ asset('controlassets/vendors/nprogress/nprogress.js') }}"></script>
 		    <!-- iCheck -->
 		    <script src="{{ asset('controlassets/vendors/iCheck/icheck.min.js') }}"></script>
+		    
+		    <script src="{{ asset('controlassets/jquery.babypaunch.spinner.min.js') }}"></script>
         @show
 	</body>
 @endsection

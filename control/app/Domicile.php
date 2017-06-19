@@ -12,6 +12,11 @@ class Domicile extends Model
         'dom_calle', 'dom_numext', 'dom_numint', 'dom_col', 'dom_ciudad', 'dom_munic', 'dom_estado', 'dom_pais'
     ];
 
+    public function __construct()
+    {
+        $this->connection = \Session::get('selected_database','mysql');
+    }
+
     public function distributors()
     {
         return $this->hasMany('App\Distributor','distrib_dom_id');

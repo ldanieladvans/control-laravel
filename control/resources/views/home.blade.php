@@ -27,7 +27,7 @@
                   <div class="icon"></br><i class="fa fa-users"></i></div>
                   <div class="count">{{count($clients)}}</div>
                   <h3>Cliente(s)</h3>
-                  <p>      </p>
+                  </br>
                 </div>
               </div>
               <div class="animated flipInY col-lg-3 col-md-3 col-sm-6 col-xs-12">
@@ -35,7 +35,7 @@
                   <div class="icon"></br><i class="fa fa-sitemap"></i></div>
                   <div class="count">{{count($distributors)}}</div>
                   <h3>Distribuidore(s)</h3>
-                  <p>      </p>
+                  </br>
                 </div>
               </div>
               <div class="animated flipInY col-lg-3 col-md-3 col-sm-6 col-xs-12">
@@ -51,7 +51,7 @@
                   <div class="icon"></br><i class="fa fa-suitcase"></i></div>
                   <div class="count">{{count($packages)}}</div>
                   <h3>Paquetes</h3>
-                  <p>      </p>
+                  </br>
                 </div>
               </div>
             </div>
@@ -520,8 +520,12 @@
     <script src="{{ asset('controlassets/vendors/moment/min/moment.min.js') }}"></script>
     <script src="{{ asset('controlassets/vendors/bootstrap-daterangepicker/daterangepicker.js') }}"></script>
 
+    
+
     <!-- Custom Theme Scripts -->
     <script src="{{ asset('controlassets/build/js/custom.js') }}"></script>
+
+
 @endsection
 
 

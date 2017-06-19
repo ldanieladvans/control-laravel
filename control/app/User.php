@@ -24,6 +24,11 @@ class User extends Authenticatable implements HasRoleAndPermissionContract
         'name', 'email', 'password', 'usrc_nick', 'uscr_tel', 'usrc_super', 'usrc_ult_acces', 'usrc_activo', 'usrc_distrib_id'
     ];
 
+    public function __construct()
+    {
+        $this->connection = \Session::get('selected_database','mysql');
+    }
+
     /**
      * The attributes that should be hidden for arrays.
      *

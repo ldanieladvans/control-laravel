@@ -12,6 +12,11 @@ class Reference extends Model
         'refer_nom', 'refer_rfc'
     ];
 
+    public function __construct()
+    {
+        $this->connection = \Session::get('selected_database','mysql');
+    }
+
     public function clients()
     {
         return $this->hasMany('App\Client','cliente_refer_id');

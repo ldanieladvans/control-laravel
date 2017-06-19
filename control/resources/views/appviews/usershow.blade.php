@@ -14,7 +14,7 @@
     <!-- PNotify -->
     <link href="{{ asset('controlassets/pnotify/pnotify.custom.min.css') }}" rel="stylesheet" type="text/css" />
     <!-- Animate -->
-    <link href="{{ asset('controlassets/animate.css') }}" rel="stylesheet" type="text/css" />
+    <!--<link href="{{ asset('controlassets/animate.css') }}" rel="stylesheet" type="text/css" />-->
 @endsection
 
 @section('app_content')
@@ -312,6 +312,9 @@
 
             var password = document.getElementById(passid).value;
 
+            hideModal("passmodal"+user);
+            $('#loadingmodal').modal('show');
+
             if(password){
               $.ajax({
                 url: 'user/changepass',
@@ -319,7 +322,9 @@
                 data: {_token: CSRF_TOKEN,password:password,user:user},
                 dataType: 'JSON',
                 success: function (data) {
-                  hideModal("passmodal"+data['user']);
+                  $('#loadingmodal').modal('hide');
+                  //$('button[type="button"]').removeAttr('disabled');
+                  //hideModal("passmodal"+data['user']);
                   new PNotify({
                     title: "Notificación",
                     type: "info",
@@ -331,6 +336,8 @@
                     styling: 'bootstrap3'
                   });
                   //PNotify.removeAll();
+                  document.getElementById('password'+data['user']).value = '';
+
                     
                 },
                 error: function(XMLHttpRequest, textStatus, errorThrown) { 

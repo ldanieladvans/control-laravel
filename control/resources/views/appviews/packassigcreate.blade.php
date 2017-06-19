@@ -9,7 +9,7 @@
     <!-- PNotify -->
     <link href="{{ asset('controlassets/pnotify/pnotify.custom.min.css') }}" rel="stylesheet" type="text/css" />
     <!-- Animate -->
-    <link href="{{ asset('controlassets/animate.css') }}" rel="stylesheet" type="text/css" />
+    <!--<link href="{{ asset('controlassets/animate.css') }}" rel="stylesheet" type="text/css" />-->
     <style>
 	    .errorType {
 	        border-color: #F00 !important;

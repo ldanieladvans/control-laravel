@@ -8,6 +8,8 @@ use App\Package;
 use App\Packageassignation;
 use App\Appaccount;
 use Illuminate\Http\Request;
+use App\Http\Middleware\ChangeCon;
+use Illuminate\Support\Facades\DB;
 
 class HomeController extends Controller
 {
@@ -36,6 +38,7 @@ class HomeController extends Controller
         $asigpaqs_array_return = [];
         $appctas_array = [];
         $appctas_array_return = [];
+        
         $asigpaqs = Packageassignation::where('asigpaq_f_vent','>=',mktime(0, 0, 0, date("m")-1, date("d"),date("Y")))
                                       ->where('asigpaq_f_vent','<=',date("Y-m-d"))->get();
         foreach ($asigpaqs as $asigpaq) {
