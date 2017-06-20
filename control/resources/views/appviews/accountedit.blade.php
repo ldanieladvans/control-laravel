@@ -35,22 +35,22 @@
 
                 	{{ Form::hidden('_method', 'PUT') }}
 
-                  <div class="item form-group">                     
+                  <!--<div class="item form-group">                     
                       <div class="col-md-9 col-sm-9 col-xs-12">
                         <input id="cta_nomservd" title="Identificador del servidor" class="form-control has-feedback-left" name="cta_nomservd" placeholder="Identificador del servidor *" required="required" type="text" value="{{$account->cta_nomservd}}">
                         <span class="fa fa-info form-control-feedback left" aria-hidden="true"></span>
                       </div>
-                    </div>
+                    </div>-->
 
 
                   <div class="item form-group">                     
                       <div class="col-md-9 col-sm-9 col-xs-12">
-                        <input id="cta_num" title="Número de Cuenta" class="form-control has-feedback-left" name="cta_num" placeholder="Número de Cuenta *" type="number" value="{{$account->cta_num}}">
+                        <input id="cta_num" title="RFC" class="form-control has-feedback-left" name="cta_num" placeholder="Número de Cuenta / RFC *" type="number" value="{{$account->cta_num}}">
                         <span class="fa fa-bar-chart form-control-feedback left" aria-hidden="true"></span>
                       </div>
                     </div>
 
-                  <div class="item form-group">                     
+                  <!--<div class="item form-group">                     
                       <div class="col-md-9 col-sm-9 col-xs-12">
                         <input id="cta_fecha" title="Fecha" class="form-control has-feedback-left" name="cta_fecha" placeholder="Fecha" required="required" type="date" value="{{$account->cta_fecha}}">
                         <span class="fa fa-calendar form-control-feedback left" aria-hidden="true"></span>
@@ -62,11 +62,11 @@
                         <input id="cta_nom_bd" title="Nombre Base de Datos" class="form-control has-feedback-left" name="cta_nom_bd" placeholder="Nombre Base de Datos *" required="required" type="text" value="{{$account->cta_nom_bd}}">
                         <span class="fa fa-laptop form-control-feedback left" aria-hidden="true"></span>
                       </div>
-                    </div>
+                    </div>-->
 
                   <div class="item form-group">                     
                       <div class="col-md-9 col-sm-9 col-xs-12">
-                        <input id="cta_estado" title="Estado" class="form-control has-feedback-left" name="cta_estado" placeholder="Estado *" required="required" type="text" readonly="readonly" value="Inactiva" value="{{$account->cta_estado}}">
+                        <input id="cta_estado" title="Estado" class="form-control has-feedback-left" name="cta_estado" placeholder="Estado *" required="required" type="text" readonly="readonly" value="{{$account->cta_estado}}" value="{{$account->cta_estado}}">
                         <span class="fa fa-certificate form-control-feedback left" aria-hidden="true"></span>
                       </div>
                     </div>

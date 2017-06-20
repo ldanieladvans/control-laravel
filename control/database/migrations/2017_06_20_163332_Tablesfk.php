@@ -4,7 +4,7 @@ use Illuminate\Support\Facades\Schema;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Database\Migrations\Migration;
 
-class AddingTablesFk extends Migration
+class Tablesfk extends Migration
 {
     /**
      * Run the migrations.
@@ -43,6 +43,10 @@ class AddingTablesFk extends Migration
         Schema::table('appcta', function($table) {
             $table->foreign('appcta_cuenta_id')->references('id')->on('cta')->onDelete('cascade');;
             $table->foreign('appcta_paq_id')->references('id')->on('paq')->onDelete('cascade');;
+        });
+
+        Schema::table('app', function($table) {
+            $table->foreign('app_appcta_id')->references('id')->on('appcta')->onDelete('cascade');;
         });
     }
 

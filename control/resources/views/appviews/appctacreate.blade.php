@@ -8,8 +8,8 @@
     <link href="{{ asset('controlassets/build/css/custom.css') }}" rel="stylesheet">
     <!-- PNotify -->
     <link href="{{ asset('controlassets/pnotify/pnotify.custom.min.css') }}" rel="stylesheet" type="text/css" />
-    <!-- Animate -->
-    <!--<link href="{{ asset('controlassets/animate.css') }}" rel="stylesheet" type="text/css" />-->
+    <!-- Chosen -->    
+    <link href="{{ asset('controlassets/vendors/chosen/chosen.css') }}" rel="stylesheet" type="text/css" />
     <style>
 	    .errorType {
 	        border-color: #F00 !important;
@@ -73,9 +73,12 @@
 	                      <ul id="myTab" class="nav nav-tabs bar_tabs" role="tablist">
 	                        <li role="presentation" class="active"><a href="#tab_content1" id="home-tab" role="tab" data-toggle="tab" aria-expanded="true">Cuenta-Paquete</a>
 	                        </li>
-	                        <li role="presentation" class=""><a href="#tab_content2" role="tab" id="profile-tab" data-toggle="tab" aria-expanded="false">Fechas</a>
+	                        <li role="presentation" class=""><a href="#tab_content2" role="tab" id="profile-tab" data-toggle="tab" aria-expanded="false">Aplicaciones</a>
 	                        </li>
+                          <li role="presentation" class=""><a href="#tab_content3" role="tab" id="date-tab" data-toggle="tab" aria-expanded="false">Fechas</a>
+                          </li>
 	                      </ul>
+
 	                      <div id="myTabContent" class="tab-content">
 	                        <div role="tabpanel" class="tab-pane fade active in" id="tab_content1" aria-labelledby="home-tab">
 
@@ -109,7 +112,29 @@
                         	  
 	                        </div>
 
-	                        <div role="tabpanel" class="tab-pane fade" id="tab_content2" aria-labelledby="profile-tab">
+
+
+                          <div role="tabpanel" class="tab-pane fade" id="tab_content2" aria-labelledby="home-tab">
+
+                            <div class="item form-group">
+                                  <div class="col-md-10 col-sm-10 col-xs-12">
+                                    <select id="apps" name="apps[]" tabindex="2" data-placeholder="Seleccione las aplicaciones ..." class="chosen-select form-control" multiple="multiple">
+                                          <option value="cont">Contabilidad</option>
+                                          <option value="bov">Bóveda</option>
+                                          <option value="nom">Nómina</option>
+                                          <option value="pld">PLD</option>
+                                          <option value="cc">Control de Calidad</option>
+                                          <option value="not">Notaría</option>
+                                    </select>
+                                  </div>
+                            </div>
+
+                            
+                          </div>
+
+
+
+	                        <div role="tabpanel" class="tab-pane fade" id="tab_content3" aria-labelledby="profile-tab">
 
 	                        	<div class="item form-group">                     
 			                      <div class="col-md-9 col-sm-9 col-xs-12">
@@ -181,6 +206,11 @@
     <script src="{{ asset('controlassets/vendors/pnotify/dist/pnotify.buttons.js') }}"></script>
     <script src="{{ asset('controlassets/vendors/pnotify/dist/pnotify.nonblock.js') }}"></script>
 
+      <!-- Chosen -->
+    <script src="{{ asset('controlassets/vendors/chosen/chosen.jquery.js') }}" type="text/javascript"></script>
+    <script src="{{ asset('controlassets/vendors/chosen/docsupport/prism.js') }}" type="text/javascript" charset="utf-8"></script>
+    <script src="{{ asset('controlassets/vendors/chosen/docsupport/init.js') }}" type="text/javascript" charset="utf-8"></script>
+
 	<!-- Custom Theme Scripts -->
     <script src="{{ asset('controlassets/build/js/custom.js') }}"></script>
 
@@ -204,6 +234,8 @@
 	});*/
 
 	//$("#appcta_cuenta_id").trigger("change");
+
+  $('.chosen-select', this).chosen('destroy').chosen();
 
 	$( "#packassigform" ).submit(function( event ) {
 	  
