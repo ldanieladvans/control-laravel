@@ -16,3 +16,10 @@ use Illuminate\Http\Request;
 Route::middleware('auth:api')->get('/user', function (Request $request) {
     return $request->user();
 });
+
+
+//Control Services
+//Route::get('/service', 'HomeController@index')->name('home');
+
+Route::get('/firstservice', 'ApiserviceController@firstservice')->middleware('auth:api');
+
