@@ -250,19 +250,36 @@
 
   $('.chosen-select', this).chosen('destroy').chosen();
 
+  var cta_aux = false;
+  var CSRF_TOKEN = $('meta[name="csrf-token"]').attr('content');
+
+  $('#appcta_cuenta_id').change(function(){
+    if(this.value == ""){
+      
+      cta_aux = false;     
+    }else{
+      $("#appcta_paq_id").removeAttr('disabled');
+      $("#appcta_rfc").removeAttr('disabled');
+      $("#appcta_gig").removeAttr('disabled');
+      cta_aux = this.value;
+    }
+    $("#appcta_paq_id").val("");
+    $("#appcta_rfc").val(""); 
+    $("#appcta_gig").val("");
+
+  });
+
   $('#appcta_paq_id').change(function(){
-    var CSRF_TOKEN = $('meta[name="csrf-token"]').attr('content');
-
-
       $.ajax({
           url: '/getgigrfcbypack',
           type: 'POST',
-          data: {_token: CSRF_TOKEN,paqid:this.value},
+          data: {_token: CSRF_TOKEN,paqid:this.value,accid:cta_aux},
           dataType: 'JSON',
           success: function (data) {
             document.getElementById('appcta_rfc').value=data['rfc'];
             document.getElementById('appcta_gig').value=data['gig'];
-              
+            document.getElementById('appcta_rfc').setAttribute("data-validate-minmax", "0,"+data['rfc']);
+            document.getElementById('appcta_gig').setAttribute("data-validate-minmax", "0,"+data['gig']);
           }
       });
   });

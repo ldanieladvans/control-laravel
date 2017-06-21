@@ -254,9 +254,7 @@
 
   $('#appcta_cuenta_id').change(function(){
     if(this.value == ""){
-      $("#appcta_paq_id").val("");
-      $("#appcta_rfc").val(""); 
-      $("#appcta_gig").val("");
+      
       cta_aux = false;     
     }else{
       $("#appcta_paq_id").removeAttr('disabled');
@@ -264,6 +262,9 @@
       $("#appcta_gig").removeAttr('disabled');
       cta_aux = this.value;
     }
+    $("#appcta_paq_id").val("");
+    $("#appcta_rfc").val(""); 
+    $("#appcta_gig").val("");
 
   });
 

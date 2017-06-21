@@ -7,6 +7,7 @@ use App\Appaccount;
 use App\Appcontrol;
 use App\Package;
 use App\Account;
+use App\Packageassignation;
 use Illuminate\Support\Facades\DB;
 
 class AppaccountController extends Controller
@@ -196,6 +197,64 @@ class AppaccountController extends Controller
         return redirect()->route('appcta.index');
     }
 
+    private function getgigrfcbypackaux($paqid,$accid)
+    {
+        $paqid = false;
+        $accid = false;
+        $rfc = 0;
+        $gig = 0;
+        $counter_assig_rfc = 0;
+        $counter_assig_gig = 0;
+        $return_rfc = 0;
+        $return_gig = 0;
+        $acc_obj = false;
+
+        $asig_distrib_rfc = 0;
+        $asig_distrib_gig = 0;
+
+        $paq_obj = Package::find($paqid);
+        $acc_obj = Account::find($accid);
+
+        $rfc = $paq_obj->paq_rfc;
+        $gig = $paq_obj->paq_gig;
+
+        $prevassignations = Appaccount::where('appcta_cuenta_id','=',$accid)->get();
+        foreach ($prevassignations as $prevassignation) {
+            $counter_assig_rfc += $prevassignation->asigpaq_rfc;
+            $counter_assig_gig += $prevassignation->asigpaq_gig;
+        }
+
+        if($acc_obj!=false){
+            $distrib = $acc_obj->distributor ? $distrib = $acc_obj->distributor : false;
+
+                if($distrib!=false){
+
+                    $distribassignations = Packageassignation::where('asigpaq_distrib_id','=',$distrib->id)->get();
+
+                    foreach ($distribassignations as $distribassignation) {
+                        $asig_distrib_rfc += $distribassignation->asigpaq_rfc;
+                        $asig_distrib_gig += $distribassignation->asigpaq_gig;
+                    }
+                    $rfc_assigs = ($distrib->distrib_limitrfc + ($asig_distrib_rfc - $counter_assig_rfc));
+                    $gig_assigs = ($distrib->distrib_limitgig + ($asig_distrib_gig - $counter_assig_gig));
+                    if($rfc <= $rfc_assigs){
+                        $return_rfc = $rfc;
+                    }else{
+                        $return_rfc = $rfc_assigs;
+                    }
+                    if($gig <= $gig_assigs){
+                        $return_gig = $gig;
+                    }else{
+                        $return_gig = $gig_assigs;
+                    }
+                }
+        }
+
+        return array('gig' => $return_gig,
+                    'rfc' => $return_rfc);   
+
+    }
+
 
     public function getgigrfcbypack(Request $request)
     {
@@ -211,32 +270,75 @@ class AppaccountController extends Controller
         $return_gig = 0;
         $acc_obj = false;
 
+        $asig_distrib_rfc = 0;
+        $asig_distrib_gig = 0;
+
+        $return_array = array();
+
         if(array_key_exists('paqid',$alldata) && isset($alldata['paqid'])){
-            $paqid = Package::find($alldata['paqid']);
+            $paqid = $alldata['paqid'];
+
         }
 
-        if($paqid!=false){
-
-            $rfc = $paqid->paq_rfc;
-            $gig = $paqid->paq_gig;
+        if($paqid!=false){            
 
             if(array_key_exists('accid',$alldata) && isset($alldata['accid'])){
-                $acc_obj = Account::find($alldata['accid']);
-                $prevassignations = Appaccount::where('appcta_cuenta_id','=',$alldata['accid'])->get();
-                foreach ($prevassignations as $prevassignation) {
-                    $counter_assig_rfc += $prevassignation->asigpaq_rfc;
-                    $counter_assig_gig += $prevassignation->asigpaq_gig;
+                $acc_id = $alldata['accid'];
+            }
+        }
+
+        if($acc_id!=false && $paqid!=false){
+
+            $paq_obj = Package::find($paqid);
+            $acc_obj = Account::find($acc_id);
+
+            $rfc = $paq_obj->paq_rfc;
+            $gig = $paq_obj->paq_gig;
+
+            $prevassignations = Appaccount::where('appcta_cuenta_id','=',$acc_id)->get();
+            foreach ($prevassignations as $prevassignation) {
+                $counter_assig_rfc += $prevassignation->appcta_rfc;
+                $counter_assig_gig += $prevassignation->appcta_gig;
+            }
+
+
+
+            if($acc_obj!=false){
+                $distrib = $acc_obj->distributor ? $distrib = $acc_obj->distributor : false;
+
+                if($distrib!=false){
+
+                    $distribassignations = Packageassignation::where('asigpaq_distrib_id','=',$distrib->id)->get();
+
+                    foreach ($distribassignations as $distribassignation) {
+                        $asig_distrib_rfc += $distribassignation->asigpaq_rfc;
+                        $asig_distrib_gig += $distribassignation->asigpaq_gig;
+                    }
+                    $rfc_assigs = ($distrib->distrib_limitrfc + ($asig_distrib_rfc - $counter_assig_rfc));
+                    $gig_assigs = ($distrib->distrib_limitgig + ($asig_distrib_gig - $counter_assig_gig));
+                    if($rfc <= $rfc_assigs){
+                        $return_rfc = $rfc;
+                    }else{
+                        $return_rfc = $rfc_assigs;
+                    }
+                    if($gig <= $gig_assigs){
+                        $return_gig = $gig;
+                    }else{
+                        $return_gig = $gig_assigs;
+                    }
                 }
             }
         }
 
-
+        /*echo "<pre>";
+        print_r($counter_assig_rfc);die();
+        echo "</pre>";*/
 
         $response = array(
             'status' => 'success',
             'msg' => 'Setting created successfully',
-            'gig' => $gig,
-            'rfc' => $rfc,
+            'gig' => $return_gig ,
+            'rfc' => $return_rfc,
         );
         return \Response::json($response);
     }
