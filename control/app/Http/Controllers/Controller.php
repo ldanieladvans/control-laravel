@@ -19,7 +19,17 @@ class Controller extends BaseController
     	$user = \Auth::user();
     	$browser = new Browser();
     	$split_var = explode('\Controllers',get_class($this));
-    	$binnacle = new Binnacle(['bitc_usrc_id'=>$user->id,'bitc_fecha'=>date("Y-m-d H:i:s"),'bitc_tipo_op'=>$fname,'bitc_ip'=>$request->ip(),'bitc_naveg'=>$browser->getName().' '.$browser->getVersion(),'bitc_modulo'=>$split_var[1],'bitc_result'=>'TODO','bitc_msj'=>$fmessage,'bitc_dat'=>json_encode($request->all())]);
+    	$binnacle = new Binnacle();
+    	/*['bitc_usrc_id'=>$user->id,'bitc_fecha'=>date("Y-m-d H:i:s"),'bitc_tipo_op'=>$fname,'bitc_ip'=>$request->ip(),'bitc_naveg'=>$browser->getName().' '.$browser->getVersion(),'bitc_modulo'=>$split_var[1],'bitc_result'=>'TODO','bitc_msj'=>$fmessage,'bitc_dat'=>json_encode($request->all())]*/
+    	$binnacle->bitc_usrc_id = $user->id;
+    	$binnacle->bitc_fecha = date("Y-m-d H:i:s");
+    	$binnacle->bitc_tipo_op = $fname;
+    	$binnacle->bitc_ip = $request->ip();
+    	$binnacle->bitc_naveg = $browser->getName().' '.$browser->getVersion();
+    	$binnacle->bitc_modulo = $split_var[1];
+    	$binnacle->bitc_result = 'TODO';
+    	$binnacle->bitc_msj = $fmessage;
+    	$binnacle->bitc_dat = json_encode($request->all());
     	$binnacle->save();
     }
 }

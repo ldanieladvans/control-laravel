@@ -12,10 +12,12 @@ class Packageassignation extends Model
         'asigpaq_distrib_id', 'asigpaq_paq_id', 'asigpaq_gig', 'asigpaq_rfc', 'asigpaq_f_vent', 'asigpaq_f_act', 'asigpaq_f_fin', 'asigpaq_f_caduc', 'asigpaq_activo'
     ];
 
-    public function __construct()
+    //Uncomment for multibd
+    /*public function __construct(array $attributes = [])
     {
+        parent::__construct($attributes);
         $this->connection = \Session::get('selected_database','mysql');
-    }
+    }*/
 
     public function distributor()
     {

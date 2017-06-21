@@ -12,10 +12,12 @@ class Distributor extends Model
         'distrib_nom', 'distrib_rfc', 'distrib_f_nac', 'distrib_limitgig', 'distrib_limitrfc', 'distrib_tel', 'distrib_correo', 'distrib_sector', 'distrib_nac', 'distrib_sup', 'distrib_f_creac', 'distrib_activo', 'distrib_dom_id'
     ];
 
-    public function __construct()
+    //Uncomment for multibd
+    /*public function __construct(array $attributes = [])
     {
+        parent::__construct($attributes);
         $this->connection = \Session::get('selected_database','mysql');
-    }
+    }*/
 
     public function users()
     {

@@ -12,10 +12,12 @@ class Reference extends Model
         'refer_nom', 'refer_rfc'
     ];
 
-    public function __construct()
+    //Uncomment for multibd
+    /*public function __construct(array $attributes = [])
     {
+        parent::__construct($attributes);
         $this->connection = \Session::get('selected_database','mysql');
-    }
+    }*/
 
     public function clients()
     {

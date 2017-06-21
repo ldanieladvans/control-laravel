@@ -176,8 +176,9 @@
 					            </li>
 					            <li><a><i class="fa fa-exchange"></i> <strong>ASIGNACIONES</strong> <span class="fa fa-chevron-down"></span></a>
 					            	<ul class="nav child_menu">
+					            		<li><a href="{{ route('asigpaq.index') }}"><strong>ASIGNACIÓN DISTRIBUIDORES</strong></a></li>
 						            	<li><a href="{{ route('account.index') }}"><strong>CUENTAS</strong></a></li>
-						            	<li><a href="{{ route('asigpaq.index') }}"><strong>ASIGNACIÓN DISTRIBUIDORES</strong></a></li>
+						            	
 						                <li><a href="{{ route('appcta.index') }}"><strong>ASIGNACIÓN CLIENTES</strong></a></li>
 					                </ul>
 					            </li>

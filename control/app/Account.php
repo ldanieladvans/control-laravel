@@ -12,10 +12,12 @@ class Account extends Model
         'cta_cliente_id', 'cta_distrib_id', 'cta_nomservd', 'cta_num', 'cta_fecha', 'cta_nom_bd', 'cta_estado'
     ];
 
-    public function __construct()
+    //Uncomment for multibd
+    /*public function __construct(array $attributes = [])
     {
+        parent::__construct($attributes);
         $this->connection = \Session::get('selected_database','mysql');
-    }
+    }*/
 
     public function distributor()
     {

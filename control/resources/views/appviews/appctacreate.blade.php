@@ -47,49 +47,19 @@
 
                     <div class="item form-group">	                    
 	                    <div class="col-md-9 col-sm-9 col-xs-12">
-	                      <input id="appcta_app" class="form-control has-feedback-left" title="Nombre del Recurso o Aplicación" name="appcta_app" placeholder="Aplicación *" required="required" type="text">
+	                      <input id="appcta_app" class="form-control has-feedback-left" title="Identificador de la asignación" name="appcta_app" placeholder="Identificador de la asignación *" required="required" type="text">
 	                      <span class="fa fa-laptop form-control-feedback left" aria-hidden="true"></span>
 	                    </div>
 	                  </div>
 
-	                  <div class="item form-group">	                    
-	                    <div class="col-md-9 col-sm-9 col-xs-12">
-	                      <input id="appcta_rfc" class="form-control has-feedback-left" name="appcta_rfc" title="Cantidad de RFCs" placeholder="Cantidad RFC *" required="required" type="numberint">
-	                      <span class="fa fa-bank form-control-feedback left" aria-hidden="true"></span>
-	                    </div>
-	                  </div>
-
-	                  <div class="item form-group">	                    
-	                    <div class="col-md-9 col-sm-9 col-xs-12">
-	                      <input id="appcta_gig" class="form-control has-feedback-left" name="appcta_gig" placeholder="Cantidad Gigas *" required="required" type="number" title="Almacenamiento en Gigas">
-	                      <span class="fa fa-archive form-control-feedback left" aria-hidden="true"></span>
-	                    </div>
-	                  </div>
-
-
-
-                  	<div class="x_content">
-                      <div class="" role="tabpanel" data-example-id="togglable-tabs">
-	                      <ul id="myTab" class="nav nav-tabs bar_tabs" role="tablist">
-	                        <li role="presentation" class="active"><a href="#tab_content1" id="home-tab" role="tab" data-toggle="tab" aria-expanded="true">Cuenta-Paquete</a>
-	                        </li>
-	                        <li role="presentation" class=""><a href="#tab_content2" role="tab" id="profile-tab" data-toggle="tab" aria-expanded="false">Aplicaciones</a>
-	                        </li>
-                          <li role="presentation" class=""><a href="#tab_content3" role="tab" id="date-tab" data-toggle="tab" aria-expanded="false">Fechas</a>
-                          </li>
-	                      </ul>
-
-	                      <div id="myTabContent" class="tab-content">
-	                        <div role="tabpanel" class="tab-pane fade active in" id="tab_content1" aria-labelledby="home-tab">
-
-                        	  <div class="item form-group">
+	                  <div class="item form-group">
                               <label class="control-label col-md-1 col-sm-1 col-xs-12">Cuenta*</label>
                                   <div class="col-md-8 col-sm-8 col-xs-12">
                                     <select class="select2_single form-control col-md-7 col-xs-12" id="appcta_cuenta_id" name="appcta_cuenta_id" required>
                                       <option value="">Seleccione una opción ...</option>
                                       @foreach($accounts as $account)
-			                            	<option value="{{ $account->id }}">{{ $account->cta_num }}</option>
-			                            @endforeach
+                                    <option value="{{ $account->id }}">{{ $account->cta_num }}</option>
+                                  @endforeach
                                     </select>
                                   </div>
 
@@ -100,37 +70,78 @@
                             <div class="item form-group">
                               <label class="control-label col-md-1 col-sm-1 col-xs-12">Paquete*</label>
                                   <div class="col-md-8 col-sm-8 col-xs-12">
-                                    <select class="select2_single form-control col-md-7 col-xs-12" name="appcta_paq_id" id="appcta_paq_id" required>
+                                    <select class="select2_single form-control col-md-7 col-xs-12" name="appcta_paq_id" id="appcta_paq_id" required disabled="disabled">
                                       <option value="">Seleccione una opción ...</option>
                                       @foreach($packages as $package)
-			                            	<option value="{{ $package->id }}">{{ $package->paq_nom }}</option>
-			                            @endforeach
+                                    <option value="{{ $package->id }}">{{ $package->paq_nom }}</option>
+                                  @endforeach
                                     </select>
                                   </div>
                             </div>
 
-                        	  
-	                        </div>
 
 
+                  	<div class="x_content">
+                      <div class="" role="tabpanel" data-example-id="togglable-tabs">
+	                      <ul id="myTab" class="nav nav-tabs bar_tabs" role="tablist">
+	                        <li role="presentation" class="active"><a href="#tab_content1" id="home-tab" role="tab" data-toggle="tab" aria-expanded="true">Aplicaciones</a>
+	                        </li>
+	                        <li role="presentation" class=""><a href="#tab_content2" role="tab" id="profile-tab" data-toggle="tab" aria-expanded="false">Detalle</a>
+	                        </li>
+                          <li role="presentation" class=""><a href="#tab_content3" role="tab" id="date-tab" data-toggle="tab" aria-expanded="false">Fechas</a>
+                          </li>
+	                      </ul>
 
-                          <div role="tabpanel" class="tab-pane fade" id="tab_content2" aria-labelledby="home-tab">
+	                      <div id="myTabContent" class="tab-content">
+
+
+                          <div role="tabpanel" class="tab-pane fade active in" id="tab_content1" aria-labelledby="home-tab">
 
                             <div class="item form-group">
                                   <div class="col-md-10 col-sm-10 col-xs-12">
                                     <select id="apps" name="apps[]" tabindex="2" data-placeholder="Seleccione las aplicaciones ..." class="chosen-select form-control" multiple="multiple">
-                                          <option value="cont">Contabilidad</option>
+                                          <!--<option value="cont">Contabilidad</option>
                                           <option value="bov">Bóveda</option>
                                           <option value="nom">Nómina</option>
                                           <option value="pld">PLD</option>
                                           <option value="cc">Control de Calidad</option>
-                                          <option value="not">Notaría</option>
+                                          <option value="not">Notaría</option>-->
+                                          @foreach($apps as $key => $value)
+                                            <option value="{{ $key }}">{{ $value }}</option>
+                                          @endforeach
+
                                     </select>
                                   </div>
                             </div>
 
                             
                           </div>
+
+
+	                        <div role="tabpanel" class="tab-pane fade" id="tab_content2" aria-labelledby="home-tab">
+
+                            <div class="item form-group">                     
+                              <div class="col-md-9 col-sm-9 col-xs-12">
+                                <input id="appcta_rfc" class="form-control has-feedback-left" name="appcta_rfc" title="Cantidad de RFCs" placeholder="Cantidad RFC *" required="required" type="numberint" disabled="disabled">
+                                <span class="fa fa-bank form-control-feedback left" aria-hidden="true"></span>
+                              </div>
+                            </div>
+
+                            <div class="item form-group">                     
+                              <div class="col-md-9 col-sm-9 col-xs-12">
+                                <input id="appcta_gig" class="form-control has-feedback-left" name="appcta_gig" placeholder="Cantidad Gigas *" required="required" type="number" title="Almacenamiento en Gigas" disabled="disabled">
+                                <span class="fa fa-archive form-control-feedback left" aria-hidden="true"></span>
+                              </div>
+                            </div>
+
+                        	  
+
+                        	  
+	                        </div>
+
+
+
+                          
 
 
 
@@ -235,7 +246,42 @@
 
 	//$("#appcta_cuenta_id").trigger("change");
 
+
   $('.chosen-select', this).chosen('destroy').chosen();
+
+  var cta_aux = false;
+  var CSRF_TOKEN = $('meta[name="csrf-token"]').attr('content');
+
+  $('#appcta_cuenta_id').change(function(){
+    if(this.value == ""){
+      $("#appcta_paq_id").val("");
+      $("#appcta_rfc").val(""); 
+      $("#appcta_gig").val("");
+      cta_aux = false;     
+    }else{
+      $("#appcta_paq_id").removeAttr('disabled');
+      $("#appcta_rfc").removeAttr('disabled');
+      $("#appcta_gig").removeAttr('disabled');
+      cta_aux = this.value;
+    }
+
+  });
+
+  $('#appcta_paq_id').change(function(){
+
+      $.ajax({
+          url: '/getgigrfcbypack',
+          type: 'POST',
+          data: {_token: CSRF_TOKEN,paqid:this.value,accid:cta_aux},
+          dataType: 'JSON',
+          success: function (data) {
+            document.getElementById('appcta_rfc').value=data['rfc'];
+            document.getElementById('appcta_gig').value=data['gig'];
+            document.getElementById('appcta_rfc').setAttribute("data-validate-minmax", "0,"+data['rfc']);
+            document.getElementById('appcta_gig').setAttribute("data-validate-minmax", "0,"+data['gig']);
+          }
+      });
+  });
 
 	$( "#packassigform" ).submit(function( event ) {
 	  

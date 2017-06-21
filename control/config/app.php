@@ -2,6 +2,10 @@
 
 return [
 
+
+    //Advans Apps
+    'advans_apps' => ['cont'=>'Contabilidad','bov'=>'Bóveda','nom'=>'Nómina','pld'=>'PLD','cc'=>'Control de Calidad','not'=>'Notaría'],
+
     /*
     |--------------------------------------------------------------------------
     | Application Name

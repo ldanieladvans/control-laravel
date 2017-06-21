@@ -154,6 +154,7 @@ class AccountController extends Controller
                 $account->cta_estado = $alldata['accstate'];
             }
         }
+        $account->cta_fecha = date("Y-m-d");
         $account->save();
         if($account!=false){
             $fmessage = 'El estado de la cuenta: '.$account->cta_num.' cambió a: '.$account->cta_estado;

@@ -12,10 +12,12 @@ class Binnacle extends Model
         'bitc_usrc_id', 'bitc_fecha', 'bitc_tipo_op', 'bitc_ip', 'bitc_naveg', 'bitc_modulo', 'bitc_result', 'bitc_msj', 'bitc_dat'
     ];
 
-    public function __construct()
+    //Uncomment for multibd
+    /*public function __construct(array $attributes = [])
     {
+        parent::__construct($attributes);
         $this->connection = \Session::get('selected_database','mysql');
-    }
+    }*/
 
     public function user()
     {

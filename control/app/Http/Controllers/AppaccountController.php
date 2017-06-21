@@ -4,8 +4,10 @@ namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
 use App\Appaccount;
+use App\Appcontrol;
 use App\Package;
 use App\Account;
+use Illuminate\Support\Facades\DB;
 
 class AppaccountController extends Controller
 {
@@ -38,8 +40,10 @@ class AppaccountController extends Controller
     public function create()
     {
         $packages = Package::all();
-        $accounts = Account::all();
-        return view('appviews.appctacreate',['packages'=>$packages,'accounts'=>$accounts]);
+        //$accounts = Account::all();
+        $accounts = Account::where('cta_estado','=','Activa')->get();
+        $apps = config('app.advans_apps');
+        return view('appviews.appctacreate',['packages'=>$packages,'accounts'=>$accounts,'apps'=>$apps]);
     }
 
     /**
@@ -51,13 +55,40 @@ class AppaccountController extends Controller
     public function store(Request $request)
     {
         $alldata = $request->all();
+
+        $apps = false;
+
+        if(array_key_exists('apps',$alldata)){
+            if(isset($alldata['apps'])){
+                $apps = $alldata['apps'];
+                unset($alldata['apps']);
+            }
+        }
+        
+        $apps_conf = config('app.advans_apps');
         if(array_key_exists('appcta_cuenta_id',$alldata)){
             if($alldata['appcta_cuenta_id']==''){
                 unset($alldata['appcta_cuenta_id']);
             }
         }
         $appcta = new Appaccount($alldata);
+
+
+        $appcta->appcta_app = $alldata['appcta_app'];
+
+        
         $appcta->save();
+
+
+        if($apps!=false){
+            foreach ($apps as $key => $value) {
+                $appc = new Appcontrol();
+                $appc->app_nom = $apps[$value];
+                $appc->app_code = $value;
+                $appc->app_appcta_id = $appcta->id;
+                $appc->save();
+            }
+        }
 
         $fmessage = 'Se ha asignado un paquete a una cuenta con nombre: '.$alldata['appcta_app'];
         \Session::flash('message',$fmessage);
@@ -86,10 +117,11 @@ class AppaccountController extends Controller
     {
         $appcta = Appaccount::findOrFail($id);
         $packages = Package::all();
-        $accounts = Account::all();
+        //$accounts = Account::all();
+        $accounts = Account::where('cta_estado','=','Activa')->get();
+        $apps = config('app.advans_apps');
 
-
-        return view('appviews.appctaedit',['packages'=>$packages,'accounts'=>$accounts,'appcta'=>$appcta]);
+        return view('appviews.appctaedit',['packages'=>$packages,'accounts'=>$accounts,'appcta'=>$appcta,'apps'=>$apps]);
     }
 
     /**
@@ -101,10 +133,8 @@ class AppaccountController extends Controller
      */
     public function update(Request $request, $id)
     {
+        $apps = config('app.advans_apps');
         $alldata = $request->all();
-        /*echo "<pre>";
-        print_r($alldata);die();
-        echo "</pre>";*/
         $appcta = Appaccount::findOrFail($id);
         $appcta->appcta_app = $alldata['appcta_app'];
         $appcta->appcta_rfc = $alldata['appcta_rfc'];
@@ -127,6 +157,18 @@ class AppaccountController extends Controller
         }
 
         $appcta->save();
+
+        DB::table('app')->where('app_appcta_id', '=', $appcta->id)->delete();
+
+        if(array_key_exists('apps',$alldata) && isset($alldata['apps'])){
+            foreach ($alldata['apps'] as $key => $value) {
+                $appc = new Appcontrol();
+                $appc->app_nom = $apps[$value];
+                $appc->app_code = $value;
+                $appc->app_appcta_id = $appcta->id;
+                $appc->save();
+            }
+        }
 
         $fmessage = 'Se ha actualizado un paquete - cuenta con nombre: '.$alldata['appcta_app'];
         \Session::flash('message',$fmessage);
@@ -152,5 +194,50 @@ class AppaccountController extends Controller
 
         }
         return redirect()->route('appcta.index');
+    }
+
+
+    public function getgigrfcbypack(Request $request)
+    {
+        $alldata = $request->all();
+
+        $paqid = false;
+        $accid = false;
+        $rfc = 0;
+        $gig = 0;
+        $counter_assig_rfc = 0;
+        $counter_assig_gig = 0;
+        $return_rfc = 0;
+        $return_gig = 0;
+        $acc_obj = false;
+
+        if(array_key_exists('paqid',$alldata) && isset($alldata['paqid'])){
+            $paqid = Package::find($alldata['paqid']);
+        }
+
+        if($paqid!=false){
+
+            $rfc = $paqid->paq_rfc;
+            $gig = $paqid->paq_gig;
+
+            if(array_key_exists('accid',$alldata) && isset($alldata['accid'])){
+                $acc_obj = Account::find($alldata['accid']);
+                $prevassignations = Appaccount::where('appcta_cuenta_id','=',$alldata['accid'])->get();
+                foreach ($prevassignations as $prevassignation) {
+                    $counter_assig_rfc += $prevassignation->asigpaq_rfc;
+                    $counter_assig_gig += $prevassignation->asigpaq_gig;
+                }
+            }
+        }
+
+
+
+        $response = array(
+            'status' => 'success',
+            'msg' => 'Setting created successfully',
+            'gig' => $gig,
+            'rfc' => $rfc,
+        );
+        return \Response::json($response);
     }
 }

@@ -13,12 +13,13 @@ class Appcontrol extends Migration
      */
     public function up()
     {
-        Schema::table('app', function (Blueprint $table) {
+
+        Schema::create('app', function (Blueprint $table) {
             $table->increments('id');
             $table->timestamps();
             $table->integer('app_appcta_id')->unsigned()->nullable();
             $table->string('app_nom',25)->nullable();
-            $table->string('app_code',3)->nullable();
+            $table->string('app_code',4)->nullable();
         });
     }
 

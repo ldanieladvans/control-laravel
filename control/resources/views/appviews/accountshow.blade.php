@@ -40,9 +40,10 @@
                         <tr>
                           <th>Id</th>
                           <th>Número de Cuenta</th>
-                          <th>Servidor</th>
-                          <th>Fecha</th>
-                          <th>Base de Datos</th>
+                          <th>Fecha Activación</th>
+                          <!--<th>Servidor</th>
+                          
+                          <th>Base de Datos</th>-->
                           <th>Cliente</th>
                           <th>Distribuidor</th>
                           <th>Estado</th>
@@ -56,9 +57,10 @@
                         <tr>
                         	<td>{{ $acc->id }}</td>
                         	<td>{{ $acc->cta_num }}</td>
-                        	<td>{{ $acc->cta_nomservd }}</td>
-                        	<td>{{ $acc->cta_fecha }}</td>
-                        	<td>{{ $acc->cta_nom_bd }}</td>
+                          <td>{{ $acc->cta_fecha }}</td>
+                        	<!--<td>{{ $acc->cta_nomservd }}</td>
+                        	
+                        	<td>{{ $acc->cta_nom_bd }}</td>-->
                           <td>{{ $acc->client ?  $acc->client->cliente_nom : '' }}</td>
                           <td>{{ $acc->distributor ? $acc->distributor->distrib_nom : '' }}</td>
                         	<td>{{ $acc->cta_estado }}</td>

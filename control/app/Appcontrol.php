@@ -12,10 +12,12 @@ class Appcontrol extends Model
         'app_appcta_id', 'app_nom', 'app_code'
     ];
 
-    public function __construct()
+    //Uncomment for multibd
+    /*public function __construct(array $attributes = [])
     {
+        parent::__construct($attributes);
         $this->connection = \Session::get('selected_database','mysql');
-    }
+    }*/
 
     public function appcta()
     {

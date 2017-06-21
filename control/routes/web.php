@@ -159,6 +159,7 @@ Route::post('/security/user/{user_id}/permsbyroles', 'UserController@permsbyrole
 Route::post('/security/user/changepass', 'UserController@changepass');
 Route::post('/security/role/assignPerm', 'RoleController@assignPerm');
 Route::post('/account/account/changeAccState', 'AccountController@changeAccState');
+Route::post('/getgigrfcbypack', 'AppaccountController@getgigrfcbypack');
 
 
 

@@ -49,7 +49,7 @@
 
                   <div class="item form-group">                     
                       <div class="col-md-9 col-sm-9 col-xs-12">
-                        <input id="cta_num" title="RFC" class="form-control has-feedback-left" name="cta_num" placeholder="Número de Cuenta / RFC *" type="number">
+                        <input id="cta_num" title="RFC" class="form-control has-feedback-left" name="cta_num" placeholder="Número de Cuenta / RFC *" type="text">
                         <span class="fa fa-bar-chart form-control-feedback left" aria-hidden="true"></span>
                       </div>
                     </div>

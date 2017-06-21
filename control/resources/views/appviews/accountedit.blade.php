@@ -45,7 +45,7 @@
 
                   <div class="item form-group">                     
                       <div class="col-md-9 col-sm-9 col-xs-12">
-                        <input id="cta_num" title="RFC" class="form-control has-feedback-left" name="cta_num" placeholder="Número de Cuenta / RFC *" type="number" value="{{$account->cta_num}}">
+                        <input id="cta_num" title="RFC" class="form-control has-feedback-left" name="cta_num" placeholder="Número de Cuenta / RFC *" type="text" value="{{$account->cta_num}}">
                         <span class="fa fa-bar-chart form-control-feedback left" aria-hidden="true"></span>
                       </div>
                     </div>
@@ -87,7 +87,7 @@
 
                             <div class="item form-group">
                               <label class="control-label col-md-1 col-sm-1 col-xs-12">Cliente</label>
-                                  <div class="col-md-5 col-sm-5 col-xs-12">
+                                  <div class="col-md-8 col-sm-8 col-xs-12">
                                     <select class="select2_single form-control col-md-7 col-xs-12" name="cta_cliente_id">
                                       <option value="null">Seleccione una opción ...</option>
                                       @foreach($clients as $client)
@@ -100,9 +100,11 @@
                                       @endforeach
                                     </select>
                                   </div>
-
+                              </div> 
+                                 
+                            <div class="item form-group">
                               <label class="control-label col-md-1 col-sm-1 col-xs-12">Distribuidor</label>
-                                  <div class="col-md-5 col-sm-5 col-xs-12">
+                                  <div class="col-md-8 col-sm-8 col-xs-12">
                                     <select class="select2_single form-control col-md-7 col-xs-12" name="cta_distrib_id">
                                       <option value="null">Seleccione una opción ...</option>
                                       @foreach($distributors as $distributor)
@@ -126,7 +128,7 @@
 
                             <div class="item form-group">
                               <div class="col-md-10 col-sm-10 col-xs-12">
-                                <select id="packages" name="packages[]" tabindex="2" data-placeholder="Seleccione los paquetes ..."  class="chosen-select form-control" multiple="multiple">
+                                <select id="packages" name="packages[]" tabindex="2" data-placeholder="Seleccione los paquetes ..."  class="chosen-select form-control" multiple="multiple" disabled>
                                 
                                     @foreach($packages as $package)
                                       <option value="{{ $package->id }}" selected="selected">{{ $package->paq_nom }}</option>
