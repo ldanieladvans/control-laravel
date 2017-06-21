@@ -41,7 +41,7 @@
               <div class="x_content">
 
                 <!--<form class="form-horizontal form-label-left input_mask">-->
-                {{ Form::open(['route' => ['appcta.update', $appcta->id], 'class'=>'form-horizontal form-label-left']) }}
+                {{ Form::open(['route' => ['appcta.update', $appcta->id], 'id'=>'packassigform', 'class'=>'form-horizontal form-label-left']) }}
 
                   {{ Form::hidden('_method', 'PUT') }}
 
@@ -284,9 +284,16 @@
       });
   });
 
+
+
+
   $( "#packassigform" ).submit(function( event ) {
+
+
+    $('#loadingmodal').modal('show');
+    event.preventDefault();
+
     
-    event.preventDefault()
 
       /*if($(selectobj).hasClass('errorType')){
         new PNotify({

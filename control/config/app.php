@@ -6,6 +6,18 @@ return [
     //Advans Apps
     'advans_apps' => ['cont'=>'Contabilidad','bov'=>'Bóveda','nom'=>'Nómina','pld'=>'PLD','cc'=>'Control de Calidad','not'=>'Notaría'],
 
+    'advans_apps_url' => ['ctac'=>'http://advans.cuenta.mx','cont'=>'http://advans.cuenta.mx','bov'=>'Bóveda','nom'=>'Nómina','pld'=>'PLD','cc'=>'Control de Calidad','not'=>'Notaría'],
+
+    'advans_apps_security' => ['ctac'=> [
+                                    'grant_type' => 'password',
+                                    'client_id' => '4',
+                                    'client_secret' => 'SAFwNTuBOV9AdyJtLJtiWXc0yHB5I2L0MKGdWvNe',
+                                    'username' => 'mabel@gmail.com',
+                                    'password' => base64_decode('RGFuaWVsMTIz'),
+                                    'scope' => '*',
+                                    ]
+                          ],
+
     /*
     |--------------------------------------------------------------------------
     | Application Name

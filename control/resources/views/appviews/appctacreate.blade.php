@@ -285,6 +285,8 @@
   });
 
 	$( "#packassigform" ).submit(function( event ) {
+
+    $('#loadingmodal').modal('show');
 	  
 	  event.preventDefault()
 
