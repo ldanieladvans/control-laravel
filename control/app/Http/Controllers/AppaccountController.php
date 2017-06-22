@@ -279,6 +279,8 @@ class AppaccountController extends Controller
 
         $return_array = array();
 
+        $distrib = false;
+
         if(array_key_exists('paqid',$alldata) && isset($alldata['paqid'])){
             $paqid = $alldata['paqid'];
 
@@ -336,14 +338,11 @@ class AppaccountController extends Controller
             }
         }
 
-        
-
-        $acces_vars = $this->getAccessToken();
-        $service_response = $this->getAppService($acces_vars['access_token'],'createbd',[],'ctac');
-
-        echo "<pre>";
-        print_r($service_response);die();
-        echo "</pre>";
+        $params_service = array();
+        if($distrib!=false){
+            $params_service['rfc_nombrebd'] = $distrib->distrib_rfc;
+        }
+         
 
         $response = array(
             'status' => 'success',
@@ -354,38 +353,106 @@ class AppaccountController extends Controller
         return \Response::json($response);
     }
 
-    public function getAccessToken($control_app='ctac'){
-        $url_aux = config('app.advans_apps_url.'.$control_app);
-        $http = new \GuzzleHttp\Client();
-        $response = $http->post($url_aux.'/oauth/token', [
-            'form_params' => config('app.advans_apps_security.'.$control_app),
-        ]);
+    public function changeAccountState(Request $request)
+    {
 
-        $vartemp = json_decode((string) $response->getBody(), true);
-        return $vartemp;
+        $client_rfc = '';
+        $apps = array();
+        $packs = array();
+        $appcta = false;
+
+        $arrayparams = array();
+
+        $alldata = $request->all();
+
+        if(array_key_exists('appctaid',$alldata) && isset($alldata['appctaid'])){
+            $appcta = Appaccount::findOrFail($alldata['appctaid']);
+            array_push($packs,[
+                                'paqapp_cantrfc'=>$appcta->appcta_rfc,
+                                'paqapp_cantgig'=>$appcta->appcta_gig,
+                                'paqapp_f_venta'=>$appcta->appcta_f_vent,
+                                'paqapp_f_act'=>$appcta->appcta_f_act,
+                                'paqapp_f_fin'=>$appcta->appcta_f_fin,
+                                'paqapp_f_caduc'=>$appcta->appcta_f_caduc,
+                                'paqapp_control_id'=>$appcta->id,
+                                ]);
+            /*$appcta->appcta_estado = 'Activa';
+            $appcta->save();*/
+        }
+
+        if($appcta!=false){
+            $client_rfc = $appcta->account ? ($appcta->account->client ? $appcta->account->client->cliente_rfc : '') : '';
+        }
+
+        if($client_rfc!=''){
+            $apps_aux = $appcta->apps ? $appcta->apps : [];
+            foreach ($apps_aux as $app_aux) {
+                array_push($apps,['app_cod'=>$app_aux->app_code,'app_nom'=>$app_aux->app_nom]);
+            }
+
+        }
+
+        $arrayparams['rfc_nombrebd'] = $client_rfc;
+        $arrayparams['account_id'] = $appcta ? $appcta->id : 'false';
+        $arrayparams['apps_cta'] = json_encode($apps);
+        $arrayparams['paq_cta'] = json_encode($packs);
+
+        $acces_vars = $this->getAccessToken();
+        $service_response = $this->getAppService($acces_vars['access_token'],'createbd',$arrayparams,'ctac');
+
+        /*echo "<pre>";
+        print_r($service_response);die();
+        echo "</pre>";*/
+
+        if($appcta!=false){
+            $appcta->appcta_estado = 'Activa';
+            $appcta->save();
+        }
+
+        $fmessage = 'Se ha activado una cuenta';
+        \Session::flash('message',$fmessage);
+        $this->registeredBinnacle($request,'destroy',$fmessage);
+
+        $response = array(
+            'status' => 'success',
+            'msg' => 'Setting created successfully',
+        );
+        return \Response::json($response);
     }
 
 
-    public function getAppService($access_token,$app_service,$arrayparams,$control_app='ctac'){
-        $http = new \GuzzleHttp\Client();
+    public function getAccState(Request $request)
+    {
 
-        $query = http_build_query([
-            'rfc_nombrebd' => 'nuevaint1',
-        ]);
+        $client_rfc = '';
+        $apps = array();
+        $packs = array();
+        $appcta = false;
 
-        $url_aux = config('app.advans_apps_url.'.$control_app);
-        /*$array_send = [
-                       'headers' => [
-                                    'Authorization' => 'Bearer '.$access_token,
-                                    ]
-                      ];
-        $response = $http->get($url_aux.'/api/'.$app_service, $array_send);*/
-        $response = $http->get('http://advans.cuenta.mx/api/createbd?'.$query, [
-            'headers' => [
-                'Authorization' => 'Bearer '.$access_token,
-            ],
+        $arrayparams = array();
+
+        $alldata = $request->all();
+
+        $acc_state = 'None';
+
+        if(array_key_exists('rfc',$alldata) && isset($alldata['rfc'])){
+            $rfc_accid = split('_', $alldata['rfc']);
+            if(count($rfc_accid)>=2){
+                $appcta = Appaccount::findOrFail($rfc_accid[1]);
+                $acc_state = $appcta->appcta_estado;
+            }
             
-        ]);
-        return json_decode((string) $response->getBody(), true);
+        }
+
+
+        $response = array(
+            'status' => 'success',
+            'msg' => 'Setting created successfully',
+            'accstate' => $acc_state
+        );
+        return \Response::json($response);
     }
+
+
+    
 }

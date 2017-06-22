@@ -32,4 +32,35 @@ class Controller extends BaseController
     	$binnacle->bitc_dat = json_encode($request->all());
     	$binnacle->save();
     }
+
+    public function getAccessToken($control_app='ctac'){
+        $url_aux = config('app.advans_apps_url.'.$control_app);
+        $http = new \GuzzleHttp\Client();
+        $response = $http->post($url_aux.'/oauth/token', [
+            'form_params' => config('app.advans_apps_security.'.$control_app),
+        ]);
+
+        $vartemp = json_decode((string) $response->getBody(), true);
+        return $vartemp;
+    }
+
+
+    public function getAppService($access_token,$app_service,$arrayparams,$control_app='ctac'){
+        $http = new \GuzzleHttp\Client();
+
+        /*$query = http_build_query([
+            'rfc_nombrebd' => 'nuevaint1',
+        ]);*/
+        $query = http_build_query($arrayparams);
+
+        $url_aux = config('app.advans_apps_url.'.$control_app);
+        $array_send = [
+                       'headers' => [
+                                    'Authorization' => 'Bearer '.$access_token,
+                                    ]
+                      ];
+        $response = $http->get($url_aux.'/api/'.$app_service.'?'.$query, $array_send);
+
+        return json_decode((string) $response->getBody(), true);
+    }
 }

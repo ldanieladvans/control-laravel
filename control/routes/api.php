@@ -22,4 +22,5 @@ Route::middleware('auth:api')->get('/user', function (Request $request) {
 //Route::get('/service', 'HomeController@index')->name('home');
 
 Route::get('/firstservice', 'ApiserviceController@firstservice')->middleware('auth:api');
+Route::get('/getaccstate', 'AppaccountController@getAccState')->middleware('auth:api');
 

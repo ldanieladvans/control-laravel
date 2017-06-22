@@ -27,6 +27,7 @@ class CreateAppcta extends Migration
             $table->date('appcta_f_fin')->nullable();
             $table->date('appcta_f_caduc')->nullable();
             $table->boolean('appcta_activo')->default(1);
+            $table->string('appcta_estado',20)->default('Inactiva');
         });
     }
 

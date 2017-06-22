@@ -8,6 +8,9 @@
     <link href="{{ asset('controlassets/vendors/datatables.net-fixedheader-bs/css/fixedHeader.bootstrap.min.css') }}" rel="stylesheet">
     <link href="{{ asset('controlassets/vendors/datatables.net-responsive-bs/css/responsive.bootstrap.min.css') }}" rel="stylesheet">
     <link href="{{ asset('controlassets/vendors/datatables.net-scroller-bs/css/scroller.bootstrap.min.css') }}" rel="stylesheet">
+
+    <!-- PNotify -->
+    <link href="{{ asset('controlassets/pnotify/pnotify.custom.min.css') }}" rel="stylesheet" type="text/css" />
 @endsection
 
 @section('app_content')
@@ -37,15 +40,18 @@
                           <th>Id</th>
                           <th>Nombre App</th>
                           <th>Cliente</th>
-                          <th>RFCs</th>
-                          <th>Gigas</th>
+                          
+                          <!--<th>RFCs</th>
+                          <th>Gigas</th>-->
                           <th>Paquete</th>
                           <th>Cuenta</th>
                           <th>Fecha Venta</th>
                           <th>Fecha Act.</th>
                           <th>Fecha Fin</th>
                           <th>Fecha Cad.</th>
+                          <th>En Cuenta</th>
                           <th>Acciones</th>
+                          
                         </tr>
                       </thead>
 
@@ -56,25 +62,51 @@
                         	<td>{{ $appcta->id }}</td>
                         	<td>{{ $appcta->appcta_app }}</td>
                           <td>{{ $appcta->account ? ($appcta->account->client ? $appcta->account->client->cliente_nom:'') : ''  }}</td>
-                        	<td>{{ $appcta->appcta_rfc }}</td>
-                        	<td>{{ $appcta->appcta_gig }}</td>
+                          
+                        	<!--<td>{{ $appcta->appcta_rfc }}</td>
+                        	<td>{{ $appcta->appcta_gig }}</td>-->
                         	<td>{{ $appcta->package ? $appcta->package->paq_nom : ''  }}</td>
                         	<td>{{ $appcta->account ? $appcta->account->cta_num : ''  }}</td>
                         	<td>{{ $appcta->appcta_f_vent }}</td>
                         	<td>{{ $appcta->appcta_f_act }}</td>
                         	<td>{{ $appcta->appcta_f_fin }}</td>
                         	<td>{{ $appcta->appcta_f_caduc }}</td>
+                          <td>{{ $appcta->appcta_estado }}</td>
 
 
               					
 
-                            <td class=" last" width="13%">
+                            <td class=" last" width="15%">
                                       
                                       
                                       <div class="btn-group">
                                           <div class="btn-group">
                                               <button onclick="location.href = 'appcta/{{$appcta->id}}/edit';" class="btn btn-xs" data-placement="left" title="Editar" style=" color:#790D4E "><i class="fa fa-edit fa-2x"></i> </button>
                                           </div>
+
+
+
+
+
+                                          <div class="btn-group">
+                                              <button onclick="" data-toggle="dropdown" class="btn btn-xs dropdown-toggle" data-placement="left" title="Más" style=" color:#790D4E "><i class="fa fa-plus-square fa-2x"></i> </button>
+                                                <ul role="menu" class="dropdown-menu">
+                                                  
+                                                  @if ($appcta->appcta_estado == 'Inactiva')
+                                                      <li><a onclick="changeAccountState('Activa',{{Auth::user()->id}},{{$appcta->id}})">Activar en Cuenta</a>
+                                                      </li>
+                                                  @else
+                                                      <li><a onclick="changeAccountState('Inactiva',{{Auth::user()->id}},{{$appcta->id}})">Desactivar en Cuenta</a>
+                                                      </li>
+                                                  @endif
+
+                                                </ul>
+
+
+                                          </div>
+
+
+
 
                                               
                                               {{ Form::open(['route' => ['appcta.destroy', $appcta->id], 'class'=>'pull-right']) }}
@@ -105,6 +137,12 @@
     <script src="{{ asset('controlassets/vendors/datatables.net/js/jquery.dataTables.js') }}"></script>
     <!-- FastClick -->
     <script src="{{ asset('controlassets/vendors/fastclick/lib/fastclick.js') }}"></script>
+
+    <!-- PNotify -->
+    <script src="{{ asset('controlassets/vendors/pnotify/dist/pnotify.js') }}"></script>
+    <script src="{{ asset('controlassets/vendors/pnotify/dist/pnotify.buttons.js') }}"></script>
+    <script src="{{ asset('controlassets/vendors/pnotify/dist/pnotify.nonblock.js') }}"></script>
+
     <!-- Custom Theme Scripts -->
     <script src="{{ asset('controlassets/build/js/custom.js') }}"></script>
 
@@ -118,5 +156,34 @@
               $('#alertmsgcta').trigger('click');
           }, 4e3);
       });
+
+      var CSRF_TOKEN = $('meta[name="csrf-token"]').attr('content');
+
+
+      function changeAccountState(accstate,user,appctaid){
+              $('#loadingmodal').modal('show');
+              $.ajax({
+                url: '/changestateaccount',
+                type: 'POST',
+                data: {_token: CSRF_TOKEN,accstate:accstate,user:user,appctaid:appctaid},
+                dataType: 'JSON',
+                success: function (data) {
+                  window.location.href = window.location.href;
+                    
+                },
+                error: function(XMLHttpRequest, textStatus, errorThrown) { 
+                    new PNotify({
+                    title: "Notificación",
+                    type: "info",
+                    text: "Ha ocurrido un error. No se ha podido cambiar el estado en la app Cuenta",
+                    nonblock: {
+                      nonblock: true
+                    },
+                    addclass: 'dark',
+                    styling: 'bootstrap3'
+                  });
+                }
+            });       
+        }
     </script>
 @endsection
