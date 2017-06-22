@@ -9,6 +9,10 @@
     <link href="{{ asset('controlassets/vendors/datatables.net-responsive-bs/css/responsive.bootstrap.min.css') }}" rel="stylesheet">
     <link href="{{ asset('controlassets/vendors/datatables.net-scroller-bs/css/scroller.bootstrap.min.css') }}" rel="stylesheet">
 
+    <!-- Chosen -->
+    
+    <link href="{{ asset('controlassets/vendors/chosen/chosen.css') }}" rel="stylesheet" type="text/css" />
+
     <!-- PNotify -->
     <link href="{{ asset('controlassets/pnotify/pnotify.custom.min.css') }}" rel="stylesheet" type="text/css" />
 @endsection
@@ -100,7 +104,54 @@
                                                       </li>
                                                   @endif
 
+                                                      <li><a id="appmodallink{{$appcta->id}}" onclick="showModal('appsmodal'+{{$appcta->id}})">Asignar Apps</a>
+                                                      </li>
+
                                                 </ul>
+
+
+
+                                                <div class="modal fade" id="appsmodal{{$appcta->id}}" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+                                                  <div class="modal-dialog" role="document">
+                                                    <div class="modal-content">
+                                                      <div class="modal-header">
+                                                        <h5 class="modal-title" id="exampleModalLabel">Asignación de Aplicaciones: {{$appcta->appcta_app}}</h5>
+                                                        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                                                          <span aria-hidden="true">&times;</span>
+                                                        </button>
+                                                      </div>
+                                                      <div class="modal-body">
+                                                        <form>
+                                                          <div class="item form-group">
+                                                                <div class="col-md-10 col-sm-10 col-xs-12">
+                                                                  <select id="roles" name="roles[]" tabindex="2" data-placeholder="Seleccione los permisos ..." name="rolesapp" class="chosen-select form-control" onchange="onSelectAssignApps(this)" multiple="multiple">
+                                                                  
+                                                                      <!--@foreach($apps as $key => $value)
+                                                                        <option value="{{ $key }}" {{$appcta->hasApp($key,true) > 0 ? 'selected':''}}>{{ $value }}</option>
+                                                                      @endforeach-->
+
+                                                                      @foreach($apps as $key => $value)
+                                                                        @if ($appcta->hasApp($key,true) == 0)
+                                                                          <option value="{{ $key }}" >{{ $value }}</option>
+                                                                        @endif
+                                                                        
+                                                                      @endforeach
+
+                                                                  </select>
+                                                                </div>
+                                                          </div>
+                                                        </form>
+
+                                                        <div id="result_failure_rol{{$appcta->id}}"></div>
+
+                                                      </div>
+                                                      <div class="modal-footer">
+                                                        <button type="button" class="btn btn-secondary" data-dismiss="modal">Cerrar</button>
+                                                        <button type="button"  onclick="assignApp({{Auth::user()->id}},{{$appcta->id}});" class="btn btn-primary">Ok</button>
+                                                      </div>
+                                                    </div>
+                                                  </div>
+                                                </div>
 
 
                                           </div>
@@ -138,6 +189,11 @@
     <!-- FastClick -->
     <script src="{{ asset('controlassets/vendors/fastclick/lib/fastclick.js') }}"></script>
 
+    <!-- Chosen -->
+  <script src="{{ asset('controlassets/vendors/chosen/chosen.jquery.js') }}" type="text/javascript"></script>
+  <script src="{{ asset('controlassets/vendors/chosen/docsupport/prism.js') }}" type="text/javascript" charset="utf-8"></script>
+  <script src="{{ asset('controlassets/vendors/chosen/docsupport/init.js') }}" type="text/javascript" charset="utf-8"></script>
+
     <!-- PNotify -->
     <script src="{{ asset('controlassets/vendors/pnotify/dist/pnotify.js') }}"></script>
     <script src="{{ asset('controlassets/vendors/pnotify/dist/pnotify.buttons.js') }}"></script>
@@ -158,6 +214,60 @@
       });
 
       var CSRF_TOKEN = $('meta[name="csrf-token"]').attr('content');
+
+      var selectedapps = [];
+
+      function showModal(modalid) {
+          $("#"+modalid).modal('show');
+          $("#"+modalid).on('shown.bs.modal', function () {
+            $('.chosen-select', this).chosen('destroy').chosen();
+          });
+        }
+
+        function hideModal(modalid) {
+          $("#"+modalid).modal('hide');
+        }
+
+      function getSelectValues(select) {
+          var result = [];
+          var options = select && select.options;
+          var opt;
+
+          for (var i=0, iLen=options.length; i<iLen; i++) {
+            opt = options[i];
+
+            if (opt.selected) {
+              result.push(opt.value || opt.text);
+            }
+          }
+          return result;
+        }
+
+      function onSelectAssignApps(element){
+        selectedapps = getSelectValues(element);
+      }
+
+
+      function assignApp(user,appctaid){
+
+            var CSRF_TOKEN = $('meta[name="csrf-token"]').attr('content');
+
+            $.ajax({
+              url: '/assignapps',
+              type: 'POST',
+              data: {_token: CSRF_TOKEN,selected:selectedapps,user:user,appctaid:appctaid},
+              dataType: 'JSON',
+              success: function (data) {
+
+                hideModal("appsmodal"+data['app']);
+                window.location.href = window.location.href;
+                  
+              },
+              error: function(XMLHttpRequest, textStatus, errorThrown) { 
+                  $("#result_failure"+user).html('<p><strong>Ocurrió un error: '+errorThrown+'</strong></p>');
+              }
+          });       
+        }
 
 
       function changeAccountState(accstate,user,appctaid){

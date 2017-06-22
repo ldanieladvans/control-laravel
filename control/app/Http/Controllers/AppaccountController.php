@@ -30,7 +30,9 @@ class AppaccountController extends Controller
     public function index()
     {
         $appctas = Appaccount::all();
-        return view('appviews.appctashow',['appctas'=>$appctas]);
+        $apps = config('app.advans_apps');
+
+        return view('appviews.appctashow',['appctas'=>$appctas,'apps'=>$apps]);
     }
 
     /**
@@ -361,7 +363,11 @@ class AppaccountController extends Controller
         $packs = array();
         $appcta = false;
 
+        $state_var = 'Inactiva';
+
         $arrayparams = array();
+
+        $fmessage = 'Se ha desactivado una cuenta';
 
         $alldata = $request->all();
 
@@ -380,38 +386,45 @@ class AppaccountController extends Controller
             $appcta->save();*/
         }
 
-        if($appcta!=false){
-            $client_rfc = $appcta->account ? ($appcta->account->client ? $appcta->account->client->cliente_rfc : '') : '';
-        }
+        if(array_key_exists('accstate',$alldata) && $alldata['accstate'] == 'Activa'){
 
-        if($client_rfc!=''){
-            $apps_aux = $appcta->apps ? $appcta->apps : [];
-            foreach ($apps_aux as $app_aux) {
-                array_push($apps,['app_cod'=>$app_aux->app_code,'app_nom'=>$app_aux->app_nom]);
+            
+
+            if($appcta!=false){
+                $client_rfc = $appcta->account ? ($appcta->account->client ? $appcta->account->client->cliente_rfc : '') : '';
             }
 
+            if($client_rfc!=''){
+                $apps_aux = $appcta->apps ? $appcta->apps : [];
+                foreach ($apps_aux as $app_aux) {
+                    array_push($apps,['app_cod'=>$app_aux->app_code,'app_nom'=>$app_aux->app_nom]);
+                }
+
+            }
+
+            $arrayparams['rfc_nombrebd'] = $client_rfc;
+            $arrayparams['account_id'] = $appcta ? $appcta->id : 'false';
+            $arrayparams['apps_cta'] = json_encode($apps);
+            $arrayparams['paq_cta'] = json_encode($packs);
+
+            $acces_vars = $this->getAccessToken();
+            $service_response = $this->getAppService($acces_vars['access_token'],'createbd',$arrayparams,'ctac');
+
+            /*echo "<pre>";
+            print_r($service_response);die();
+            echo "</pre>";*/
+            $fmessage = 'Se ha activado una cuenta';
+            $state_var = 'Activa';
         }
 
-        $arrayparams['rfc_nombrebd'] = $client_rfc;
-        $arrayparams['account_id'] = $appcta ? $appcta->id : 'false';
-        $arrayparams['apps_cta'] = json_encode($apps);
-        $arrayparams['paq_cta'] = json_encode($packs);
-
-        $acces_vars = $this->getAccessToken();
-        $service_response = $this->getAppService($acces_vars['access_token'],'createbd',$arrayparams,'ctac');
-
-        /*echo "<pre>";
-        print_r($service_response);die();
-        echo "</pre>";*/
-
         if($appcta!=false){
-            $appcta->appcta_estado = 'Activa';
+            $appcta->appcta_estado = $state_var;
             $appcta->save();
         }
 
-        $fmessage = 'Se ha activado una cuenta';
+        
         \Session::flash('message',$fmessage);
-        $this->registeredBinnacle($request,'destroy',$fmessage);
+        $this->registeredBinnacle($request,'update',$fmessage);
 
         $response = array(
             'status' => 'success',
@@ -436,7 +449,7 @@ class AppaccountController extends Controller
         $acc_state = 'None';
 
         if(array_key_exists('rfc',$alldata) && isset($alldata['rfc'])){
-            $rfc_accid = split('_', $alldata['rfc']);
+            $rfc_accid = explode('_', $alldata['rfc']);
             if(count($rfc_accid)>=2){
                 $appcta = Appaccount::findOrFail($rfc_accid[1]);
                 $acc_state = $appcta->appcta_estado;
@@ -451,6 +464,65 @@ class AppaccountController extends Controller
             'accstate' => $acc_state
         );
         return \Response::json($response);
+    }
+
+
+    public function assignApps(Request $request)
+    {
+
+        $alldata = $request->all();
+        $rfc = '';
+        $appcta_id = '';
+
+        $array_apps = array();
+
+        $apps = config('app.advans_apps');
+        
+
+        if(array_key_exists('appctaid',$alldata) && isset($alldata['appctaid'])){
+            $appcta = Appaccount::findOrFail($alldata['appctaid']);
+            $rfc = $appcta->account ? ($appcta->account->client ? $appcta->account->client->cliente_rfc : '') : '';
+
+            $appcta_id = $appcta->id;
+
+            //$deletedRows = Appcontrol::where('app_appcta_id', $appcta->id)->delete();
+            if(array_key_exists('selected',$alldata)){
+
+                foreach ($alldata['selected'] as $key => $value) {
+                    array_push($array_apps,['app_cod'=>$value,'app_nom'=>$apps[$value]]);
+                }
+
+                $arrayparams['rfc_nombrebd'] = $rfc.'_'.$appcta->id;
+                $arrayparams['account_id'] = $appcta ? $appcta->id : 'false';
+                $arrayparams['apps_cta'] = json_encode($array_apps);
+                $acces_vars = $this->getAccessToken();
+                $service_response = $this->getAppService($acces_vars['access_token'],'addapp',$arrayparams,'ctac');
+                foreach ($alldata['selected'] as $key => $value) {
+                    $appc = new Appcontrol();
+                    $appc->app_nom = $apps[$value];
+                    $appc->app_code = $value;
+                    $appc->app_appcta_id = $appcta->id;
+                    $appc->save();
+                }
+                
+            }
+        }
+
+        $fmessage = 'Se han añadido nuevas aplicaciones';
+        \Session::flash('message',$fmessage);
+        $this->registeredBinnacle($request,'update',$fmessage);
+
+        $response = array(
+            'status' => 'success',
+            'msg' => 'Setting created successfully',
+            'app' => $appcta_id
+        );
+        return \Response::json($response);
+    }
+
+
+    public function getApssByAssig(){
+        return Appcontrol::where('app_appcta_id',$this->id)->get();
     }
 
 
