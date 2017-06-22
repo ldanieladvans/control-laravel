@@ -160,10 +160,10 @@
 
 
                                               
-                                              {{ Form::open(['route' => ['appcta.destroy', $appcta->id], 'class'=>'pull-right']) }}
+                                              <!--{{ Form::open(['route' => ['appcta.destroy', $appcta->id], 'class'=>'pull-right']) }}
                                               {{ Form::hidden('_method', 'DELETE') }}
                                               <button  href="#" class="btn btn-xs" onclick="return confirm('¿Está seguro que quiere eliminar este registro?')" type="submit" data-placement="left" title="Borrar" style=" color:#790D4E "><i class="fa fa-trash fa-2x"></i></button>
-                                            {{ Form::close() }}
+                                            {{ Form::close() }}-->
 
                                           </div>
 

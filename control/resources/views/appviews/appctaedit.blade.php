@@ -49,7 +49,7 @@
 
                     <div class="item form-group">                     
                       <div class="col-md-9 col-sm-9 col-xs-12">
-                        <input id="appcta_app" class="form-control has-feedback-left" title="Identificador de la asignación" name="appcta_app" placeholder="Identificador de la asignación *" required="required" type="text" value="{{$appcta->appcta_app}}">
+                        <input id="appcta_app" class="form-control has-feedback-left" title="Identificador de la asignación" name="appcta_app" placeholder="Identificador de la asignación *" required="required" type="text" value="{{$appcta->appcta_app}}" >
                         <span class="fa fa-laptop form-control-feedback left" aria-hidden="true"></span>
                       </div>
                     </div>
@@ -57,7 +57,7 @@
                     <div class="item form-group">
                               <label class="control-label col-md-1 col-sm-1 col-xs-12">Cuenta*</label>
                                   <div class="col-md-8 col-sm-8 col-xs-12">
-                                    <select class="select2_single form-control col-md-7 col-xs-12" id="appcta_cuenta_id" name="appcta_cuenta_id" required>
+                                    <select class="select2_single form-control col-md-7 col-xs-12" id="appcta_cuenta_id" name="appcta_cuenta_id" disabled >
                                       <option value="">Seleccione una opción ...</option>
                                       @foreach($accounts as $account)
                                     <option value="{{ $account->id }}" {{$appcta->appcta_cuenta_id == $account->id ? 'selected':''}}>{{ $account->cta_num }}</option>
@@ -72,7 +72,7 @@
                             <div class="item form-group">
                               <label class="control-label col-md-1 col-sm-1 col-xs-12">Paquete*</label>
                                   <div class="col-md-8 col-sm-8 col-xs-12">
-                                    <select class="select2_single form-control col-md-7 col-xs-12" name="appcta_paq_id" id="appcta_paq_id" required>
+                                    <select class="select2_single form-control col-md-7 col-xs-12" name="appcta_paq_id" id="appcta_paq_id" disabled>
                                       <option value="">Seleccione una opción ...</option>
                                       @foreach($packages as $package)
                                     <option value="{{ $package->id }}" {{$appcta->appcta_paq_id == $package->id ? 'selected':''}}>{{ $package->paq_nom }}</option>
@@ -101,7 +101,7 @@
 
                             <div class="item form-group">
                                   <div class="col-md-10 col-sm-10 col-xs-12">
-                                    <select id="apps" name="apps[]" tabindex="2" data-placeholder="Seleccione las aplicaciones ..." class="chosen-select form-control" multiple="multiple">
+                                    <select id="apps" name="apps[]" tabindex="2" data-placeholder="Seleccione las aplicaciones ..." class="chosen-select form-control" multiple="multiple" disabled>
                                           <!--<option value="cont">Contabilidad</option>
                                           <option value="bov">Bóveda</option>
                                           <option value="nom">Nómina</option>
@@ -124,14 +124,14 @@
 
                             <div class="item form-group">                     
                               <div class="col-md-9 col-sm-9 col-xs-12">
-                                <input id="appcta_rfc" class="form-control has-feedback-left" name="appcta_rfc" title="Cantidad de RFCs" placeholder="Cantidad RFC *" required="required" type="numberint" value="{{$appcta->appcta_rfc}}">
+                                <input id="appcta_rfc" class="form-control has-feedback-left" name="appcta_rfc" title="Cantidad de RFCs" placeholder="Cantidad RFC *" required="required" type="numberint" value="{{$appcta->appcta_rfc}}" disabled>
                                 <span class="fa fa-bank form-control-feedback left" aria-hidden="true"></span>
                               </div>
                             </div>
 
                             <div class="item form-group">                     
                               <div class="col-md-9 col-sm-9 col-xs-12">
-                                <input id="appcta_gig" class="form-control has-feedback-left" name="appcta_gig" placeholder="Cantidad Gigas *" required="required" type="number" title="Almacenamiento en Gigas" value="{{$appcta->appcta_gig}}">
+                                <input id="appcta_gig" class="form-control has-feedback-left" name="appcta_gig" placeholder="Cantidad Gigas *" required="required" type="number" title="Almacenamiento en Gigas" value="{{$appcta->appcta_gig}}" disabled>
                                 <span class="fa fa-archive form-control-feedback left" aria-hidden="true"></span>
                               </div>
                             </div>

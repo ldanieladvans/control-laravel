@@ -140,8 +140,8 @@ class AppaccountController extends Controller
         $alldata = $request->all();
         $appcta = Appaccount::findOrFail($id);
         $appcta->appcta_app = $alldata['appcta_app'];
-        $appcta->appcta_rfc = $alldata['appcta_rfc'];
-        $appcta->appcta_gig = $alldata['appcta_gig'];
+        /*$appcta->appcta_rfc = $alldata['appcta_rfc'];
+        $appcta->appcta_gig = $alldata['appcta_gig'];*/
         $appcta->appcta_f_vent = $alldata['appcta_f_vent'];
         $appcta->appcta_f_act = $alldata['appcta_f_act'];
         $appcta->appcta_f_fin = $alldata['appcta_f_fin'];
