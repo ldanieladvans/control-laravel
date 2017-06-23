@@ -296,7 +296,7 @@
 		    <script src="{{ asset('controlassets/vendors/pnotify/dist/pnotify.nonblock.js') }}"></script>
 
 		    <script type="text/javascript">
-		    	/*var message, tests, checkField, validate, mark, unmark, field, minmax, defaults,
+		    	var message, tests, checkField, validate, mark, unmark, field, minmax, defaults,
 			        validateWords, lengthRange, lengthLimit, pattern, alertTxt, data,
 			        email_illegalChars = /[\(\)\<\>\,\;\:\\\/\"\[\]]/,
 			        email_filter = /^.+@.+\..{2,6}$/;
@@ -591,14 +591,14 @@
 				    	}
 				    }
 				    
-				    if(submit_aux==0 || empty_fields==0){
+				    if(submit_aux==0 || $('#'+formid)[0].checkValidity()==false){
 				      submit = false;
 				      event.preventDefault();
 				      
 				      new PNotify({
 	                    title: "Error",
 	                    type: "error",
-	                    text: "Existen campos requeridos que debe llenar.",
+	                    text: "Los campos marcados en rojo son requeridos que debe llenar.",
 	                    nonblock: {
 	                      nonblock: true
 	                    },
@@ -610,7 +610,7 @@
 				      submit = true;
 				    }
 				    return submit;  
-			    }*/
+			    }
 		    </script>
         @show
 	</body>

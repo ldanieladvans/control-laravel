@@ -457,7 +457,6 @@ var validator = (function($){
         mark        : mark,
         unmark      : unmark,
         message     : message,
-        tests       : tests,
-        submit      : submit
+        tests       : tests
     }
 })(jQuery);

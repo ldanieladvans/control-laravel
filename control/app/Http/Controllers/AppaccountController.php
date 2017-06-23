@@ -62,7 +62,7 @@ class AppaccountController extends Controller
         $apps = false;
 
         if(array_key_exists('apps',$alldata)){
-            if(isset($alldata['apps'])){
+            if(isset($alldata['apps']) && $alldata['apps'] != ''){
                 $apps = $alldata['apps'];
                 unset($alldata['apps']);
             }
@@ -79,6 +79,38 @@ class AppaccountController extends Controller
 
         $appcta->appcta_app = $alldata['appcta_app'];
 
+        if(array_key_exists('appcta_f_vent',$alldata)){
+            if($alldata['appcta_f_vent']==''){
+                $appcta->appcta_f_vent = date('Y-m-d');
+            }else{
+                $appcta->appcta_f_vent = $alldata['appcta_f_vent'];
+            }
+        }
+
+        /*if(array_key_exists('appcta_f_act',$alldata)){
+            if($alldata['appcta_f_act']==''){
+                $appcta->appcta_f_act = date('Y-m-d');
+            }else{
+                $appcta->appcta_f_act = $alldata['appcta_f_act'];
+            }
+        }*/
+
+        if(array_key_exists('appcta_f_fin',$alldata)){
+            if($alldata['appcta_f_fin']==''){
+                $appcta->appcta_f_fin = date('Y-m-d');
+            }else{
+                $appcta->appcta_f_fin = $alldata['appcta_f_fin'];
+            }
+        }
+
+        if(array_key_exists('appcta_f_caduc',$alldata)){
+            if($alldata['appcta_f_caduc']==''){
+                $appcta->appcta_f_caduc = date('Y-m-d');
+            }else{
+                $appcta->appcta_f_caduc = $alldata['appcta_f_caduc'];
+            }
+        }
+
         
         $appcta->save();
 
@@ -86,7 +118,7 @@ class AppaccountController extends Controller
         if($apps!=false){
             foreach ($apps as $key => $value) {
                 $appc = new Appcontrol();
-                $appc->app_nom = $apps[$value];
+                $appc->app_nom = $apps_conf[$value];
                 $appc->app_code = $value;
                 $appc->app_appcta_id = $appcta->id;
                 $appc->save();

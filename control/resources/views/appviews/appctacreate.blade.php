@@ -84,11 +84,11 @@
                   	<div class="x_content">
                       <div class="" role="tabpanel" data-example-id="togglable-tabs">
 	                      <ul id="myTab" class="nav nav-tabs bar_tabs" role="tablist">
-	                        <li role="presentation" class="active"><a href="#tab_content1" id="home-tab" role="tab" data-toggle="tab" aria-expanded="true">Aplicaciones</a>
+	                        <li role="presentation" id="li_content1" class="active"><a href="#tab_content1" id="home-tab" role="tab" data-toggle="tab" aria-expanded="true">Detalles</a>
 	                        </li>
-	                        <li role="presentation" class=""><a href="#tab_content2" role="tab" id="profile-tab" data-toggle="tab" aria-expanded="false">Detalle</a>
-	                        </li>
-                          <li role="presentation" class=""><a href="#tab_content3" role="tab" id="date-tab" data-toggle="tab" aria-expanded="false">Fechas</a>
+	                        <!--<li role="presentation" id="li_content2" class=""><a href="#tab_content2" role="tab" id="profile-tab" data-toggle="tab" aria-expanded="false">Detalle</a>
+	                        </li>-->
+                          <li role="presentation" id="li_content3" class=""><a href="#tab_content3" role="tab" id="date-tab" data-toggle="tab" aria-expanded="false">Fechas</a>
                           </li>
 	                      </ul>
 
@@ -97,15 +97,24 @@
 
                           <div role="tabpanel" class="tab-pane fade active in" id="tab_content1" aria-labelledby="home-tab">
 
+                            <div class="item form-group" id="group_appcta_rfc">                     
+                              <div class="col-md-9 col-sm-9 col-xs-12">
+                                <input id="appcta_rfc" class="form-control has-feedback-left" name="appcta_rfc" title="Cantidad de RFCs" placeholder="Cantidad RFC *" required="required" type="numberint">
+                                <span class="fa fa-bank form-control-feedback left" aria-hidden="true"></span>
+                              </div>
+                            </div>
+
+                            <div class="item form-group" id="group_appcta_gig">                     
+                              <div class="col-md-9 col-sm-9 col-xs-12">
+                                <input id="appcta_gig" class="form-control has-feedback-left" name="appcta_gig" placeholder="Cantidad Gigas *" required="required" type="number" title="Almacenamiento en Gigas">
+                                <span class="fa fa-archive form-control-feedback left" aria-hidden="true"></span>
+                              </div>
+                            </div>
+
                             <div class="item form-group">
-                                  <div class="col-md-10 col-sm-10 col-xs-12">
-                                    <select id="apps" name="apps[]" tabindex="2" data-placeholder="Seleccione las aplicaciones ..." class="chosen-select form-control" multiple="multiple">
-                                          <!--<option value="cont">Contabilidad</option>
-                                          <option value="bov">Bóveda</option>
-                                          <option value="nom">Nómina</option>
-                                          <option value="pld">PLD</option>
-                                          <option value="cc">Control de Calidad</option>
-                                          <option value="not">Notaría</option>-->
+                                  <div class="col-md-9 col-sm-9 col-xs-12">
+                                    <select id="apps" name="apps[]" tabindex="2" data-placeholder="Seleccione las aplicaciones ..." class="select form-control" multiple="multiple" required>
+                                          <option value=""></option>
                                           @foreach($apps as $key => $value)
                                             <option value="{{ $key }}">{{ $value }}</option>
                                           @endforeach
@@ -118,16 +127,16 @@
                           </div>
 
 
-	                        <div role="tabpanel" class="tab-pane fade" id="tab_content2" aria-labelledby="home-tab">
+	                        <!--<div role="tabpanel" class="tab-pane fade" id="tab_content2" aria-labelledby="home-tab">
 
-                            <div class="item form-group">                     
+                            <div class="item form-group" id="group_appcta_rfc">                     
                               <div class="col-md-9 col-sm-9 col-xs-12">
                                 <input id="appcta_rfc" class="form-control has-feedback-left" name="appcta_rfc" title="Cantidad de RFCs" placeholder="Cantidad RFC *" required="required" type="numberint" disabled="disabled">
                                 <span class="fa fa-bank form-control-feedback left" aria-hidden="true"></span>
                               </div>
                             </div>
 
-                            <div class="item form-group">                     
+                            <div class="item form-group" id="group_appcta_gig">                     
                               <div class="col-md-9 col-sm-9 col-xs-12">
                                 <input id="appcta_gig" class="form-control has-feedback-left" name="appcta_gig" placeholder="Cantidad Gigas *" required="required" type="number" title="Almacenamiento en Gigas" disabled="disabled">
                                 <span class="fa fa-archive form-control-feedback left" aria-hidden="true"></span>
@@ -137,7 +146,7 @@
                         	  
 
                         	  
-	                        </div>
+	                        </div>-->
 
 
 
@@ -147,28 +156,28 @@
 
 	                        <div role="tabpanel" class="tab-pane fade" id="tab_content3" aria-labelledby="profile-tab">
 
-	                        	<div class="item form-group">                     
+	                        	<div class="item form-group" id="group_appcta_f_vent">                     
 			                      <div class="col-md-9 col-sm-9 col-xs-12">
-			                        <input id="appcta_f_vent" title="Fecha de Venta o Asignación" class="form-control has-feedback-left" name="appcta_f_vent" placeholder="Fecha Venta" required="required" type="date">
+			                        <input id="appcta_f_vent" title="Fecha de Venta o Asignación" class="form-control has-feedback-left" name="appcta_f_vent" placeholder="Fecha Venta" required="required" type="date" disabled>
 			                        <span class="fa fa-calendar form-control-feedback left" aria-hidden="true"></span>
 			                      </div>
 			                    </div>
 
-			                    <div class="item form-group">                     
+			                    <div class="item form-group" id="group_appcta_f_act">                     
 			                      <div class="col-md-9 col-sm-9 col-xs-12">
-			                        <input id="appcta_f_act" title="Fecha de Actualización" class="form-control has-feedback-left" name="appcta_f_act" placeholder="Fecha Actualización" required="required" type="date">
+			                        <input id="appcta_f_act" title="Fecha de Activación" class="form-control has-feedback-left" name="appcta_f_act" placeholder="Fecha Activación" required="required" type="date" disabled>
 			                        <span class="fa fa-calendar form-control-feedback left" aria-hidden="true"></span>
 			                      </div>
 			                    </div>
 
-			                    <div class="item form-group">                     
+			                    <div class="item form-group" id="group_appcta_f_fin">                     
 			                      <div class="col-md-9 col-sm-9 col-xs-12">
 			                        <input id="appcta_f_fin" title="Fecha de Fin" class="form-control has-feedback-left" name="appcta_f_fin" placeholder="Fecha Fin" required="required" type="date">
 			                        <span class="fa fa-calendar form-control-feedback left" aria-hidden="true"></span>
 			                      </div>
 			                    </div>
 
-			                    <div class="item form-group">                     
+			                    <div class="item form-group" id="group_appcta_f_caduc">                     
 			                      <div class="col-md-9 col-sm-9 col-xs-12">
 			                        <input id="appcta_f_caduc" title="Fecha de Caducidad" class="form-control has-feedback-left" name="appcta_f_caduc" placeholder="Fecha Caducidad" required="required" type="date">
 			                        <span class="fa fa-calendar form-control-feedback left" aria-hidden="true"></span>
@@ -186,7 +195,8 @@
                         <div class="col-md-9 col-sm-9 col-xs-12 col-md-offset-3">
                           <button id="cancel" type="button" onclick="location.href = '/account/appcta';" class="btn btn-info">Cancelar</button>
                           <button type="reset" class="btn btn-primary">Borrar Datos</button>
-                  		  <button id="send" type="submit" class="btn btn-success">Guardar</button>
+                  		    <!--<button id="send" onclick="onSendClick()" type="button" class="btn btn-success">Guardar</button>-->
+                          <button id="send" type="submit" class="btn btn-success">Guardar</button>
                         </div>
                       </div>
 
@@ -227,24 +237,6 @@
 
     <script type="text/javascript">
 
-   /*var selectedval = false;
-    var selectobj = false;
-   
-    $('select').on('change', function() {
-    	console.log('sd');
-	  if(this.name=='appcta_cuenta_id'){
-	  	selectobj = this;
-	  	selectedval = this.value;
-	  	if(this.value==''){
-	  		$(this).addClass('errorType');
-	  	}else{
-	  		$(this).removeClass('errorType');
-	  	}
-	  }
-	  
-	});*/
-
-	//$("#appcta_cuenta_id").trigger("change");
 
 
   $('.chosen-select', this).chosen('destroy').chosen();
@@ -269,8 +261,8 @@
   });
 
   $('#appcta_paq_id').change(function(){
-
-      $.ajax({
+      if(this.value!=""){
+        $.ajax({
           url: '/getgigrfcbypack',
           type: 'POST',
           data: {_token: CSRF_TOKEN,paqid:this.value,accid:cta_aux},
@@ -282,9 +274,66 @@
             document.getElementById('appcta_gig').setAttribute("data-validate-minmax", "0,"+data['gig']);
           }
       });
+      }else{
+        document.getElementById('appcta_rfc').value='';
+        document.getElementById('appcta_gig').value='';
+      }
+      
   });
 
 
+  function activaTab(tab){
+    $('.nav-tabs a[href="#' + tab + '"]').tab('show');
+  }
+
+  
+  function activeBeforeSubmit(){
+    var tabid = false;
+    tabsInForm = $( "#packassigform").find('.tab-pane');
+    tabsInForm.each(function(){
+        tabid = this.id;
+        var activate_tab = false;
+        fieldsInTab = $( "#"+this.id).find(':input').filter('[required=required], .required, .optional').not('[disabled=disabled]');
+          fieldsInTab.each(function(){
+            if(this.required && this.value == ''){
+                  activate_tab = true;
+                  return;
+                }
+        });
+
+          if(activate_tab==true){
+              return;
+            }
+
+    });
+
+
+
+    if(tabid!=false){
+      activaTab(tabid);
+    }
+
+  }
+
+
+
+  var nocall = true;
+
+  /*function onSendClick(){
+    var form_validity = $("#packassigform")[0].checkValidity();
+    if(form_validity==false){
+      $("#appcta_app").value = '';
+      activeBeforeSubmit();
+      validateNoMsgForm('packassigform',[],event);
+    }else{
+      $("#packassigform").submit();
+    }
+    
+  }*/
+
+	$( "#packassigform" ).submit(function( event ) {
+      event.preventDefault();
+	});
 
 	</script>
 
