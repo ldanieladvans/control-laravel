@@ -104,7 +104,7 @@
                                                       </li>
                                                   @endif
 
-                                                      <li><a id="appmodallink{{$appcta->id}}" onclick="showModal('appsmodal'+{{$appcta->id}})">Asignar Apps</a>
+                                                      <li><a id="appmodallink{{$appcta->id}}" onclick="showModal('appsmodal'+{{$appcta->id}})">Añadir Apps</a>
                                                       </li>
 
                                                 </ul>
@@ -115,7 +115,7 @@
                                                   <div class="modal-dialog" role="document">
                                                     <div class="modal-content">
                                                       <div class="modal-header">
-                                                        <h5 class="modal-title" id="exampleModalLabel">Asignación de Aplicaciones: {{$appcta->appcta_app}}</h5>
+                                                        <h5 class="modal-title" id="exampleModalLabel">Añadir Aplicaciones: {{$appcta->appcta_app}}</h5>
                                                         <button type="button" class="close" data-dismiss="modal" aria-label="Close">
                                                           <span aria-hidden="true">&times;</span>
                                                         </button>

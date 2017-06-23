@@ -79,13 +79,14 @@ class AppaccountController extends Controller
 
         $appcta->appcta_app = $alldata['appcta_app'];
 
-        if(array_key_exists('appcta_f_vent',$alldata)){
+
+        /*if(array_key_exists('appcta_f_vent',$alldata)){
             if($alldata['appcta_f_vent']==''){
                 $appcta->appcta_f_vent = date('Y-m-d');
             }else{
                 $appcta->appcta_f_vent = $alldata['appcta_f_vent'];
             }
-        }
+        }*/
 
         /*if(array_key_exists('appcta_f_act',$alldata)){
             if($alldata['appcta_f_act']==''){
@@ -94,6 +95,8 @@ class AppaccountController extends Controller
                 $appcta->appcta_f_act = $alldata['appcta_f_act'];
             }
         }*/
+
+        $appcta->appcta_f_vent = date('Y-m-d');
 
         if(array_key_exists('appcta_f_fin',$alldata)){
             if($alldata['appcta_f_fin']==''){
@@ -482,6 +485,11 @@ class AppaccountController extends Controller
 
         if($appcta!=false){
             $appcta->appcta_estado = $state_var;
+            $appcta->save();
+        }
+
+        if($state_var=='Activa'){
+            $appcta->appcta_f_act = date('Y-m-d');
             $appcta->save();
         }
 

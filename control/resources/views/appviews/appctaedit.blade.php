@@ -86,10 +86,10 @@
                     <div class="x_content">
                       <div class="" role="tabpanel" data-example-id="togglable-tabs">
                         <ul id="myTab" class="nav nav-tabs bar_tabs" role="tablist">
-                          <li role="presentation" class="active"><a href="#tab_content1" id="home-tab" role="tab" data-toggle="tab" aria-expanded="true">Aplicaciones</a>
+                          <li role="presentation" class="active"><a href="#tab_content1" id="home-tab" role="tab" data-toggle="tab" aria-expanded="true">Detalles</a>
                           </li>
-                          <li role="presentation" class=""><a href="#tab_content2" role="tab" id="profile-tab" data-toggle="tab" aria-expanded="false">Detalle</a>
-                          </li>
+                          <!--<li role="presentation" class=""><a href="#tab_content2" role="tab" id="profile-tab" data-toggle="tab" aria-expanded="false">Detalle</a>
+                          </li>-->
                           <li role="presentation" class=""><a href="#tab_content3" role="tab" id="date-tab" data-toggle="tab" aria-expanded="false">Fechas</a>
                           </li>
                         </ul>
@@ -99,9 +99,23 @@
 
                           <div role="tabpanel" class="tab-pane fade active in" id="tab_content1" aria-labelledby="home-tab">
 
+                          <div class="item form-group">                     
+                              <div class="col-md-9 col-sm-9 col-xs-12">
+                                <input id="appcta_rfc" class="form-control has-feedback-left" name="appcta_rfc" title="Cantidad de RFCs" placeholder="Cantidad RFC *" required="required" type="numberint" value="{{$appcta->appcta_rfc}}" data-validate-minmax="0,{{$rfc > $appcta->appcta_rfc ? $rfc : $appcta->appcta_rfc}}">
+                                <span class="fa fa-bank form-control-feedback left" aria-hidden="true"></span>
+                              </div>
+                            </div>
+
+                            <div class="item form-group">                     
+                              <div class="col-md-9 col-sm-9 col-xs-12">
+                                <input id="appcta_gig" class="form-control has-feedback-left" name="appcta_gig" placeholder="Cantidad Gigas *" required="required" type="number" title="Almacenamiento en Gigas" value="{{$appcta->appcta_gig}}" data-validate-minmax="0,{{$gig > $appcta->appcta_gig ? $gig : $appcta->appcta_gig}}">
+                                <span class="fa fa-archive form-control-feedback left" aria-hidden="true"></span>
+                              </div>
+                            </div>
+
                             <div class="item form-group">
-                                  <div class="col-md-10 col-sm-10 col-xs-12">
-                                    <select id="apps" name="apps[]" tabindex="2" data-placeholder="Seleccione las aplicaciones ..." class="chosen-select form-control" multiple="multiple" disabled>
+                                  <div class="col-md-9 col-sm-9 col-xs-12">
+                                    <select id="apps" name="apps[]" tabindex="2" data-placeholder="Seleccione las aplicaciones ..." class="select form-control" multiple="multiple" disabled>
                                           <!--<option value="cont">Contabilidad</option>
                                           <option value="bov">Bóveda</option>
                                           <option value="nom">Nómina</option>
@@ -120,7 +134,7 @@
                           </div>
 
 
-                          <div role="tabpanel" class="tab-pane fade" id="tab_content2" aria-labelledby="home-tab">
+                          <!--<div role="tabpanel" class="tab-pane fade" id="tab_content2" aria-labelledby="home-tab">
 
                             <div class="item form-group">                     
                               <div class="col-md-9 col-sm-9 col-xs-12">
@@ -139,7 +153,7 @@
                             
 
                             
-                          </div>
+                          </div>-->
 
 
 
