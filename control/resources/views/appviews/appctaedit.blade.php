@@ -7,7 +7,7 @@
     <!-- Custom Theme Style -->
     <link href="{{ asset('controlassets/build/css/custom.css') }}" rel="stylesheet">
     <!-- PNotify -->
-    <link href="{{ asset('controlassets/pnotify/pnotify.custom.min.css') }}" rel="stylesheet" type="text/css" />
+    <!--<link href="{{ asset('controlassets/pnotify/pnotify.custom.min.css') }}" rel="stylesheet" type="text/css" />-->
     <!-- Chosen -->    
     <link href="{{ asset('controlassets/vendors/chosen/chosen.css') }}" rel="stylesheet" type="text/css" />
     <style>
@@ -23,7 +23,7 @@
         <div class="col-md-12 col-sm-12 col-xs-12">
             <div class="x_panel">
               <div class="x_title">
-                <h2>Nueva Asignación a Cliente</h2>
+                <h2>Editar Asignación a Cliente</h2>
                 <ul class="nav navbar-right panel_toolbox">
                   <li><a class="collapse-link"><i class="fa fa-chevron-up"></i></a>
                   </li>
@@ -124,14 +124,14 @@
 
                             <div class="item form-group">                     
                               <div class="col-md-9 col-sm-9 col-xs-12">
-                                <input id="appcta_rfc" class="form-control has-feedback-left" name="appcta_rfc" title="Cantidad de RFCs" placeholder="Cantidad RFC *" required="required" type="numberint" value="{{$appcta->appcta_rfc}}" disabled>
+                                <input id="appcta_rfc" class="form-control has-feedback-left" name="appcta_rfc" title="Cantidad de RFCs" placeholder="Cantidad RFC *" required="required" type="numberint" value="{{$appcta->appcta_rfc}}" data-validate-minmax="0,{{$rfc}}">
                                 <span class="fa fa-bank form-control-feedback left" aria-hidden="true"></span>
                               </div>
                             </div>
 
                             <div class="item form-group">                     
                               <div class="col-md-9 col-sm-9 col-xs-12">
-                                <input id="appcta_gig" class="form-control has-feedback-left" name="appcta_gig" placeholder="Cantidad Gigas *" required="required" type="number" title="Almacenamiento en Gigas" value="{{$appcta->appcta_gig}}" disabled>
+                                <input id="appcta_gig" class="form-control has-feedback-left" name="appcta_gig" placeholder="Cantidad Gigas *" required="required" type="number" title="Almacenamiento en Gigas" value="{{$appcta->appcta_gig}}" data-validate-minmax="0,{{$gig}}">
                                 <span class="fa fa-archive form-control-feedback left" aria-hidden="true"></span>
                               </div>
                             </div>
@@ -151,14 +151,14 @@
 
                             <div class="item form-group">                     
                             <div class="col-md-9 col-sm-9 col-xs-12">
-                              <input id="appcta_f_vent" title="Fecha de Venta o Asignación" class="form-control has-feedback-left" name="appcta_f_vent" placeholder="Fecha Venta" required="required" type="date" value="{{$appcta->appcta_f_vent}}">
+                              <input id="appcta_f_vent" title="Fecha de Venta o Asignación" class="form-control has-feedback-left" name="appcta_f_vent" placeholder="Fecha Venta" required="required" type="date" value="{{$appcta->appcta_f_vent}}" disabled>
                               <span class="fa fa-calendar form-control-feedback left" aria-hidden="true"></span>
                             </div>
                           </div>
 
                           <div class="item form-group">                     
                             <div class="col-md-9 col-sm-9 col-xs-12">
-                              <input id="appcta_f_act" title="Fecha de Actualización" class="form-control has-feedback-left" name="appcta_f_act" placeholder="Fecha Actualización" required="required" type="date" value="{{$appcta->appcta_f_act}}">
+                              <input id="appcta_f_act" title="Fecha de Activación" class="form-control has-feedback-left" name="appcta_f_act" placeholder="Fecha Activación" required="required" type="date" value="{{$appcta->appcta_f_act}}" disabled>
                               <span class="fa fa-calendar form-control-feedback left" aria-hidden="true"></span>
                             </div>
                           </div>
@@ -215,9 +215,9 @@
     <script src="{{ asset('controlassets/vendors/switchery/dist/switchery.min.js') }}"></script>
 
     <!-- PNotify -->
-    <script src="{{ asset('controlassets/vendors/pnotify/dist/pnotify.js') }}"></script>
+    <!--<script src="{{ asset('controlassets/vendors/pnotify/dist/pnotify.js') }}"></script>
     <script src="{{ asset('controlassets/vendors/pnotify/dist/pnotify.buttons.js') }}"></script>
-    <script src="{{ asset('controlassets/vendors/pnotify/dist/pnotify.nonblock.js') }}"></script>
+    <script src="{{ asset('controlassets/vendors/pnotify/dist/pnotify.nonblock.js') }}"></script>-->
 
       <!-- Chosen -->
     <script src="{{ asset('controlassets/vendors/chosen/chosen.jquery.js') }}" type="text/javascript"></script>

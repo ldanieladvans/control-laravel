@@ -9,7 +9,7 @@
     <link href="{{ asset('controlassets/vendors/datatables.net-responsive-bs/css/responsive.bootstrap.min.css') }}" rel="stylesheet">
     <link href="{{ asset('controlassets/vendors/datatables.net-scroller-bs/css/scroller.bootstrap.min.css') }}" rel="stylesheet">
     <!-- PNotify -->
-    <link href="{{ asset('controlassets/pnotify/pnotify.custom.min.css') }}" rel="stylesheet" type="text/css" />
+    <!--<link href="{{ asset('controlassets/pnotify/pnotify.custom.min.css') }}" rel="stylesheet" type="text/css" />-->
     <!-- Animate -->
     <!--<link href="{{ asset('controlassets/animate.css') }}" rel="stylesheet" type="text/css" />-->
 @endsection
@@ -119,9 +119,9 @@
     <!-- Custom Theme Scripts -->
     <script src="{{ asset('controlassets/build/js/custom.js') }}"></script>
     <!-- PNotify -->
-    <script src="{{ asset('controlassets/vendors/pnotify/dist/pnotify.js') }}"></script>
+    <!--<script src="{{ asset('controlassets/vendors/pnotify/dist/pnotify.js') }}"></script>
     <script src="{{ asset('controlassets/vendors/pnotify/dist/pnotify.buttons.js') }}"></script>
-    <script src="{{ asset('controlassets/vendors/pnotify/dist/pnotify.nonblock.js') }}"></script>
+    <script src="{{ asset('controlassets/vendors/pnotify/dist/pnotify.nonblock.js') }}"></script>-->
     <!--<script src="{{ asset('controlassets/pnotify/pnotify.custom.min.js') }}"></script>-->
 
     <script>

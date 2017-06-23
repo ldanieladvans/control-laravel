@@ -12,7 +12,7 @@
     
     <link href="{{ asset('controlassets/vendors/chosen/chosen.css') }}" rel="stylesheet" type="text/css" />
     <!-- PNotify -->
-    <link href="{{ asset('controlassets/pnotify/pnotify.custom.min.css') }}" rel="stylesheet" type="text/css" />
+    <!--<link href="{{ asset('controlassets/pnotify/pnotify.custom.min.css') }}" rel="stylesheet" type="text/css" />-->
     <!-- Animate -->
     <!--<link href="{{ asset('controlassets/animate.css') }}" rel="stylesheet" type="text/css" />-->
 @endsection
@@ -228,9 +228,9 @@
 
     
     <!-- PNotify -->
-    <script src="{{ asset('controlassets/vendors/pnotify/dist/pnotify.js') }}"></script>
+    <!--<script src="{{ asset('controlassets/vendors/pnotify/dist/pnotify.js') }}"></script>
     <script src="{{ asset('controlassets/vendors/pnotify/dist/pnotify.buttons.js') }}"></script>
-    <script src="{{ asset('controlassets/vendors/pnotify/dist/pnotify.nonblock.js') }}"></script>
+    <script src="{{ asset('controlassets/vendors/pnotify/dist/pnotify.nonblock.js') }}"></script>-->
     <!--<script src="{{ asset('controlassets/pnotify/pnotify.custom.min.js') }}"></script>-->
 
     <!-- Custom Theme Scripts -->

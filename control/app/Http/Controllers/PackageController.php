@@ -107,7 +107,7 @@ class PackageController extends Controller
      */
     public function destroy(Package $package,Request $request)
     {
-        if (isset($id)){
+        if (isset($package)){
             //$package = Package::findOrFail($id);
             $fmessage = 'Se ha eliminado el paquete: '.$package->paq_nom;
             \Session::flash('message',$fmessage);

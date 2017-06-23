@@ -124,7 +124,9 @@ class AppaccountController extends Controller
         $accounts = Account::where('cta_estado','=','Activa')->get();
         $apps = config('app.advans_apps');
 
-        return view('appviews.appctaedit',['packages'=>$packages,'accounts'=>$accounts,'appcta'=>$appcta,'apps'=>$apps]);
+        $gig_rfc = $this->getgigrfcbypackaux($id);
+
+        return view('appviews.appctaedit',['packages'=>$packages,'accounts'=>$accounts,'appcta'=>$appcta,'apps'=>$apps,'gig'=>$gig_rfc['gig'],'rfc'=>$gig_rfc['rfc']]);
     }
 
     /**
@@ -136,8 +138,14 @@ class AppaccountController extends Controller
      */
     public function update(Request $request, $id)
     {
+
         $apps = config('app.advans_apps');
         $alldata = $request->all();
+
+        echo "<pre>";
+        print_r($alldata);die();
+        echo "</pre>";
+
         $appcta = Appaccount::findOrFail($id);
         $appcta->appcta_app = $alldata['appcta_app'];
         /*$appcta->appcta_rfc = $alldata['appcta_rfc'];
@@ -197,66 +205,6 @@ class AppaccountController extends Controller
 
         }
         return redirect()->route('appcta.index');
-    }
-
-    private function getgigrfcbypackaux($paqid,$accid)
-    {
-        $paqid = false;
-        $accid = false;
-        $rfc = 0;
-        $gig = 0;
-        $counter_assig_rfc = 0;
-        $counter_assig_gig = 0;
-        $return_rfc = 0;
-        $return_gig = 0;
-        $acc_obj = false;
-
-        $asig_distrib_rfc = 0;
-        $asig_distrib_gig = 0;
-
-        $client = false;
-
-        $paq_obj = Package::find($paqid);
-        $acc_obj = Account::find($accid);
-
-        $rfc = $paq_obj->paq_rfc;
-        $gig = $paq_obj->paq_gig;
-
-        $prevassignations = Appaccount::where('appcta_cuenta_id','=',$accid)->get();
-        foreach ($prevassignations as $prevassignation) {
-            $counter_assig_rfc += $prevassignation->asigpaq_rfc;
-            $counter_assig_gig += $prevassignation->asigpaq_gig;
-        }
-
-        if($acc_obj!=false){
-            $distrib = $acc_obj->distributor ? $distrib = $acc_obj->distributor : false;
-
-                if($distrib!=false){
-
-                    $distribassignations = Packageassignation::where('asigpaq_distrib_id','=',$distrib->id)->get();
-
-                    foreach ($distribassignations as $distribassignation) {
-                        $asig_distrib_rfc += $distribassignation->asigpaq_rfc;
-                        $asig_distrib_gig += $distribassignation->asigpaq_gig;
-                    }
-                    $rfc_assigs = ($distrib->distrib_limitrfc + ($asig_distrib_rfc - $counter_assig_rfc));
-                    $gig_assigs = ($distrib->distrib_limitgig + ($asig_distrib_gig - $counter_assig_gig));
-                    if($rfc <= $rfc_assigs){
-                        $return_rfc = $rfc;
-                    }else{
-                        $return_rfc = $rfc_assigs;
-                    }
-                    if($gig <= $gig_assigs){
-                        $return_gig = $gig;
-                    }else{
-                        $return_gig = $gig_assigs;
-                    }
-                }
-        }
-
-        return array('gig' => $return_gig,
-                    'rfc' => $return_rfc);   
-
     }
 
 
@@ -354,6 +302,89 @@ class AppaccountController extends Controller
         );
         return \Response::json($response);
     }
+
+
+
+    private function getgigrfcbypackaux($id)
+    {
+
+        $paqid = false;
+        $accid = false;
+        $rfc = 0;
+        $gig = 0;
+        $counter_assig_rfc = 0;
+        $counter_assig_gig = 0;
+        $return_rfc = 0;
+        $return_gig = 0;
+        $acc_obj = false;
+
+        $asig_distrib_rfc = 0;
+        $asig_distrib_gig = 0;
+
+        $client_rfc = false;
+
+        $return_array = array();
+
+        $distrib = false;
+
+        $this_model = Appaccount::findOrFail($id);
+
+
+
+        $paq_obj = $this_model->package ? $this_model->package : false;
+
+        if($paq_obj!=false){            
+            $acc_obj = $this_model->account ? $this_model->account : false;
+        }
+
+        if($acc_obj!=false && $paq_obj!=false){
+
+            $rfc = $paq_obj->paq_rfc;
+            $gig = $paq_obj->paq_gig;
+
+            $prevassignations = Appaccount::where('appcta_cuenta_id','=',$acc_obj->id)->get();
+            foreach ($prevassignations as $prevassignation) {
+                $counter_assig_rfc += $prevassignation->appcta_rfc;
+                $counter_assig_gig += $prevassignation->appcta_gig;
+            }
+
+
+
+            if($acc_obj!=false){
+                $distrib = $acc_obj->distributor ? $acc_obj->distributor : false;
+
+                $client_rfc = $acc_obj->client ? $acc_obj->client->cliente_rfc : '';
+
+                if($distrib!=false){
+
+                    $distribassignations = Packageassignation::where('asigpaq_distrib_id','=',$distrib->id)->get();
+
+                    foreach ($distribassignations as $distribassignation) {
+                        $asig_distrib_rfc += $distribassignation->asigpaq_rfc;
+                        $asig_distrib_gig += $distribassignation->asigpaq_gig;
+                    }
+                    $rfc_assigs = ($distrib->distrib_limitrfc + ($asig_distrib_rfc - $counter_assig_rfc));
+                    $gig_assigs = ($distrib->distrib_limitgig + ($asig_distrib_gig - $counter_assig_gig));
+                    if($rfc <= $rfc_assigs){
+                        $return_rfc = $rfc;
+                    }else{
+                        $return_rfc = $rfc_assigs;
+                    }
+                    if($gig <= $gig_assigs){
+                        $return_gig = $gig;
+                    }else{
+                        $return_gig = $gig_assigs;
+                    }
+                }
+            }
+        }
+
+
+        return array('gig' => $return_gig,
+                    'rfc' => $return_rfc);   
+
+    }
+
 
     public function changeAccountState(Request $request)
     {
@@ -461,7 +492,7 @@ class AppaccountController extends Controller
         $response = array(
             'status' => 'success',
             'msg' => 'Setting created successfully',
-            'accstate' => $acc_state
+            'accstate' => 'Activa'
         );
         return \Response::json($response);
     }

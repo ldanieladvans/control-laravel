@@ -16,6 +16,8 @@
     <link href="{{ asset('controlassets/animate.css') }}" rel="stylesheet" type="text/css" />
     <!-- Mask -->
     <link href="{{ asset('controlassets/jquery-loadmask-master/jquery.loadmask.css') }}" rel="stylesheet" type="text/css" />
+    <!-- PNotify -->
+    <link href="{{ asset('controlassets/pnotify/pnotify.custom.min.css') }}" rel="stylesheet" type="text/css" />
 
     <style type="text/css">
     	.lmask {
@@ -287,6 +289,329 @@
 		    <script src="{{ asset('controlassets/vendors/iCheck/icheck.min.js') }}"></script>
 		    
 		    <script src="{{ asset('controlassets/jquery.babypaunch.spinner.min.js') }}"></script>
+
+		    <!-- PNotify -->
+		    <script src="{{ asset('controlassets/vendors/pnotify/dist/pnotify.js') }}"></script>
+		    <script src="{{ asset('controlassets/vendors/pnotify/dist/pnotify.buttons.js') }}"></script>
+		    <script src="{{ asset('controlassets/vendors/pnotify/dist/pnotify.nonblock.js') }}"></script>
+
+		    <script type="text/javascript">
+		    	/*var message, tests, checkField, validate, mark, unmark, field, minmax, defaults,
+			        validateWords, lengthRange, lengthLimit, pattern, alertTxt, data,
+			        email_illegalChars = /[\(\)\<\>\,\;\:\\\/\"\[\]]/,
+			        email_filter = /^.+@.+\..{2,6}$/;
+
+			    function isInt(value) {
+			        return !isNaN(value) && (function(x) { return (x | 0) === x; })(parseFloat(value))
+			    }
+
+
+			    testsNoMsg = {
+			        sameAsPlaceholder : function(a){
+			            return $.fn.placeholder && a.attr('placeholder') !== undefined && data.val == a.prop('placeholder');
+			        },
+			        hasValue : function(a){
+			            if( !a ){
+			                return false;
+			            }
+			            return true;
+			        },
+			        linked : function(a,b){
+			            if( b != a ){
+			                return false;
+			            }
+			            return true;
+			        },
+			        email : function(a){
+			            if ( !email_filter.test( a ) || a.match( email_illegalChars ) ){
+			                return false;
+			            }
+			            return true;
+			        },
+
+			        text : function(a, skip){
+			            console.log(validateWords);
+			            if( validateWords ){
+			                var words = a.split(' ');
+			                // iterrate on all the words
+			                var wordsLength = function(len){
+			                    for( var w = words.length; w--; )
+			                        if( words[w].length < len )
+			                            return false;
+			                    return true;
+			                };
+
+			                if( words.length < validateWords || !wordsLength(2) ){
+			                    return false;
+			                }
+			                return true;
+			            }
+			            if( !skip && lengthRange && a.length < lengthRange[0] ){
+			                return false;
+			            }
+			            if( lengthRange && lengthRange[1] && a.length > lengthRange[1] ){
+			                return false;
+			            }
+			            if( lengthLimit && lengthLimit.length ){
+			                while( lengthLimit.length ){
+			                    if( lengthLimit.pop() == a.length ){
+			                        return false;
+			                    }
+			                }
+			            }
+
+			            if( pattern ){
+			                var regex, jsRegex;
+			                switch( pattern ){
+			                    case 'alphanumeric' :
+			                        regex = /^[a-zA-Z0-9]+$/i;
+			                        break;
+			                    case 'numeric' :
+			                        regex = /^[0-9]+$/i;
+			                        break;
+			                    case 'phone' :
+			                        regex = /^\+?([0-9]|[-|' '])+$/i;
+			                        break;
+			                    default :
+			                        regex = pattern;
+			                }
+			                try{
+			                    jsRegex = new RegExp(regex).test(a);
+			                    if( a && !jsRegex )
+			                        return false;
+			                }
+			                catch(err){
+			                    console.log(err, field, 'regex is invalid');
+			                    return false;
+			                }
+			            }
+
+			            return true;
+			        },
+			        number : function(a){
+			            if( isNaN(parseFloat(a)) && !isFinite(a) ){
+			                return false;
+			            }
+			            else if( lengthRange && a.length < lengthRange[0] ){
+			                return false;
+			            }
+			            else if( lengthRange && lengthRange[1] && a.length > lengthRange[1] ){
+			                return false;
+			            }
+			            else if( minmax[0] && (a|0) < minmax[0] ){
+			                return false;
+			            }
+			            else if( minmax[1] && (a|0) > minmax[1] ){
+			                return false;
+			            }
+			            return true;
+			        },
+			        numberint : function(a){
+			            if( isNaN(parseFloat(a)) && !isFinite(a) ){
+			                return false;
+			            }
+			            else if(!isInt(a)){
+			                return false;
+			            }
+			            else if( lengthRange && a.length < lengthRange[0] ){
+			                return false;
+			            }
+			            else if( lengthRange && lengthRange[1] && a.length > lengthRange[1] ){
+			                return false;
+			            }
+			            else if( minmax[0] && (a|0) < minmax[0] ){
+			                return false;
+			            }
+			            else if( minmax[1] && (a|0) > minmax[1] ){
+			                return false;
+			            }
+			            return true;
+			        },
+			        date : function(a){
+			            var day, A = a.split(/[-./]/g), i;
+			            if( field[0].valueAsNumber )
+			                return true;
+
+			            for( i = A.length; i--; ){
+			                if( isNaN(parseFloat(a)) && !isFinite(a) )
+			                    return false;
+			            }
+			            try{
+			                day = new Date(A[2], A[1]-1, A[0]);
+			                if( day.getMonth()+1 == A[1] && day.getDate() == A[0] )
+			                    return day;
+			                return false;
+			            }
+			            catch(er){
+			                console.log('date test: ', err);
+			                return false;
+			            }
+			        },
+			        url : function(a){
+			            function testUrl(url){
+			                return /^(https?:\/\/)?([\w\d\-_]+\.+[A-Za-z]{2,})+\/?/.test( url );
+			            }
+			            if( !testUrl( a ) ){
+			                return false;
+			            }
+			            return true;
+			        },
+			        hidden : function(a){
+			            if( lengthRange && a.length < lengthRange[0] ){
+			                return false;
+			            }
+			            if( pattern ){
+			                var regex;
+			                if( pattern == 'alphanumeric' ){
+			                    regex = /^[a-z0-9]+$/i;
+			                    if( !regex.test(a) ){
+			                        return false;
+			                    }
+			                }
+			            }
+			            return true;
+			        },
+			        select : function(a){
+			            if( !tests.hasValue(a) ){
+			                return false;
+			            }
+			            return true;
+			        }
+			    };
+
+
+			    function prepareFieldDataNoMsg(el){
+			        field = $(el);
+
+			        field.data( 'valid', true );                
+			        field.data( 'type', field.attr('type') );   
+			        pattern = field.attr('pattern');
+			    }
+
+			    function testByTypeNoMsg(type, value){
+			        if( type == 'tel' )
+			            pattern = pattern || 'phone';
+
+			        if( !type || type == 'password' || type == 'tel' || type == 'search' || type == 'file' )
+			            type = 'text';
+
+
+			        return testsNoMsg[type] ? testsNoMsg[type](value, true) : true;
+			    }
+
+			   function checkFieldNoMsg(tabfields){
+			        if( this.type !='hidden' && $(this).is(':hidden') )
+			            return true;
+
+			        
+			        prepareFieldDataNoMsg(this);
+
+			        field.data( 'val', field[0].value.replace(/^\s+|\s+$/g, "") );  // cache the value of the field and trim it
+			        data = field.data();
+
+			        if( field[0].nodeName.toLowerCase() === "select" ){
+			            data.type = 'select';
+			        }
+			        else if( field[0].nodeName.toLowerCase() === "textarea" ){
+			            data.type = 'text';
+			        }
+
+			        validateWords   = data['validateWords'] || 0;
+			        lengthRange     = data['validateLengthRange'] ? (data['validateLengthRange']+'').split(',') : [1];
+			        lengthLimit     = data['validateLength'] ? (data['validateLength']+'').split(',') : false;
+			        minmax          = data['validateMinmax'] ? (data['validateMinmax']+'').split(',') : '';
+
+
+			        data.valid = testsNoMsg.hasValue(data.val);
+
+
+
+			        if( field.hasClass('optional') && !data.valid )
+			            data.valid = true;
+
+			        if( field[0].type === "checkbox" ){
+			            data.valid = field[0].checked;
+			        }
+
+			        else if( data.valid ){
+
+
+			            if( testsNoMsg.sameAsPlaceholder(field) ){
+			                data.valid = false;
+
+			            }
+
+			            else if( data.valid || data.type == 'select' ){
+
+			                data.valid = testByTypeNoMsg(data.type, data.val);
+			            }
+
+
+
+			        }
+			        if( data.valid ){
+
+			            submit = true;
+			        }
+			        else{
+			            submit = false;
+			        }
+
+			        
+
+			        return data.valid;
+			    }
+
+
+			    function validateTabsField(tabfields,empty_fields){
+			    	
+			    	tabfields.each(function(){
+			    		if(document.getElementById(this).required && document.getElementById(this).value == ''){
+			    			empty_fields = 0;
+			    		}
+			    		console.log('entro');
+				    });
+			    }
+
+
+			    function validateNoMsgForm(formid,tabfields=[]){
+			    	submit = false;
+			    	submit_aux = false;
+				    fieldsToCheck = $( "#"+formid ).find(':input').filter('[required=required], .required, .optional').not('[disabled=disabled]');
+				    fieldsToCheck.each(function(){
+				    	console.log(this);
+				        submit_aux = submit_aux * checkFieldNoMsg.apply(this);
+				        etr = 23;
+				    });
+
+			     	var empty_fields = 1;
+				    for(var tbl=0;tbl<tabfields.length;tbl++){
+				    	if(document.getElementById(tabfields[tbl]).required && document.getElementById(tabfields[tbl]).value == ''){
+				    		empty_fields = 0;
+				    	}
+				    }
+				    
+				    if(submit_aux==0 || empty_fields==0){
+				      submit = false;
+				      event.preventDefault();
+				      
+				      new PNotify({
+	                    title: "Error",
+	                    type: "error",
+	                    text: "Existen campos requeridos que debe llenar.",
+	                    nonblock: {
+	                      nonblock: true
+	                    },
+
+	                    styling: 'bootstrap3'
+	                  });
+				    }else{
+				      $('#loadingmodal').modal('show');
+				      submit = true;
+				    }
+				    return submit;  
+			    }*/
+		    </script>
         @show
 	</body>
 @endsection

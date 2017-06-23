@@ -7,7 +7,7 @@
     <!-- Custom Theme Style -->
     <link href="{{ asset('controlassets/build/css/custom.css') }}" rel="stylesheet">
     <!-- PNotify -->
-    <link href="{{ asset('controlassets/pnotify/pnotify.custom.min.css') }}" rel="stylesheet" type="text/css" />
+    <!--<link href="{{ asset('controlassets/pnotify/pnotify.custom.min.css') }}" rel="stylesheet" type="text/css" />-->
     <!-- Chosen -->    
     <link href="{{ asset('controlassets/vendors/chosen/chosen.css') }}" rel="stylesheet" type="text/css" />
     <style>
@@ -213,9 +213,9 @@
     <script src="{{ asset('controlassets/vendors/switchery/dist/switchery.min.js') }}"></script>
 
     <!-- PNotify -->
-    <script src="{{ asset('controlassets/vendors/pnotify/dist/pnotify.js') }}"></script>
+    <!--<script src="{{ asset('controlassets/vendors/pnotify/dist/pnotify.js') }}"></script>
     <script src="{{ asset('controlassets/vendors/pnotify/dist/pnotify.buttons.js') }}"></script>
-    <script src="{{ asset('controlassets/vendors/pnotify/dist/pnotify.nonblock.js') }}"></script>
+    <script src="{{ asset('controlassets/vendors/pnotify/dist/pnotify.nonblock.js') }}"></script>-->
 
       <!-- Chosen -->
     <script src="{{ asset('controlassets/vendors/chosen/chosen.jquery.js') }}" type="text/javascript"></script>
@@ -284,38 +284,7 @@
       });
   });
 
-	$( "#packassigform" ).submit(function( event ) {
 
-    $('#loadingmodal').modal('show');
-	  
-	  event.preventDefault()
-
-	  	/*if($(selectobj).hasClass('errorType')){
-	  		new PNotify({
-                    title: "Error",
-                    type: "error",
-                    text: "Debe seleccionar una cuenta",
-                    nonblock: {
-                      nonblock: true
-                    },
-                    styling: 'bootstrap3'
-                  });
-	  	}*/
-	  	if(document.getElementById('appcta_f_vent').value=='' || document.getElementById('appcta_f_act').value=='' || document.getElementById('appcta_f_fin').value=='' || document.getElementById('appcta_f_caduc').value==''){
-	  		new PNotify({
-                    title: "Error",
-                    type: "error",
-                    text: "Todas las fechas son obligatorias. Consulte el Tab Fechas",
-                    nonblock: {
-                      nonblock: true
-                    },
-
-                    styling: 'bootstrap3'
-                  });
-	  	}
-	  	
-
-	});
 
 	</script>
 

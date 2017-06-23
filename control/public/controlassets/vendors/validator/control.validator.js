@@ -429,6 +429,7 @@ var validator = (function($){
     /* vaildates all the REQUIRED fields prior to submiting the form
     */
     function checkAll( $form ){
+        console.log($form);
         $form = $($form);
 
         if( $form.length == 0 ){
@@ -456,6 +457,7 @@ var validator = (function($){
         mark        : mark,
         unmark      : unmark,
         message     : message,
-        tests       : tests
+        tests       : tests,
+        submit      : submit
     }
 })(jQuery);

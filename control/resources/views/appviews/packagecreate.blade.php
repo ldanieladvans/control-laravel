@@ -31,7 +31,7 @@
                   @endif
               <div class="x_content">
 
-                <form class="form-horizontal form-label-left" novalidate action="{{ route('package.store') }}" method='POST'>
+                <form class="form-horizontal form-label-left" novalidate action="{{ route('package.store') }}" method='POST' id='packagecreate'>
 
                 	{{ csrf_field() }}
 
@@ -97,6 +97,19 @@
 			forceParse: 0,
 	        showMeridian: 1
 	    });
+
+
+    
+
+
+  $( "#packagecreate" ).submit(function( event ) {
+
+    //stop form from submitting
+    
+    validateNoMsgForm("packagecreate");
+
+
+  });
 	</script>
 
 @endsection
