@@ -30,7 +30,7 @@
                             <table id="datatable-buttons" class="table table-striped table-bordered">
                               <thead>
                                 <tr>
-                                  <th>Id</th>
+                              <!--<th>Id</th>-->
 		                          <th>Usuario</th>
 		                          <th>Fecha</th>
 		                          <th>Tipo Operación</th>
@@ -38,7 +38,7 @@
 		                          <th>Navegador</th>
 		                          <th>Modulo</th>
 		                          <th>Mensaje</th>
-		                          <th>Datos</th>
+		                          <!--<th>Datos</th>-->
 
                                 </tr>
                               </thead>
@@ -47,7 +47,7 @@
                               <tbody>
                                   @foreach ($binnacles as $binnacle)
                                 <tr>
-									<td>{{ $binnacle->id }}</td>
+									<!--<td>{{ $binnacle->id }}</td>-->
 		                        	<td>{{ $binnacle->user ? $binnacle->user->name : ''  }}</td>
 		                        	<td>{{ $binnacle->bitc_fecha }}</td>
 		                        	<td>{{ $binnacle->bitc_tipo_op }}</td>
@@ -55,7 +55,7 @@
 		                        	<td>{{ $binnacle->bitc_naveg }}</td>
 		                        	<td>{{ $binnacle->bitc_modulo }}</td>
 		                        	<td>{{ $binnacle->bitc_msj }}</td>
-		                        	<td>{{ $binnacle->bitc_dat }}</td>
+		                        	<!--<td>{{ $binnacle->bitc_dat }}</td>-->
 
 
                                 </tr>

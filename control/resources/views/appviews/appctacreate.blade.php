@@ -332,8 +332,11 @@
   }*/
 
 	$( "#packassigform" ).submit(function( event ) {
-      event.preventDefault();
-	});
+    event.preventDefault();
+    if($('#packassigform')[0].checkValidity()==true){
+      $('#loadingmodal').modal('show');
+    }
+  });
 
 	</script>
 

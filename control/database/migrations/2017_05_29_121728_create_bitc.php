@@ -21,7 +21,7 @@ class CreateBitc extends Migration
             $table->timestampTz('bitc_fecha')->nullable();
             $table->string('bitc_tipo_op',25)->nullable();
             $table->string('bitc_ip',20)->nullable();
-            $table->string('bitc_naveg',20)->nullable();
+            $table->string('bitc_naveg',50)->nullable();
             $table->string('bitc_modulo',30)->nullable();
             $table->text('bitc_result')->nullable();
             $table->text('bitc_msj')->nullable();

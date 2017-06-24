@@ -80,22 +80,6 @@ class AppaccountController extends Controller
         $appcta->appcta_app = $alldata['appcta_app'];
 
 
-        /*if(array_key_exists('appcta_f_vent',$alldata)){
-            if($alldata['appcta_f_vent']==''){
-                $appcta->appcta_f_vent = date('Y-m-d');
-            }else{
-                $appcta->appcta_f_vent = $alldata['appcta_f_vent'];
-            }
-        }*/
-
-        /*if(array_key_exists('appcta_f_act',$alldata)){
-            if($alldata['appcta_f_act']==''){
-                $appcta->appcta_f_act = date('Y-m-d');
-            }else{
-                $appcta->appcta_f_act = $alldata['appcta_f_act'];
-            }
-        }*/
-
         $appcta->appcta_f_vent = date('Y-m-d');
 
         if(array_key_exists('appcta_f_fin',$alldata)){
@@ -176,17 +160,19 @@ class AppaccountController extends Controller
 
         $apps = config('app.advans_apps');
         $alldata = $request->all();
+        $packs = array();
+        $arrayparams = array();
 
-        echo "<pre>";
+        /*echo "<pre>";
         print_r($alldata);die();
-        echo "</pre>";
+        echo "</pre>";*/
 
         $appcta = Appaccount::findOrFail($id);
         $appcta->appcta_app = $alldata['appcta_app'];
-        /*$appcta->appcta_rfc = $alldata['appcta_rfc'];
-        $appcta->appcta_gig = $alldata['appcta_gig'];*/
-        $appcta->appcta_f_vent = $alldata['appcta_f_vent'];
-        $appcta->appcta_f_act = $alldata['appcta_f_act'];
+        $appcta->appcta_rfc = $alldata['appcta_rfc'];
+        $appcta->appcta_gig = $alldata['appcta_gig'];
+        /*$appcta->appcta_f_vent = $alldata['appcta_f_vent'];
+        $appcta->appcta_f_act = $alldata['appcta_f_act'];*/
         $appcta->appcta_f_fin = $alldata['appcta_f_fin'];
         $appcta->appcta_f_caduc = $alldata['appcta_f_caduc'];
 
@@ -204,7 +190,8 @@ class AppaccountController extends Controller
 
         $appcta->save();
 
-        DB::table('app')->where('app_appcta_id', '=', $appcta->id)->delete();
+        //For updating apps
+        /*DB::table('app')->where('app_appcta_id', '=', $appcta->id)->delete();
 
         if(array_key_exists('apps',$alldata) && isset($alldata['apps'])){
             foreach ($alldata['apps'] as $key => $value) {
@@ -214,7 +201,25 @@ class AppaccountController extends Controller
                 $appc->app_appcta_id = $appcta->id;
                 $appc->save();
             }
-        }
+        }*/
+
+        array_push($packs,[
+                        'paqapp_cantrfc'=>$appcta->appcta_rfc,
+                        'paqapp_cantgig'=>$appcta->appcta_gig,
+                        'paqapp_f_venta'=>$appcta->appcta_f_vent,
+                        'paqapp_f_act'=>$appcta->appcta_f_act,
+                        'paqapp_f_fin'=>$appcta->appcta_f_fin,
+                        'paqapp_f_caduc'=>$appcta->appcta_f_caduc,
+                        'paqapp_control_id'=>$appcta->id,
+                        ]);
+        $client_rfc = $appcta->account ? ($appcta->account->client ? $appcta->account->client->cliente_rfc : '') : '';
+
+        $arrayparams['rfc_nombrebd'] = $client_rfc.'_'.$appcta->id;
+        $arrayparams['account_id'] = $appcta ? $appcta->id : 'false';
+        $arrayparams['paq_cta'] = json_encode($packs);
+
+        $acces_vars = $this->getAccessToken();
+        $service_response = $this->getAppService($acces_vars['access_token'],'modpaq',$arrayparams,'ctac');
 
         $fmessage = 'Se ha actualizado un paquete - cuenta con nombre: '.$alldata['appcta_app'];
         \Session::flash('message',$fmessage);

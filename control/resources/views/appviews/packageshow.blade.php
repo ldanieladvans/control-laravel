@@ -30,11 +30,11 @@
                   @endif
 
                   <div class="x_content">
-                    <button type="button" onclick="location.href = 'package/create';" class="btn btn-primary">Agregar</button>
+                    <button type="button" style=" background-color:#053666 " onclick="location.href = 'package/create';" class="btn btn-primary">Agregar</button>
                     <table id="datatable-buttons" class="table table-striped table-bordered">
                       <thead>
                         <tr>
-                          <th>Id</th>
+                          <!--<th>Id</th>-->
                           <th>Nombre</th>
                           <th>Gigas</th>
                           <th>RFCs</th>
@@ -46,7 +46,7 @@
                       <tbody>
                         @foreach($packages as $pack)
                         <tr>
-                        	<td>{{ $pack->id }}</td>
+                        	<!--<td>{{ $pack->id }}</td>-->
                         	<td>{{ $pack->paq_nom }}</td>
                         	<td>{{ $pack->paq_gig }}</td>
                         	<td>{{ $pack->paq_rfc }}</td>
@@ -57,7 +57,7 @@
                                       
                                       <div class="btn-group">
                                           <div class="btn-group">
-                                              <button onclick="location.href = 'package/{{$pack->id}}/edit';" class="btn btn-xs" data-placement="left" title="Editar" style=" color:#790D4E "><i class="fa fa-edit fa-2x"></i> </button>
+                                              <button onclick="location.href = 'package/{{$pack->id}}/edit';" class="btn btn-xs" data-placement="left" title="Editar" ><i class="fa fa-edit fa-3x"></i> </button>
                                           </div>
 
                                         <!--<div class="btn-group">
@@ -77,7 +77,7 @@
                                               
                                               {{ Form::open(['route' => ['package.destroy', $pack], 'class'=>'pull-right']) }}
                                               {{ Form::hidden('_method', 'DELETE') }}
-                                              <button  href="#" class="btn btn-xs" onclick="return confirm('¿Está seguro que quiere eliminar este registro?')" type="submit" data-placement="left" title="Borrar" style=" color:#790D4E "><i class="fa fa-trash fa-2x"></i></button>
+                                              <button  href="#" class="btn btn-xs" onclick="return confirm('¿Está seguro que quiere eliminar este registro?')" type="submit" data-placement="left" title="Borrar" ><i class="fa fa-trash fa-3x"></i></button>
                                             {{ Form::close() }}
 
                                           </div>

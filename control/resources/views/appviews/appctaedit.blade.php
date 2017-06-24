@@ -302,38 +302,10 @@
 
 
   $( "#packassigform" ).submit(function( event ) {
-
-
-    $('#loadingmodal').modal('show');
     event.preventDefault();
-
-    
-
-      /*if($(selectobj).hasClass('errorType')){
-        new PNotify({
-                    title: "Error",
-                    type: "error",
-                    text: "Debe seleccionar una cuenta",
-                    nonblock: {
-                      nonblock: true
-                    },
-                    styling: 'bootstrap3'
-                  });
-      }*/
-      if(document.getElementById('appcta_f_vent').value=='' || document.getElementById('appcta_f_act').value=='' || document.getElementById('appcta_f_fin').value=='' || document.getElementById('appcta_f_caduc').value==''){
-        new PNotify({
-                    title: "Error",
-                    type: "error",
-                    text: "Todas las fechas son obligatorias. Consulte el Tab Fechas",
-                    nonblock: {
-                      nonblock: true
-                    },
-
-                    styling: 'bootstrap3'
-                  });
-      }
-      
-
+    if($('#packassigform')[0].checkValidity()==true){
+      $('#loadingmodal').modal('show');
+    }
   });
 
   </script>

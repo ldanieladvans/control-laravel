@@ -38,11 +38,11 @@
                   @endif
 
                   <div class="x_content">
-                  <button type="button" onclick="location.href = 'role/create';" class="btn btn-primary">Agregar</button>
+                  <button type="button" style=" background-color:#053666 " onclick="location.href = 'role/create';" class="btn btn-primary">Agregar</button>
                     <table id="datatable-buttons" class="table table-striped table-bordered">
                       <thead>
                         <tr>
-                          <th>Id</th>
+                          <!--<th>Id</th>-->
                           <th>Nombre</th>
                           <th>Código</th>
                           <th>Acciones</th>
@@ -53,7 +53,7 @@
                       <tbody>
                         @foreach($roles as $rol)
                         <tr>
-                        	<td>{{ $rol->id }}</td>
+                        	<!--<td>{{ $rol->id }}</td>-->
                         	<td>{{ $rol->name }}</td>
                         	<td>{{ $rol->slug }}</td>
 
@@ -63,11 +63,11 @@
                                       
                                       <div class="btn-group">
                                         <div class="btn-group">
-                                              <button onclick="location.href = 'role/{{$rol->id}}/edit';" class="btn btn-xs" data-placement="left" title="Editar" style=" color:#790D4E "><i class="fa fa-edit fa-2x"></i> </button>
+                                              <button onclick="location.href = 'role/{{$rol->id}}/edit';" class="btn btn-xs" data-placement="left" title="Editar"><i class="fa fa-edit fa-3x"></i> </button>
                                           </div>
 
                                         <div class="btn-group">
-                                              <button onclick="" data-toggle="dropdown" class="btn btn-xs dropdown-toggle" data-placement="left" title="Más" style=" color:#790D4E "><i class="fa fa-plus-square fa-2x"></i> </button>
+                                              <button onclick="" data-toggle="dropdown" class="btn btn-xs dropdown-toggle" data-placement="left" title="Más" ><i class="fa fa-plus-square fa-3x"></i> </button>
                                                 <ul role="menu" class="dropdown-menu">
                                                   <li><a id="permsmodallink{{$rol->id}}" onclick="showModal({{$rol->id}})">Asignar permisos</a>
                                                   </li>
@@ -111,7 +111,7 @@
 
                                           {{ Form::open(['route' => ['role.destroy', $rol->id], 'class'=>'pull-right']) }}
                                               {{ Form::hidden('_method', 'DELETE') }}
-                                              <button  href="#" class="btn btn-xs" onclick="return confirm('¿Está seguro que quiere eliminar este registro?')" type="submit" data-placement="left" title="Borrar" style=" color:#790D4E "><i class="fa fa-trash fa-2x"></i></button>
+                                              <button  href="#" class="btn btn-xs" onclick="return confirm('¿Está seguro que quiere eliminar este registro?')" type="submit" data-placement="left" title="Borrar" ><i class="fa fa-trash fa-3x"></i></button>
                                             {{ Form::close() }}
 
                                         </div>

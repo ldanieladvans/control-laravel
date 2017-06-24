@@ -33,7 +33,7 @@
                     <table id="datatable-buttons" class="table table-striped table-bordered">
                       <thead>
                         <tr>
-                          <th>Id</th>
+                          <!--<th>Id</th>-->
                           <th>Nombre</th>
                           <th>Código</th>
                           <th>Descripción</th>
@@ -45,7 +45,7 @@
                       <tbody>
                         @foreach($permissions as $permission)
                         <tr>
-                        	<td>{{ $permission->id }}</td>
+                        	<!--<td>{{ $permission->id }}</td>-->
                         	<td>{{ $permission->name }}</td>
                         	<td>{{ $permission->slug }}</td>
                         	<td>{{ $permission->description }}</td>
@@ -57,7 +57,7 @@
                                       <div class="btn-group">
 
                                         <div class="btn-group">
-                                              <button onclick="location.href = 'permission/{{$permission->id}}/edit';" class="btn btn-xs" data-placement="left" title="Editar" style=" color:#790D4E "><i class="fa fa-edit fa-2x"></i> </button>
+                                              <button onclick="location.href = 'permission/{{$permission->id}}/edit';" class="btn btn-xs" data-placement="left" title="Editar" ><i class="fa fa-edit fa-3x"></i> </button>
                                           </div>
 
 

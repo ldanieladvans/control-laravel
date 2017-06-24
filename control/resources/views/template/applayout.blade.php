@@ -20,6 +20,17 @@
     <link href="{{ asset('controlassets/pnotify/pnotify.custom.min.css') }}" rel="stylesheet" type="text/css" />
 
     <style type="text/css">
+
+    thead tr {
+		  color:#FFFFFF ; 
+		  background-color:#053666 ;
+	  }
+
+  td.last button {
+		  color:#053666 ; 
+		  background-color:#FFFFFF ;
+	  }
+
     	.lmask {
 		  position: absolute;
 		  height: 100%;
@@ -579,9 +590,7 @@
 			    	submit_aux = false;
 				    fieldsToCheck = $( "#"+formid ).find(':input').filter('[required=required], .required, .optional').not('[disabled=disabled]');
 				    fieldsToCheck.each(function(){
-				    	console.log(this);
 				        submit_aux = submit_aux * checkFieldNoMsg.apply(this);
-				        etr = 23;
 				    });
 
 			     	var empty_fields = 1;

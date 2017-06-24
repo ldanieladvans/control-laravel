@@ -34,11 +34,11 @@
                   @endif
 
                   <div class="x_content">
-                    <button type="button" onclick="location.href = 'account/create';" class="btn btn-primary">Agregar</button>
+                    <button type="button" style=" background-color:#053666 " onclick="location.href = 'account/create';" class="btn btn-primary">Agregar</button>
                     <table id="datatable-buttons" class="table table-striped table-bordered">
                       <thead>
                         <tr>
-                          <th>Id</th>
+                          <!--<th>Id</th>-->
                           <th>Número de Cuenta</th>
                           <th>Fecha Activación</th>
                           <!--<th>Servidor</th>
@@ -55,7 +55,7 @@
                       <tbody>
                         @foreach($accounts as $acc)
                         <tr>
-                        	<td>{{ $acc->id }}</td>
+                        	<!--<td>{{ $acc->id }}</td>-->
                         	<td>{{ $acc->cta_num }}</td>
                           <td>{{ $acc->cta_fecha }}</td>
                         	<!--<td>{{ $acc->cta_nomservd }}</td>
@@ -66,16 +66,16 @@
                         	<td>{{ $acc->cta_estado }}</td>
 
 
-                          <td class=" last" width="13%">
+                          <td class=" last" width="15%">
                                       
                                       
                                       <div class="btn-group">
                                           <div class="btn-group">
-                                              <button onclick="location.href = 'account/{{$acc->id}}/edit';" class="btn btn-xs" data-placement="left" title="Editar" style=" color:#790D4E "><i class="fa fa-edit fa-2x"></i> </button>
+                                              <button onclick="location.href = 'account/{{$acc->id}}/edit';" class="btn btn-xs" data-placement="left" title="Editar" ><i class="fa fa-edit fa-3x"></i> </button>
                                           </div>
 
                                         <div class="btn-group">
-                                              <button onclick="" data-toggle="dropdown" class="btn btn-xs dropdown-toggle" data-placement="left" title="Más" style=" color:#790D4E "><i class="fa fa-plus-square fa-2x"></i> </button>
+                                              <button onclick="" data-toggle="dropdown" class="btn btn-xs dropdown-toggle" data-placement="left" title="Más" ><i class="fa fa-plus-square fa-3x"></i> </button>
                                                 <ul role="menu" class="dropdown-menu">
                                                   @if ($acc->cta_estado == 'Inactiva')
                                                       <li><a onclick="changeAccountState('Activa',{{Auth::user()->id}},{{$acc->id}})">Activar Cuenta</a>
@@ -91,7 +91,7 @@
                                               
                                               {{ Form::open(['route' => ['account.destroy', $acc], 'class'=>'pull-right']) }}
                                               {{ Form::hidden('_method', 'DELETE') }}
-                                              <button  href="#" class="btn btn-xs" onclick="return confirm('¿Está seguro que quiere eliminar este registro?')" type="submit" data-placement="left" title="Borrar" style=" color:#790D4E "><i class="fa fa-trash fa-2x"></i></button>
+                                              <button  href="#" class="btn btn-xs" onclick="return confirm('¿Está seguro que quiere eliminar este registro?')" type="submit" data-placement="left" title="Borrar" ><i class="fa fa-trash fa-3x"></i></button>
                                             {{ Form::close() }}
 
                                           </div>
