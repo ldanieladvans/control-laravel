@@ -25,6 +25,8 @@ class UserController extends Controller
     public function __construct()
     {
         $this->middleware('auth');
+        //This allow only to apps users
+        $this->middleware('role:app');
     }
 
 
@@ -275,10 +277,16 @@ class UserController extends Controller
     public function destroy(User $user,Request $request)
     {
         if (isset($user)){
-            $fmessage = 'Se ha eliminado el usuario: '.$user->name;
-            \Session::flash('message',$fmessage);
-            $this->registeredBinnacle($request,'destroy',$fmessage);
-            $user->delete();
+            if($user->usrc_admin == 1){
+                $fmessage = 'No se puede eliminar el usuario administrador';
+                \Session::flash('message',$fmessage);
+            }else{
+                $fmessage = 'Se ha eliminado el usuario: '.$user->name;
+                \Session::flash('message',$fmessage);
+                $this->registeredBinnacle($request,'destroy',$fmessage);
+                $user->delete();
+            }
+            
 
         }
         return redirect()->route('user.index');

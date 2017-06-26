@@ -10,6 +10,8 @@ use App\Appaccount;
 use Illuminate\Http\Request;
 use App\Http\Middleware\ChangeCon;
 use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Session;
 
 class HomeController extends Controller
 {
@@ -21,7 +23,8 @@ class HomeController extends Controller
     public function __construct()
     {
         $this->middleware('auth');
-        //$this->middleware('role:admin');
+        //This allow only to apps users
+        $this->middleware('role:app');
     }
 
     /**
@@ -29,7 +32,7 @@ class HomeController extends Controller
      *
      * @return \Illuminate\Http\Response
      */
-    public function index()
+    public function index(Request $request)
     {
         $clients = Client::all();
         $distributors = Distributor::all();
@@ -39,6 +42,10 @@ class HomeController extends Controller
         $asigpaqs_array_return = [];
         $appctas_array = [];
         $appctas_array_return = [];
+
+        /*echo "<pre>";
+        print_r($request->session());die();
+        echo "</pre>";*/
         
         $asigpaqs = Packageassignation::where('asigpaq_f_vent','>=',mktime(0, 0, 0, date("m")-1, date("d"),date("Y")))
                                       ->where('asigpaq_f_vent','<=',date("Y-m-d"))->get();

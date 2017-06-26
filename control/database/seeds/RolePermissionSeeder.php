@@ -3,6 +3,8 @@
 use Illuminate\Database\Seeder;
 use Bican\Roles\Models\Role;
 use Bican\Roles\Models\Permission;
+use App\User;
+use Illuminate\Support\Facades\DB;
 
 class RolePermissionSeeder extends Seeder
 {
@@ -10,16 +12,16 @@ class RolePermissionSeeder extends Seeder
 	public function createroles(){
 		//TODO here goes the app roles
 		$adminRole = Role::create([
-		    'name' => 'Admin',
-		    'slug' => 'admin',
-		    'description' => '', // optional
-		    'level' => 1, // optional, set to 1 by default
+		    'name' => 'App',
+		    'slug' => 'app',
 		]);
 
 		$moderatorRole = Role::create([
-		    'name' => 'Forum Moderator',
-		    'slug' => 'forum.moderator',
+		    'name' => 'Api',
+		    'slug' => 'api',
 		]);
+
+		return $adminRole->id;
 	}
 
 	public function createpermissions(){
@@ -36,6 +38,21 @@ class RolePermissionSeeder extends Seeder
 		]);
 	}
 
+	public function createsuperuser($app_role_id){
+		//TODO here goes the app roles
+		$adminUser = User::create([
+		    'name' => 'Admin',
+		    'usrc_nick' => 'admin',
+		    'email' => 'control.admin@advans.mx', 
+		    'password' => bcrypt('Admin123*'),
+		    'usrc_admin' => 1, 
+		]);
+
+		DB::table('role_user')->insert([
+            ['role_id' => $app_role_id, 'user_id' => $adminUser->id, 'created_at'=>date("Y-m-d H:i:s"),'updated_at'=>date("Y-m-d H:i:s")]
+        ]);
+	}
+
     /**
      * Run the database seeds.
      *
@@ -43,7 +60,8 @@ class RolePermissionSeeder extends Seeder
      */
     public function run()
     {
-        $this->createroles();
+        $app_role_id = $this->createroles();
         $this->createpermissions();
+        $this->createsuperuser($app_role_id);
     }
 }

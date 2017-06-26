@@ -18,6 +18,8 @@ class AccountController extends Controller
     public function __construct()
     {
         $this->middleware('auth');
+        //This allow only to apps users
+        $this->middleware('role:app');
     }
 
     /**

@@ -20,6 +20,8 @@ class AppaccountController extends Controller
     public function __construct()
     {
         $this->middleware('auth');
+        //This allow only to apps users
+        $this->middleware('role:app');
     }
 
     /**
@@ -509,38 +511,6 @@ class AppaccountController extends Controller
         return \Response::json($response);
     }
 
-
-    public function getAccState(Request $request)
-    {
-
-        $client_rfc = '';
-        $apps = array();
-        $packs = array();
-        $appcta = false;
-
-        $arrayparams = array();
-
-        $alldata = $request->all();
-
-        $acc_state = 'None';
-
-        if(array_key_exists('rfc',$alldata) && isset($alldata['rfc'])){
-            $rfc_accid = explode('_', $alldata['rfc']);
-            if(count($rfc_accid)>=2){
-                $appcta = Appaccount::findOrFail($rfc_accid[1]);
-                $acc_state = $appcta->appcta_estado;
-            }
-            
-        }
-
-
-        $response = array(
-            'status' => 'success',
-            'msg' => 'Setting created successfully',
-            'accstate' => 'Activa'
-        );
-        return \Response::json($response);
-    }
 
 
     public function assignApps(Request $request)

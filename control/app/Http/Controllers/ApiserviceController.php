@@ -5,18 +5,15 @@ namespace App\Http\Controllers;
 use Illuminate\Http\Request;
 use Bican\Roles\Models\Role;
 use Bican\Roles\Models\Permission;
+use App\Appaccount;
 
 class ApiserviceController extends Controller
 {
-    public function firstservice(Request $request)
+
+    public function __construct()
     {
-        $alldata = $request->all();
-        $response = array(
-            'status' => 'success',
-            'msg' => 'Se cambió la contraseña satisfactoriamente',
-            'user' => $alldata,
-        );
-        return \Response::json($response);
+        //This allow only to api users
+        $this->middleware('role:api');
     }
 
     public function getUsersRolesPermsByBd(Request $request)
@@ -53,6 +50,38 @@ class ApiserviceController extends Controller
             'msg' => 'Setting created successfully',
             'rolesperms' => json_encode($arrayreturn),
             'roles'=> json_encode($arrayroles)
+        );
+        return \Response::json($response);
+    }
+
+    public function getAccState(Request $request)
+    {
+
+        $client_rfc = '';
+        $apps = array();
+        $packs = array();
+        $appcta = false;
+
+        $arrayparams = array();
+
+        $alldata = $request->all();
+
+        $acc_state = 'None';
+
+        if(array_key_exists('rfc',$alldata) && isset($alldata['rfc'])){
+            $rfc_accid = explode('_', $alldata['rfc']);
+            if(count($rfc_accid)>=2){
+                $appcta = Appaccount::findOrFail($rfc_accid[1]);
+                $acc_state = $appcta->appcta_estado;
+            }
+            
+        }
+
+
+        $response = array(
+            'status' => 'success',
+            'msg' => 'Setting created successfully',
+            'accstate' => $acc_state
         );
         return \Response::json($response);
     }
