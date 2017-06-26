@@ -21,6 +21,7 @@ class HomeController extends Controller
     public function __construct()
     {
         $this->middleware('auth');
+        //$this->middleware('role:admin');
     }
 
     /**
@@ -41,6 +42,9 @@ class HomeController extends Controller
         
         $asigpaqs = Packageassignation::where('asigpaq_f_vent','>=',mktime(0, 0, 0, date("m")-1, date("d"),date("Y")))
                                       ->where('asigpaq_f_vent','<=',date("Y-m-d"))->get();
+        /*echo "<pre>";
+        print_r($asigpaqs);die();
+        echo "</pre>";*/
         foreach ($asigpaqs as $asigpaq) {
             if(array_key_exists(((string)$asigpaq->asigpaq_f_vent),$asigpaqs_array)){
                 $asigpaqs_array[((string)$asigpaq->asigpaq_f_vent)] = $asigpaqs_array[((string)$asigpaq->asigpaq_f_vent)] + 1;

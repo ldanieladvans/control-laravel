@@ -24,3 +24,6 @@ Route::middleware('auth:api')->get('/user', function (Request $request) {
 Route::get('/firstservice', 'ApiserviceController@firstservice')->middleware('auth:api');
 Route::get('/getaccstate', 'AppaccountController@getAccState')->middleware('auth:api');
 
+//Test
+Route::get('/rolesperms', 'ApiserviceController@getUsersRolesPermsByBd')->middleware('auth:api');
+

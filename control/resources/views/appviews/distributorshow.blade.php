@@ -59,7 +59,7 @@
                         	<td>{{ $distributor->distrib_tel }}</td>
                         	<td>{{ $distributor->distrib_correo }}</td>
                         	<td>{{ $distributor->distrib_nac }}</td>
-                        	<td>{{ $distributor->distrib_sup }}</td>
+                        	<td>{{ $distributor->distrib_sup ? 'Si' : 'No' }}</td>
 
                             <td class=" last" width="13%">
                                       
