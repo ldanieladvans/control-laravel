@@ -36,7 +36,7 @@ class ApiserviceController extends Controller
                 $perm_array = array();
                 $permissions = $role->permissions()->get();
                 foreach ($permissions as $permission) {
-                    array_push($perm_array, [$permission->slug,$permission->name]])
+                    array_push($perm_array, [$permission->slug,$permission->name]);
                 }
                 $arrayreturn[$role->slug.'-'.$role->name] = $perm_array;
                 $arrayroles[$role->slug] = $role->name;
@@ -81,7 +81,7 @@ class ApiserviceController extends Controller
         $response = array(
             'status' => 'success',
             'msg' => 'Setting created successfully',
-            'accstate' => $acc_state
+            'accstate' => 'Activa'
         );
         return \Response::json($response);
     }
