@@ -80,32 +80,60 @@
                   	<div class="x_content">
                       <div class="" role="tabpanel" data-example-id="togglable-tabs">
 	                      <ul id="myTab" class="nav nav-tabs bar_tabs" role="tablist">
-	                        <li role="presentation" class="active"><a href="#tab_content1" id="home-tab" role="tab" data-toggle="tab" aria-expanded="true">Detalle</a>
+	                        <li role="presentation" class="active"><a href="#tab_content1" id="home-tab" role="tab" data-toggle="tab" aria-expanded="true">Detalles</a>
 	                        </li>
-	                        <li role="presentation" class=""><a href="#tab_content2" role="tab" id="profile-tab" data-toggle="tab" aria-expanded="false">Fechas</a>
-	                        </li>
+	                        <!--<li role="presentation" class=""><a href="#tab_content2" role="tab" id="profile-tab" data-toggle="tab" aria-expanded="false">Fechas</a>
+	                        </li>-->
 	                      </ul>
 	                      <div id="myTabContent" class="tab-content">
 	                        <div role="tabpanel" class="tab-pane fade active in" id="tab_content1" aria-labelledby="home-tab">
 
                         	  <div class="item form-group">                      
                               <div class="col-md-9 col-sm-9 col-xs-12">
-                                <input id="asigpaq_rfc" class="form-control has-feedback-left" name="asigpaq_rfc" title="Cantidad de RFCs" placeholder="Cantidad RFC *" required="required" type="numberint" value="{{$asigpaq->asigpaq_rfc}}">
+                                <input id="asigpaq_rfc" class="form-control has-feedback-left" name="asigpaq_rfc" title="Cantidad de RFCs" placeholder="Cantidad RFC *" required="required" type="numberint" value="{{$asigpaq->asigpaq_rfc}}" data-validate-minmax="0,{{$rfc}}">
                                 <span class="fa fa-bank form-control-feedback left" aria-hidden="true"></span>
                               </div>
                             </div>
 
                             <div class="item form-group">                     
                               <div class="col-md-9 col-sm-9 col-xs-12">
-                                <input id="asigpaq_gig" class="form-control has-feedback-left" name="asigpaq_gig" placeholder="Cantidad Gigas *" required="required" type="number" title="Almacenamiento en Gigas" value="{{$asigpaq->asigpaq_gig}}">
+                                <input id="asigpaq_gig" class="form-control has-feedback-left" name="asigpaq_gig" placeholder="Cantidad Gigas *" required="required" type="number" title="Almacenamiento en Gigas" value="{{$asigpaq->asigpaq_gig}}" data-validate-minmax="0,{{$gig}}">
                                 <span class="fa fa-archive form-control-feedback left" aria-hidden="true"></span>
                               </div>
                             </div>
 
+                            <div class="item form-group">                     
+                            <div class="col-md-9 col-sm-9 col-xs-12">
+                              <input id="asigpaq_f_vent" title="Fecha de Venta o Asignación" class="form-control has-feedback-left" name="asigpaq_f_vent" placeholder="Fecha Venta" disabled type="date" value="{{$asigpaq->asigpaq_f_vent}}">
+                              <span class="fa fa-calendar form-control-feedback left" aria-hidden="true"></span>
+                            </div>
+                          </div>
+
+                          <div class="item form-group">                     
+                            <div class="col-md-9 col-sm-9 col-xs-12">
+                              <input id="asigpaq_f_act" title="Fecha de Actualización" class="form-control has-feedback-left" name="asigpaq_f_act" placeholder="Fecha Actualización" disabled type="date" value="{{$asigpaq->asigpaq_f_act}}">
+                              <span class="fa fa-calendar form-control-feedback left" aria-hidden="true"></span>
+                            </div>
+                          </div>
+
+                          <div class="item form-group">                     
+                            <div class="col-md-9 col-sm-9 col-xs-12">
+                              <input id="asigpaq_f_fin" title="Fecha de Fin" class="form-control has-feedback-left" name="asigpaq_f_fin" placeholder="Fecha Fin" required="required" type="date" value="{{$asigpaq->asigpaq_f_fin}}">
+                              <span class="fa fa-calendar form-control-feedback left" aria-hidden="true"></span>
+                            </div>
+                          </div>
+
+                          <div class="item form-group">                     
+                            <div class="col-md-9 col-sm-9 col-xs-12">
+                              <input id="asigpaq_f_caduc" title="Fecha de Caducidad" class="form-control has-feedback-left" name="asigpaq_f_caduc" placeholder="Fecha Caducidad" required="required" type="date" value="{{$asigpaq->asigpaq_f_caduc}}">
+                              <span class="fa fa-calendar form-control-feedback left" aria-hidden="true"></span>
+                            </div>
+                          </div>
+
                         	  
 	                        </div>
 
-	                        <div role="tabpanel" class="tab-pane fade" id="tab_content2" aria-labelledby="profile-tab">
+	                        <!--<div role="tabpanel" class="tab-pane fade" id="tab_content2" aria-labelledby="profile-tab">
 
 	                        	<div class="item form-group">                     
 			                      <div class="col-md-9 col-sm-9 col-xs-12">
@@ -135,7 +163,7 @@
 			                      </div>
 			                    </div>
 
-	                        </div>
+	                        </div>-->
 
 	                      </div>
 	                    </div>
@@ -203,15 +231,21 @@
   $('#asigpaq_paq_id').change(function(){
     var CSRF_TOKEN = $('meta[name="csrf-token"]').attr('content');
 
+      document.getElementById('asigpaq_rfc').value='';
+      document.getElementById('asigpaq_gig').value='';
 
+      console.log(this.value);
       $.ajax({
           url: '/getgigrfcbypack',
           type: 'POST',
           data: {_token: CSRF_TOKEN,paqid:this.value},
           dataType: 'JSON',
           success: function (data) {
+            console.log(data);
             document.getElementById('asigpaq_rfc').value=data['rfc'];
             document.getElementById('asigpaq_gig').value=data['gig'];
+            document.getElementById('asigpaq_rfc').setAttribute("data-validate-minmax", "0,"+data['rfc']);
+            document.getElementById('asigpaq_gig').setAttribute("data-validate-minmax", "0,"+data['gig']);
               
           }
       });
@@ -232,7 +266,7 @@
                     styling: 'bootstrap3'
                   });
 	  	}*/
-	  	if(document.getElementById('asigpaq_f_vent').value=='' || document.getElementById('asigpaq_f_act').value=='' || document.getElementById('asigpaq_f_fin').value=='' || document.getElementById('asigpaq_f_caduc').value==''){
+	  	/*if(document.getElementById('asigpaq_f_vent').value=='' || document.getElementById('asigpaq_f_act').value=='' || document.getElementById('asigpaq_f_fin').value=='' || document.getElementById('asigpaq_f_caduc').value==''){
 	  		new PNotify({
                     title: "Error",
                     type: "error",
@@ -243,7 +277,7 @@
 
                     styling: 'bootstrap3'
                   });
-	  	}
+	  	}*/
 	  	
 
 	});

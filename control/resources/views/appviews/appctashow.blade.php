@@ -262,7 +262,8 @@
               success: function (data) {
 
                 hideModal("appsmodal"+data['app']);
-                window.location.href = window.location.href;
+                //window.location.href = window.location.href;
+                console.log(data);
                   
               },
               error: function(XMLHttpRequest, textStatus, errorThrown) { 
@@ -280,6 +281,7 @@
                 data: {_token: CSRF_TOKEN,accstate:accstate,user:user,appctaid:appctaid},
                 dataType: 'JSON',
                 success: function (data) {
+                  
                   window.location.href = window.location.href;
                     
                 },

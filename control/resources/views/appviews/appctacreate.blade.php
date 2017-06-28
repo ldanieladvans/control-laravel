@@ -263,7 +263,7 @@
   $('#appcta_paq_id').change(function(){
       if(this.value!=""){
         $.ajax({
-          url: '/getgigrfcbypack',
+          url: '/getgigrfcbypackacc',
           type: 'POST',
           data: {_token: CSRF_TOKEN,paqid:this.value,accid:cta_aux},
           dataType: 'JSON',

@@ -183,8 +183,9 @@
 					            </li>
 					            <li><a><i class="fa fa-group"></i> <strong>DIRECTORIO</strong> <span class="fa fa-chevron-down"></span></a>
 					              <ul class="nav child_menu">
+					              	<li><a href="{{ route('distributor.index') }}"><strong>DISTRIBUIDORES</strong></a></li>
 					                <li><a href="{{ route('client.index') }}"><strong>CLIENTES</strong></a></li>
-					                <li><a href="{{ route('distributor.index') }}"><strong>DISTRIBUIDORES</strong></a></li>
+					                
 					              </ul>
 					            </li>
 					            <li><a><i class="fa fa-exchange"></i> <strong>ASIGNACIONES</strong> <span class="fa fa-chevron-down"></span></a>

@@ -250,7 +250,7 @@ class AppaccountController extends Controller
     }
 
 
-    public function getgigrfcbypack(Request $request)
+    public function getgigrfcbypackacc(Request $request)
     {
         $alldata = $request->all();
 
@@ -281,25 +281,27 @@ class AppaccountController extends Controller
         if($paqid!=false){            
 
             if(array_key_exists('accid',$alldata) && isset($alldata['accid'])){
-                $acc_id = $alldata['accid'];
+                $accid = $alldata['accid'];
             }
         }
 
-        if($acc_id!=false && $paqid!=false){
+        if($accid!=false && $paqid!=false){
 
             $paq_obj = Package::find($paqid);
-            $acc_obj = Account::find($acc_id);
+            $acc_obj = Account::find($accid);
 
             $rfc = $paq_obj->paq_rfc;
             $gig = $paq_obj->paq_gig;
 
-            $prevassignations = Appaccount::where('appcta_cuenta_id','=',$acc_id)->get();
+            $prevassignations = Appaccount::where('appcta_cuenta_id','=',$accid)->get();
             foreach ($prevassignations as $prevassignation) {
                 $counter_assig_rfc += $prevassignation->appcta_rfc;
                 $counter_assig_gig += $prevassignation->appcta_gig;
             }
 
-
+            /*echo "<pre>";
+            print_r($rfc);die();
+            echo "</pre>";*/
 
             if($acc_obj!=false){
                 $distrib = $acc_obj->distributor ? $acc_obj->distributor : false;
@@ -455,8 +457,6 @@ class AppaccountController extends Controller
                                 'paqapp_f_caduc'=>$appcta->appcta_f_caduc,
                                 'paqapp_control_id'=>$appcta->id,
                                 ]);
-            /*$appcta->appcta_estado = 'Activa';
-            $appcta->save();*/
         }
 
         if(array_key_exists('accstate',$alldata) && $alldata['accstate'] == 'Activa'){
@@ -475,7 +475,20 @@ class AppaccountController extends Controller
 
             }
 
-            $arrayparams['rfc_nombrebd'] = $client_rfc;
+            $client_mail = $appcta->account->client ? $appcta->account->client->cliente_correo : $client_rfc;
+            $client_nick = $client_rfc;
+
+            if (strpos($client_mail, '@') !== false) {
+                $client_nick = explode('@',$client_mail)[0];
+            }
+
+            $arrayparams['rfc_nombrebd'] = $appcta->account ? $appcta->account->cta_num : $client_rfc;
+            $arrayparams['client_rfc'] = $client_rfc;
+            $arrayparams['client_email'] = $client_mail;
+
+            $arrayparams['client_name'] = $appcta->account->client ? $appcta->account->client->cliente_nom : $client_rfc;
+            $arrayparams['client_nick'] = $client_nick;
+
             $arrayparams['account_id'] = $appcta ? $appcta->id : 'false';
             $arrayparams['apps_cta'] = json_encode($apps);
             $arrayparams['paq_cta'] = json_encode($packs);
@@ -483,9 +496,6 @@ class AppaccountController extends Controller
             $acces_vars = $this->getAccessToken();
             $service_response = $this->getAppService($acces_vars['access_token'],'createbd',$arrayparams,'ctac');
 
-            /*echo "<pre>";
-            print_r($service_response);die();
-            echo "</pre>";*/
             $fmessage = 'Se ha activado una cuenta';
             $state_var = 'Activa';
         }
@@ -523,6 +533,8 @@ class AppaccountController extends Controller
         $array_apps = array();
 
         $apps = config('app.advans_apps');
+
+        $testmsg = 'no entro';
         
 
         if(array_key_exists('appctaid',$alldata) && isset($alldata['appctaid'])){
@@ -538,11 +550,13 @@ class AppaccountController extends Controller
                     array_push($array_apps,['app_cod'=>$value,'app_nom'=>$apps[$value]]);
                 }
 
-                $arrayparams['rfc_nombrebd'] = $rfc.'_'.$appcta->id;
+                //$arrayparams['rfc_nombrebd'] = $rfc.'_'.$appcta->id;
+                $arrayparams['rfc_nombrebd'] = ($appcta->account ? $appcta->account->cta_num : '').'_'.$appcta->id;
                 $arrayparams['account_id'] = $appcta ? $appcta->id : 'false';
                 $arrayparams['apps_cta'] = json_encode($array_apps);
                 $acces_vars = $this->getAccessToken();
                 $service_response = $this->getAppService($acces_vars['access_token'],'addapp',$arrayparams,'ctac');
+                $testmsg = 'entro';
                 foreach ($alldata['selected'] as $key => $value) {
                     $appc = new Appcontrol();
                     $appc->app_nom = $apps[$value];
@@ -561,7 +575,8 @@ class AppaccountController extends Controller
         $response = array(
             'status' => 'success',
             'msg' => 'Setting created successfully',
-            'app' => $appcta_id
+            'app' => $appcta_id,
+            'testmsg'=> $testmsg
         );
         return \Response::json($response);
     }
