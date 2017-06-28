@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use Illuminate\Http\Request;
 use App\Distributor;
 use App\Domicile;
+use Illuminate\Support\Facades\Validator;
 
 class DistributorController extends Controller
 {
@@ -83,6 +84,12 @@ class DistributorController extends Controller
         }
 
         $distributor_vals['distrib_nom'] = $alldata['distrib_nom'];
+
+        $rules = ['distrib_rfc' => 'required|rfc'];
+        $messages = ['rfc' => 'RFC inválido'];
+
+        $validator = Validator::make($alldata, $rules, $messages)->validate();
+
         $distributor_vals['distrib_rfc'] = $alldata['distrib_rfc'];
         $distributor_vals['distrib_limitgig'] = $alldata['distrib_limitgig'];
         $distributor_vals['distrib_limitrfc'] = $alldata['distrib_limitrfc'];
@@ -173,6 +180,12 @@ class DistributorController extends Controller
         }
 
         $distributor->distrib_nom = $alldata['distrib_nom'];
+
+        $rules = ['distrib_rfc' => 'required|rfc'];
+        $messages = ['rfc' => 'RFC inválido'];
+
+        $validator = Validator::make($alldata, $rules, $messages)->validate();
+        
         $distributor->distrib_rfc = $alldata['distrib_rfc'];
         $distributor->distrib_limitgig = $alldata['distrib_limitgig'];
         $distributor->distrib_limitrfc = $alldata['distrib_limitrfc'];

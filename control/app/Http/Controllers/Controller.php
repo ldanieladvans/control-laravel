@@ -65,4 +65,8 @@ class Controller extends BaseController
 
         return json_decode((string) $response->getBody(), true);
     }
+
+    public function validateRfc($rfc){
+        
+    }
 }

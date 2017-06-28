@@ -6,6 +6,7 @@ use Illuminate\Http\Request;
 use App\Client;
 use App\Reference;
 use App\Domicile;
+use Illuminate\Support\Facades\Validator;
 
 class ClientController extends Controller
 {
@@ -102,6 +103,13 @@ class ClientController extends Controller
         $client_vals['cliente_nom'] = $alldata['cliente_nom'];
         $client_vals['cliente_correo'] = $alldata['cliente_correo'];
         $client_vals['cliente_tel'] = $alldata['cliente_tel'];
+
+
+        $rules = ['cliente_rfc' => 'required|rfc'];
+        $messages = ['rfc' => 'RFC inválido'];
+
+        $validator = Validator::make($alldata, $rules, $messages)->validate();
+
         $client_vals['cliente_rfc'] = $alldata['cliente_rfc'];
         $client_vals['cliente_nac'] = $alldata['cliente_nac'];
         $client_vals['cliente_tipo'] = $alldata['cliente_tipo'];
@@ -209,6 +217,12 @@ class ClientController extends Controller
         $client->cliente_nom = $alldata['cliente_nom'];
         $client->cliente_correo = $alldata['cliente_correo'];
         $client->cliente_tel = $alldata['cliente_tel'];
+
+        $rules = ['cliente_rfc' => 'required|rfc'];
+        $messages = ['rfc' => 'RFC inválido'];
+
+        $validator = Validator::make($alldata, $rules, $messages)->validate();
+
         $client->cliente_rfc = $alldata['cliente_rfc'];
         $client->cliente_nac = $alldata['cliente_nac'];
         $client->cliente_tipo = $alldata['cliente_tipo'];

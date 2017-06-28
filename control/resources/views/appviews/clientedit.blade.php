@@ -58,11 +58,16 @@
 	                    </div>
 	                  </div>
 
-	                  <div class="item form-group">	                    
+	                  <div class="item form-group {{ $errors->has('cliente_rfc') ? 'bad' : '' }}">	                    
 	                    <div class="col-md-9 col-sm-9 col-xs-12">
 	                      <input id="cliente_rfc" class="form-control has-feedback-left" name="cliente_rfc" placeholder="RFC *" required="required" type="text" data-validate-words="1" value="{{ $client->cliente_rfc }}">
 	                      <span class="fa fa-institution form-control-feedback left" aria-hidden="true"></span>
 	                    </div>
+	                    <div class="col-md-3 col-sm-3 col-xs-12">
+                            <span style="float: left; color: red;" id="span_cliente_rfc" {{$errors->has('cliente_rfc') ? '' : 'hidden'}}>
+                                {{ $errors->first('cliente_rfc') }}
+                            </span>
+                        </div>
 	                  </div>
 
 	                  <div class="item form-group">	                    
@@ -326,6 +331,10 @@
     <script src="{{ asset('controlassets/build/js/custom.js') }}"></script>
 
     <script type="text/javascript">
+
+    	$("#cliente_rfc").on('change', function(){
+    		document.getElementById("span_cliente_rfc").setAttribute('hidden','1');
+    	});
 
 		function toggleCheckbox(element){
 		   element.checked = !element.checked;
