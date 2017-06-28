@@ -81,8 +81,11 @@ var validator = (function($){
         text : function(a, skip){
             // make sure there are at least X number of words, each at least 2 chars long.
             // for example 'john F kenedy' should be at least 2 words and will pass validation
+
+
             if( validateWords ){
                 var words = a.split(' ');
+
                 // iterrate on all the words
                 var wordsLength = function(len){
                     for( var w = words.length; w--; )
@@ -91,12 +94,18 @@ var validator = (function($){
                     return true;
                 };
 
+
+
                 if( words.length < validateWords || !wordsLength(2) ){
                     alertTxt = message.complete;
                     return false;
                 }
+
                 return true;
             }
+
+            
+
             if( !skip && lengthRange && a.length < lengthRange[0] ){
                 alertTxt = message.min;
                 return false;
@@ -144,7 +153,9 @@ var validator = (function($){
                 }
             }
 
+            
             if( validateRfc ){
+
                 var regex, jsRegex;
                 regex = /^[A-ZÑ&]{3,4}([0-9]{2})([0-1][0-9])([0-3][0-9])[A-Z0-9][A-Z0-9][0-9A]$/u;
 
@@ -384,7 +395,7 @@ var validator = (function($){
         minmax          = data['validateMinmax'] ? (data['validateMinmax']+'').split(',') : ''; // for type 'number', defines the minimum and/or maximum for the value as a number.
         validateRfc     = data['validateRfc'] == '1' ? true : false;
 
-        console.log(validateRfc);
+        
 
         data.valid = tests.hasValue(data.val);
 

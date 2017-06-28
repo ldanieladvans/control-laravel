@@ -64,7 +64,7 @@
 
 	                  <div class="item form-group {{ $errors->has('cliente_rfc') ? 'bad' : '' }}">	                    
 	                    <div class="col-md-9 col-sm-9 col-xs-12">
-	                      <input id="cliente_rfc" class="form-control has-feedback-left" name="cliente_rfc" placeholder="RFC *" required="required" type="text" data-validate-words="1" value="{{ old('cliente_rfc') }}" data-validate-rfc="1">
+	                      <input id="cliente_rfc" class="form-control has-feedback-left" name="cliente_rfc" placeholder="RFC *" required="required" type="text"  value="{{ old('cliente_rfc') }}" data-validate-rfc="1">
 	                      <span class="fa fa-institution form-control-feedback left" aria-hidden="true"></span>
 
 	                    </div>
