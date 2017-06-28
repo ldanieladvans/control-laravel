@@ -171,4 +171,22 @@ class AccountController extends Controller
         );
         return \Response::json($response);
     }
+
+
+    public function getClientRfc(Request $request)
+    {
+        $alldata = $request->all();
+        $rfc = '';
+        if(array_key_exists('clientid',$alldata) && isset($alldata['clientid'])){
+            $rfc = Client::findOrFail($alldata['clientid'])->cliente_rfc;
+        }
+        
+
+        $response = array(
+            'status' => 'success',
+            'msg' => 'Ok',
+            'rfc' => $rfc
+        );
+        return \Response::json($response);
+    }
 }

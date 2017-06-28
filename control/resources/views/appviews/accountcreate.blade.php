@@ -46,13 +46,35 @@
                       </div>
                     </div>-->
 
+                    <div class="item form-group">
+                      <label class="control-label col-md-1 col-sm-1 col-xs-12">Cliente*</label>
+                          <div class="col-md-8 col-sm-8 col-xs-12">
+                            <select class="select2_single form-control col-md-7 col-xs-12" name="cta_cliente_id" id="cta_cliente_id" required>
+                              <option value="">Seleccione una opción ...</option>
+                              @foreach($clients as $client)
+                                <option value="{{ $client->id }}">{{ $client->cliente_nom }}</option>
+                              @endforeach
+                            </select>
+                          </div>
 
-                  <div class="item form-group">                     
-                      <div class="col-md-9 col-sm-9 col-xs-12">
-                        <input id="cta_num" title="RFC" class="form-control has-feedback-left" name="cta_num" placeholder="Número de Cuenta / RFC *" type="text">
-                        <span class="fa fa-bar-chart form-control-feedback left" aria-hidden="true"></span>
-                      </div>
+                      
+
                     </div>
+
+                    <div class="item form-group">
+                      <label class="control-label col-md-1 col-sm-1 col-xs-12">Distribuidor*</label>
+                          <div class="col-md-8 col-sm-8 col-xs-12">
+                            <select class="select2_single form-control col-md-7 col-xs-12" name="cta_distrib_id" id="cta_distrib_id" required>
+                              <option value="">Seleccione una opción ...</option>
+                              @foreach($distributors as $distributor)
+                                <option value="{{ $distributor->id }}">{{ $distributor->distrib_nom }}</option>
+                              @endforeach
+                            </select>
+                          </div>
+                    </div>
+
+
+                  
 
                   <!--<div class="item form-group">                     
                       <div class="col-md-9 col-sm-9 col-xs-12">
@@ -68,18 +90,13 @@
                       </div>
                     </div>-->
 
-                  <div class="item form-group">                     
-                      <div class="col-md-9 col-sm-9 col-xs-12">
-                        <input id="cta_estado" title="Estado" class="form-control has-feedback-left" name="cta_estado" placeholder="Estado *" required="required" type="text" readonly="readonly" value="Inactiva">
-                        <span class="fa fa-certificate form-control-feedback left" aria-hidden="true"></span>
-                      </div>
-                    </div>
+                  
 
 
                   <div class="x_content">
                       <div class="" role="tabpanel" data-example-id="togglable-tabs">
                         <ul id="myTab" class="nav nav-tabs bar_tabs" role="tablist">
-                          <li role="presentation" class="active"><a href="#tab_content1" id="home-tab" role="tab" data-toggle="tab" aria-expanded="true">Cliente - Distribuidor</a>
+                          <li role="presentation" class="active"><a href="#tab_content1" id="home-tab" role="tab" data-toggle="tab" aria-expanded="true">Detalles</a>
                           </li>
                         </ul>
 
@@ -87,36 +104,23 @@
 
                           <div role="tabpanel" class="tab-pane fade active in" id="tab_content1" aria-labelledby="home-tab">
 
-                            <div class="item form-group">
-                              <label class="control-label col-md-1 col-sm-1 col-xs-12">Cliente*</label>
-                                  <div class="col-md-8 col-sm-8 col-xs-12">
-                                    <select class="select2_single form-control col-md-7 col-xs-12" name="cta_cliente_id" required>
-                                      <option value="">Seleccione una opción ...</option>
-                                      @foreach($clients as $client)
-                                        <option value="{{ $client->id }}">{{ $client->cliente_nom }}</option>
-                                      @endforeach
-                                    </select>
-                                  </div>
-
-                              
-
+                            <div class="item form-group">                     
+                              <div class="col-md-9 col-sm-9 col-xs-12">
+                                <input id="cta_num" title="RFC" class="form-control has-feedback-left" name="cta_num" placeholder="Número de Cuenta / RFC *" type="text" readonly="readonly">
+                                <span class="fa fa-bar-chart form-control-feedback left" aria-hidden="true"></span>
+                              </div>
                             </div>
 
-                            <div class="item form-group">
-                              <label class="control-label col-md-1 col-sm-1 col-xs-12">Distribuidor*</label>
-                                  <div class="col-md-8 col-sm-8 col-xs-12">
-                                    <select class="select2_single form-control col-md-7 col-xs-12" name="cta_distrib_id" required>
-                                      <option value="">Seleccione una opción ...</option>
-                                      @foreach($distributors as $distributor)
-                                        <option value="{{ $distributor->id }}">{{ $distributor->distrib_nom }}</option>
-                                      @endforeach
-                                    </select>
-                                  </div>
-                            </div>
+                            
                             
                           </div>
 
-                          
+                          <div class="item form-group">                     
+                            <div class="col-md-9 col-sm-9 col-xs-12">
+                              <input id="cta_estado" title="Estado" class="form-control has-feedback-left" name="cta_estado" placeholder="Estado *" required="required" type="text" readonly="readonly" value="Inactiva">
+                              <span class="fa fa-certificate form-control-feedback left" aria-hidden="true"></span>
+                            </div>
+                          </div>
 
                               
                         </div>
@@ -172,6 +176,25 @@
 			forceParse: 0,
 	        showMeridian: 1
 	    });
+
+      var CSRF_TOKEN = $('meta[name="csrf-token"]').attr('content');
+
+      $('#cta_cliente_id').change(function(){
+        if(this.value!=""){
+          $.ajax({
+            url: '/getclientrfc',
+            type: 'POST',
+            data: {_token: CSRF_TOKEN,clientid:this.value},
+            dataType: 'JSON',
+            success: function (data) {
+              document.getElementById('cta_num').value=data['rfc'];
+            }
+        });
+        }else{
+          document.getElementById('cta_num').value='';
+        }
+
+      });
 	</script>
 
 @endsection

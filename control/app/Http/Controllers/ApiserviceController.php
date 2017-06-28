@@ -81,7 +81,7 @@ class ApiserviceController extends Controller
         $response = array(
             'status' => 'success',
             'msg' => 'Setting created successfully',
-            'accstate' => $acc_state
+            'accstate' => 'Activa'
         );
         return \Response::json($response);
     }
