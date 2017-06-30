@@ -10,8 +10,8 @@ return [
 
     'advans_apps_security' => ['ctac'=> [
                                     'grant_type' => 'password',
-                                    'client_id' => '1',
-                                    'client_secret' => 'IsDi1CA03MfzpTgMkCkBNqEwtWyzvsmyALcLJU3B',
+                                    'client_id' => '2',
+                                    'client_secret' => '0AAzYebysFaGjCRixsY2UgL927o9t6qrgMXIyIQz',
                                     'username' => 'control@gmail.com',
                                     'password' => 'control',
                                     'scope' => '*',
