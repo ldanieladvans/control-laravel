@@ -453,7 +453,7 @@ class AppaccountController extends Controller
                                 'paqapp_cantrfc'=>$appcta->appcta_rfc,
                                 'paqapp_cantgig'=>$appcta->appcta_gig,
                                 'paqapp_f_venta'=>$appcta->appcta_f_vent,
-                                'paqapp_f_act'=>$appcta->appcta_f_act,
+                                'paqapp_f_act'=>date('Y-m-d'),
                                 'paqapp_f_fin'=>$appcta->appcta_f_fin,
                                 'paqapp_f_caduc'=>$appcta->appcta_f_caduc,
                                 'paqapp_control_id'=>$appcta->id,
