@@ -61,7 +61,7 @@ return [
 
         'mysql' => [
             'driver' => 'mysql',
-            'host' => '127.0.0.1:13306',
+            'host' => '172.31.2.220',
             'port' => env('DB_PORT', '3306'),
             'database' => env('DB_DATABASE', 'forge'),
             'username' => env('DB_USERNAME', 'forge'),
