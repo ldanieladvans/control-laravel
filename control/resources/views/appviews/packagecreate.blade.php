@@ -102,14 +102,14 @@
     
 
 
-  $( "#packagecreate" ).submit(function( event ) {
+  /*$( "#packagecreate" ).submit(function( event ) {
 
     //stop form from submitting
     
     validateNoMsgForm("packagecreate");
 
 
-  });
+  });*/
 	</script>
 
 @endsection
