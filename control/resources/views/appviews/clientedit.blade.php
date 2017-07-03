@@ -82,18 +82,18 @@
 		                    <div class="col-md-3 col-sm-3 col-xs-12">
 		                      <select class="select2_single form-control col-md-7 col-xs-12" name="cliente_tipo">
 		                        <option value="null">Seleccione una opción ...</option>
-		                        <option value="one" {{$client->cliente_tipo == 'one' ? 'selected':''}} >Option one</option>
-                            	<option value="two" {{$client->cliente_tipo == 'two' ? 'selected':''}}>Option two</option>
+		                        <option value="one" {{$client->cliente_tipo == 'moral' ? 'selected':''}} >Moral</option>
+                            	<option value="two" {{$client->cliente_tipo == 'fisica' ? 'selected':''}}>Física</option>
 		                      </select>
 		                  	</div>
 
-	                  	<label class="control-label col-md-1 col-sm-1 col-xs-12">Género: </label>
+	                  	<!--<label class="control-label col-md-1 col-sm-1 col-xs-12">Género: </label>
 	                      <div class="col-md-3 col-sm-3 col-xs-12">
 	                       <p></p>
 	                        M:
 	                        <input type="radio" class="flat" name="gender" id="genderM" value="M" {{$client->cliente_sexo == 'M' ? 'checked':''}} /> F:
 	                        <input type="radio" class="flat" name="gender" id="genderF" value="F" {{$client->cliente_sexo == 'F' ? 'checked':''}}/>
-	                      </div>
+	                      </div>-->
 		              </div>
 
                   	<div class="x_content">

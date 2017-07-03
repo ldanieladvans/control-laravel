@@ -88,19 +88,19 @@
 		                <label class="control-label col-md-1 col-sm-1 col-xs-12">Tipo: </label>
 		                    <div class="col-md-3 col-sm-3 col-xs-12">
 		                      <select class="select2_single form-control col-md-7 col-xs-12" name="cliente_tipo">
-		                        <option value="null">Seleccione una opción ...</option>
-		                        <option value="one">Option one</option>
-                            	<option value="two">Option two</option>
+		                        <option value="">Seleccione una opción ...</option>
+		                        <option value="moral">Moral</option>
+                            	<option value="fisica">Física</option>
 		                      </select>
 		                  	</div>
 
-	                  	<label class="control-label col-md-1 col-sm-1 col-xs-12">Género: </label>
+	                  	<!--<label class="control-label col-md-1 col-sm-1 col-xs-12">Género: </label>
 	                      <div class="col-md-3 col-sm-3 col-xs-12">
 	                       <p></p>
 	                        M:
 	                        <input type="radio" class="flat" name="gender" id="genderM" value="M" checked="" required /> F:
 	                        <input type="radio" class="flat" name="gender" id="genderF" value="F" />
-	                      </div>
+	                      </div>-->
 		              </div>
 
 

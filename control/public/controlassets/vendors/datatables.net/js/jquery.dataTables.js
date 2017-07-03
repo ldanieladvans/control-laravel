@@ -4788,6 +4788,8 @@
 			d2       = $.isArray( menu[0] ),
 			lengths  = d2 ? menu[0] : menu,
 			language = d2 ? menu[1] : menu;
+
+
 	
 		var select = $('<select/>', {
 			'name':          tableId+'_length',
@@ -4799,10 +4801,14 @@
 			select[0][ i ] = new Option( language[i], lengths[i] );
 		}
 	
+		
+
 		var div = $('<div><label/></div>').addClass( classes.sLength );
+
 		if ( ! settings.aanFeatures.l ) {
 			div[0].id = tableId+'_length';
 		}
+
 	
 		div.children().append(
 			settings.oLanguage.sLengthMenu.replace( '_MENU_', select[0].outerHTML )
@@ -4823,6 +4829,7 @@
 				$('select', div).val( len );
 			}
 		} );
+
 	
 		return div[0];
 	}
@@ -11416,7 +11423,7 @@
 			 *      } );
 			 *    } );
 			 */
-			"sInfoEmpty": "Mostrando 0 a 0 de 0 entradas",
+			"sInfoEmpty": "Mostrando 0 a 0 de 0 registros",
 	
 	
 			/**
@@ -11438,7 +11445,7 @@
 			 *      } );
 			 *    } );
 			 */
-			"sInfoFiltered": "(filtered from _MAX_ total entries)",
+			"sInfoFiltered": "(filtrado de _MAX_ registros)",
 	
 	
 			/**
@@ -11556,7 +11563,7 @@
 			 *      } );
 			 *    } );
 			 */
-			"sLengthMenu": "Show _MENU_ entries",
+			"sLengthMenu": "Mostrando _MENU_ registros",
 	
 	
 			/**

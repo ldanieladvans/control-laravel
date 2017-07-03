@@ -24,7 +24,7 @@ class CreateCliente extends Migration
             $table->string('cliente_rfc',13);
             $table->string('cliente_tipo',15)->nullable();
             $table->string('cliente_tel',20)->nullable();
-            $table->string('cliente_correo',25)->nullable();
+            $table->string('cliente_correo',100)->nullable();
             $table->string('cliente_nac',20)->nullable();
             $table->integer('cliente_sector')->nullable();
             $table->timestampTz('cliente_f_creac')->nullable();

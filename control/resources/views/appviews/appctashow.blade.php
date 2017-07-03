@@ -38,7 +38,7 @@
 
                   <div class="x_content">
                     <button type="button" style=" background-color:#053666 " onclick="location.href = 'appcta/create';" class="btn btn-primary">Agregar</button>
-                    <table id="datatable-buttons" class="table table-striped table-bordered">
+                    <table id="datatable-responsive" class="table table-striped table-bordered dt-responsive nowrap" cellspacing="0" width="100%">
                       <thead>
                         <tr>
                           <!--<th>Id</th>-->
@@ -49,12 +49,18 @@
                           <th>Gigas</th>-->
                           <th>Paquete</th>
                           <th>Cuenta</th>
+
+                          <th>En Cuenta</th>
+                          
+
                           <th>Fecha Venta</th>
                           <th>Fecha Act.</th>
+
+                          <th>Acciones</th>
+
                           <th>Fecha Fin</th>
                           <th>Fecha Cad.</th>
-                          <th>En Cuenta</th>
-                          <th>Acciones</th>
+                          
                           
                         </tr>
                       </thead>
@@ -71,16 +77,13 @@
                         	<td>{{ $appcta->appcta_gig }}</td>-->
                         	<td>{{ $appcta->package ? $appcta->package->paq_nom : ''  }}</td>
                         	<td>{{ $appcta->account ? $appcta->account->cta_num : ''  }}</td>
-                        	<td>{{ $appcta->appcta_f_vent }}</td>
-                        	<td>{{ $appcta->appcta_f_act }}</td>
-                        	<td>{{ $appcta->appcta_f_fin }}</td>
-                        	<td>{{ $appcta->appcta_f_caduc }}</td>
+
                           <td>{{ $appcta->appcta_estado }}</td>
 
+                        	<td>{{ $appcta->appcta_f_vent }}</td>
+                        	<td>{{ $appcta->appcta_f_act }}</td>
 
-              					
-
-                            <td class=" last" width="15%">
+                          <td class=" last" width="15%">
                                       
                                       
                                       <div class="btn-group">
@@ -171,6 +174,10 @@
 
 
                                   </td>
+                          
+                        	<td>{{ $appcta->appcta_f_fin }}</td>
+                        	<td>{{ $appcta->appcta_f_caduc }}</td>
+                          
 
 
                         </tr>
@@ -188,6 +195,19 @@
 	@parent
     <!-- Datatables -->
     <script src="{{ asset('controlassets/vendors/datatables.net/js/jquery.dataTables.js') }}"></script>
+
+    <script src="{{ asset('controlassets/vendors/datatables.net-bs/js/dataTables.bootstrap.min.js') }}"></script>
+    <script src="{{ asset('controlassets/vendors/datatables.net-buttons/js/dataTables.buttons.min.js') }}"></script>
+    <script src="{{ asset('controlassets/vendors/datatables.net-buttons-bs/js/buttons.bootstrap.min.js') }}"></script>
+    <script src="{{ asset('controlassets/vendors/datatables.net-buttons/js/buttons.flash.min.js') }}"></script>
+    <script src="{{ asset('controlassets/vendors/datatables.net-buttons/js/buttons.html5.min.js') }}"></script>
+    <script src="{{ asset('controlassets/vendors/datatables.net-buttons/js/buttons.print.min.js') }}"></script>
+    <script src="{{ asset('controlassets/vendors/datatables.net-fixedheader/js/dataTables.fixedHeader.min.js') }}"></script>
+    <script src="{{ asset('controlassets/vendors/datatables.net-keytable/js/dataTables.keyTable.min.js') }}"></script>
+    <script src="{{ asset('controlassets/vendors/datatables.net-responsive/js/dataTables.responsive.min.js') }}"></script>
+    <script src="{{ asset('controlassets/vendors/datatables.net-responsive-bs/js/responsive.bootstrap.js') }}"></script>
+    <script src="{{ asset('controlassets/vendors/datatables.net-scroller/js/dataTables.scroller.min.js') }}"></script>
+
     <!-- FastClick -->
     <script src="{{ asset('controlassets/vendors/fastclick/lib/fastclick.js') }}"></script>
 

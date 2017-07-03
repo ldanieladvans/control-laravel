@@ -23,7 +23,7 @@ class CreateDistrib extends Migration
             $table->float('distrib_limitgig')->nullable();
             $table->integer('distrib_limitrfc')->nullable();
             $table->string('distrib_tel',20)->nullable();
-            $table->string('distrib_correo',25)->nullable();
+            $table->string('distrib_correo',100)->nullable();
             $table->string('distrib_sector',30)->nullable();
             $table->string('distrib_nac',20)->nullable();
             $table->boolean('distrib_sup')->default(0);

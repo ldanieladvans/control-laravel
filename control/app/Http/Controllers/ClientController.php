@@ -113,7 +113,7 @@ class ClientController extends Controller
         $client_vals['cliente_rfc'] = $alldata['cliente_rfc'];
         $client_vals['cliente_nac'] = $alldata['cliente_nac'];
         $client_vals['cliente_tipo'] = $alldata['cliente_tipo'];
-        $client_vals['cliente_sexo'] = $alldata['gender'];
+        //$client_vals['cliente_sexo'] = $alldata['gender'];
 
         $client = new Client($client_vals);
 
@@ -226,7 +226,7 @@ class ClientController extends Controller
         $client->cliente_rfc = $alldata['cliente_rfc'];
         $client->cliente_nac = $alldata['cliente_nac'];
         $client->cliente_tipo = $alldata['cliente_tipo'];
-        $client->cliente_sexo = $alldata['gender'];
+        //$client->cliente_sexo = $alldata['gender'];
 
         if ($domicile_id != "null"){
             $client->cliente_dom_id = $domicile_id;
