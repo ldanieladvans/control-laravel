@@ -98,17 +98,12 @@
                                           <div class="btn-group">
                                               <button onclick="" data-toggle="dropdown" class="btn btn-xs dropdown-toggle" data-placement="left" title="Más" ><i class="fa fa-plus-square fa-3x"></i> </button>
                                                 <ul role="menu" class="dropdown-menu">
-                                                  
-                                                  @if ($appcta->appcta_estado == 'Inactiva')
-                                                      <li><a onclick="changeAccountState('Activa',{{Auth::user()->id}},{{$appcta->id}})">Activar en Cuenta</a>
-                                                      </li>
 
                                                       <li><a id="appmodallink{{$appcta->id}}" onclick="showModal('appsmodal'+{{$appcta->id}})">Añadir Apps</a>
                                                       </li>
-                                                  @else
-                                                      <li><a onclick="changeAccountState('Inactiva',{{Auth::user()->id}},{{$appcta->id}})">Desactivar en Cuenta</a>
-                                                      </li>
-                                                  @endif
+
+                                                  <!-- <li><a onclick="changeAccountState('Inactiva',{{Auth::user()->id}},{{$appcta->id}})">Desactivar en Cuenta</a>
+                                                      </li> -->
 
                                                       
 

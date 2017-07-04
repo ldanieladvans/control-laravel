@@ -150,6 +150,7 @@
       function changeAccountState(accstate,user,accid){
 
             var CSRF_TOKEN = $('meta[name="csrf-token"]').attr('content');
+            $('#loadingmodal').modal('show');
 
               $.ajax({
                 url: 'account/changeAccState',

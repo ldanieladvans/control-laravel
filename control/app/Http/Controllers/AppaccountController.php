@@ -63,6 +63,10 @@ class AppaccountController extends Controller
 
         $apps = false;
 
+        $packs = array();
+
+        $apps_ret = array();
+
         if(array_key_exists('apps',$alldata)){
             if(isset($alldata['apps']) && $alldata['apps'] != ''){
                 $apps = $alldata['apps'];
@@ -100,8 +104,20 @@ class AppaccountController extends Controller
             }
         }
 
-        
+        $appcta->appcta_estado = 'Activa';
         $appcta->save();
+
+        array_push($packs,[
+                                'paqapp_cantrfc'=>$appcta->appcta_rfc,
+                                'paqapp_cantgig'=>$appcta->appcta_gig,
+                                'paqapp_f_venta'=>$appcta->appcta_f_vent,
+                                'paqapp_f_act'=>date('Y-m-d'),
+                                'paqapp_f_fin'=>$appcta->appcta_f_fin,
+                                'paqapp_f_caduc'=>$appcta->appcta_f_caduc,
+                                'paqapp_control_id'=>$appcta->id,
+                                ]);
+
+        
 
 
         if($apps!=false){
@@ -111,8 +127,24 @@ class AppaccountController extends Controller
                 $appc->app_code = $value;
                 $appc->app_appcta_id = $appcta->id;
                 $appc->save();
+                array_push($apps_ret,['app_cod'=>$value,'app_nom'=>$apps_conf[$value]]);
             }
         }
+
+        $arrayparams['rfc_nombrebd'] = $appcta->account ? $appcta->account->cta_num : $client_rfc;
+        $arrayparams['client_rfc'] = $appcta->account ? $appcta->account->cta_num : '';
+        $arrayparams['client_email'] = $appcta->account->client ? $appcta->account->client->cliente_correo : '';
+
+        $arrayparams['client_name'] = $appcta->account->client ? $appcta->account->client->cliente_nom : $client_rfc;
+        $arrayparams['client_nick'] = count(explode('@',$arrayparams['client_email'])) > 1 ? explode('@',$arrayparams['client_email'])[0] : '';
+
+        $arrayparams['account_id'] = $appcta ? $appcta->id : 'false';
+        $arrayparams['apps_cta'] = json_encode($apps_ret);
+        $arrayparams['paq_cta'] = json_encode($packs);
+
+
+        $acces_vars = $this->getAccessToken();
+        $service_response = $this->getAppService($acces_vars['access_token'],'addpaq',$arrayparams,'ctac');
 
         $fmessage = 'Se ha asignado un paquete a una cuenta con nombre: '.$alldata['appcta_app'];
         \Session::flash('message',$fmessage);
@@ -494,8 +526,11 @@ class AppaccountController extends Controller
             $arrayparams['apps_cta'] = json_encode($apps);
             $arrayparams['paq_cta'] = json_encode($packs);
 
+            /*$acces_vars = $this->getAccessToken();
+            $service_response = $this->getAppService($acces_vars['access_token'],'createbd',$arrayparams,'ctac');*/
+
             $acces_vars = $this->getAccessToken();
-            $service_response = $this->getAppService($acces_vars['access_token'],'createbd',$arrayparams,'ctac');
+            $service_response = $this->getAppService($acces_vars['access_token'],'addpaq',$arrayparams,'ctac');
 
             $fmessage = 'Se ha activado una cuenta';
             $state_var = 'Activa';

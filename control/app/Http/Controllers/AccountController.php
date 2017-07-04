@@ -158,6 +158,17 @@ class AccountController extends Controller
         }
         $account->cta_fecha = date("Y-m-d");
         $account->save();
+
+        $arrayparams['rfc_nombrebd'] = $account->cta_num ? $account->cta_num : '';
+        $arrayparams['client_rfc'] = $account->client ? $account->client->cliente_rfc : '';
+        $arrayparams['client_email'] = $account->client ? $account->client->cliente_correo : '';
+        $arrayparams['client_name'] = $account->client ? $account->client->cliente_nom : '';
+        $arrayparams['client_nick'] = count(explode('@',$arrayparams['client_email'])) > 1 ? explode('@',$arrayparams['client_email'])[0] : '';
+        $arrayparams['account_id'] = $account->id;
+
+        $acces_vars = $this->getAccessToken();
+        $service_response = $this->getAppService($acces_vars['access_token'],'createbd',$arrayparams,'ctac');
+        
         if($account!=false){
             $fmessage = 'El estado de la cuenta: '.$account->cta_num.' cambió a: '.$account->cta_estado;
             \Session::flash('message',$fmessage);
