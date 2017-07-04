@@ -57,6 +57,8 @@ Route::post('/getgigrfcbypackacc', 'AppaccountController@getgigrfcbypackacc');
 Route::post('/changestateaccount', 'AppaccountController@changeAccountState');
 Route::post('/assignapps', 'AppaccountController@assignApps');
 Route::post('/getclientrfc', 'AccountController@getClientRfc');
+Route::post('/getctausers', 'AccountController@getCtaUsers');
+Route::post('/unblockuser', 'AccountController@unblockUser');
 
 
 

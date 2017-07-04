@@ -84,9 +84,53 @@
                                                       <li><a onclick="changeAccountState('Inactiva',{{Auth::user()->id}},{{$acc->id}})">Inactivar Cuenta</a>
                                                       </li>
                                                   @endif
-
+                                                  <li><a onclick="getCtaUsers('{{ $acc->cta_num }}',{{Auth::user()->id}},{{$acc->id}})">Desbloquear Usuarios</a>
+                                                    </li>
                                                 </ul>
-                                          </div>
+
+                                                <div class="modal fade" id="ctauser{{$acc->cta_num}}" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+                                                    <div class="modal-dialog" role="document">
+                                                      <div class="modal-content">
+                                                        <div class="modal-header">
+                                                          <h5 class="modal-title" id="exampleModalLabel">Usuarios de cuenta: {{$acc->cta_num}}</h5>
+                                                          <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                                                            <span aria-hidden="true">&times;</span>
+                                                          </button>
+                                                        </div>
+                                                        <div class="modal-body">
+                                                          <form>
+                                                            <table id="datatable-responsive{{$acc->cta_num}}" cellspacing="0" width="100%">
+                                                              <thead>
+                                                                <tr>
+                                                                  <th>Nombre</th>
+                                                                  <th>Correo</th>
+                                                                  <th>Bloqueado</th>
+                                                                  <th>Acciones</th>
+                                                                </tr>
+                                                              </thead>
+                                                              <tbody>
+                                                              </tbody>
+                                                            </table>
+                                                          </form>
+
+                                                          <div id="result_failure_rol{{$acc->cta_num}}"></div>
+
+                                                        </div>
+                                                        <div class="modal-footer">
+                                                          <button type="button" class="btn btn-secondary" data-dismiss="modal">Cerrar</button>
+                                                          <button type="button" class="btn btn-primary">Ok</button>
+                                                        </div>
+                                                      </div>
+                                                    </div>
+                                                  </div>
+
+                                            </div>
+
+
+
+
+
+
 
                                               
                                               {{ Form::open(['route' => ['account.destroy', $acc], 'class'=>'pull-right']) }}
@@ -147,6 +191,34 @@
           }, 4e3);
       });
 
+      function unlockUsers(aux_param){
+        var res = aux_param.split("$");
+        var CSRF_TOKEN = $('meta[name="csrf-token"]').attr('content');
+        $.ajax({
+                url: '/unblockuser',
+                type: 'POST',
+                data: {_token: CSRF_TOKEN,userid:res[0],rfc:res[1]},
+                dataType: 'JSON',
+                success: function (data) {
+                  //window.location.href = window.location.href;
+                  console.log(data);
+                    
+                },
+                error: function(XMLHttpRequest, textStatus, errorThrown) { 
+                    new PNotify({
+                    title: "Notificación",
+                    type: "info",
+                    text: "Ha ocurrido un error. No se ha podido cambiar el estado de la cuenta",
+                    nonblock: {
+                      nonblock: true
+                    },
+                    addclass: 'dark',
+                    styling: 'bootstrap3'
+                  });
+                }
+            });
+      }
+
       function changeAccountState(accstate,user,accid){
 
             var CSRF_TOKEN = $('meta[name="csrf-token"]').attr('content');
@@ -174,6 +246,49 @@
                   });
                 }
             });       
+        }
+
+
+      function getCtaUsers(rfc,user,accid){
+
+            var CSRF_TOKEN = $('meta[name="csrf-token"]').attr('content');
+              $('#loadingmodal').modal('show');
+              $.ajax({
+                url: '/getctausers',
+                type: 'POST',
+                data: {_token: CSRF_TOKEN,rfc:rfc,user:user,accid:accid},
+                dataType: 'JSON',
+                success: function (data) {
+                  console.log(data);
+                  $('#'+data['modalname']).modal('show');
+
+                  $('#loadingmodal').modal('hide');
+
+                  var aux_rfc = String(data['rfc']);
+                  data['users'].forEach(function(item){
+
+                    var aux_param = String(item.id)+'$'+aux_rfc;
+                    console.log(aux_param);
+                    $('#datatable-responsive'+data['rfc']).find('tbody').append( "<tr><td>"+item.name+"</td><td>"+item.email+"</td><td>"+item.users_blocked+"</td><td><div class='btn-group'><div class='btn-group'><a id='"+data['rfc']+"' onclick='unlockUsers("+'"'+aux_param+'"'+")' class='btn btn-xs' data-placement='left' title='Desbloquear' ><i class='fa fa-unlock fa-3x'></i> </a></div></td></tr>");
+
+                  });
+
+                  //window.location.href = window.location.href;
+                    
+                },
+                error: function(XMLHttpRequest, textStatus, errorThrown) { 
+                    new PNotify({
+                    title: "Notificación",
+                    type: "info",
+                    text: "Ha ocurrido un error. No se ha podido cambiar el estado de la cuenta",
+                    nonblock: {
+                      nonblock: true
+                    },
+                    addclass: 'dark',
+                    styling: 'bootstrap3'
+                  });
+                }
+            });      
         }
     </script>
 @endsection

@@ -218,4 +218,47 @@ class AccountController extends Controller
         );
         return \Response::json($response);
     }
+
+    public function getCtaUsers(Request $request)
+    {
+        $alldata = $request->all();
+        $arrayparams = array();
+
+        if(array_key_exists('rfc',$alldata) && isset($alldata['rfc'])){
+            $arrayparams['dbname'] = $alldata['rfc'];
+            $acces_vars = $this->getAccessToken();
+            $service_response = $this->getAppService($acces_vars['access_token'],'getusr',$arrayparams,'ctac');
+        }
+        
+        
+        $response = array(
+            'status' => 'success',
+            'msg' => 'Ok',
+            'users' => $service_response,
+            'modalname' => 'ctauser'.$alldata['rfc'],
+            'rfc' => $alldata['rfc']
+        );
+        return \Response::json($response);
+    }
+
+
+    public function unblockUser(Request $request)
+    {
+        $alldata = $request->all();
+        $arrayparams = array();
+
+        if(array_key_exists('userid',$alldata) && isset($alldata['userid'])){
+            $arrayparams['user_id'] = $alldata['userid'];
+            $arrayparams['dbname'] = $alldata['rfc'];
+            $acces_vars = $this->getAccessToken();
+            $service_response = $this->getAppService($acces_vars['access_token'],'unlockusr',$arrayparams,'ctac');
+        }
+        
+        
+        $response = array(
+            'status' => 'success',
+            'msg' => 'Ok',
+        );
+        return \Response::json($response);
+    }
 }

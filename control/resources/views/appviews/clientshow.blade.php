@@ -57,7 +57,7 @@
                         	<td>{{ $client->cliente_rfc }}</td>
                         	<td>{{ $client->cliente_correo }}</td>
                         	<td>{{ $client->cliente_tel }}</td>
-                        	<td>{{ $client->cliente_tipo }}</td>
+                        	<td>{{ $client->cliente_tipo == 'moral' ? 'Moral' : 'Física'}}</td>
 
 
               					

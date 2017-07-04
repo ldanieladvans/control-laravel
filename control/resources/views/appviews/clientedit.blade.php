@@ -81,9 +81,9 @@
 		                <label class="control-label col-md-1 col-sm-1 col-xs-12">Tipo: </label>
 		                    <div class="col-md-3 col-sm-3 col-xs-12">
 		                      <select class="select2_single form-control col-md-7 col-xs-12" name="cliente_tipo">
-		                        <option value="null">Seleccione una opción ...</option>
-		                        <option value="one" {{$client->cliente_tipo == 'moral' ? 'selected':''}} >Moral</option>
-                            	<option value="two" {{$client->cliente_tipo == 'fisica' ? 'selected':''}}>Física</option>
+		                        <option value="">Seleccione una opción ...</option>
+		                        <option value="moral" {{$client->cliente_tipo == 'moral' ? 'selected':''}} >Moral</option>
+                            	<option value="fisica" {{$client->cliente_tipo == 'fisica' ? 'selected':''}}>Física</option>
 		                      </select>
 		                  	</div>
 

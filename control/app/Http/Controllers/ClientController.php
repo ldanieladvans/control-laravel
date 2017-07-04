@@ -75,13 +75,15 @@ class ClientController extends Controller
                 $certificateCApemContent = '-----BEGIN CERTIFICATE-----' . PHP_EOL
                         . chunk_split(base64_encode($cert), 64, PHP_EOL)
                         . '-----END CERTIFICATE-----' . PHP_EOL;
-                //$certificateCApem = $certificateCAcer . '.pem';
+                $certificateCApem = $certificateCApemContent  . '.pem';
 
-                echo "<pre>";
-                print_r($certificateCApemContent);die();
-                echo "</pre>";
+                
                 
                 $parseCert = openssl_x509_parse($certificateCApemContent);
+
+                /*echo "<pre>";
+                print_r($parseCert);die();
+                echo "</pre>";*/
             }
             $alldata['cert_f_ini'] = $parseCert['validFrom_time_t'];
             $alldata['cert_f_fin'] = $parseCert['validTo_time_t'];
@@ -201,8 +203,6 @@ class ClientController extends Controller
     public function update(Request $request, Client $client)
     {
         $alldata = $request->all();
-
-
 
         $dom_vals = array();
         $refer_vals = array();
