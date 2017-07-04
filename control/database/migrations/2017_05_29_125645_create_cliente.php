@@ -30,6 +30,8 @@ class CreateCliente extends Migration
             $table->timestampTz('cliente_f_creac')->nullable();
             $table->integer('cliente_dom_id')->unsigned()->nullable();
             $table->boolean('cliente_activo')->default(1);
+            $table->date('cert_f_ini')->nullable();
+            $table->date('cert_f_fin')->nullable();
         });
     }
 

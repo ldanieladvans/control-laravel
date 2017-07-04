@@ -8,6 +8,7 @@ use App\Reference;
 use App\Domicile;
 use Illuminate\Support\Facades\Validator;
 
+
 class ClientController extends Controller
 {
     /**
@@ -55,7 +56,38 @@ class ClientController extends Controller
     {
         $alldata = $request->all();
 
+        $parseCert = false;
 
+        if(array_key_exists('client_cert',$alldata)){
+            
+            $cert     = request()->file('client_cert');
+
+            
+
+            $path = $request->file('client_cert')->storeAs('public', $alldata['cliente_rfc'].'.'.$cert->getClientOriginalName());
+            
+
+            $parseCert = openssl_x509_parse(file_get_contents(storage_path().DIRECTORY_SEPARATOR.'app'.DIRECTORY_SEPARATOR.'public'.DIRECTORY_SEPARATOR.$alldata['cliente_rfc'].'.'.$cert->getClientOriginalName()));
+            
+            if ($parseCert == FALSE) {
+                /* Convert .cer to .pem, cURL uses .pem */
+                
+                $certificateCApemContent = '-----BEGIN CERTIFICATE-----' . PHP_EOL
+                        . chunk_split(base64_encode($cert), 64, PHP_EOL)
+                        . '-----END CERTIFICATE-----' . PHP_EOL;
+                //$certificateCApem = $certificateCAcer . '.pem';
+
+                echo "<pre>";
+                print_r($certificateCApemContent);die();
+                echo "</pre>";
+                
+                $parseCert = openssl_x509_parse($certificateCApemContent);
+            }
+            $alldata['cert_f_ini'] = $parseCert['validFrom_time_t'];
+            $alldata['cert_f_fin'] = $parseCert['validTo_time_t'];
+       
+            
+        }
 
         $dom_vals = array();
         $refer_vals = array();

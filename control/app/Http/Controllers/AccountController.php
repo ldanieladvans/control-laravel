@@ -55,22 +55,37 @@ class AccountController extends Controller
      */
     public function store(Request $request)
     {
+        $cta_distrib_id = 0;
+        $cta_cliente_id = 0;
         $alldata = $request->all();
         if(array_key_exists('cta_distrib_id',$alldata)){
             if($alldata['cta_distrib_id']=='null'){
                 unset($alldata['cta_distrib_id']);
+            }else{
+                $cta_distrib_id = $alldata['cta_distrib_id'];
             }
         }
         if(array_key_exists('cta_cliente_id',$alldata)){
             if($alldata['cta_cliente_id']=='null'){
                 unset($alldata['cta_cliente_id']);
+            }else{
+                $cta_cliente_id = $alldata['cta_cliente_id'];
             }
         }
-        $cta = new Account($alldata);
-        $cta->save();
-        $fmessage = 'Se ha creado la cuenta: '.$alldata['cta_num'];
-        \Session::flash('message',$fmessage);
-        $this->registeredBinnacle($request,'store',$fmessage);
+        $exist_account = Account::where('cta_distrib_id',$cta_distrib_id)->where('cta_cliente_id',$cta_cliente_id)->get();
+        
+        if(isset($exist_account)){
+            $fmessage = 'Ya existe una cuenta para estos datos.';
+            \Session::flash('message',$fmessage);
+        }else{
+            $cta = new Account($alldata);
+            $cta->save();
+            $fmessage = 'Se ha creado la cuenta: '.$alldata['cta_num'];
+            \Session::flash('message',$fmessage);
+            $this->registeredBinnacle($request,'store',$fmessage);
+        }
+
+        
         return redirect()->route('account.index');
     }
 
@@ -159,16 +174,19 @@ class AccountController extends Controller
         $account->cta_fecha = date("Y-m-d");
         $account->save();
 
-        $arrayparams['rfc_nombrebd'] = $account->cta_num ? $account->cta_num : '';
-        $arrayparams['client_rfc'] = $account->client ? $account->client->cliente_rfc : '';
-        $arrayparams['client_email'] = $account->client ? $account->client->cliente_correo : '';
-        $arrayparams['client_name'] = $account->client ? $account->client->cliente_nom : '';
-        $arrayparams['client_nick'] = count(explode('@',$arrayparams['client_email'])) > 1 ? explode('@',$arrayparams['client_email'])[0] : '';
-        $arrayparams['account_id'] = $account->id;
+        if($account->cta_estado == 'Activa'){
+            $arrayparams['rfc_nombrebd'] = $account->cta_num ? $account->cta_num : '';
+            $arrayparams['client_rfc'] = $account->client ? $account->client->cliente_rfc : '';
+            $arrayparams['client_email'] = $account->client ? $account->client->cliente_correo : '';
+            $arrayparams['client_name'] = $account->client ? $account->client->cliente_nom : '';
+            $arrayparams['client_nick'] = count(explode('@',$arrayparams['client_email'])) > 1 ? explode('@',$arrayparams['client_email'])[0] : '';
+            $arrayparams['account_id'] = $account->id;
 
-        $acces_vars = $this->getAccessToken();
-        $service_response = $this->getAppService($acces_vars['access_token'],'createbd',$arrayparams,'ctac');
+            $acces_vars = $this->getAccessToken();
+            $service_response = $this->getAppService($acces_vars['access_token'],'createbd',$arrayparams,'ctac');
+        }
         
+
         if($account!=false){
             $fmessage = 'El estado de la cuenta: '.$account->cta_num.' cambió a: '.$account->cta_estado;
             \Session::flash('message',$fmessage);

@@ -40,6 +40,10 @@ Route::group(['prefix' => 'security'], function () {
     Route::resource('binnacle', 'BinnacleController');
 });
 
+Route::group(['prefix' => 'exts'], function () {
+    Route::resource('news', 'NewsController');
+});
+
 //Ajax routes
 Route::post('/security/user/assignroles', 'UserController@assignroles');
 Route::post('/security/user/assignperms', 'UserController@assignperms');

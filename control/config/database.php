@@ -1,9 +1,5 @@
 <?php
 
-if(env('SSH_TUN',false)){
-    shell_exec("ssh -i dev-capas.pem -f -L 13306:127.0.0.1:3306 ldaniel@172.31.2.220 >> sshlogfile");
-}
-
 
 return [
 

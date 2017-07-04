@@ -50,16 +50,17 @@
                           <th>Paquete</th>
                           <th>Cuenta</th>
 
-                          <th>En Cuenta</th>
-                          
 
-                          <th>Fecha Venta</th>
-                          <th>Fecha Act.</th>
+                          <th>Gigas</th>
+                          <th>RFCs</th>
+
+                          <th>Aplicaciones</th>
 
                           <th>Acciones</th>
 
+                          <!--<th>Fecha Venta</th>
                           <th>Fecha Fin</th>
-                          <th>Fecha Cad.</th>
+                          <th>Fecha Caducidad</th>-->
                           
                           
                         </tr>
@@ -78,10 +79,19 @@
                         	<td>{{ $appcta->package ? $appcta->package->paq_nom : ''  }}</td>
                         	<td>{{ $appcta->account ? $appcta->account->cta_num : ''  }}</td>
 
-                          <td>{{ $appcta->appcta_estado }}</td>
+                          <td>{{ $appcta->appcta_gig }}</td>
+                          <td>{{ $appcta->appcta_rfc }}</td>
 
-                        	<td>{{ $appcta->appcta_f_vent }}</td>
-                        	<td>{{ $appcta->appcta_f_act }}</td>
+                        	<td>
+                           @foreach($appcta->apps as $apploop)
+                              @if ($loop->first)
+                                  {{ $apploop->app_nom }}
+                              @else
+                                   , {{ $apploop->app_nom }}
+                              @endif
+                              
+                           @endforeach 
+                          </td>
 
                           <td class=" last" width="15%">
                                       
@@ -169,9 +179,10 @@
 
 
                                   </td>
-                          
+
+                          <!--<td>{{ $appcta->appcta_f_vent }}</td>                       
                         	<td>{{ $appcta->appcta_f_fin }}</td>
-                        	<td>{{ $appcta->appcta_f_caduc }}</td>
+                        	<td>{{ $appcta->appcta_f_caduc }}</td>-->
                           
 
 

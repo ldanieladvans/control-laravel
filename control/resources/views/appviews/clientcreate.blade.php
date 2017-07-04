@@ -37,7 +37,7 @@
 
 
                 <!--<form class="form-horizontal form-label-left input_mask">-->
-                <form class="form-horizontal form-label-left" novalidate action="{{ route('client.store') }}" method='POST'>
+                <form class="form-horizontal form-label-left" novalidate action="{{ route('client.store') }}" method='POST' enctype="multipart/form-data">
 
                 	  {{ csrf_field() }}
 
@@ -111,8 +111,11 @@
 	                        </li>
 	                        <li role="presentation" class=""><a href="#tab_content2" role="tab" id="profile-tab" data-toggle="tab" aria-expanded="false">Referencia</a>
 	                        </li>
+	                        <li role="presentation" class=""><a href="#tab_content3" role="tab" id="cert-tab" data-toggle="tab" aria-expanded="false">Vigencia Certificado</a>
+	                        </li>
 	                      </ul>
 	                      <div id="myTabContent" class="tab-content">
+
 	                        <div role="tabpanel" class="tab-pane fade active in" id="tab_content1" aria-labelledby="home-tab">
 
                         	  <div id="switch_new_dom">
@@ -298,6 +301,32 @@
 				                    </div>
 				                  </div>
 			                  </div>
+
+	                        </div>
+
+
+	                        <div role="tabpanel" class="tab-pane fade" id="tab_content3" aria-labelledby="profile-tab">
+
+	                        	<div class="item form-group">	                    
+				                    <div class="col-md-9 col-sm-9 col-xs-12">
+				                      <input id="client_cert" class="form-control has-feedback-left" name="client_cert" placeholder="Certificado del Cliente " type="file" accept=".cer" title="Certificado con extensión .cer">
+				                      <span class="fa fa-lock form-control-feedback left" aria-hidden="true"></span>
+				                    </div>
+				                  </div>
+
+				                  <div class="item form-group">	                    
+				                    <div class="col-md-9 col-sm-9 col-xs-12">
+				                      <input id="cert_f_ini" class="form-control has-feedback-left" name="cliente_correo" placeholder="Fecha Inicio Certificado" type="date" disabled title="Fecha Inicio Certificado">
+				                      <span class="fa fa-calendar form-control-feedback left" aria-hidden="true"></span>
+				                    </div>
+				                  </div>
+
+				                  <div class="item form-group">	                    
+				                    <div class="col-md-9 col-sm-9 col-xs-12">
+				                      <input id="cert_f_fin" class="form-control has-feedback-left" name="cliente_tel" placeholder="Fecha Fin Certificado"  type="date" disabled title="Fecha Fin Certificado">
+				                      <span class="fa fa-calendar form-control-feedback left" aria-hidden="true"></span>
+				                    </div>
+				                  </div>
 
 	                        </div>
 
