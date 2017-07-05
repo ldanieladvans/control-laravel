@@ -39,7 +39,7 @@
                           <th>RFCs</th>
                           <th>Gigas</th>
                           
-                          <th>Paquete</th>
+                          <!--<th>Paquete</th>-->
                           <th>Fecha Venta</th>
                           <th>Fecha Act.</th>
                           <!--<th>Fecha Fin</th>
@@ -53,10 +53,13 @@
                         @foreach($asigpaqs as $asigpaq)
                         <tr>
                           <!--<td>{{ $asigpaq->id }}</td>-->
-                          <td>{{ $asigpaq->package ? $asigpaq->package->paq_nom : ''  }}</td>
+                          
+                          <td>{{ $asigpaq->distributor ? $asigpaq->distributor->distrib_nom : ''  }}</td>
                           <td>{{ $asigpaq->asigpaq_rfc }}</td>
                           <td>{{ $asigpaq->asigpaq_gig }}</td>
-                          <td>{{ $asigpaq->distributor ? $asigpaq->distributor->distrib_nom : ''  }}</td>
+                          
+
+                          <!--<td>{{ $asigpaq->package ? $asigpaq->package->paq_nom : ''  }}</td>-->
                           
                           <td>{{ $asigpaq->asigpaq_f_vent }}</td>
                           <td>{{ $asigpaq->asigpaq_f_act }}</td>
