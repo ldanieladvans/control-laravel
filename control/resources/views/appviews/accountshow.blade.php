@@ -132,7 +132,7 @@
 
                                                         </div>
                                                         <div class="modal-footer">
-                                                          <button type="button" class="btn btn-secondary" data-dismiss="modal" onclick="cleanctausertable({{$acc->cta_num}})">Cerrar</button>
+                                                          <button type="button" class="btn btn-secondary" data-dismiss="modal" onclick="cleanctausertable('{{$acc->cta_num}}')">Cerrar</button>
                                                         </div>
                                                       </div>
                                                     </div>
