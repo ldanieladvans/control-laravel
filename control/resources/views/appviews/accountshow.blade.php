@@ -108,9 +108,9 @@
                                                       <div class="modal-content">
                                                         <div class="modal-header">
                                                           <h5 class="modal-title" id="exampleModalLabel">Usuarios de cuenta: {{$acc->cta_num}}</h5>
-                                                          <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                                                          <!--<button type="button" class="close" data-dismiss="modal" aria-label="Close">
                                                             <span aria-hidden="true">&times;</span>
-                                                          </button>
+                                                          </button>-->
                                                         </div>
                                                         <div class="modal-body">
                                                           <form>
@@ -144,9 +144,9 @@
                                                       <div class="modal-content">
                                                         <div class="modal-header">
                                                           <h5 class="modal-title" id="exampleModalLabel">Últimas 10 entradas de la bitácora de la cuenta: {{$acc->cta_num}}</h5>
-                                                          <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                                                          <!--<button type="button" class="close" data-dismiss="modal" aria-label="Close">
                                                             <span aria-hidden="true">&times;</span>
-                                                          </button>
+                                                          </button>-->
                                                         </div>
                                                         <div class="modal-body">
                                                           <form>
@@ -255,6 +255,7 @@
                 data: {_token: CSRF_TOKEN,userid:res[0],rfc:res[1]},
                 dataType: 'JSON',
                 success: function (data) {
+                  cleanTable('datatable-responsive'+data['rfc']);
                   window.location.href = window.location.href;
                     
                 },
