@@ -96,7 +96,7 @@ class AppaccountController extends Controller
 
         $exist_acc = Appaccount::where('appcta_cuenta_id',$appcta_cuenta_id)->where('appcta_paq_id',$appcta_paq_id)->get();
 
-        if(isset($exist_acc)){
+        if(count($exist_acc)>0){
             $fmessage = 'Ya existe una asignación con estos datos.';
             \Session::flash('message',$fmessage);
         }else{
