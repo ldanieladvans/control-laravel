@@ -74,7 +74,7 @@ class AccountController extends Controller
         }
         $exist_account = Account::where('cta_distrib_id',$cta_distrib_id)->where('cta_cliente_id',$cta_cliente_id)->get();
         
-        if(isset($exist_account)){
+        if(count($exist_account) > 0){
             $fmessage = 'Ya existe una cuenta para estos datos.';
             \Session::flash('message',$fmessage);
         }else{
