@@ -60,7 +60,7 @@
 
                       </div>
 
-                      <div class="item form-group">
+                      <!--<div class="item form-group">
                         <label class="control-label col-md-1 col-sm-1 col-xs-12">Paquete*</label>
                             <div class="col-md-8 col-sm-8 col-xs-12">
                               <select class="select2_single form-control col-md-7 col-xs-12" name="asigpaq_paq_id" id="asigpaq_paq_id" required>
@@ -70,7 +70,7 @@
                             @endforeach
                               </select>
                             </div>
-                      </div>
+                      </div>-->
 
 
 	                  
@@ -116,7 +116,7 @@
                             </div>
                           </div>
 
-                          <div class="item form-group">                     
+                          <!--<div class="item form-group">                     
                             <div class="col-md-9 col-sm-9 col-xs-12">
                               <input id="asigpaq_f_fin" title="Fecha de Fin" class="form-control has-feedback-left" name="asigpaq_f_fin" placeholder="Fecha Fin" required="required" type="date">
                               <span class="fa fa-calendar form-control-feedback left" aria-hidden="true"></span>
@@ -128,7 +128,7 @@
                               <input id="asigpaq_f_caduc" title="Fecha de Caducidad" class="form-control has-feedback-left" name="asigpaq_f_caduc" placeholder="Fecha Caducidad" required="required" type="date">
                               <span class="fa fa-calendar form-control-feedback left" aria-hidden="true"></span>
                             </div>
-                          </div>
+                          </div>-->
 
                         	  
 	                        </div>
@@ -229,7 +229,8 @@
 
 	//$("#appcta_cuenta_id").trigger("change");
 
-  $('#asigpaq_paq_id').change(function(){
+  //For check gig and rfc pack
+  /*$('#asigpaq_paq_id').change(function(){
     var CSRF_TOKEN = $('meta[name="csrf-token"]').attr('content');
 
       document.getElementById('asigpaq_rfc').value='';
@@ -250,7 +251,7 @@
               
           }
       });
-  });
+  });*/
 
 	$( "#packassigform" ).submit(function( event ) {
 	  

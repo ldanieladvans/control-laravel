@@ -204,12 +204,19 @@
 					                <li><a href="{{ route('package.index') }}"><strong>PAQUETES</strong></a></li>
 					              </ul>
 					            </li>
+
 					            <li><a><i class="fa fa-unlock-alt"></i> <strong>SEGURIDAD</strong> <span class="fa fa-chevron-down"></span></a>
 					              <ul class="nav child_menu">
 					                <li><a href="{{ route('user.index') }}"><strong>USUARIOS</strong></a></li>
 					                <li><a href="{{ route('role.index') }}"><strong>ROLES</strong></a></li>
 					                <li><a href="{{ route('permission.index') }}"><strong>PERMISOS</strong></a></li>
 					                <li><a href="{{ route('binnacle.index') }}"><strong>BITÁCORA</strong></a></li>
+					              </ul>
+					            </li>
+
+					            <li><a><i class="fa fa-newspaper-o"></i> <strong>SERV. EXTERNOS</strong> <span class="fa fa-chevron-down"></span></a>
+					              <ul class="nav child_menu">
+					                <li><a href="{{ route('news.index') }}"><strong>NOTICIAS</strong></a></li>
 					              </ul>
 					            </li>
 					           

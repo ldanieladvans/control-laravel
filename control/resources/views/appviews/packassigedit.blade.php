@@ -60,7 +60,7 @@
 
                       </div>
 
-                      <div class="item form-group">
+                      <!--<div class="item form-group">
                         <label class="control-label col-md-1 col-sm-1 col-xs-12">Paquete*</label>
                             <div class="col-md-8 col-sm-8 col-xs-12">
                               <select class="select2_single form-control col-md-7 col-xs-12" name="asigpaq_paq_id" id="asigpaq_paq_id" required>
@@ -70,7 +70,7 @@
                             @endforeach
                               </select>
                             </div>
-                      </div>
+                      </div>-->
 
 
 	                  
@@ -90,14 +90,14 @@
 
                         	  <div class="item form-group">                      
                               <div class="col-md-9 col-sm-9 col-xs-12">
-                                <input id="asigpaq_rfc" class="form-control has-feedback-left" name="asigpaq_rfc" title="Cantidad de RFCs" placeholder="Cantidad RFC *" required="required" type="numberint" value="{{$asigpaq->asigpaq_rfc}}" data-validate-minmax="0,{{$rfc}}">
+                                <input id="asigpaq_rfc" class="form-control has-feedback-left" name="asigpaq_rfc" title="Cantidad de RFCs" placeholder="Cantidad RFC *" required="required" type="numberint" value="{{$asigpaq->asigpaq_rfc}}" >
                                 <span class="fa fa-bank form-control-feedback left" aria-hidden="true"></span>
                               </div>
                             </div>
 
                             <div class="item form-group">                     
                               <div class="col-md-9 col-sm-9 col-xs-12">
-                                <input id="asigpaq_gig" class="form-control has-feedback-left" name="asigpaq_gig" placeholder="Cantidad Gigas *" required="required" type="number" title="Almacenamiento en Gigas" value="{{$asigpaq->asigpaq_gig}}" data-validate-minmax="0,{{$gig}}">
+                                <input id="asigpaq_gig" class="form-control has-feedback-left" name="asigpaq_gig" placeholder="Cantidad Gigas *" required="required" type="number" title="Almacenamiento en Gigas" value="{{$asigpaq->asigpaq_gig}}" >
                                 <span class="fa fa-archive form-control-feedback left" aria-hidden="true"></span>
                               </div>
                             </div>
@@ -116,7 +116,7 @@
                             </div>
                           </div>
 
-                          <div class="item form-group">                     
+                          <!--<div class="item form-group">                     
                             <div class="col-md-9 col-sm-9 col-xs-12">
                               <input id="asigpaq_f_fin" title="Fecha de Fin" class="form-control has-feedback-left" name="asigpaq_f_fin" placeholder="Fecha Fin" required="required" type="date" value="{{$asigpaq->asigpaq_f_fin}}">
                               <span class="fa fa-calendar form-control-feedback left" aria-hidden="true"></span>
@@ -128,7 +128,7 @@
                               <input id="asigpaq_f_caduc" title="Fecha de Caducidad" class="form-control has-feedback-left" name="asigpaq_f_caduc" placeholder="Fecha Caducidad" required="required" type="date" value="{{$asigpaq->asigpaq_f_caduc}}">
                               <span class="fa fa-calendar form-control-feedback left" aria-hidden="true"></span>
                             </div>
-                          </div>
+                          </div>-->
 
                         	  
 	                        </div>
@@ -228,7 +228,7 @@
 
 	//$("#appcta_cuenta_id").trigger("change");
 
-  $('#asigpaq_paq_id').change(function(){
+  /*$('#asigpaq_paq_id').change(function(){
     var CSRF_TOKEN = $('meta[name="csrf-token"]').attr('content');
 
       document.getElementById('asigpaq_rfc').value='';
@@ -249,7 +249,7 @@
               
           }
       });
-  });
+  });*/
 
 	$( "#packassigform" ).submit(function( event ) {
 	  

@@ -16,7 +16,7 @@
         <div class="col-md-12 col-sm-12 col-xs-12">
                 <div class="x_panel">
                   <div class="x_title">
-                    <h2>Clientes</h2>
+                    <h2>Noticias</h2>
                     
                     <div class="clearfix"></div>
                   </div>
@@ -30,71 +30,47 @@
                   @endif
 
                   <div class="x_content">
-                    <button type="button" style=" background-color:#053666 " onclick="location.href = 'client/create';" class="btn btn-primary">Agregar</button>
+                  	<button type="button" style=" background-color:#053666 " onclick="location.href = 'news/create';" class="btn btn-primary">Agregar</button>
                     <table id="datatable-responsive" class="table table-striped table-bordered dt-responsive nowrap" cellspacing="0" width="100%">
                       <thead>
                         <tr>
-                          <!--<th>Id</th>-->
-                          <th>Nombre</th>
-                          <th>Sexo</th>
-                          <th>Nacionalidad</th>
-                          <th>RFC</th>
-                          <th>Correo</th>
-                          <th>Teléfono</th>
-                          <th>Tipo</th>
+                          <th>Título</th>
+                          <th>Descripción</th>
+                          <th>Fecha</th>
+                          <th>Liga</th>
+                          <th>Activo</th>
                           <th>Acciones</th>
                         </tr>
                       </thead>
 
 
                       <tbody>
-                        @foreach($clients as $client)
+                        @foreach($news as $new)
                         <tr>
-                        	<!--<td>{{ $client->id }}</td>-->
-                        	<td>{{ $client->cliente_nom }}</td>
-                        	<td>{{ $client->cliente_sexo }}</td>
-                        	<td>{{ $client->cliente_nac }}</td>
-                        	<td>{{ $client->cliente_rfc }}</td>
-                        	<td>{{ $client->cliente_correo }}</td>
-                        	<td>{{ $client->cliente_tel }}</td>
-                        	<td>{{ $client->cliente_tipo == 'moral' ? 'Moral' : 'Física'}}</td>
-
-
-              					
-
-                            <td class=" last" width="13%">
+                        	<td>{{ $new->tittle }}</td>
+                        	<td>{{ $new->description }}</td>
+                    		<td>{{ $new->pdate }}</td>
+                        <td>{{ $new->nlink }}</td>
+                			<td>{{ $new->nactivo == 1 ? 'Si':'No'}}</td>
+                          
+                          	<td class=" last" width="15%">
                                       
                                       
                                       <div class="btn-group">
-                                          <div class="btn-group">
-                                              <button onclick="location.href = 'client/{{$client->id}}/edit';" class="btn btn-xs" data-placement="left" title="Editar" ><i class="fa fa-edit fa-2x"></i> </button>
+                                        <div class="btn-group">
+                                              <button onclick="location.href = 'news/{{$new->id}}/edit';" class="btn btn-xs" data-placement="left" title="Editar"><i class="fa fa-edit fa-2x"></i> </button>
                                           </div>
 
-                                        <!--<div class="btn-group">
-                                              <button onclick="" data-toggle="dropdown" class="btn btn-xs dropdown-toggle" data-placement="left" title="Más" style=" color:#790D4E "><i class="fa fa-plus-square fa-2x"></i> </button>
-                                                <ul role="menu" class="dropdown-menu">
-                                                  <li><a href="#">Action</a>
-                                                  </li>
-                                                  <li><a href="#">Another action</a>
-                                                  </li>
-                                                  <li><a href="#">Something else here</a>
-                                                  </li>
-                                                  <li><a href="#">Separated link</a>
-                                                  </li>
-                                                </ul>
-                                          </div>-->
 
-                                              
-                                              {{ Form::open(['route' => ['client.destroy', $client], 'class'=>'pull-right']) }}
+                                          {{ Form::open(['route' => ['news.destroy', $new->id], 'class'=>'pull-right']) }}
                                               {{ Form::hidden('_method', 'DELETE') }}
                                               <button  href="#" class="btn btn-xs" onclick="return confirm('¿Está seguro que quiere eliminar este registro?')" type="submit" data-placement="left" title="Borrar" ><i class="fa fa-trash fa-2x"></i></button>
                                             {{ Form::close() }}
 
-                                          </div>
+                                        </div>
 
 
                                   </td>
-
 
                         </tr>
                         @endforeach
@@ -123,7 +99,7 @@
     <script src="{{ asset('controlassets/vendors/datatables.net-responsive/js/dataTables.responsive.min.js') }}"></script>
     <script src="{{ asset('controlassets/vendors/datatables.net-responsive-bs/js/responsive.bootstrap.js') }}"></script>
     <script src="{{ asset('controlassets/vendors/datatables.net-scroller/js/dataTables.scroller.min.js') }}"></script>
-
+    
     <!-- FastClick -->
     <script src="{{ asset('controlassets/vendors/fastclick/lib/fastclick.js') }}"></script>
     <!-- Custom Theme Scripts -->

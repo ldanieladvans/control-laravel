@@ -6,6 +6,9 @@ use Illuminate\Http\Request;
 use Bican\Roles\Models\Role;
 use Bican\Roles\Models\Permission;
 use App\Appaccount;
+use App\Account;
+use App\News;
+use Illuminate\Support\Facades\Log;
 
 class ApiserviceController extends Controller
 {
@@ -69,10 +72,10 @@ class ApiserviceController extends Controller
         $acc_state = 'None';
 
         if(array_key_exists('rfc',$alldata) && isset($alldata['rfc'])){
-            $rfc_accid = explode('_', $alldata['rfc']);
-            if(count($rfc_accid)>=2){
-                $appcta = Appaccount::findOrFail($rfc_accid[1]);
-                $acc_state = $appcta->appcta_estado;
+            $appcta = Account::where('cta_num',$alldata['rfc'])->get();
+            Log::info($appcta);
+            if(count($appcta) > 0){
+                $acc_state = $appcta[0]['cta_estado'];
             }
             
         }
@@ -82,6 +85,19 @@ class ApiserviceController extends Controller
             'status' => 'success',
             'msg' => 'Setting created successfully',
             'accstate' => $acc_state
+        );
+        return \Response::json($response);
+    }
+
+    public function getNews(Request $request)
+    {
+
+        $news = News::where('nactivo',1)->get();
+
+        $response = array(
+            'status' => 'success',
+            'msg' => 'success',
+            'news' => json_encode($news)
         );
         return \Response::json($response);
     }

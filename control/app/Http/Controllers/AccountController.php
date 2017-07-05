@@ -55,22 +55,37 @@ class AccountController extends Controller
      */
     public function store(Request $request)
     {
+        $cta_distrib_id = 0;
+        $cta_cliente_id = 0;
         $alldata = $request->all();
         if(array_key_exists('cta_distrib_id',$alldata)){
             if($alldata['cta_distrib_id']=='null'){
                 unset($alldata['cta_distrib_id']);
+            }else{
+                $cta_distrib_id = $alldata['cta_distrib_id'];
             }
         }
         if(array_key_exists('cta_cliente_id',$alldata)){
             if($alldata['cta_cliente_id']=='null'){
                 unset($alldata['cta_cliente_id']);
+            }else{
+                $cta_cliente_id = $alldata['cta_cliente_id'];
             }
         }
-        $cta = new Account($alldata);
-        $cta->save();
-        $fmessage = 'Se ha creado la cuenta: '.$alldata['cta_num'];
-        \Session::flash('message',$fmessage);
-        $this->registeredBinnacle($request,'store',$fmessage);
+        $exist_account = Account::where('cta_distrib_id',$cta_distrib_id)->where('cta_cliente_id',$cta_cliente_id)->get();
+        
+        if(isset($exist_account)){
+            $fmessage = 'Ya existe una cuenta para estos datos.';
+            \Session::flash('message',$fmessage);
+        }else{
+            $cta = new Account($alldata);
+            $cta->save();
+            $fmessage = 'Se ha creado la cuenta: '.$alldata['cta_num'];
+            \Session::flash('message',$fmessage);
+            $this->registeredBinnacle($request,'store',$fmessage);
+        }
+
+        
         return redirect()->route('account.index');
     }
 
@@ -158,6 +173,20 @@ class AccountController extends Controller
         }
         $account->cta_fecha = date("Y-m-d");
         $account->save();
+
+        if($account->cta_estado == 'Activa'){
+            $arrayparams['rfc_nombrebd'] = $account->cta_num ? $account->cta_num : '';
+            $arrayparams['client_rfc'] = $account->client ? $account->client->cliente_rfc : '';
+            $arrayparams['client_email'] = $account->client ? $account->client->cliente_correo : '';
+            $arrayparams['client_name'] = $account->client ? $account->client->cliente_nom : '';
+            $arrayparams['client_nick'] = count(explode('@',$arrayparams['client_email'])) > 1 ? explode('@',$arrayparams['client_email'])[0] : '';
+            $arrayparams['account_id'] = $account->id;
+
+            $acces_vars = $this->getAccessToken();
+            $service_response = $this->getAppService($acces_vars['access_token'],'createbd',$arrayparams,'ctac');
+        }
+        
+
         if($account!=false){
             $fmessage = 'El estado de la cuenta: '.$account->cta_num.' cambió a: '.$account->cta_estado;
             \Session::flash('message',$fmessage);
@@ -186,6 +215,71 @@ class AccountController extends Controller
             'status' => 'success',
             'msg' => 'Ok',
             'rfc' => $rfc
+        );
+        return \Response::json($response);
+    }
+
+    public function getCtaUsers(Request $request)
+    {
+        $alldata = $request->all();
+        $arrayparams = array();
+
+        if(array_key_exists('rfc',$alldata) && isset($alldata['rfc'])){
+            $arrayparams['dbname'] = $alldata['rfc'];
+            $acces_vars = $this->getAccessToken();
+            $service_response = $this->getAppService($acces_vars['access_token'],'getusr',$arrayparams,'ctac');
+        }
+        
+        
+        $response = array(
+            'status' => 'success',
+            'msg' => 'Ok',
+            'users' => $service_response,
+            'modalname' => 'ctauser'.$alldata['rfc'],
+            'rfc' => $alldata['rfc']
+        );
+        return \Response::json($response);
+    }
+
+
+    public function unblockUser(Request $request)
+    {
+        $alldata = $request->all();
+        $arrayparams = array();
+
+        if(array_key_exists('userid',$alldata) && isset($alldata['userid'])){
+            $arrayparams['user_id'] = $alldata['userid'];
+            $arrayparams['dbname'] = $alldata['rfc'];
+            $acces_vars = $this->getAccessToken();
+            $service_response = $this->getAppService($acces_vars['access_token'],'unlockusr',$arrayparams,'ctac');
+        }
+        
+        
+        $response = array(
+            'status' => 'success',
+            'msg' => 'Ok',
+        );
+        return \Response::json($response);
+    }
+
+    public function getCtaBin(Request $request)
+    {
+        $alldata = $request->all();
+        $arrayparams = array();
+
+        if(array_key_exists('rfc',$alldata) && isset($alldata['rfc'])){
+            $arrayparams['dbname'] = $alldata['rfc'];
+            $acces_vars = $this->getAccessToken();
+            $service_response = $this->getAppService($acces_vars['access_token'],'getbit',$arrayparams,'ctac');
+        }
+        
+        
+        $response = array(
+            'status' => 'success',
+            'msg' => 'Ok',
+            'bitentries' => $service_response,
+            'modalname' => 'binacle'.$alldata['rfc'],
+            'rfc' => $alldata['rfc']
         );
         return \Response::json($response);
     }

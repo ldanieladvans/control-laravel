@@ -81,19 +81,19 @@
 		                <label class="control-label col-md-1 col-sm-1 col-xs-12">Tipo: </label>
 		                    <div class="col-md-3 col-sm-3 col-xs-12">
 		                      <select class="select2_single form-control col-md-7 col-xs-12" name="cliente_tipo">
-		                        <option value="null">Seleccione una opción ...</option>
-		                        <option value="one" {{$client->cliente_tipo == 'one' ? 'selected':''}} >Option one</option>
-                            	<option value="two" {{$client->cliente_tipo == 'two' ? 'selected':''}}>Option two</option>
+		                        <option value="">Seleccione una opción ...</option>
+		                        <option value="moral" {{$client->cliente_tipo == 'moral' ? 'selected':''}} >Moral</option>
+                            	<option value="fisica" {{$client->cliente_tipo == 'fisica' ? 'selected':''}}>Física</option>
 		                      </select>
 		                  	</div>
 
-	                  	<label class="control-label col-md-1 col-sm-1 col-xs-12">Género: </label>
+	                  	<!--<label class="control-label col-md-1 col-sm-1 col-xs-12">Género: </label>
 	                      <div class="col-md-3 col-sm-3 col-xs-12">
 	                       <p></p>
 	                        M:
 	                        <input type="radio" class="flat" name="gender" id="genderM" value="M" {{$client->cliente_sexo == 'M' ? 'checked':''}} /> F:
 	                        <input type="radio" class="flat" name="gender" id="genderF" value="F" {{$client->cliente_sexo == 'F' ? 'checked':''}}/>
-	                      </div>
+	                      </div>-->
 		              </div>
 
                   	<div class="x_content">
@@ -102,6 +102,8 @@
 	                        <li role="presentation" class="active"><a href="#tab_content1" id="home-tab" role="tab" data-toggle="tab" aria-expanded="true">Domicilio</a>
 	                        </li>
 	                        <li role="presentation" class=""><a href="#tab_content2" role="tab" id="profile-tab" data-toggle="tab" aria-expanded="false">Referencia</a>
+	                        </li>
+	                        <li role="presentation" class=""><a href="#tab_content3" role="tab" id="cert-tab" data-toggle="tab" aria-expanded="false">Vigencia Certificado</a>
 	                        </li>
 	                      </ul>
 	                      <div id="myTabContent" class="tab-content">
@@ -290,6 +292,31 @@
 				                    </div>
 				                  </div>
 			                  </div>
+
+	                        </div>
+
+	                        <div role="tabpanel" class="tab-pane fade" id="tab_content3" aria-labelledby="profile-tab">
+
+	                        	<div class="item form-group">	                    
+				                    <div class="col-md-9 col-sm-9 col-xs-12">
+				                      <input id="client_cert" class="form-control has-feedback-left" name="client_cert" placeholder="Certificado del Cliente " type="file" accept=".cer" title="Certificado con extensión .cer">
+				                      <span class="fa fa-lock form-control-feedback left" aria-hidden="true"></span>
+				                    </div>
+				                  </div>
+
+				                  <div class="item form-group">	                    
+				                    <div class="col-md-9 col-sm-9 col-xs-12">
+				                      <input id="cert_f_ini" class="form-control has-feedback-left" name="cliente_correo" placeholder="Fecha Inicio Certificado" type="date" disabled title="Fecha Inicio Certificado" value="{{ $client->cert_f_ini }}">
+				                      <span class="fa fa-calendar form-control-feedback left" aria-hidden="true"></span>
+				                    </div>
+				                  </div>
+
+				                  <div class="item form-group">	                    
+				                    <div class="col-md-9 col-sm-9 col-xs-12">
+				                      <input id="cert_f_fin" class="form-control has-feedback-left" name="cliente_tel" placeholder="Fecha Fin Certificado"  type="date" disabled title="Fecha Fin Certificado" value="{{ $client->cert_f_fin }}">
+				                      <span class="fa fa-calendar form-control-feedback left" aria-hidden="true"></span>
+				                    </div>
+				                  </div>
 
 	                        </div>
 

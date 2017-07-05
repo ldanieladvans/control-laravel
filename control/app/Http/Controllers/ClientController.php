@@ -8,6 +8,7 @@ use App\Reference;
 use App\Domicile;
 use Illuminate\Support\Facades\Validator;
 
+
 class ClientController extends Controller
 {
     /**
@@ -55,7 +56,40 @@ class ClientController extends Controller
     {
         $alldata = $request->all();
 
+        $parseCert = false;
 
+        if(array_key_exists('client_cert',$alldata)){
+            
+            $cert     = request()->file('client_cert');
+
+            
+
+            $path = $request->file('client_cert')->storeAs('public', $alldata['cliente_rfc'].'.'.$cert->getClientOriginalName());
+            
+
+            $parseCert = openssl_x509_parse(file_get_contents(storage_path().DIRECTORY_SEPARATOR.'app'.DIRECTORY_SEPARATOR.'public'.DIRECTORY_SEPARATOR.$alldata['cliente_rfc'].'.'.$cert->getClientOriginalName()));
+            
+            if ($parseCert == FALSE) {
+                /* Convert .cer to .pem, cURL uses .pem */
+                
+                $certificateCApemContent = '-----BEGIN CERTIFICATE-----' . PHP_EOL
+                        . chunk_split(base64_encode($cert), 64, PHP_EOL)
+                        . '-----END CERTIFICATE-----' . PHP_EOL;
+                $certificateCApem = $certificateCApemContent  . '.pem';
+
+                
+                
+                $parseCert = openssl_x509_parse($certificateCApemContent);
+
+                /*echo "<pre>";
+                print_r($parseCert);die();
+                echo "</pre>";*/
+            }
+            $alldata['cert_f_ini'] = $parseCert['validFrom_time_t'];
+            $alldata['cert_f_fin'] = $parseCert['validTo_time_t'];
+       
+            
+        }
 
         $dom_vals = array();
         $refer_vals = array();
@@ -113,7 +147,7 @@ class ClientController extends Controller
         $client_vals['cliente_rfc'] = $alldata['cliente_rfc'];
         $client_vals['cliente_nac'] = $alldata['cliente_nac'];
         $client_vals['cliente_tipo'] = $alldata['cliente_tipo'];
-        $client_vals['cliente_sexo'] = $alldata['gender'];
+        //$client_vals['cliente_sexo'] = $alldata['gender'];
 
         $client = new Client($client_vals);
 
@@ -170,8 +204,6 @@ class ClientController extends Controller
     {
         $alldata = $request->all();
 
-
-
         $dom_vals = array();
         $refer_vals = array();
         $domicile_id = array_key_exists('cliente_dom_id',$alldata) ? $alldata['cliente_dom_id'] : false;
@@ -226,7 +258,7 @@ class ClientController extends Controller
         $client->cliente_rfc = $alldata['cliente_rfc'];
         $client->cliente_nac = $alldata['cliente_nac'];
         $client->cliente_tipo = $alldata['cliente_tipo'];
-        $client->cliente_sexo = $alldata['gender'];
+        //$client->cliente_sexo = $alldata['gender'];
 
         if ($domicile_id != "null"){
             $client->cliente_dom_id = $domicile_id;

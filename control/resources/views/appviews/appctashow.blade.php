@@ -38,7 +38,7 @@
 
                   <div class="x_content">
                     <button type="button" style=" background-color:#053666 " onclick="location.href = 'appcta/create';" class="btn btn-primary">Agregar</button>
-                    <table id="datatable-buttons" class="table table-striped table-bordered">
+                    <table id="datatable-responsive" class="table table-striped table-bordered dt-responsive nowrap" cellspacing="0" width="100%">
                       <thead>
                         <tr>
                           <!--<th>Id</th>-->
@@ -49,12 +49,19 @@
                           <th>Gigas</th>-->
                           <th>Paquete</th>
                           <th>Cuenta</th>
-                          <th>Fecha Venta</th>
-                          <th>Fecha Act.</th>
-                          <th>Fecha Fin</th>
-                          <th>Fecha Cad.</th>
-                          <th>En Cuenta</th>
+
+
+                          <th>Gigas</th>
+                          <th>RFCs</th>
+
+                          <th>Aplicaciones</th>
+
                           <th>Acciones</th>
+
+                          <!--<th>Fecha Venta</th>
+                          <th>Fecha Fin</th>
+                          <th>Fecha Caducidad</th>-->
+                          
                           
                         </tr>
                       </thead>
@@ -71,45 +78,47 @@
                         	<td>{{ $appcta->appcta_gig }}</td>-->
                         	<td>{{ $appcta->package ? $appcta->package->paq_nom : ''  }}</td>
                         	<td>{{ $appcta->account ? $appcta->account->cta_num : ''  }}</td>
-                        	<td>{{ $appcta->appcta_f_vent }}</td>
-                        	<td>{{ $appcta->appcta_f_act }}</td>
-                        	<td>{{ $appcta->appcta_f_fin }}</td>
-                        	<td>{{ $appcta->appcta_f_caduc }}</td>
-                          <td>{{ $appcta->appcta_estado }}</td>
 
+                          <td>{{ $appcta->appcta_gig }}</td>
+                          <td>{{ $appcta->appcta_rfc }}</td>
 
-              					
+                        	<td>
+                           @foreach($appcta->apps as $apploop)
+                              @if ($loop->first)
+                                  {{ $apploop->app_nom }}
+                              @else
+                                   , {{ $apploop->app_nom }}
+                              @endif
+                              
+                           @endforeach 
+                          </td>
 
-                            <td class=" last" width="15%">
+                          <td class=" last" width="15%">
                                       
                                       
                                       <div class="btn-group">
                                           <div class="btn-group">
-                                              <button onclick="location.href = 'appcta/{{$appcta->id}}/edit';" class="btn btn-xs" data-placement="left" title="Editar" ><i class="fa fa-edit fa-3x"></i> </button>
+                                              <button onclick="location.href = 'appcta/{{$appcta->id}}/edit';" class="btn btn-xs" data-placement="left" title="Editar" ><i class="fa fa-edit fa-2x"></i> </button>
                                           </div>
 
 
-
-
+                                          <div class="btn-group">
+                                              <button onclick="showModal('appsmodal'+{{$appcta->id}})" class="btn btn-xs" data-placement="left" title="Añadir Apps" ><i class="fa fa-plus-square-o fa-2x"></i> </button>
+                                          </div>
 
                                           <div class="btn-group">
+                                              <button onclick="showModal('appsmodalquit'+{{$appcta->id}})" class="btn btn-xs" data-placement="left" title="Quitar Apps" ><i class="fa fa-minus-square-o fa-2x"></i> </button>
+                                          </div>
+
+
+                                          <!--<div class="btn-group">
                                               <button onclick="" data-toggle="dropdown" class="btn btn-xs dropdown-toggle" data-placement="left" title="Más" ><i class="fa fa-plus-square fa-3x"></i> </button>
                                                 <ul role="menu" class="dropdown-menu">
-                                                  
-                                                  @if ($appcta->appcta_estado == 'Inactiva')
-                                                      <li><a onclick="changeAccountState('Activa',{{Auth::user()->id}},{{$appcta->id}})">Activar en Cuenta</a>
-                                                      </li>
 
                                                       <li><a id="appmodallink{{$appcta->id}}" onclick="showModal('appsmodal'+{{$appcta->id}})">Añadir Apps</a>
                                                       </li>
-                                                  @else
-                                                      <li><a onclick="changeAccountState('Inactiva',{{Auth::user()->id}},{{$appcta->id}})">Desactivar en Cuenta</a>
-                                                      </li>
-                                                  @endif
 
-                                                      
-
-                                                </ul>
+                                                </ul>-->
 
 
 
@@ -125,8 +134,8 @@
                                                       <div class="modal-body">
                                                         <form>
                                                           <div class="item form-group">
-                                                                <div class="col-md-10 col-sm-10 col-xs-12">
-                                                                  <select id="roles" name="roles[]" tabindex="2" data-placeholder="Seleccione los permisos ..." name="rolesapp" class="chosen-select form-control" onchange="onSelectAssignApps(this)" multiple="multiple">
+                                                                <div class="col-md-12 col-sm-12 col-xs-12">
+                                                                  <select id="roles" name="roles[]" tabindex="2" data-placeholder="Seleccione los permisos ..." name="rolesapp" class="chosen-select form-control" onchange="onSelectAssignApps(this)" multiple="multiple" style="width: 500px; display: none;">
                                                                   
                                                                       <!--@foreach($apps as $key => $value)
                                                                         <option value="{{ $key }}" {{$appcta->hasApp($key,true) > 0 ? 'selected':''}}>{{ $value }}</option>
@@ -156,7 +165,51 @@
                                                 </div>
 
 
-                                          </div>
+
+                                                <div class="modal fade" id="appsmodalquit{{$appcta->id}}" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+                                                  <div class="modal-dialog" role="document">
+                                                    <div class="modal-content">
+                                                      <div class="modal-header">
+                                                        <h5 class="modal-title" id="exampleModalLabel">Aplicaciones de cuenta {{$appcta->appcta_app}} a eliminar</h5>
+                                                        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                                                          <span aria-hidden="true">&times;</span>
+                                                        </button>
+                                                      </div>
+                                                      <div class="modal-body">
+                                                        <form>
+                                                          <div class="item form-group">
+                                                                <div class="col-md-12 col-sm-12 col-xs-12">
+                                                                  <select id="roles" name="roles[]" tabindex="2" data-placeholder="Seleccione los permisos ..." name="rolesapp" class="chosen-select form-control" onchange="onSelectQuitApps(this)" multiple="multiple" style="width: 500px; display: none;">
+                                                                  
+                                                                      <!--@foreach($apps as $key => $value)
+                                                                        <option value="{{ $key }}" {{$appcta->hasApp($key,true) > 0 ? 'selected':''}}>{{ $value }}</option>
+                                                                      @endforeach-->
+
+                                                                      @foreach($apps as $key => $value)
+                                                                        @if ($appcta->hasApp($key,true) > 0)
+                                                                          <option value="{{ $key }}" >{{ $value }}</option>
+                                                                        @endif
+                                                                        
+                                                                      @endforeach
+
+                                                                  </select>
+                                                                </div>
+                                                          </div>
+                                                        </form>
+
+                                                        <div id="result_failure_rol_quit{{$appcta->id}}"></div>
+
+                                                      </div>
+                                                      <div class="modal-footer">
+                                                        <button type="button" class="btn btn-secondary" data-dismiss="modal">Cerrar</button>
+                                                        <button type="button"  onclick="quitApp({{Auth::user()->id}},{{$appcta->id}});" class="btn btn-primary">Ok</button>
+                                                      </div>
+                                                    </div>
+                                                  </div>
+                                                </div>
+
+
+                                          <!--</div>-->
 
 
 
@@ -171,6 +224,11 @@
 
 
                                   </td>
+
+                          <!--<td>{{ $appcta->appcta_f_vent }}</td>                       
+                        	<td>{{ $appcta->appcta_f_fin }}</td>
+                        	<td>{{ $appcta->appcta_f_caduc }}</td>-->
+                          
 
 
                         </tr>
@@ -188,6 +246,19 @@
 	@parent
     <!-- Datatables -->
     <script src="{{ asset('controlassets/vendors/datatables.net/js/jquery.dataTables.js') }}"></script>
+
+    <script src="{{ asset('controlassets/vendors/datatables.net-bs/js/dataTables.bootstrap.min.js') }}"></script>
+    <script src="{{ asset('controlassets/vendors/datatables.net-buttons/js/dataTables.buttons.min.js') }}"></script>
+    <script src="{{ asset('controlassets/vendors/datatables.net-buttons-bs/js/buttons.bootstrap.min.js') }}"></script>
+    <script src="{{ asset('controlassets/vendors/datatables.net-buttons/js/buttons.flash.min.js') }}"></script>
+    <script src="{{ asset('controlassets/vendors/datatables.net-buttons/js/buttons.html5.min.js') }}"></script>
+    <script src="{{ asset('controlassets/vendors/datatables.net-buttons/js/buttons.print.min.js') }}"></script>
+    <script src="{{ asset('controlassets/vendors/datatables.net-fixedheader/js/dataTables.fixedHeader.min.js') }}"></script>
+    <script src="{{ asset('controlassets/vendors/datatables.net-keytable/js/dataTables.keyTable.min.js') }}"></script>
+    <script src="{{ asset('controlassets/vendors/datatables.net-responsive/js/dataTables.responsive.min.js') }}"></script>
+    <script src="{{ asset('controlassets/vendors/datatables.net-responsive-bs/js/responsive.bootstrap.js') }}"></script>
+    <script src="{{ asset('controlassets/vendors/datatables.net-scroller/js/dataTables.scroller.min.js') }}"></script>
+
     <!-- FastClick -->
     <script src="{{ asset('controlassets/vendors/fastclick/lib/fastclick.js') }}"></script>
 
@@ -218,6 +289,7 @@
       var CSRF_TOKEN = $('meta[name="csrf-token"]').attr('content');
 
       var selectedapps = [];
+      var quitapps = [];
 
       function showModal(modalid) {
           $("#"+modalid).modal('show');
@@ -249,6 +321,10 @@
         selectedapps = getSelectValues(element);
       }
 
+      function onSelectQuitApps(element){
+        quitapps = getSelectValues(element);
+      }
+
 
       function assignApp(user,appctaid){
 
@@ -262,8 +338,29 @@
               success: function (data) {
 
                 hideModal("appsmodal"+data['app']);
-                //window.location.href = window.location.href;
-                console.log(data);
+                window.location.href = window.location.href;
+                  
+              },
+              error: function(XMLHttpRequest, textStatus, errorThrown) { 
+                  $("#result_failure"+user).html('<p><strong>Ocurrió un error: '+errorThrown+'</strong></p>');
+              }
+          });       
+        }
+
+
+      function quitApp(user,appctaid){
+
+            var CSRF_TOKEN = $('meta[name="csrf-token"]').attr('content');
+
+            $.ajax({
+              url: '/quitapps',
+              type: 'POST',
+              data: {_token: CSRF_TOKEN,selected:quitapps,user:user,appctaid:appctaid},
+              dataType: 'JSON',
+              success: function (data) {
+
+                hideModal("appsmodalquit"+data['app']);
+                window.location.href = window.location.href;
                   
               },
               error: function(XMLHttpRequest, textStatus, errorThrown) { 

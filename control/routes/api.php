@@ -18,6 +18,8 @@ Route::middleware('auth:api')->get('/user', function (Request $request) {
 });
 
 Route::get('/getaccstate', 'ApiserviceController@getAccState')->middleware('auth:api');
+Route::get('/getnews', 'ApiserviceController@getNews')->middleware('auth:api');
+
 
 //Test
 Route::get('/rolesperms', 'ApiserviceController@getUsersRolesPermsByBd')->middleware('auth:api');
