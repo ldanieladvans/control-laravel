@@ -258,6 +258,7 @@ class AccountController extends Controller
         $response = array(
             'status' => 'success',
             'msg' => 'Ok',
+            'rfc' => $alldata['rfc']
         );
         return \Response::json($response);
     }

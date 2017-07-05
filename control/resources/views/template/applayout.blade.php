@@ -628,6 +628,21 @@
 				    }
 				    return submit;  
 			    }
+
+
+
+			    function cleanTable(bdid){
+			    	console.log(bdid);
+			    	console.log(11);
+		            var table = document.getElementById(bdid);
+		               var rowCount = table.rows.length;
+
+		            while(table.rows.length > 1) {
+
+		              table.deleteRow(1);
+		            }
+
+		        }
 		    </script>
         @show
 	</body>
