@@ -63,15 +63,19 @@
                                       
                                       <div class="btn-group">
                                         <div class="btn-group">
-                                              <button onclick="location.href = 'role/{{$rol->id}}/edit';" class="btn btn-xs" data-placement="left" title="Editar"><i class="fa fa-edit fa-3x"></i> </button>
+                                              <button onclick="location.href = 'role/{{$rol->id}}/edit';" class="btn btn-xs" data-placement="left" title="Editar"><i class="fa fa-edit fa-2x"></i> </button>
                                           </div>
 
-                                        <div class="btn-group">
+                                          <div class="btn-group">
+                                              <button  onclick="showModal({{$rol->id}})" class="btn btn-xs" data-placement="left" title="Asignar Permisos"><i class="fa fa-thumbs-o-up fa-2x"></i> </button>
+                                          </div>
+
+                                        <!--<div class="btn-group">
                                               <button onclick="" data-toggle="dropdown" class="btn btn-xs dropdown-toggle" data-placement="left" title="Más" ><i class="fa fa-plus-square fa-3x"></i> </button>
                                                 <ul role="menu" class="dropdown-menu">
                                                   <li><a id="permsmodallink{{$rol->id}}" onclick="showModal({{$rol->id}})">Asignar permisos</a>
                                                   </li>
-                                                </ul>
+                                                </ul>-->
 
                                                 <div class="modal fade" id="permsmodal{{$rol->id}}" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
                                                 <div class="modal-dialog" role="document">
@@ -86,7 +90,7 @@
                                                       <form>
                                                         <div class="item form-group">
                                                               <div class="col-md-10 col-sm-10 col-xs-12">
-                                                                <select id="permisos" name="permisos[]" tabindex="2" data-placeholder="Seleccione los permisos ..." name="rolesapp" class="chosen-select form-control" onchange="onSelectAssignPerm(this)" multiple="multiple">
+                                                                <select id="permisos" name="permisos[]" tabindex="2" data-placeholder="Seleccione los permisos ..." name="rolesapp" class="chosen-select form-control" onchange="onSelectAssignPerm(this)" multiple="multiple" style="width: 500px; display: none;">
                                                                 
                                                                     @foreach($permissions as $permission)
                                                                       <option value="{{ $permission->id }}" {{Auth::user()->customGetRolePerms($rol->id,$permission->id,true) > 0 ? 'selected':''}} >{{ $permission->name }}</option>
@@ -107,11 +111,11 @@
                                                 </div>
                                               </div>
 
-                                          </div>
+                                          <!--</div>-->
 
                                           {{ Form::open(['route' => ['role.destroy', $rol->id], 'class'=>'pull-right']) }}
                                               {{ Form::hidden('_method', 'DELETE') }}
-                                              <button  href="#" class="btn btn-xs" onclick="return confirm('¿Está seguro que quiere eliminar este registro?')" type="submit" data-placement="left" title="Borrar" ><i class="fa fa-trash fa-3x"></i></button>
+                                              <button  href="#" class="btn btn-xs" onclick="return confirm('¿Está seguro que quiere eliminar este registro?')" type="submit" data-placement="left" title="Borrar" ><i class="fa fa-trash fa-2x"></i></button>
                                             {{ Form::close() }}
 
                                         </div>

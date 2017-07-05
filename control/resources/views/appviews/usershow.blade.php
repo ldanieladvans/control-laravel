@@ -110,8 +110,8 @@
                                                     </div>
                                                     <div class="modal-body">
                                                       <form>
-                                                        <div class="item form-group">
-                                                          <input placeholder="Contraseña" required="required" type="password" class="form-control" id="password{{$user->id}}">
+                                                        <div class="form-group">
+                                                          <input placeholder="Contraseña" required="required" type="password" class="form-control" id="password{{$user->id}}" style="width: 500px;">
                                                         </div>
                                                       </form>
 
