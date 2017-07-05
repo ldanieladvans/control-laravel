@@ -173,7 +173,7 @@
 
                                                         </div>
                                                         <div class="modal-footer">
-                                                          <button type="button" class="btn btn-secondary" data-dismiss="modal" onclick="cleanbintable({{$acc->cta_num}})">Cerrar</button>
+                                                          <button type="button" class="btn btn-secondary" data-dismiss="modal" onclick="cleanbintable('"'+{{$acc->cta_num}}+'"')">Cerrar</button>
                                                         </div>
                                                       </div>
                                                     </div>
