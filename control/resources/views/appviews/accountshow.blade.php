@@ -132,7 +132,7 @@
 
                                                         </div>
                                                         <div class="modal-footer">
-                                                          <button type="button" class="btn btn-secondary" data-dismiss="modal" onclick="cleanTable({{$acc->cta_num}})">Cerrar</button>
+                                                          <button type="button" class="btn btn-secondary" data-dismiss="modal" onclick="cleanctausertable({{$acc->cta_num}})">Cerrar</button>
                                                         </div>
                                                       </div>
                                                     </div>
@@ -173,7 +173,7 @@
 
                                                         </div>
                                                         <div class="modal-footer">
-                                                          <button type="button" class="btn btn-secondary" data-dismiss="modal">Cerrar</button>
+                                                          <button type="button" class="btn btn-secondary" data-dismiss="modal" onclick="cleanbintable({{$acc->cta_num}})">Cerrar</button>
                                                         </div>
                                                       </div>
                                                     </div>
@@ -393,5 +393,27 @@
             }); 
      
         }
+
+        function cleanctausertable(bdid){
+                var table = document.getElementById('datatable-responsive'+bdid);
+                   var rowCount = table.rows.length;
+
+                while(table.rows.length > 1) {
+
+                  table.deleteRow(1);
+                }
+
+            }
+
+          function cleanbintable(bdid){
+                var table = document.getElementById('datatable-responsive-bin'+bdid);
+                   var rowCount = table.rows.length;
+
+                while(table.rows.length > 1) {
+
+                  table.deleteRow(1);
+                }
+
+            }
     </script>
 @endsection
