@@ -607,7 +607,7 @@ class AppaccountController extends Controller
                 }
 
                 //$arrayparams['rfc_nombrebd'] = $rfc.'_'.$appcta->id;
-                $arrayparams['rfc_nombrebd'] = ($appcta->account ? $appcta->account->cta_num : '').'_'.$appcta->id;
+                $arrayparams['rfc_nombrebd'] = ($appcta->account ? $appcta->account->cta_num : '');
                 $arrayparams['account_id'] = $appcta ? $appcta->id : 'false';
                 $arrayparams['apps_cta'] = json_encode($array_apps);
                 $acces_vars = $this->getAccessToken();
@@ -633,6 +633,58 @@ class AppaccountController extends Controller
             'msg' => 'Setting created successfully',
             'app' => $appcta_id,
             'testmsg'=> $testmsg
+        );
+        return \Response::json($response);
+    }
+
+
+    public function quitApps(Request $request)
+    {
+
+        $alldata = $request->all();
+        $rfc = '';
+        $appcta_id = '';
+
+        $array_apps = array();
+
+        $apps = config('app.advans_apps');
+        
+
+        if(array_key_exists('appctaid',$alldata) && isset($alldata['appctaid'])){
+            $appcta = Appaccount::findOrFail($alldata['appctaid']);
+            $rfc = $appcta->account ? ($appcta->account->client ? $appcta->account->client->cliente_rfc : '') : '';
+
+            $appcta_id = $appcta->id;
+
+            //$deletedRows = Appcontrol::where('app_appcta_id', $appcta->id)->delete();
+            if(array_key_exists('selected',$alldata)){
+
+                foreach ($alldata['selected'] as $key => $value) {
+                    array_push($array_apps,['app_cod'=>$value,'app_nom'=>$apps[$value]]);
+                }
+
+                //$arrayparams['rfc_nombrebd'] = $rfc.'_'.$appcta->id;
+                $arrayparams['rfc_nombrebd'] = ($appcta->account ? $appcta->account->cta_num : '');
+                $arrayparams['account_id'] = $appcta ? $appcta->id : 'false';
+                $arrayparams['apps_cta'] = json_encode($array_apps);
+                $acces_vars = $this->getAccessToken();
+                $service_response = $this->getAppService($acces_vars['access_token'],'desactapp',$arrayparams,'ctac');
+                $testmsg = 'entro';
+                foreach ($alldata['selected'] as $key => $value) {
+                    \DB::table('app')->where('app_appcta_id',$appcta_id)->where('app_code',$value)->delete();
+                }
+                
+            }
+        }
+
+        $fmessage = 'Se han eliminado aplicaciones';
+        \Session::flash('message',$fmessage);
+        $this->registeredBinnacle($request,'delete',$fmessage);
+
+        $response = array(
+            'status' => 'success',
+            'msg' => 'Setting created successfully',
+            'app' => $appcta_id
         );
         return \Response::json($response);
     }

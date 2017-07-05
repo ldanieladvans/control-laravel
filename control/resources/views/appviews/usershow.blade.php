@@ -67,15 +67,27 @@
 
               					
 
-                            <td class=" last" width="15%">
+                            <td class=" last" width="18%">
                                       
                                       
                                       <div class="btn-group">
                                           <div class="btn-group">
-                                              <button onclick="location.href = 'user/{{$user->id}}/edit';" class="btn btn-xs" data-placement="left" title="Editar"><i class="fa fa-edit fa-3x"></i> </button>
+                                              <button onclick="location.href = 'user/{{$user->id}}/edit';" class="btn btn-xs" data-placement="left" title="Editar"><i class="fa fa-edit fa-2x"></i> </button>
                                           </div>
 
-                                        <div class="btn-group">
+                                          <div class="btn-group">
+                                              <button onclick="showModal('passmodal'+{{$user->id}})" class="btn btn-xs" data-placement="left" title="Cambiar contraseña"><i class="fa fa-lock fa-2x"></i> </button>
+                                          </div>
+
+                                          <div class="btn-group">
+                                              <button onclick="showModal('rolesmodal'+{{$user->id}})" class="btn btn-xs" data-placement="left" title="Asignar Roles"><i class="fa fa-group fa-2x"></i> </button>
+                                          </div>
+
+                                          <div class="btn-group">
+                                              <button onclick="showModal('permsmodal'+{{$user->id}})" class="btn btn-xs" data-placement="left" title="Asignar Permisos"><i class="fa fa-thumbs-o-up fa-2x"></i> </button>
+                                          </div>
+
+                                        <!--<div class="btn-group">
                                               <button onclick="" data-toggle="dropdown" class="btn btn-xs dropdown-toggle" data-placement="left" title="Más" ><i class="fa fa-plus-square fa-3x"></i> </button>
                                                 <ul role="menu" class="dropdown-menu">
                                                   <li><a id="passmodallink{{$user->id}}" onclick="showModal('passmodal'+{{$user->id}})">Cambiar contraseña</a>
@@ -84,7 +96,7 @@
                                                   </li>
                                                   <li><a id="permmodallink{{$user->id}}" onclick="showModal('permsmodal'+{{$user->id}})">Asignar Permisos</a>
                                                   </li>
-                                                </ul>
+                                                </ul>-->
 
 
                                                <div class="modal fade" id="passmodal{{$user->id}}" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
@@ -98,7 +110,7 @@
                                                     </div>
                                                     <div class="modal-body">
                                                       <form>
-                                                        <div class="form-group">
+                                                        <div class="item form-group">
                                                           <input placeholder="Contraseña" required="required" type="password" class="form-control" id="password{{$user->id}}">
                                                         </div>
                                                       </form>
@@ -131,7 +143,7 @@
                                                       <form>
                                                         <div class="item form-group">
                                                               <div class="col-md-10 col-sm-10 col-xs-12">
-                                                                <select id="roles" name="roles[]" tabindex="2" data-placeholder="Seleccione los permisos ..." name="rolesapp" class="chosen-select form-control" onchange="onSelectAssignRole(this)" multiple="multiple">
+                                                                <select id="roles" name="roles[]" tabindex="2" data-placeholder="Seleccione los permisos ..." name="rolesapp" class="chosen-select form-control" onchange="onSelectAssignRole(this)" multiple="multiple" style="width: 500px; display: none;">
                                                                 
                                                                     @foreach($roles as $role)
                                                                       <option value="{{ $role->id }}" {{$user->hasRole($role->id) ? 'selected':''}} >{{ $role->name }}</option>
@@ -167,7 +179,7 @@
                                                       <form>
                                                         <div class="item form-group">
                                                               <div class="col-md-10 col-sm-10 col-xs-12">
-                                                                <select id="permisos" name="permisos[]" tabindex="2" data-placeholder="Seleccione los permisos ..." name="rolesapp" class="chosen-select form-control" onchange="onSelectAssignPerm(this)" multiple="multiple">
+                                                                <select id="permisos" name="permisos[]" tabindex="2" data-placeholder="Seleccione los permisos ..." name="rolesapp" class="chosen-select form-control" onchange="onSelectAssignPerm(this)" multiple="multiple" style="width: 500px; display: none;">
                                                                 
                                                                     @foreach($permissions as $permission)
                                                                       <option value="{{ $permission->id }}" {{$user->customGetUserPerms($permission->id,true) ? 'selected':''}} >{{ $permission->name }}</option>
@@ -188,12 +200,16 @@
                                                 </div>
                                               </div>
 
-                                          </div>
+
+
+                                          <!--</div>-->
+
+
 
                                               
                                               {{ Form::open(['route' => ['user.destroy', $user], 'class'=>'pull-right']) }}
                                               {{ Form::hidden('_method', 'DELETE') }}
-                                              <button  href="#" class="btn btn-xs" onclick="return confirm('¿Está seguro que quiere eliminar este registro?')" type="submit" data-placement="left" title="Borrar" ><i class="fa fa-trash fa-3x"></i></button>
+                                              <button  href="#" class="btn btn-xs" onclick="return confirm('¿Está seguro que quiere eliminar este registro?')" type="submit" data-placement="left" title="Borrar" ><i class="fa fa-trash fa-2x"></i></button>
                                             {{ Form::close() }}
 
                                           </div>

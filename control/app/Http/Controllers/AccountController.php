@@ -261,4 +261,26 @@ class AccountController extends Controller
         );
         return \Response::json($response);
     }
+
+    public function getCtaBin(Request $request)
+    {
+        $alldata = $request->all();
+        $arrayparams = array();
+
+        if(array_key_exists('rfc',$alldata) && isset($alldata['rfc'])){
+            $arrayparams['dbname'] = $alldata['rfc'];
+            $acces_vars = $this->getAccessToken();
+            $service_response = $this->getAppService($acces_vars['access_token'],'getbit',$arrayparams,'ctac');
+        }
+        
+        
+        $response = array(
+            'status' => 'success',
+            'msg' => 'Ok',
+            'bitentries' => $service_response,
+            'modalname' => 'binacle'.$alldata['rfc'],
+            'rfc' => $alldata['rfc']
+        );
+        return \Response::json($response);
+    }
 }
