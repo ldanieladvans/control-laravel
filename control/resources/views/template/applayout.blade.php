@@ -632,8 +632,6 @@
 
 
 			    function cleanTable(bdid){
-			    	console.log(bdid);
-			    	console.log(11);
 		            var table = document.getElementById(bdid);
 		               var rowCount = table.rows.length;
 

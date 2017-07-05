@@ -104,9 +104,9 @@
                                                   <div class="modal-content">
                                                     <div class="modal-header">
                                                       <h5 class="modal-title" id="exampleModalLabel">Cambio de contraseña: {{$user->name}}</h5>
-                                                      <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                                                      <!--<button type="button" class="close" data-dismiss="modal" aria-label="Close">
                                                         <span aria-hidden="true">&times;</span>
-                                                      </button>
+                                                      </button>-->
                                                     </div>
                                                     <div class="modal-body">
                                                       <form>
@@ -119,7 +119,7 @@
 
                                                     </div>
                                                     <div class="modal-footer">
-                                                      <button type="button" class="btn btn-secondary" data-dismiss="modal">Cerrar</button>
+                                                      <button type="button" onclick="cleanPass({{$user->id}});" class="btn btn-secondary" data-dismiss="modal">Cerrar</button>
                                                       <button type="button"  onclick="changePass({{$user->id}});" class="btn btn-primary">Ok</button>
                                                     </div>
                                                   </div>
@@ -417,7 +417,9 @@
         }
 
 
-    
+    function cleanPass(userid){
+      document.getElementById('password'+userid).value = '';
+    }
 
       $( function() {
           $('#alertmsgcta').click(function() {
