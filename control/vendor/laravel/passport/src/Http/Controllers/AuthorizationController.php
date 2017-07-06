@@ -59,16 +59,8 @@ class AuthorizationController
                               ClientRepository $clients,
                               TokenRepository $tokens)
     {
-
-        /*echo "<pre>";
-        print_r($this->server);die();
-        echo "</pre>";*/
-        //dd($this->server);
-
         return $this->withErrorHandling(function () use ($psrRequest, $request, $clients, $tokens) {
             $authRequest = $this->server->validateAuthorizationRequest($psrRequest);
-
-            
 
             $scopes = $this->parseScopes($authRequest);
 
