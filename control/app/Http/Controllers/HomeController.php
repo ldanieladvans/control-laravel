@@ -13,6 +13,13 @@ use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Session;
 
+use App\Mail\ClientCreate;
+use Illuminate\Support\Facades\Mail;
+use ReverseRegex\Lexer;
+use ReverseRegex\Random\SimpleRandom;
+use ReverseRegex\Parser;
+use ReverseRegex\Generator\Scope;
+
 class HomeController extends Controller
 {
     /**
@@ -43,10 +50,6 @@ class HomeController extends Controller
         $appctas_array = [];
         $appctas_array_return = [];
 
-        /*echo "<pre>";
-        print_r($request->session());die();
-        echo "</pre>";*/
-        
         $asigpaqs = Packageassignation::where('asigpaq_f_vent','>=',mktime(0, 0, 0, date("m")-1, date("d"),date("Y")))
                                       ->where('asigpaq_f_vent','<=',date("Y-m-d"))->get();
         /*echo "<pre>";
@@ -89,6 +92,12 @@ class HomeController extends Controller
 
         return view('home',['accounts_active'=>$accounts_active,'accounts'=>$accounts,'packages'=>$packages,'clients'=>$clients,'distributors'=>$distributors,'asigpaqs'=>json_encode($asigpaqs_array_return),'appctas'=>json_encode($appctas_array_return),'distributors_top'=>$distributors_top]);
     }
+
+    function rand_chars($c, $l, $u = FALSE) { 
+      if (!$u) for ($s = '', $i = 0, $z = strlen($c)-1; $i < $l; $x = rand(0,$z), $s .= $c{$x}, $i++); 
+      else for ($i = 0, $z = strlen($c)-1, $s = $c{rand(0,$z)}, $i = 1; $i != $l; $x = rand(0,$z), $s .= $c{$x}, $s = ($s{$i} == $s{$i-1} ? substr($s,0,-1) : $s), $i=strlen($s)); 
+      return $s; 
+    } 
 
     
 }

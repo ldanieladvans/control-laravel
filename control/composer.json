@@ -9,6 +9,7 @@
         "bican/roles": "2.1.*",
         "cviebrock/eloquent-sluggable": "^4.2",
         "guzzlehttp/guzzle": "^6.2",
+        "icomefromthenet/reverse-regex": "v0.0.6.3",
         "laravel/framework": "5.4.*",
         "laravel/passport": "^2.0",
         "laravel/tinker": "~1.0",

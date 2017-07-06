@@ -8,6 +8,10 @@ use App\Distributor;
 use App\Package;
 use Illuminate\Http\Request;
 
+use App\Mail\ClientCreate;
+use Illuminate\Support\Facades\Mail;
+
+
 class AccountController extends Controller
 {
     /**
@@ -171,10 +175,28 @@ class AccountController extends Controller
                 $account->cta_estado = $alldata['accstate'];
             }
         }
-        $account->cta_fecha = date("Y-m-d");
+        
         $account->save();
 
         if($account->cta_estado == 'Activa'){
+            if(!$account->cta_fecha){
+                $caracteres = 'abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVXWYZ0123456789!"$%&/()=?¿*/[]{}.,;:';
+                $password = $this->rand_chars($caracteres,8);
+                $resultm = preg_match('/^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[$@$!%*?&#.$($)$-$_])[a-zA-Z\d$@$!%*?&#.$($‌​)$-$_]{8,50}$/u', $password, $matchesm);
+
+                while(!$resultm || count($matchesm) == 0){
+                    $password = $this->rand_chars($caracteres,8);
+                    $resultm = preg_match('/^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[$@$!%*?&#.$($)$-$_])[a-zA-Z\d$@$!%*?&#.$($‌​)$-$_]{8,50}$/u', $password, $matchesm);
+                }
+
+                $cliente_correo = $account->client ? $account->client->cliente_correo : false;
+                if ($cliente_correo){
+                    Mail::to($cliente_correo)->send(new ClientCreate(['user'=>$cliente_correo,'password'=>$password]));
+                }
+                
+            }
+
+            $account->cta_fecha = date("Y-m-d");
             $arrayparams['rfc_nombrebd'] = $account->cta_num ? $account->cta_num : '';
             $arrayparams['client_rfc'] = $account->client ? $account->client->cliente_rfc : '';
             $arrayparams['client_email'] = $account->client ? $account->client->cliente_correo : '';
