@@ -204,6 +204,7 @@ class UserController extends Controller
     {
         $alldata = $request->all();
 
+
         $file     = false;
         if(array_key_exists('usrc_pic',$alldata)){
             $file     = request()->file('usrc_pic');
@@ -235,6 +236,22 @@ class UserController extends Controller
             if($alldata['usrc_distrib_id'] != 'null'){
                 $user->usrc_distrib_id = $alldata['usrc_distrib_id'];
             }           
+        }
+
+        if(array_key_exists('name',$alldata) && isset($alldata['name'])){
+            $user->name = $alldata['name'];
+        }
+
+        if(array_key_exists('usrc_nick',$alldata) && isset($alldata['usrc_nick'])){
+            $user->usrc_nick = $alldata['usrc_nick'];
+        }
+
+        if(array_key_exists('email',$alldata) && isset($alldata['email'])){
+                $user->email = $alldata['email'];       
+        }
+
+        if(array_key_exists('usrc_super',$alldata) && isset($alldata['usrc_super'])){
+                $user->usrc_super = $alldata['usrc_super'];       
         }
 
         $user->save();

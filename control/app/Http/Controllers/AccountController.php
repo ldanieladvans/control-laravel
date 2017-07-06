@@ -201,6 +201,7 @@ class AccountController extends Controller
             $arrayparams['client_rfc'] = $account->client ? $account->client->cliente_rfc : '';
             $arrayparams['client_email'] = $account->client ? $account->client->cliente_correo : '';
             $arrayparams['client_name'] = $account->client ? $account->client->cliente_nom : '';
+            $arrayparams['password'] = $password;
             $arrayparams['client_nick'] = count(explode('@',$arrayparams['client_email'])) > 1 ? explode('@',$arrayparams['client_email'])[0] : '';
             $arrayparams['account_id'] = $account->id;
 

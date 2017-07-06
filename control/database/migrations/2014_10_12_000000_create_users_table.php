@@ -21,7 +21,7 @@ class CreateUsersTable extends Migration
             $table->rememberToken();
             $table->timestamps();
             //Added
-            $table->string('usrc_nick',10)->nullable();
+            $table->string('usrc_nick',100)->nullable();
             $table->string('usrc_tel',15)->nullable();
             $table->boolean('usrc_super')->default(0);
             $table->timestampTz('usrc_ult_acces')->nullable();
