@@ -20,14 +20,14 @@ class CpMex extends Migration
             $table->string('d_codigo',10)->nullable();
             $table->string('d_asenta',100)->nullable();
             $table->string('d_tipo_asenta',50)->nullable();
-            $table->string('d_mnpio',100)->nullable();
+            $table->string('D_mnpio',100)->nullable();
             $table->string('d_estado',50)->nullable();
             $table->string('d_ciudad',100)->nullable();
-            $table->string('d_cp',10)->nullable();
+            $table->string('d_CP',10)->nullable();
             $table->string('c_estado',10)->nullable();
 
             $table->string('c_oficina',10)->nullable();
-            $table->string('c_cp',20)->nullable();
+            $table->string('c_CP',20)->nullable();
             $table->string('c_tipo_asenta',10)->nullable();
             $table->string('c_mnpio',10)->nullable();
             $table->string('id_asenta_cpcons',10)->nullable();

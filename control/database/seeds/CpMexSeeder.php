@@ -15,7 +15,7 @@ class CpMexSeeder extends Seeder
      */
     public function run()
     {
-        $excel = file_get_contents(storage_path().DIRECTORY_SEPARATOR.'app'.DIRECTORY_SEPARATOR.'public'.DIRECTORY_SEPARATOR.'CPdescarga.xls');
+        /*$excel = file_get_contents(storage_path().DIRECTORY_SEPARATOR.'app'.DIRECTORY_SEPARATOR.'public'.DIRECTORY_SEPARATOR.'CPdescarga.xls');
         
         Excel::load(storage_path().DIRECTORY_SEPARATOR.'app'.DIRECTORY_SEPARATOR.'public'.DIRECTORY_SEPARATOR.'CPdescarga.xls', function($reader) {
         	$counter_sheet = 0;
@@ -51,8 +51,9 @@ class CpMexSeeder extends Seeder
 			});
 			Log::info(date('Y-m-d H:i:s'));
 
-		});
+		});*/
 
+		exec("mysql -u ".env('DB_USERNAME', 'control')." -p".env('DB_PASSWORD', 'control')." -e \"USE ".env('DB_DATABASE', 'control').";LOAD XML LOCAL INFILE 'CPdescarga.xml' INTO TABLE cpmex CHARACTER SET 'utf8' ROWS IDENTIFIED BY '<table>';\"; ");
         
 
     }
