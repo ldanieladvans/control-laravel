@@ -7,6 +7,8 @@ use App\Client;
 use App\Reference;
 use App\Domicile;
 use Illuminate\Support\Facades\Validator;
+use App\Munic;
+use App\Cpmex;
 
 
 class ClientController extends Controller
@@ -43,6 +45,7 @@ class ClientController extends Controller
     {
         $references = Reference::all();
         $domiciles = Domicile::all();
+        //$cps = Cpmex::all();
         return view('appviews.clientcreate',['references'=>$references,'domiciles'=>$domiciles]);
     }
 

@@ -10,6 +10,8 @@ use Illuminate\Foundation\Auth\Access\AuthorizesRequests;
 use App\Binnacle;
 use Illuminate\Http\Request;
 use Sinergi\BrowserDetector\Browser;
+use App\Munic;
+use App\Cpmex;
 
 class Controller extends BaseController
 {
@@ -75,4 +77,48 @@ class Controller extends BaseController
       else for ($i = 0, $z = strlen($c)-1, $s = $c{rand(0,$z)}, $i = 1; $i != $l; $x = rand(0,$z), $s .= $c{$x}, $s = ($s{$i} == $s{$i-1} ? substr($s,0,-1) : $s), $i=strlen($s)); 
       return $s; 
     } 
+
+
+    public function getMunic(Request $request)
+    {
+        $alldata = $request->all();
+        $result_response = [];
+        if(array_key_exists('domstate',$alldata) && isset($alldata['domstate'])){
+            $result_response = Munic::where('m_state',strtoupper($alldata['domstate']))->get();
+        }
+        
+        
+        $response = array(
+            'status' => 'success',
+            'msg' => 'Ok',
+            'munics' => $result_response,
+        );
+        return \Response::json($response);
+    }
+
+    public function getCpData(Request $request)
+    {
+        $alldata = $request->all();
+        $result_response = [];
+        if(array_key_exists('dommunicserv',$alldata) && array_key_exists('domcpserv',$alldata)){
+            if($alldata['dommunicserv']!='' && $alldata['domcpserv']!=''){
+                $d_codigo = "%".$alldata['dommunicserv']."%";
+                $result_response = Cpmex::where('c_mnpio',$alldata['dommunicserv'])->where('d_codigo','like',$d_codigo)->get();
+            }elseif($alldata['dommunicserv']!='' && $alldata['domcpserv']==''){
+                $result_response = Cpmex::where('c_mnpio',$alldata['dommunicserv'])->get();
+            }else{
+                $d_codigo = "%".$alldata['dommunicserv']."%";
+                $result_response = Cpmex::where('d_codigo','like',$d_codigo)->get();
+            }
+            
+        }
+        
+        
+        $response = array(
+            'status' => 'success',
+            'msg' => 'Ok',
+            'tabledata' => $result_response,
+        );
+        return \Response::json($response);
+    }
 }

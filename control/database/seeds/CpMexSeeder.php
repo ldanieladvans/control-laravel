@@ -2,7 +2,7 @@
 
 use Illuminate\Database\Seeder;
 
-use App\Cpmex;
+use App\Munic;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Log;
 
@@ -15,43 +15,32 @@ class CpMexSeeder extends Seeder
      */
     public function run()
     {
-        /*$excel = file_get_contents(storage_path().DIRECTORY_SEPARATOR.'app'.DIRECTORY_SEPARATOR.'public'.DIRECTORY_SEPARATOR.'CPdescarga.xls');
+        /*$excel = file_get_contents(storage_path().DIRECTORY_SEPARATOR.'app'.DIRECTORY_SEPARATOR.'public'.DIRECTORY_SEPARATOR.'CPdescarga.xls');*/
         
-        Excel::load(storage_path().DIRECTORY_SEPARATOR.'app'.DIRECTORY_SEPARATOR.'public'.DIRECTORY_SEPARATOR.'CPdescarga.xls', function($reader) {
-        	$counter_sheet = 0;
+        Excel::load('c_Municipio.xls', function($reader) {
 		    // Loop through all sheets
-			$reader->each(function($sheet,$counter_sheet) {
+			$reader->each(function($row) {
 
-			    if($counter_sheet > 0){
-			    	// Loop through all rows
-			    	Log::info(date('Y-m-d H:i:s'));
-				    $sheet->each(function($row) {
-				    		
-				    	$objcreated = Cpmex::create([
-						    'd_codigo' => $row['d_codigo'],
-						    'd_asenta' => $row['d_asenta'],
-						    'd_tipo_asenta' => $row['d_tipo_asenta'],
-						    'd_mnpio' => $row['d_mnpio'],
-						    'd_estado' => $row['d_estado'],
-						    'd_ciudad' => $row['d_ciudad'],
-						    'd_cp' => $row['d_cp'],
-						    'c_estado' => $row['c_estado'],
-						    'c_oficina' => $row['c_oficina'],
-						    'c_cp' => $row['c_cp'],
-						    'c_tipo_asenta' => $row['c_tipo_asenta'],
-						    'c_mnpio' => $row['c_mnpio'],
-						    'id_asenta_cpcons' => $row['id_asenta_cpcons'],
-						    'd_zona' => $row['d_zona'],
-						    'c_cve_ciudad' => $row['c_cve_ciudad'],
+					$objcreated = Munic::create([
+						    'm_code' => $row['m_code'],
+						    'm_state' => $row['m_state'],
+						    'm_description' => mb_convert_encoding($row['m_description'], "UTF-8"),
 						]);
-				    });
-			    }
-			    $counter_sheet ++;
+
+				    // if several sheets
+				    /*$sheet->each(function($row) {
+				    		
+				    	$objcreated = Munic::create([
+						    'm_code' => $row['m_code'],
+						    'm_state' => $row['m_state'],
+						    'm_description' => $row['m_description'],
+						]);
+						
+				    });*/
 
 			});
-			Log::info(date('Y-m-d H:i:s'));
 
-		});*/
+		});
 
 		exec("mysql -u ".env('DB_USERNAME', 'control')." -p".env('DB_PASSWORD', 'control')." -e \"USE ".env('DB_DATABASE', 'control').";LOAD XML LOCAL INFILE 'CPdescarga.xml' INTO TABLE cpmex CHARACTER SET 'utf8' ROWS IDENTIFIED BY '<table>';\"; ");
         

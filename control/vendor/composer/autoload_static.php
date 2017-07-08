@@ -547,6 +547,7 @@ class ComposerStaticInitab4f8949bd1040d5a84662f6d8ddae60
         'CreateCta' => __DIR__ . '/../..' . '/database/migrations/2017_05_29_130921_create_cta.php',
         'CreateDistrib' => __DIR__ . '/../..' . '/database/migrations/2017_05_29_122822_create_distrib.php',
         'CreateDom' => __DIR__ . '/../..' . '/database/migrations/2017_05_29_123851_create_dom.php',
+        'CreateMunic' => __DIR__ . '/../..' . '/database/migrations/2017_07_07_123808_create_munic.php',
         'CreateNews' => __DIR__ . '/../..' . '/database/migrations/2017_07_04_101150_create_news.php',
         'CreatePaq' => __DIR__ . '/../..' . '/database/migrations/2017_05_29_124640_create_paq.php',
         'CreatePasswordResetsTable' => __DIR__ . '/../..' . '/database/migrations/2014_10_12_100000_create_password_resets_table.php',

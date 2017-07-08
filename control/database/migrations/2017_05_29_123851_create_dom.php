@@ -25,6 +25,7 @@ class CreateDom extends Migration
             $table->string('dom_munic',25)->nullable();
             $table->string('dom_estado',25)->nullable();
             $table->string('dom_pais',25)->nullable();
+            $table->string('dom_cp',10)->nullable();
         });
     }
 
