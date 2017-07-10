@@ -87,7 +87,7 @@
                               @if ($loop->last)
                                   {{ $apploop->app_nom }} <br />
                               @else
-                                   {{ $apploop->app_nom }}l, <br />
+                                   {{ $apploop->app_nom }}, <br />
                               @endif
                               
                            @endforeach 
