@@ -84,10 +84,10 @@
 
                         	<td>
                            @foreach($appcta->apps as $apploop)
-                              @if ($loop->first)
+                              @if ($loop->last)
                                   {{ $apploop->app_nom }} <br />
                               @else
-                                   , {{ $apploop->app_nom }} <br />
+                                   {{ $apploop->app_nom }}l, <br />
                               @endif
                               
                            @endforeach 
