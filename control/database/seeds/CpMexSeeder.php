@@ -42,7 +42,8 @@ class CpMexSeeder extends Seeder
 
 		});
 
-		exec("mysql -u ".env('DB_USERNAME', 'control')." -p".env('DB_PASSWORD', 'control')." -e \"USE ".env('DB_DATABASE', 'control').";LOAD XML LOCAL INFILE 'CPdescarga.xml' INTO TABLE cpmex CHARACTER SET 'utf8' ROWS IDENTIFIED BY '<table>';\"; ");
+		
+		exec("mysql -u ".env('DB_USERNAME', 'control')." -p".env('DB_PASSWORD', 'control')." -h ".env('DB_HOST', '127.0.0.1')." -e \"USE ".env('DB_DATABASE', 'control').";LOAD XML LOCAL INFILE 'CPdescarga.xml' INTO TABLE cpmex CHARACTER SET 'utf8' ROWS IDENTIFIED BY '<table>';\"; ");
         
 
     }
