@@ -668,7 +668,8 @@ class AppaccountController extends Controller
                 $arrayparams['account_id'] = $appcta ? $appcta->id : 'false';
                 $arrayparams['apps_cta'] = json_encode($array_apps);
                 $acces_vars = $this->getAccessToken();
-                $service_response = $this->getAppService($acces_vars['access_token'],'desactapp',$arrayparams,'ctac');
+                //$service_response = $this->getAppService($acces_vars['access_token'],'desactapp',$arrayparams,'ctac');
+                $service_response = $this->getAppService($acces_vars['access_token'],'delapp',$arrayparams,'ctac');
                 $testmsg = 'entro';
                 foreach ($alldata['selected'] as $key => $value) {
                     \DB::table('app')->where('app_appcta_id',$appcta_id)->where('app_code',$value)->delete();
