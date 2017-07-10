@@ -191,7 +191,9 @@ class AccountController extends Controller
 
                 $cliente_correo = $account->client ? $account->client->cliente_correo : false;
                 if ($cliente_correo){
-                    Mail::to($cliente_correo)->send(new ClientCreate(['user'=>$cliente_correo,'password'=>$password]));
+                    $aaa = 1;
+                    //TODO Descomentar cuando se desbloquee el puerto 587
+                    //Mail::to($cliente_correo)->send(new ClientCreate(['user'=>$cliente_correo,'password'=>$password]));
                 }
                 
             }
