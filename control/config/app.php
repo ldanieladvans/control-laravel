@@ -11,7 +11,7 @@ return [
     'advans_apps_security' => ['ctac'=> [
                                     'grant_type' => 'password',
                                     'client_id' => '1',
-                                    'client_secret' => 'MCqCP5qxbxiQsDH8GZtHzKtvKxujDgyxDZ0fas07',
+                                    'client_secret' => '7L0RvlYGtF0JdXy6zJTOVEUpAa1RIFwk8TC0dta3',
                                     'username' => 'cuenta.admin@advans.mx',
                                     'password' => 'Admin123*',
                                     'scope' => '*',
