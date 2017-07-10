@@ -6,6 +6,13 @@
     <link href="{{ asset('controlassets/vendors/switchery/dist/switchery.min.css') }}" rel="stylesheet">
     <!-- Custom Theme Style -->
     <link href="{{ asset('controlassets/build/css/custom.css') }}" rel="stylesheet">
+
+    <!-- Datatables -->
+    <link href="{{ asset('controlassets/vendors/datatables.net-bs/css/dataTables.bootstrap.min.css') }}" rel="stylesheet">
+    <link href="{{ asset('controlassets/vendors/datatables.net-buttons-bs/css/buttons.bootstrap.min.css') }}" rel="stylesheet">
+    <link href="{{ asset('controlassets/vendors/datatables.net-fixedheader-bs/css/fixedHeader.bootstrap.min.css') }}" rel="stylesheet">
+    <link href="{{ asset('controlassets/vendors/datatables.net-responsive-bs/css/responsive.bootstrap.min.css') }}" rel="stylesheet">
+    <link href="{{ asset('controlassets/vendors/datatables.net-scroller-bs/css/scroller.bootstrap.min.css') }}" rel="stylesheet">
 @endsection
 
 @section('app_content')
@@ -101,6 +108,8 @@
 		              </div>
 
 
+                  	
+
                   	<div class="x_content">
                       <div class="" role="tabpanel" data-example-id="togglable-tabs">
 	                      <ul id="myTab" class="nav nav-tabs bar_tabs" role="tablist">
@@ -108,6 +117,7 @@
 	                        </li>
 	                      </ul>
 	                      <div id="myTabContent" class="tab-content">
+
 	                        <div role="tabpanel" class="tab-pane fade active in" id="tab_content1" aria-labelledby="home-tab">
 
                         	  <div id="switch_new_dom">
@@ -129,10 +139,10 @@
                         	  	<div class="col-md-12 col-sm-12 col-xs-12 form-group ">
 			                        <label class="control-label col-md-1 col-sm-1 col-xs-12">Domicilio: </label>
 			                        <div class="col-md-11 col-sm-11 col-xs-12">
-			                          <select class="form-control" name="distrib_dom_id">
-			                            <option value="null">Seleccione ...</option>
+			                          <select class="form-control" name="cliente_dom_id">
+			                            <option value="">Seleccione ...</option>
 			                            @foreach($domiciles as $domicile)
-			                            	<option value="{{ $domicile->id }}" {{$distributor->distrib_dom_id == $domicile->id ? 'selected':''}}>{{ $domicile->dom_calle }} - {{ $domicile->dom_col }} - {{ $domicile->dom_numetx ? $domicile->dom_numetx : $domicile->dom_numint }}</option>
+			                            	<option value="{{ $domicile->id }}" {{$distributor->distrib_dom_id == $domicile->id ? 'selected':''}}>{{ $domicile->dom_cp }} - {{ $domicile->dom_estado }} - {{ $domicile->dom_ciudad }} - {{ $domicile->dom_col }}</option>
 			                            @endforeach
 			                          </select>
 			                        </div>
@@ -141,107 +151,146 @@
 
                         	  <div id="dom_new_data" {{$distributor->distrib_dom_id ? 'hidden':''}}>
 
-		                          <div class="item form-group">	                    
-				                    <div class="col-md-9 col-sm-9 col-xs-12">
-				                      <input id="dom_calle" class="form-control has-feedback-left" name="dom_calle" placeholder="Calle" type="text">
-				                      <span class="fa fa-home form-control-feedback left" aria-hidden="true"></span>
+                    	  		<div class="item form-group">
+
+                        	  		<div class="col-md-6 col-sm-6 col-xs-12 form-group ">
+					                        <label class="control-label col-md-4 col-sm-4 col-xs-12">Estado: </label>
+					                        <div class="col-md-8 col-sm-8 col-xs-12">
+					                          <select class="form-control" name="dom_estado_aux" id="dom_estado_aux">
+					                            <option value="">Seleccione ...</option>
+					                            <option value="AGU">Aguascalientes</option>
+					                            <option value="BCN">Baja California</option>
+					                            <option value="BCS">Baja California Sur</option>
+
+					                            <option value="CAM">Campeche</option>
+					                            <option value="CHP">Chiapas</option>
+					                            <option value="CHH">Chihuahua</option>
+
+					                            <option value="CMX">Ciudad de México</option>
+					                            <option value="COA">Coahuila de Zaragoza</option>
+					                            <option value="COL">Colima</option>
+
+					                            <option value="DUR">Durango</option>
+					                            <option value="GUA">Guanajuato</option>
+					                            <option value="GRO">Guerrero</option>
+
+					                            <option value="HID">Hidalgo</option>
+					                            <option value="JAL">Jalisco</option>
+					                            <option value="MEX">México</option>
+
+					                            <option value="MIC">Michoacan de Ocampo</option>
+					                            <option value="MOR">Morelos</option>
+					                            <option value="NAY">Nayarit</option>
+
+					                            <option value="NLE">Nuevo León</option>
+					                            <option value="OAX">Oaxaca</option>
+					                            <option value="PUE">Puebla</option>
+
+					                            <option value="QUE">Querétaro de Arteaga</option>
+					                            <option value="ROO">Quintana Roo</option>
+					                            <option value="SLP">San Luis Potosí</option>
+
+					                            <option value="SIN">Sinaloa</option>
+					                            <option value="SON">Sonora</option>
+					                            <option value="TAB">Tabasco</option>
+
+					                            <option value="TAM">Tamaulipas</option>
+					                            <option value="TLA">Tlaxcala</option>
+					                            <option value="VER">Veracruz de Ignacio de la Llave</option>
+
+					                            <option value="YUC">Yucatán</option>
+					                            <option value="ZAC">Zacatecas</option>
+					                            
+					                          </select>
+					                        </div>
+					                      </div>
+
+				                        <div class="col-md-6 col-sm-6 col-xs-6 form-group ">
+
+					                        <label class="control-label col-md-4 col-sm-4 col-xs-12">Municipio: </label>
+					                        <div class="col-md-8 col-sm-8 col-xs-12">
+					                          <select class="form-control" name="dom_munic" id="dom_munic">
+					                            <option value="">Seleccione ...</option>
+
+					                          </select>
+					                        </div>
+
+				                        </div>
+
+			                    </div>
+
+
+
+
+				                  <div class="item form-group">	                    
+				                    <div class="col-md-12 col-sm-12 col-xs-12">
+				                    	<table id="datatable-responsive" class="table table-striped table-bordered dt-responsive nowrap" cellspacing="0" width="100%">
+                                          <thead>
+                                            <tr>
+                                              <th align="left">Código Postal</th>
+                                              <th align="left">Estado</th>
+                                              <th align="left">Ciudad</th>
+                                              <th align="left">Asentamiento</th>
+                                              <th align="left">Tipo Asentamiento</th>
+                                              <th align="right">Seleccione</th>
+                                            </tr>
+                                          </thead>
+                                          <tbody>
+
+                                          </tbody>
+                                        </table>
 				                    </div>
 				                  </div>
 
-				                  <div class="item form-group">	                    
-				                    <div class="col-md-5 col-sm-5 col-xs-12">
-				                      <input id="dom_numext" class="form-control has-feedback-left" name="dom_numext" placeholder="# Ext" type="text">
+
+		                          <div class="item form-group">	                    
+				                    
+				                    <div class="col-md-2 col-sm-2 col-xs-12">
+				                      <input id="dom_cp" class="form-control has-feedback-left" name="dom_cp" placeholder="Código Postal"  type="text" >
 				                      <span class="fa fa-home form-control-feedback left" aria-hidden="true"></span>
 				                    </div>
 
 				                    <div class="col-md-4 col-sm-4 col-xs-12">
-				                      <input id="dom_numint" class="form-control has-feedback-left" name="dom_numint" placeholder="# Int" type="text">
-				                      <span class="fa fa-home form-control-feedback left" aria-hidden="true"></span>
-				                    </div>
-				                  </div>
-
-			                  	  <div class="item form-group">	                    
-				                    <div class="col-md-3 col-sm-3 col-xs-12">
-				                      <input id="dom_col" class="form-control has-feedback-left" name="dom_col" placeholder="Colonia" type="text">
+				                      <input id="dom_estado" class="form-control has-feedback-left" name="dom_estado" placeholder="Estado"  type="text" >
 				                      <span class="fa fa-home form-control-feedback left" aria-hidden="true"></span>
 				                    </div>
 
 				                    <div class="col-md-3 col-sm-3 col-xs-12">
-				                      <input id="dom_ciudad" class="form-control has-feedback-left" name="dom_ciudad" placeholder="Ciudad" type="text">
+				                      <input id="dom_ciudad" class="form-control has-feedback-left" name="dom_ciudad" placeholder="Ciudad" type="text" >
 				                      <span class="fa fa-home form-control-feedback left" aria-hidden="true"></span>
 				                    </div>
 
 				                    <div class="col-md-3 col-sm-3 col-xs-12">
-				                      <input id="dom_munic" class="form-control has-feedback-left" name="dom_munic" placeholder="Municipio" type="text">
+				                      <input id="dom_col" class="form-control has-feedback-left" name="dom_col" placeholder="Asentamiento" type="text" >
 				                      <span class="fa fa-home form-control-feedback left" aria-hidden="true"></span>
 				                    </div>
+
 				                  </div>
 
 
+				                  <div class="item form-group">
 
-			                      <div class="item form-group">
-				                      <div class="col-md-5 col-sm-5 col-xs-12 form-group ">
-				                        <label class="control-label col-md-2 col-sm-2 col-xs-12">Estado: </label>
-				                        <div class="col-md-10 col-sm-10 col-xs-12">
-				                          <select class="form-control" name="dom_estado">
-				                            <option value="null">Seleccione ...</option>
-				                            <option value="ags">Aguascalientes</option>
-				                            <option value="bc">Baja California</option>
-				                            <option value="bcs">Baja California Sur</option>
+				                  	<div class="col-md-12 col-sm-12 col-xs-12">
+				                      <input id="dom_calle" class="form-control has-feedback-left" name="dom_calle" placeholder="Calle"  type="text" >
+				                      <span class="fa fa-home form-control-feedback left" aria-hidden="true"></span>
+				                    </div>
 
-				                            <option value="camp">Campeche</option>
-				                            <option value="chis">Chiapas</option>
-				                            <option value="chih">Chihuahua</option>
+				                  </div>
 
-				                            <option value="cdmx">Ciudad de México</option>
-				                            <option value="coah">Coahuila de Zaragoza</option>
-				                            <option value="col">Colima</option>
 
-				                            <option value="dgo">Durango</option>
-				                            <option value="gto">Guanajuato</option>
-				                            <option value="gro">Guerrero</option>
+			                  	  <div class="item form-group">
 
-				                            <option value="hgo">Hidalgo</option>
-				                            <option value="jal">Jalisco</option>
-				                            <option value="mex">México</option>
+			                  	  	<div class="col-md-6 col-sm-6 col-xs-12">
+				                      <input id="dom_numext" class="form-control has-feedback-left" name="dom_numext" placeholder="# Ext" type="text" >
+				                      <span class="fa fa-home form-control-feedback left" aria-hidden="true"></span>
+				                    </div>
 
-				                            <option value="mich">Michoacan de Ocampo</option>
-				                            <option value="mor">Morelos</option>
-				                            <option value="nay">Nayarit</option>
+				                    <div class="col-md-6 col-sm-6 col-xs-12">
+				                      <input id="dom_numint" class="form-control has-feedback-left" name="dom_numint" placeholder="# Int" type="text" >
+				                      <span class="fa fa-home form-control-feedback left" aria-hidden="true"></span>
+				                    </div>					                  
 
-				                            <option value="nl">Nuevo León</option>
-				                            <option value="oax">Oaxaca</option>
-				                            <option value="pue">Puebla</option>
-
-				                            <option value="qro">Querétaro de Arteaga</option>
-				                            <option value="qr">Quintana Roo</option>
-				                            <option value="slp">San Luis Potosí</option>
-
-				                            <option value="sin">Sinaloa</option>
-				                            <option value="son">Sonora</option>
-				                            <option value="tab">Tabasco</option>
-
-				                            <option value="tamps">Tamaulipas</option>
-				                            <option value="tlax">Tlaxcala</option>
-				                            <option value="ver">Veracruz de Ignacio de la Llave</option>
-
-				                            <option value="yuc">Yucatán</option>
-				                            <option value="zac">Zacatecas</option>
-				                            
-				                          </select>
-				                        </div>
-				                      </div>
-
-				                      <div class="col-md-4 col-sm-4 col-xs-12 form-group ">
-				                        <label class="control-label col-md-2 col-sm-2 col-xs-12">País: </label>
-				                        <div class="col-md-10 col-sm-10 col-xs-12">
-				                          <select class="form-control" name="dom_pais">
-				                            <option value="null">Seleccione ...</option>
-				                            <option value="MX" selected>México</option>
-				                          </select>
-				                        </div>
-				                      </div>
-			                      </div>
+				                  </div>
 
 	                      		</div>
 	                        </div>
@@ -250,6 +299,10 @@
 	                      </div>
 	                    </div>
                 	</div>
+
+
+
+
 
                       <div class="ln_solid"></div>
                       <div class="form-group">
@@ -285,7 +338,29 @@
 	<!-- Custom Theme Scripts -->
     <script src="{{ asset('controlassets/build/js/custom.js') }}"></script>
 
+    <!-- Datatables -->
+    <script src="{{ asset('controlassets/vendors/datatables.net/js/jquery.dataTables.js') }}"></script>
+
+    <script src="{{ asset('controlassets/vendors/datatables.net-bs/js/dataTables.bootstrap.min.js') }}"></script>
+    <script src="{{ asset('controlassets/vendors/datatables.net-buttons/js/dataTables.buttons.min.js') }}"></script>
+    <script src="{{ asset('controlassets/vendors/datatables.net-buttons-bs/js/buttons.bootstrap.min.js') }}"></script>
+    <script src="{{ asset('controlassets/vendors/datatables.net-buttons/js/buttons.flash.min.js') }}"></script>
+    <script src="{{ asset('controlassets/vendors/datatables.net-buttons/js/buttons.html5.min.js') }}"></script>
+    <script src="{{ asset('controlassets/vendors/datatables.net-buttons/js/buttons.print.min.js') }}"></script>
+    <script src="{{ asset('controlassets/vendors/datatables.net-fixedheader/js/dataTables.fixedHeader.min.js') }}"></script>
+    <script src="{{ asset('controlassets/vendors/datatables.net-keytable/js/dataTables.keyTable.min.js') }}"></script>
+    <script src="{{ asset('controlassets/vendors/datatables.net-responsive/js/dataTables.responsive.min.js') }}"></script>
+    <script src="{{ asset('controlassets/vendors/datatables.net-responsive-bs/js/responsive.bootstrap.js') }}"></script>
+    <script src="{{ asset('controlassets/vendors/datatables.net-scroller/js/dataTables.scroller.min.js') }}"></script>
+
     <script type="text/javascript">
+
+    	var dom_estado_serv = '';
+    	var dom_munic_serv = '';
+    	var dom_cp_serv = '';
+    	var dom_munic_text = '';
+
+    	var dtobj = null;
 
     	$("#distrib_rfc").on('change', function(){
     		document.getElementById("span_distrib_rfc").setAttribute('hidden','1');
@@ -306,6 +381,167 @@
 		 }
 
 
+		 $("#dom_estado_aux").on('change', function(){
+    		var CSRF_TOKEN = $('meta[name="csrf-token"]').attr('content');
+
+    		dom_estado_serv = this.value;
+
+    		$("#dom_munic option").each(function() {
+				  $(this).remove();
+			  });
+
+			  $('#dom_munic').append($('<option>', {
+				    value: '',
+				    text: 'Seleccione ...'
+				}));
+
+    		  if(this.value!=''){
+    		  	  $('#loadingmodal').modal('show');
+	              $.ajax({
+	                url: '/getmunic',
+	                type: 'POST',
+	                data: {_token: CSRF_TOKEN,domstate:this.value},
+	                dataType: 'JSON',
+	                success: function (data) {
+                	  $('#loadingmodal').modal('hide');
+	                  
+	                  
+
+	                  data['munics'].forEach(function(item){
+	                  	$('#dom_munic').append($('<option>', {
+						    value: item.m_code,
+						    text: item.m_description
+						}));
+	                  });
+
+	                  var dataTablevalues = [];
+
+	                  var table_counter = 0;
+	                  data['tabledata'].forEach(function(item){
+
+	                      /*$('#datatable-responsive').find('tbody').append( "<tr><td id='d_codigo"+item.id+"'>"+item.d_codigo+"</td><td id='d_estado"+item.id+"'>"+item.d_estado+"</td><td id='d_ciudad"+item.id+"'>"+item.d_ciudad+"</td><td id='d_asenta"+item.id+"'>"+item.d_asenta+"</td><td id='d_tipo_asenta"+item.id+"'>"+item.d_tipo_asenta+"</td><td><div class='btn-group'><div class='btn-group'><a id='accbtn"+item.id+"' onclick='unlockUsers("+'"'+item.id+'"'+")' class='btn btn-xs' data-placement='left' title='Seleccionar' ><i class='fa fa-unlock fa-2x'></i> </a></div></td></tr>");*/
+
+	                      dataTablevalues.push([item.d_codigo,item.d_estado,item.d_ciudad,item.d_asenta,item.d_tipo_asenta,"<div class='btn-group'><div class='btn-group'><a id='accbtn"+item.id+"' onclick='getRowData("+table_counter+")' class='btn btn-xs' data-placement='left' title='Seleccionar' ><i class='fa fa-check fa-2x'></i> </a></div>"]);
+
+	                      table_counter ++;
+	                    
+
+	                  });
+
+
+
+	                  $('#datatable-responsive').dataTable().fnDestroy();
+
+	                  dtobj = $('#datatable-responsive').DataTable( {
+				        data: dataTablevalues,
+
+
+				    	} );
+	                    
+	                },
+	                error: function(XMLHttpRequest, textStatus, errorThrown) { 
+	                    new PNotify({
+	                    title: "Notificación",
+	                    type: "info",
+	                    text: "Ha ocurrido un error",
+	                    nonblock: {
+	                      nonblock: true
+	                    },
+	                    addclass: 'dark',
+	                    styling: 'bootstrap3'
+	                  });
+	                }
+	            });
+    		  }
+               
+    	});
+
+
+		 $("#dom_munic").on('change', function(){
+    		var CSRF_TOKEN = $('meta[name="csrf-token"]').attr('content');
+
+    		var table = document.getElementById('datatable-responsive');
+	        var rowCount = table.rows.length;
+
+	        while(table.rows.length > 1) {
+
+	          table.deleteRow(1);
+	        }
+
+    		dom_munic_serv = this.value;
+    		dom_munic_text = this.text;
+
+    		  if(this.value!=''){
+    		  	  $('#loadingmodal').modal('show');
+	              $.ajax({
+	                url: '/getcpdata',
+	                type: 'POST',
+	                data: {_token: CSRF_TOKEN,dommunicserv:dom_munic_serv,domcpserv:dom_cp_serv,domestadoserv:dom_estado_serv},
+	                dataType: 'JSON',
+	                success: function (data) {
+                	  $('#loadingmodal').modal('hide');
+
+	                  var dataTablevalues = [];
+
+	                  var table_counter = 0;
+	                  data['tabledata'].forEach(function(item){
+
+	                      /*$('#datatable-responsive').find('tbody').append( "<tr><td id='d_codigo"+item.id+"'>"+item.d_codigo+"</td><td id='d_estado"+item.id+"'>"+item.d_estado+"</td><td id='d_ciudad"+item.id+"'>"+item.d_ciudad+"</td><td id='d_asenta"+item.id+"'>"+item.d_asenta+"</td><td id='d_tipo_asenta"+item.id+"'>"+item.d_tipo_asenta+"</td><td><div class='btn-group'><div class='btn-group'><a id='accbtn"+item.id+"' onclick='unlockUsers("+'"'+item.id+'"'+")' class='btn btn-xs' data-placement='left' title='Seleccionar' ><i class='fa fa-unlock fa-2x'></i> </a></div></td></tr>");*/
+
+	                      dataTablevalues.push([item.d_codigo,item.d_estado,item.d_ciudad,item.d_asenta,item.d_tipo_asenta,"<div class='btn-group'><div class='btn-group'><a id='accbtn"+item.id+"' onclick='getRowData("+table_counter+")' class='btn btn-xs' data-placement='left' title='Seleccionar' ><i class='fa fa-check fa-2x'></i> </a></div>"]);
+
+	                      table_counter ++;
+	                    
+
+	                  });
+
+
+
+	                  $('#datatable-responsive').dataTable().fnDestroy();
+
+	                  dtobj = $('#datatable-responsive').DataTable( {
+				        data: dataTablevalues,
+
+
+				    } );
+	                    
+	                },
+	                error: function(XMLHttpRequest, textStatus, errorThrown) { 
+	                    new PNotify({
+	                    title: "Notificación",
+	                    type: "info",
+	                    text: "Ha ocurrido un error",
+	                    nonblock: {
+	                      nonblock: true
+	                    },
+	                    addclass: 'dark',
+	                    styling: 'bootstrap3'
+	                  });
+	                }
+	            });
+    		  }
+               
+    	});
+
+
+
+	    function getRowData(table_counter){
+	    	var rowdata = [];
+	    	if(dtobj){
+	    		rowdata = dtobj.row(table_counter).data();
+				document.getElementById('dom_cp').value = rowdata[0];
+				document.getElementById('dom_col').value = rowdata[3];
+				if(rowdata[2]!=''){
+					document.getElementById('dom_ciudad').value = rowdata[2];
+				}else{
+					document.getElementById('dom_ciudad').value = $('#dom_munic option:selected').text();
+				}
+				
+				document.getElementById('dom_estado').value = rowdata[1];
+			}
+	    }
+		 
+		 
 	</script>
 
 

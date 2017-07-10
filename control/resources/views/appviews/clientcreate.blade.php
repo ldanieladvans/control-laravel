@@ -444,6 +444,9 @@
 		   
 		 }
 
+
+		 
+
 		 $("#dom_estado_aux").on('change', function(){
     		var CSRF_TOKEN = $('meta[name="csrf-token"]').attr('content');
 
