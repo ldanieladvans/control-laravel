@@ -648,7 +648,8 @@ class AppaccountController extends Controller
         $array_apps = array();
 
         $apps = config('app.advans_apps');
-        
+        $fmessage = 'Se han eliminado aplicaciones';
+        $service_response = [];
 
         if(array_key_exists('appctaid',$alldata) && isset($alldata['appctaid'])){
             $appcta = Appaccount::findOrFail($alldata['appctaid']);
@@ -671,16 +672,26 @@ class AppaccountController extends Controller
                 //$service_response = $this->getAppService($acces_vars['access_token'],'desactapp',$arrayparams,'ctac');
                 $service_response = $this->getAppService($acces_vars['access_token'],'delapp',$arrayparams,'ctac');
                 $testmsg = 'entro';
-                foreach ($alldata['selected'] as $key => $value) {
-                    \DB::table('app')->where('app_appcta_id',$appcta_id)->where('app_code',$value)->delete();
+                if($service_response['status']=='failure'){
+                    $fmessage = $service_response['msg'];
+                }else{
+                    foreach ($alldata['selected'] as $key => $value) {
+                        \DB::table('app')->where('app_appcta_id',$appcta_id)->where('app_code',$value)->delete();
+                    }
                 }
+                
                 
             }
         }
 
-        $fmessage = 'Se han eliminado aplicaciones';
+        
         \Session::flash('message',$fmessage);
-        $this->registeredBinnacle($request,'delete',$fmessage);
+        if(array_key_exists('status', $service_response)){
+            if($service_response['status']=='success'){
+                $this->registeredBinnacle($request,'delete',$fmessage);
+            }
+        }
+        
 
         $response = array(
             'status' => 'success',
