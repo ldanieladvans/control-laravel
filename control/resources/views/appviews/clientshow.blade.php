@@ -36,7 +36,7 @@
                         <tr>
                           <!--<th>Id</th>-->
                           <th>Nombre</th>
-                          <th>Sexo</th>
+                          <!--<th>Sexo</th>-->
                           <th>Nacionalidad</th>
                           <th>RFC</th>
                           <th>Correo</th>
@@ -52,7 +52,7 @@
                         <tr>
                         	<!--<td>{{ $client->id }}</td>-->
                         	<td>{{ $client->cliente_nom }}</td>
-                        	<td>{{ $client->cliente_sexo }}</td>
+                        	<!--<td>{{ $client->cliente_sexo }}</td>-->
                         	<td>{{ $client->cliente_nac }}</td>
                         	<td>{{ $client->cliente_rfc }}</td>
                         	<td>{{ $client->cliente_correo }}</td>
