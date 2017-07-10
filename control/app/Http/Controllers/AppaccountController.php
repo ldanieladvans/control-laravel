@@ -270,8 +270,8 @@ class AppaccountController extends Controller
                         ]);
         $client_rfc = $appcta->account ? ($appcta->account->client ? $appcta->account->client->cliente_rfc : '') : '';
 
-        //$arrayparams['rfc_nombrebd'] = $client_rfc.'_'.$appcta->id;
-        $arrayparams['rfc_nombrebd'] = ($appcta->account ? $appcta->account->cta_num : '').'_'.$appcta->id;
+        $arrayparams['rfc_nombrebd'] = $client_rfc;
+        //$arrayparams['rfc_nombrebd'] = ($appcta->account ? $appcta->account->cta_num : '').'_'.$appcta->id;
         $arrayparams['account_id'] = $appcta ? $appcta->id : 'false';
         $arrayparams['paq_cta'] = json_encode($packs);
 
