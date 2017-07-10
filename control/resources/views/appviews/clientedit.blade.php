@@ -96,6 +96,8 @@
 	                      </div>-->
 		              </div>
 
+                  	
+
                   	<div class="x_content">
                       <div class="" role="tabpanel" data-example-id="togglable-tabs">
 	                      <ul id="myTab" class="nav nav-tabs bar_tabs" role="tablist">
@@ -103,10 +105,9 @@
 	                        </li>
 	                        <li role="presentation" class=""><a href="#tab_content2" role="tab" id="profile-tab" data-toggle="tab" aria-expanded="false">Referencia</a>
 	                        </li>
-	                        <li role="presentation" class=""><a href="#tab_content3" role="tab" id="cert-tab" data-toggle="tab" aria-expanded="false">Vigencia Certificado</a>
-	                        </li>
 	                      </ul>
 	                      <div id="myTabContent" class="tab-content">
+
 	                        <div role="tabpanel" class="tab-pane fade active in" id="tab_content1" aria-labelledby="home-tab">
 
                         	  <div id="switch_new_dom">
@@ -129,9 +130,9 @@
 			                        <label class="control-label col-md-1 col-sm-1 col-xs-12">Domicilio: </label>
 			                        <div class="col-md-11 col-sm-11 col-xs-12">
 			                          <select class="form-control" name="cliente_dom_id">
-			                            <option value="null">Seleccione ...</option>
+			                            <option value="">Seleccione ...</option>
 			                            @foreach($domiciles as $domicile)
-			                            	<option value="{{ $domicile->id }}" {{$client->cliente_dom_id == $domicile->id ? 'selected':''}}>{{ $domicile->dom_calle }} - {{ $domicile->dom_col }} - {{ $domicile->dom_numetx ? $domicile->dom_numetx : $domicile->dom_numint }}</option>
+			                            	<option value="{{ $domicile->id }}" {{$client->cliente_dom_id == $domicile->id ? 'selected':''}}>{{ $domicile->dom_cp }} - {{ $domicile->dom_estado }} - {{ $domicile->dom_ciudad }} - {{ $domicile->dom_col }}</option>
 			                            @endforeach
 			                          </select>
 			                        </div>
@@ -140,107 +141,146 @@
 
                         	  <div id="dom_new_data" {{$client->cliente_dom_id ? 'hidden':''}}>
 
-		                          <div class="item form-group">	                    
-				                    <div class="col-md-9 col-sm-9 col-xs-12">
-				                      <input id="dom_calle" class="form-control has-feedback-left" name="dom_calle" placeholder="Calle" type="text">
-				                      <span class="fa fa-home form-control-feedback left" aria-hidden="true"></span>
+                    	  		<div class="item form-group">
+
+                        	  		<div class="col-md-6 col-sm-6 col-xs-12 form-group ">
+					                        <label class="control-label col-md-4 col-sm-4 col-xs-12">Estado: </label>
+					                        <div class="col-md-8 col-sm-8 col-xs-12">
+					                          <select class="form-control" name="dom_estado_aux" id="dom_estado_aux">
+					                            <option value="">Seleccione ...</option>
+					                            <option value="AGU">Aguascalientes</option>
+					                            <option value="BCN">Baja California</option>
+					                            <option value="BCS">Baja California Sur</option>
+
+					                            <option value="CAM">Campeche</option>
+					                            <option value="CHP">Chiapas</option>
+					                            <option value="CHH">Chihuahua</option>
+
+					                            <option value="CMX">Ciudad de México</option>
+					                            <option value="COA">Coahuila de Zaragoza</option>
+					                            <option value="COL">Colima</option>
+
+					                            <option value="DUR">Durango</option>
+					                            <option value="GUA">Guanajuato</option>
+					                            <option value="GRO">Guerrero</option>
+
+					                            <option value="HID">Hidalgo</option>
+					                            <option value="JAL">Jalisco</option>
+					                            <option value="MEX">México</option>
+
+					                            <option value="MIC">Michoacan de Ocampo</option>
+					                            <option value="MOR">Morelos</option>
+					                            <option value="NAY">Nayarit</option>
+
+					                            <option value="NLE">Nuevo León</option>
+					                            <option value="OAX">Oaxaca</option>
+					                            <option value="PUE">Puebla</option>
+
+					                            <option value="QUE">Querétaro de Arteaga</option>
+					                            <option value="ROO">Quintana Roo</option>
+					                            <option value="SLP">San Luis Potosí</option>
+
+					                            <option value="SIN">Sinaloa</option>
+					                            <option value="SON">Sonora</option>
+					                            <option value="TAB">Tabasco</option>
+
+					                            <option value="TAM">Tamaulipas</option>
+					                            <option value="TLA">Tlaxcala</option>
+					                            <option value="VER">Veracruz de Ignacio de la Llave</option>
+
+					                            <option value="YUC">Yucatán</option>
+					                            <option value="ZAC">Zacatecas</option>
+					                            
+					                          </select>
+					                        </div>
+					                      </div>
+
+				                        <div class="col-md-6 col-sm-6 col-xs-6 form-group ">
+
+					                        <label class="control-label col-md-4 col-sm-4 col-xs-12">Municipio: </label>
+					                        <div class="col-md-8 col-sm-8 col-xs-12">
+					                          <select class="form-control" name="dom_munic" id="dom_munic">
+					                            <option value="">Seleccione ...</option>
+
+					                          </select>
+					                        </div>
+
+				                        </div>
+
+			                    </div>
+
+
+
+
+				                  <div class="item form-group">	                    
+				                    <div class="col-md-12 col-sm-12 col-xs-12">
+				                    	<table id="datatable-responsive" class="table table-striped table-bordered dt-responsive nowrap" cellspacing="0" width="100%">
+                                          <thead>
+                                            <tr>
+                                              <th align="left">Código Postal</th>
+                                              <th align="left">Estado</th>
+                                              <th align="left">Ciudad</th>
+                                              <th align="left">Asentamiento</th>
+                                              <th align="left">Tipo Asentamiento</th>
+                                              <th align="right">Seleccione</th>
+                                            </tr>
+                                          </thead>
+                                          <tbody>
+
+                                          </tbody>
+                                        </table>
 				                    </div>
 				                  </div>
 
-				                  <div class="item form-group">	                    
-				                    <div class="col-md-5 col-sm-5 col-xs-12">
-				                      <input id="dom_numext" class="form-control has-feedback-left" name="dom_numext" placeholder="# Ext" type="text">
+
+		                          <div class="item form-group">	                    
+				                    
+				                    <div class="col-md-2 col-sm-2 col-xs-12">
+				                      <input id="dom_cp" class="form-control has-feedback-left" name="dom_cp" placeholder="Código Postal"  type="text" >
 				                      <span class="fa fa-home form-control-feedback left" aria-hidden="true"></span>
 				                    </div>
 
 				                    <div class="col-md-4 col-sm-4 col-xs-12">
-				                      <input id="dom_numint" class="form-control has-feedback-left" name="dom_numint" placeholder="# Int" type="text">
-				                      <span class="fa fa-home form-control-feedback left" aria-hidden="true"></span>
-				                    </div>
-				                  </div>
-
-			                  	  <div class="item form-group">	                    
-				                    <div class="col-md-3 col-sm-3 col-xs-12">
-				                      <input id="dom_col" class="form-control has-feedback-left" name="dom_col" placeholder="Colonia" type="text">
+				                      <input id="dom_estado" class="form-control has-feedback-left" name="dom_estado" placeholder="Estado"  type="text" >
 				                      <span class="fa fa-home form-control-feedback left" aria-hidden="true"></span>
 				                    </div>
 
 				                    <div class="col-md-3 col-sm-3 col-xs-12">
-				                      <input id="dom_ciudad" class="form-control has-feedback-left" name="dom_ciudad" placeholder="Ciudad" type="text">
+				                      <input id="dom_ciudad" class="form-control has-feedback-left" name="dom_ciudad" placeholder="Ciudad" type="text" >
 				                      <span class="fa fa-home form-control-feedback left" aria-hidden="true"></span>
 				                    </div>
 
 				                    <div class="col-md-3 col-sm-3 col-xs-12">
-				                      <input id="dom_munic" class="form-control has-feedback-left" name="dom_munic" placeholder="Municipio" type="text">
+				                      <input id="dom_col" class="form-control has-feedback-left" name="dom_col" placeholder="Asentamiento" type="text" >
 				                      <span class="fa fa-home form-control-feedback left" aria-hidden="true"></span>
 				                    </div>
+
 				                  </div>
 
 
+				                  <div class="item form-group">
 
-			                      <div class="item form-group">
-				                      <div class="col-md-5 col-sm-5 col-xs-12 form-group ">
-				                        <label class="control-label col-md-2 col-sm-2 col-xs-12">Estado: </label>
-				                        <div class="col-md-10 col-sm-10 col-xs-12">
-				                          <select class="form-control" name="dom_estado">
-				                            <option value="null">Seleccione ...</option>
-				                            <option value="ags">Aguascalientes</option>
-				                            <option value="bc">Baja California</option>
-				                            <option value="bcs">Baja California Sur</option>
+				                  	<div class="col-md-12 col-sm-12 col-xs-12">
+				                      <input id="dom_calle" class="form-control has-feedback-left" name="dom_calle" placeholder="Calle"  type="text" >
+				                      <span class="fa fa-home form-control-feedback left" aria-hidden="true"></span>
+				                    </div>
 
-				                            <option value="camp">Campeche</option>
-				                            <option value="chis">Chiapas</option>
-				                            <option value="chih">Chihuahua</option>
+				                  </div>
 
-				                            <option value="cdmx">Ciudad de México</option>
-				                            <option value="coah">Coahuila de Zaragoza</option>
-				                            <option value="col">Colima</option>
 
-				                            <option value="dgo">Durango</option>
-				                            <option value="gto">Guanajuato</option>
-				                            <option value="gro">Guerrero</option>
+			                  	  <div class="item form-group">
 
-				                            <option value="hgo">Hidalgo</option>
-				                            <option value="jal">Jalisco</option>
-				                            <option value="mex">México</option>
+			                  	  	<div class="col-md-6 col-sm-6 col-xs-12">
+				                      <input id="dom_numext" class="form-control has-feedback-left" name="dom_numext" placeholder="# Ext" type="text" >
+				                      <span class="fa fa-home form-control-feedback left" aria-hidden="true"></span>
+				                    </div>
 
-				                            <option value="mich">Michoacan de Ocampo</option>
-				                            <option value="mor">Morelos</option>
-				                            <option value="nay">Nayarit</option>
+				                    <div class="col-md-6 col-sm-6 col-xs-12">
+				                      <input id="dom_numint" class="form-control has-feedback-left" name="dom_numint" placeholder="# Int" type="text" >
+				                      <span class="fa fa-home form-control-feedback left" aria-hidden="true"></span>
+				                    </div>					                  
 
-				                            <option value="nl">Nuevo León</option>
-				                            <option value="oax">Oaxaca</option>
-				                            <option value="pue">Puebla</option>
-
-				                            <option value="qro">Querétaro de Arteaga</option>
-				                            <option value="qr">Quintana Roo</option>
-				                            <option value="slp">San Luis Potosí</option>
-
-				                            <option value="sin">Sinaloa</option>
-				                            <option value="son">Sonora</option>
-				                            <option value="tab">Tabasco</option>
-
-				                            <option value="tamps">Tamaulipas</option>
-				                            <option value="tlax">Tlaxcala</option>
-				                            <option value="ver">Veracruz de Ignacio de la Llave</option>
-
-				                            <option value="yuc">Yucatán</option>
-				                            <option value="zac">Zacatecas</option>
-				                            
-				                          </select>
-				                        </div>
-				                      </div>
-
-				                      <div class="col-md-4 col-sm-4 col-xs-12 form-group ">
-				                        <label class="control-label col-md-2 col-sm-2 col-xs-12">País: </label>
-				                        <div class="col-md-10 col-sm-10 col-xs-12">
-				                          <select class="form-control" name="dom_pais">
-				                            <option value="null">Seleccione ...</option>
-				                            <option value="MX" selected>México</option>
-				                          </select>
-				                        </div>
-				                      </div>
-			                      </div>
+				                  </div>
 
 	                      		</div>
 	                        </div>
@@ -252,7 +292,7 @@
 		                        <div class="col-md-7 col-sm-7 col-xs-12">
 		                          <div class="">
 		                            <label>
-		                              <input type="checkbox" id="checkrefer" name="checkrefer" onchange="toggleCheckboxRefer(this)" class="js-switch" {{$client->cliente_refer_id ? '':'checked'}} />
+		                              <input type="checkbox" id="checkrefer" name="checkrefer" onchange="toggleCheckboxRefer(this)" class="js-switch" checked="checked" />
 		                            </label>
 		                          </div>
 		                          
@@ -267,7 +307,7 @@
 			                        <label class="control-label col-md-1 col-sm-1 col-xs-12">Referencia: </label>
 			                        <div class="col-md-11 col-sm-11 col-xs-12">
 			                          <select class="form-control" name="cliente_refer_id">
-			                            <option value="null">Seleccione ...</option>
+			                            <option value="">Seleccione ...</option>
 			                            @foreach($references as $reference)
 			                            	<option value="{{ $reference->id }}" {{$client->cliente_refer_id == $reference->id ? 'selected':''}}>{{ $reference->refer_nom }} - {{ $reference->refer_rfc }}</option>
 			                            @endforeach
@@ -280,7 +320,7 @@
                         	  <div id="refer_new_data" {{$client->cliente_refer_id ? 'hidden':''}}>
 	                        	  <div class="item form-group">	                    
 				                    <div class="col-md-9 col-sm-9 col-xs-12">
-				                      <input id="refer_nom" class="form-control has-feedback-left" name="refer_nom" placeholder="Nombre" type="text">
+				                      <input id="refer_nom" class="form-control has-feedback-left" name="refer_nom" placeholder="Nombre" required type="text">
 				                      <span class="fa fa-user form-control-feedback left" aria-hidden="true"></span>
 				                    </div>
 				                  </div>
@@ -295,34 +335,13 @@
 
 	                        </div>
 
-	                        <div role="tabpanel" class="tab-pane fade" id="tab_content3" aria-labelledby="profile-tab">
-
-	                        	<div class="item form-group">	                    
-				                    <div class="col-md-9 col-sm-9 col-xs-12">
-				                      <input id="client_cert" class="form-control has-feedback-left" name="client_cert" placeholder="Certificado del Cliente " type="file" accept=".cer" title="Certificado con extensión .cer">
-				                      <span class="fa fa-lock form-control-feedback left" aria-hidden="true"></span>
-				                    </div>
-				                  </div>
-
-				                  <div class="item form-group">	                    
-				                    <div class="col-md-9 col-sm-9 col-xs-12">
-				                      <input id="cert_f_ini" class="form-control has-feedback-left" name="cliente_correo" placeholder="Fecha Inicio Certificado" type="date" disabled title="Fecha Inicio Certificado" value="{{ $client->cert_f_ini }}">
-				                      <span class="fa fa-calendar form-control-feedback left" aria-hidden="true"></span>
-				                    </div>
-				                  </div>
-
-				                  <div class="item form-group">	                    
-				                    <div class="col-md-9 col-sm-9 col-xs-12">
-				                      <input id="cert_f_fin" class="form-control has-feedback-left" name="cliente_tel" placeholder="Fecha Fin Certificado"  type="date" disabled title="Fecha Fin Certificado" value="{{ $client->cert_f_fin }}">
-				                      <span class="fa fa-calendar form-control-feedback left" aria-hidden="true"></span>
-				                    </div>
-				                  </div>
-
-	                        </div>
 
 	                      </div>
 	                    </div>
                 	</div>
+
+
+
 
                       <div class="ln_solid"></div>
                       <div class="form-group">

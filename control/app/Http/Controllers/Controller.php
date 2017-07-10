@@ -83,8 +83,10 @@ class Controller extends BaseController
     {
         $alldata = $request->all();
         $result_response = [];
+        $states_key = config('app.states_key');
         if(array_key_exists('domstate',$alldata) && isset($alldata['domstate'])){
             $result_response = Munic::where('m_state',strtoupper($alldata['domstate']))->get();
+            $states_response = Cpmex::where('c_estado',$states_key[$alldata['domstate']])->get();
         }
         
         
@@ -92,6 +94,7 @@ class Controller extends BaseController
             'status' => 'success',
             'msg' => 'Ok',
             'munics' => $result_response,
+            'tabledata' => $states_response
         );
         return \Response::json($response);
     }
@@ -100,15 +103,17 @@ class Controller extends BaseController
     {
         $alldata = $request->all();
         $result_response = [];
-        if(array_key_exists('dommunicserv',$alldata) && array_key_exists('domcpserv',$alldata)){
+        $states_key = config('app.states_key');
+        $testval = '';
+        if(array_key_exists('dommunicserv',$alldata) && array_key_exists('domcpserv',$alldata) && array_key_exists('domestadoserv',$alldata)){
             if($alldata['dommunicserv']!='' && $alldata['domcpserv']!=''){
                 $d_codigo = "%".$alldata['dommunicserv']."%";
-                $result_response = Cpmex::where('c_mnpio',$alldata['dommunicserv'])->where('d_codigo','like',$d_codigo)->get();
+                $result_response = Cpmex::where('c_mnpio',$alldata['dommunicserv'])->where('d_codigo','like',$d_codigo)->where('c_estado',$states_key[$alldata['domestadoserv']])->get();
             }elseif($alldata['dommunicserv']!='' && $alldata['domcpserv']==''){
-                $result_response = Cpmex::where('c_mnpio',$alldata['dommunicserv'])->get();
+                $result_response = Cpmex::where('c_mnpio',$alldata['dommunicserv'])->where('c_estado',$states_key[$alldata['domestadoserv']])->get();
             }else{
                 $d_codigo = "%".$alldata['dommunicserv']."%";
-                $result_response = Cpmex::where('d_codigo','like',$d_codigo)->get();
+                $result_response = Cpmex::where('d_codigo','like',$d_codigo)->where('c_estado',$states_key[$alldata['domestadoserv']])->get();
             }
             
         }
@@ -118,6 +123,9 @@ class Controller extends BaseController
             'status' => 'success',
             'msg' => 'Ok',
             'tabledata' => $result_response,
+            'estado' => $alldata['domestadoserv'],
+            'testval' => $testval,
+            'states_key' => $states_key
         );
         return \Response::json($response);
     }

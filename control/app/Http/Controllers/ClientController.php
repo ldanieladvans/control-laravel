@@ -118,6 +118,15 @@ class ClientController extends Controller
                 if (array_key_exists('dom_pais',$alldata)){
                     $dom_vals['dom_pais'] = $alldata['dom_pais'];
                 }
+                if (array_key_exists('dom_cp',$alldata)){
+                    $dom_vals['dom_cp'] = $alldata['dom_cp'];
+                }
+                if (array_key_exists('dom_numext',$alldata)){
+                    $dom_vals['dom_numext'] = $alldata['dom_numext'];
+                }
+                if (array_key_exists('dom_numint',$alldata)){
+                    $dom_vals['dom_numint'] = $alldata['dom_numint'];
+                }
                 $domicile = new Domicile($dom_vals);
                 $domicile->save();
                 $domicile_id = $domicile->id;
@@ -229,6 +238,15 @@ class ClientController extends Controller
                 }
                 if (array_key_exists('dom_pais',$alldata)){
                     $dom_vals['dom_pais'] = $alldata['dom_pais'];
+                }
+                if (array_key_exists('dom_cp',$alldata)){
+                    $dom_vals['dom_cp'] = $alldata['dom_cp'];
+                }
+                if (array_key_exists('dom_numext',$alldata)){
+                    $dom_vals['dom_numext'] = $alldata['dom_numext'];
+                }
+                if (array_key_exists('dom_numint',$alldata)){
+                    $dom_vals['dom_numint'] = $alldata['dom_numint'];
                 }
                 $domicile = new Domicile($dom_vals);
                 $domicile->save();
