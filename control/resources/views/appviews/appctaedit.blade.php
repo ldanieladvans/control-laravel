@@ -47,12 +47,12 @@
 
                     {{ csrf_field() }}
 
-                    <div class="item form-group">                     
+                    <!--<div class="item form-group">                     
                       <div class="col-md-9 col-sm-9 col-xs-12">
                         <input id="appcta_app" class="form-control has-feedback-left" title="Identificador de la asignación" name="appcta_app" placeholder="Identificador de la asignación *" required="required" type="text" value="{{$appcta->appcta_app}}" >
                         <span class="fa fa-laptop form-control-feedback left" aria-hidden="true"></span>
                       </div>
-                    </div>
+                    </div>-->
 
                     <div class="item form-group">
                               <label class="control-label col-md-1 col-sm-1 col-xs-12">Cuenta*</label>
