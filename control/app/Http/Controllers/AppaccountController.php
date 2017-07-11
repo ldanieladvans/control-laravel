@@ -102,7 +102,7 @@ class AppaccountController extends Controller
         }else{
             $appcta = new Appaccount($alldata);
 
-            $appcta->appcta_app = $alldata['appcta_app'];
+            
 
 
             $appcta->appcta_f_vent = date('Y-m-d');
@@ -157,6 +157,8 @@ class AppaccountController extends Controller
             $arrayparams['client_name'] = $appcta->account->client ? $appcta->account->client->cliente_nom : $client_rfc;
             $arrayparams['client_nick'] = count(explode('@',$arrayparams['client_email'])) > 1 ? explode('@',$arrayparams['client_email'])[0] : '';
 
+            $appcta->appcta_app = $arrayparams['rfc_nombrebd'];
+
             $arrayparams['account_id'] = $appcta ? $appcta->id : 'false';
             $arrayparams['apps_cta'] = json_encode($apps_ret);
             $arrayparams['paq_cta'] = json_encode($packs);
@@ -165,12 +167,12 @@ class AppaccountController extends Controller
             $acces_vars = $this->getAccessToken();
             $service_response = $this->getAppService($acces_vars['access_token'],'addpaq',$arrayparams,'ctac');
 
-            $fmessage = 'Se ha asignado un paquete a una cuenta con nombre: '.$alldata['appcta_app'];
+            $fmessage = 'Se ha asignado un paquete a una cuenta con nombre: '.$arrayparams['rfc_nombrebd'];
             \Session::flash('message',$fmessage);
             $this->registeredBinnacle($request,'store',$fmessage);
         }
 
-        
+        $appcta->save();
         return redirect()->route('appcta.index');
     }
 
