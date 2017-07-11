@@ -199,6 +199,7 @@ class AccountController extends Controller
             }
 
             $account->cta_fecha = date("Y-m-d");
+            $account->save();
             $arrayparams['rfc_nombrebd'] = $account->cta_num ? $account->cta_num : '';
             $arrayparams['client_rfc'] = $account->client ? $account->client->cliente_rfc : '';
             $arrayparams['client_email'] = $account->client ? $account->client->cliente_correo : '';
