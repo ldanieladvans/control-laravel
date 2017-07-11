@@ -226,7 +226,7 @@ class AppaccountController extends Controller
         echo "</pre>";*/
 
         $appcta = Appaccount::findOrFail($id);
-        $appcta->appcta_app = $alldata['appcta_app'];
+        //$appcta->appcta_app = $alldata['appcta_app'];
         $appcta->appcta_rfc = $alldata['appcta_rfc'];
         $appcta->appcta_gig = $alldata['appcta_gig'];
         /*$appcta->appcta_f_vent = $alldata['appcta_f_vent'];
@@ -280,7 +280,7 @@ class AppaccountController extends Controller
         $acces_vars = $this->getAccessToken();
         $service_response = $this->getAppService($acces_vars['access_token'],'modpaq',$arrayparams,'ctac');
 
-        $fmessage = 'Se ha actualizado un paquete - cuenta con nombre: '.$alldata['appcta_app'];
+        $fmessage = 'Se ha actualizado un paquete - cuenta con nombre: '.$arrayparams['rfc_nombrebd'];
         \Session::flash('message',$fmessage);
         $this->registeredBinnacle($request,'store',$fmessage);
         return redirect()->route('appcta.index');
