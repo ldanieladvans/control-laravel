@@ -216,7 +216,9 @@ class DistributorController extends Controller
             $distributor->distrib_dom_id = $domicile_id;
         }
         
-        
+        /*echo "<pre>";
+        print_r($alldata);die();
+        echo "</pre>";*/
         $distributor->save();
 
         
