@@ -68,9 +68,9 @@
                             </div>
 
                             <div class="item form-group">
-                              <label class="control-label col-md-1 col-sm-1 col-xs-12">Paquete*</label>
+                              <label class="control-label col-md-1 col-sm-1 col-xs-12">Paquete</label>
                                   <div class="col-md-8 col-sm-8 col-xs-12">
-                                    <select class="select2_single form-control col-md-7 col-xs-12" name="appcta_paq_id" id="appcta_paq_id" required disabled="disabled">
+                                    <select class="select2_single form-control col-md-7 col-xs-12" name="appcta_paq_id" id="appcta_paq_id" disabled="disabled">
                                       <option value="">Seleccione una opción ...</option>
                                       @foreach($packages as $package)
                                     <option value="{{ $package->id }}">{{ $package->paq_nom }}</option>
@@ -194,7 +194,6 @@
                       <div class="form-group">
                         <div class="col-md-9 col-sm-9 col-xs-12 col-md-offset-3">
                           <button id="cancel" type="button" onclick="location.href = '/account/appcta';" class="btn btn-info">Cancelar</button>
-                          <button type="reset" class="btn btn-primary">Borrar Datos</button>
                   		    <!--<button id="send" onclick="onSendClick()" type="button" class="btn btn-success">Guardar</button>-->
                           <button id="send" type="submit" class="btn btn-success">Guardar</button>
                         </div>
