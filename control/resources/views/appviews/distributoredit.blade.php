@@ -139,7 +139,7 @@
                         	  	<div class="col-md-12 col-sm-12 col-xs-12 form-group ">
 			                        <label class="control-label col-md-1 col-sm-1 col-xs-12">Domicilio: </label>
 			                        <div class="col-md-11 col-sm-11 col-xs-12">
-			                          <select class="form-control" name="cliente_dom_id">
+			                          <select class="form-control" name="distrib_dom_id">
 			                            <option value="">Seleccione ...</option>
 			                            @foreach($domiciles as $domicile)
 			                            	<option value="{{ $domicile->id }}" {{$distributor->distrib_dom_id == $domicile->id ? 'selected':''}}>{{ $domicile->dom_cp }} - {{ $domicile->dom_estado }} - {{ $domicile->dom_ciudad }} - {{ $domicile->dom_col }}</option>
