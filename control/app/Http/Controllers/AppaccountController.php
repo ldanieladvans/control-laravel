@@ -103,7 +103,7 @@ class AppaccountController extends Controller
             $appcta = new Appaccount($alldata);
 
             
-
+            $appcta->appcta_app = 'SEO1002227C3';
 
             $appcta->appcta_f_vent = date('Y-m-d');
 
