@@ -25,7 +25,7 @@
                 <div class="tile-stats">
 
                   <div class="icon"></br><i class="fa fa-users"></i></div>
-                  <div class="count">{{count($clients)}}</div>
+                  <div class="count" style="color: #072542 ">{{count($clients)}}</div>
                   <h3>Cliente(s)</h3>
                   </br>
                 </div>
@@ -33,7 +33,7 @@
               <div class="animated flipInY col-lg-3 col-md-3 col-sm-6 col-xs-12">
                 <div class="tile-stats">
                   <div class="icon"></br><i class="fa fa-sitemap"></i></div>
-                  <div class="count">{{count($distributors)}}</div>
+                  <div class="count" style="color: #072542 ">{{count($distributors)}}</div>
                   <h3>Distribuidore(s)</h3>
                   </br>
                 </div>
@@ -41,7 +41,7 @@
               <div class="animated flipInY col-lg-3 col-md-3 col-sm-6 col-xs-12">
                 <div class="tile-stats">
                   <div class="icon"></br><i class="fa fa-bar-chart"></i></div>
-                  <div class="count">{{count($accounts)}}</div>
+                  <div class="count" style="color: #072542 ">{{count($accounts)}}</div>
                   <h3>Cuenta(s)</h3>
                   <p>{{count($accounts_active)}} Activa(s)</p>
                 </div>
@@ -49,7 +49,7 @@
               <div class="animated flipInY col-lg-3 col-md-3 col-sm-6 col-xs-12">
                 <div class="tile-stats">
                   <div class="icon"></br><i class="fa fa-suitcase"></i></div>
-                  <div class="count">{{count($packages)}}</div>
+                  <div class="count" style="color: #072542 ">{{count($packages)}}</div>
                   <h3>Paquetes</h3>
                   </br>
                 </div>

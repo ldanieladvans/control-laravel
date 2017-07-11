@@ -135,9 +135,9 @@
 @endsection
 
 @section('app_body')
-	<body class="nav-md">
+	<body class="nav-md" style="background-color: #072542 ">
 		<div class="container body">
-			<div class="main_container">
+			<div class="main_container" style="background-color: #072542 ">
 
 
 			    <!-- Modal -->
@@ -157,9 +157,9 @@
 
 				
 				@section('app_left_menu')
-		            <div class="col-md-3 left_col">
-					    <div class="left_col scroll-view">
-					      <div class="navbar nav_title" style="border: 0;">
+		            <div class="col-md-3 left_col" style="background-color: #072542 ">
+					    <div class="left_col scroll-view" style="background-color: #072542 ">
+					      <div class="navbar nav_title" style="border: 0; background-color: #072542;">
 					      	<a href="{{ route('home') }}" class="site_title"><img height="60px" src="{{asset('logo_advans.png')}}"><span>{{ config('app.name') }}</span></a>
 					      </div>
 					      <div class="clearfix"></div>
@@ -228,9 +228,9 @@
 					      </div>
 					      <!-- /sidebar menu -->
 					      <!-- /menu footer buttons -->
-					      <div class="sidebar-footer hidden-small">
+					      <!--<div class="sidebar-footer hidden-small">
 					        
-					      </div>
+					      </div>-->
 					      <!-- /menu footer buttons -->
 					    </div>
 					  </div>
