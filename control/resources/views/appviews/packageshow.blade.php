@@ -14,85 +14,55 @@
 <div class="container">
     <div class="row">
         <div class="col-md-12 col-sm-12 col-xs-12">
-                <div class="x_panel">
-                  <div class="x_title">
+            <div class="x_panel">
+                <div class="x_title">
                     <h2>Paquetes</h2>
-                    
                     <div class="clearfix"></div>
-                  </div>
+                </div>
 
-                  @if (Session::has('message'))
-                  <div class="alert alert-success alert-dismissible fade in" role="alert" id="ctams">
-                    <button type="button" id="alertmsgcta" class="close" data-dismiss="alert" aria-label="Close"><span aria-hidden="true">×</span>
-                    </button>
-                    <strong>{{ Session::get('message') }}</strong>
-                  </div>
-                  @endif
+                @if (Session::has('message'))
+                    <div class="alert alert-success alert-dismissible fade in" role="alert" id="ctams">
+                        <button type="button" id="alertmsgcta" class="close" data-dismiss="alert" aria-label="Close"><span aria-hidden="true">×</span>
+                        </button>
+                        <strong>{{ Session::get('message') }}</strong>
+                    </div>
+                @endif
 
-                  <div class="x_content">
+                <div class="x_content">
                     <button type="button" style=" background-color:#053666 " onclick="location.href = 'package/create';" class="btn btn-primary">Agregar</button>
                     <table id="datatable-responsive" class="table table-striped table-bordered dt-responsive nowrap" cellspacing="0" width="100%">
-                      <thead>
-                        <tr>
-                          <!--<th>Id</th>-->
-                          <th>Nombre</th>
-                          <th>Gigas</th>
-                          <th>RFCs</th>
-                          <th>Acciones</th>
-                        </tr>
-                      </thead>
-
-
-                      <tbody>
-                        @foreach($packages as $pack)
-                        <tr>
-                        	<!--<td>{{ $pack->id }}</td>-->
-                        	<td>{{ $pack->paq_nom }}</td>
-                        	<td>{{ $pack->paq_gig }}</td>
-                        	<td>{{ $pack->paq_rfc }}</td>
-
-
-                          <td class=" last" width="13%">
-                                      
-                                      
-                                      <div class="btn-group">
-                                          <div class="btn-group">
-                                              <button onclick="location.href = 'package/{{$pack->id}}/edit';" class="btn btn-xs" data-placement="left" title="Editar" ><i class="fa fa-edit fa-2x"></i> </button>
-                                          </div>
-
-                                        <!--<div class="btn-group">
-                                              <button onclick="" data-toggle="dropdown" class="btn btn-xs dropdown-toggle" data-placement="left" title="Más" style=" color:#790D4E "><i class="fa fa-plus-square fa-2x"></i> </button>
-                                                <ul role="menu" class="dropdown-menu">
-                                                  <li><a href="#">Action</a>
-                                                  </li>
-                                                  <li><a href="#">Another action</a>
-                                                  </li>
-                                                  <li><a href="#">Something else here</a>
-                                                  </li>
-                                                  <li><a href="#">Separated link</a>
-                                                  </li>
-                                                </ul>
-                                          </div>-->
-
-                                              
-                                              {{ Form::open(['route' => ['package.destroy', $pack], 'class'=>'pull-right']) }}
-                                              {{ Form::hidden('_method', 'DELETE') }}
-                                              <button  href="#" class="btn btn-xs" onclick="return confirm('¿Está seguro que quiere eliminar este registro?')" type="submit" data-placement="left" title="Borrar" ><i class="fa fa-trash fa-2x"></i></button>
+                        <thead>
+                            <tr>
+                                <th>Nombre</th>
+                                <th>Gigas</th>
+                                <th>RFCs</th>
+                                <th>Acciones</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            @foreach($packages as $pack)
+                                <tr>
+                                	<td>{{ $pack->paq_nom }}</td>
+                                	<td>{{ $pack->paq_gig }}</td>
+                                	<td>{{ $pack->paq_rfc }}</td>
+                                    <td class=" last" width="13%">
+                                        <div class="btn-group">
+                                            <div class="btn-group">
+                                                <button onclick="location.href = 'package/{{$pack->id}}/edit';" class="btn btn-xs" data-placement="left" title="Editar" ><i class="fa fa-edit fa-2x"></i> </button>
+                                            </div>       
+                                            {{ Form::open(['route' => ['package.destroy', $pack], 'class'=>'pull-right']) }}
+                                                {{ Form::hidden('_method', 'DELETE') }}
+                                                <button  href="#" class="btn btn-xs" onclick="return confirm('¿Está seguro que quiere eliminar este registro?')" type="submit" data-placement="left" title="Borrar" ><i class="fa fa-trash fa-2x"></i></button>
                                             {{ Form::close() }}
-
-                                          </div>
-
-
-                                  </td>
-
-
-                        </tr>
-                        @endforeach
-                      </tbody>
+                                        </div>
+                                    </td>
+                                </tr>
+                            @endforeach
+                        </tbody>
                     </table>
-                  </div>
                 </div>
-              </div>
+            </div>
+        </div>
     </div>
 </div>
 @endsection
@@ -101,7 +71,6 @@
 	@parent
     <!-- Datatables -->
     <script src="{{ asset('controlassets/vendors/datatables.net/js/jquery.dataTables.js') }}"></script>
-
     <script src="{{ asset('controlassets/vendors/datatables.net-bs/js/dataTables.bootstrap.min.js') }}"></script>
     <script src="{{ asset('controlassets/vendors/datatables.net-buttons/js/dataTables.buttons.min.js') }}"></script>
     <script src="{{ asset('controlassets/vendors/datatables.net-buttons-bs/js/buttons.bootstrap.min.js') }}"></script>
@@ -117,7 +86,6 @@
     <script src="{{ asset('controlassets/vendors/fastclick/lib/fastclick.js') }}"></script>
     <!-- Custom Theme Scripts -->
     <script src="{{ asset('controlassets/build/js/custom.js') }}"></script>
-
     <script>
       $( function() {
           $('#alertmsgcta').click(function() {

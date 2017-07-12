@@ -8,14 +8,13 @@ use App\Package;
 class PackageController extends Controller
 {
     /**
-     * Create a new controller instance.
+     * Create a new controller instance. Validating Authentication and Role
      *
      * @return void
      */
     public function __construct()
     {
         $this->middleware('auth');
-        //This allow only to apps users
         $this->middleware('role:app');
     }
 
@@ -77,7 +76,6 @@ class PackageController extends Controller
      */
     public function edit(Package $package)
     {
-        //$package = Package::findOrFail($id);
         return view('appviews.packageedit',['package'=>$package]);
     }
 
@@ -90,7 +88,6 @@ class PackageController extends Controller
      */
     public function update(Request $request, Package $package)
     {
-        //$package = Package::findOrFail($id);
         $package->paq_nom = $request->paq_nom;
         $package->paq_gig = $request->paq_gig;
         $package->paq_rfc = $request->paq_rfc;
@@ -110,12 +107,10 @@ class PackageController extends Controller
     public function destroy(Package $package,Request $request)
     {
         if (isset($package)){
-            //$package = Package::findOrFail($id);
             $fmessage = 'Se ha eliminado el paquete: '.$package->paq_nom;
             \Session::flash('message',$fmessage);
             $this->registeredBinnacle($request,'destroy',$fmessage);
             $package->delete();
-
         }
         return redirect()->route('package.index');
     }
