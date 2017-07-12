@@ -15,14 +15,13 @@ use Illuminate\Support\Facades\Mail;
 class AccountController extends Controller
 {
     /**
-     * Create a new controller instance.
+     * Create a new controller instance. Validating Authentication and Role
      *
      * @return void
      */
     public function __construct()
     {
         $this->middleware('auth');
-        //This allow only to apps users
         $this->middleware('role:app');
     }
 
@@ -76,6 +75,7 @@ class AccountController extends Controller
                 $cta_cliente_id = $alldata['cta_cliente_id'];
             }
         }
+
         $exist_account = Account::where('cta_distrib_id',$cta_distrib_id)->where('cta_cliente_id',$cta_cliente_id)->get();
         
         if(count($exist_account) > 0){
@@ -89,7 +89,6 @@ class AccountController extends Controller
             $this->registeredBinnacle($request,'store',$fmessage);
         }
 
-        
         return redirect()->route('account.index');
     }
 
@@ -113,7 +112,6 @@ class AccountController extends Controller
      */
     public function edit(Account $account)
     {
-        //$clients = Client::where('id', '<>', $account->cta_cliente_id)->get();
         $clients = Client::all();
         $distributors = Distributor::all();
         $packages = Package::all();
@@ -160,7 +158,6 @@ class AccountController extends Controller
         }
         return redirect()->route('account.index');
     }
-
 
     public function changeAccState(Request $request)
     {
@@ -227,7 +224,6 @@ class AccountController extends Controller
         return \Response::json($response);
     }
 
-
     public function getClientRfc(Request $request)
     {
         $alldata = $request->all();
@@ -235,7 +231,6 @@ class AccountController extends Controller
         if(array_key_exists('clientid',$alldata) && isset($alldata['clientid'])){
             $rfc = Client::findOrFail($alldata['clientid'])->cliente_rfc;
         }
-        
 
         $response = array(
             'status' => 'success',
@@ -255,7 +250,6 @@ class AccountController extends Controller
             $acces_vars = $this->getAccessToken();
             $service_response = $this->getAppService($acces_vars['access_token'],'getusr',$arrayparams,'ctac');
         }
-        
         
         $response = array(
             'status' => 'success',
@@ -280,7 +274,6 @@ class AccountController extends Controller
             $service_response = $this->getAppService($acces_vars['access_token'],'unlockusr',$arrayparams,'ctac');
         }
         
-        
         $response = array(
             'status' => 'success',
             'msg' => 'Ok',
@@ -299,7 +292,6 @@ class AccountController extends Controller
             $acces_vars = $this->getAccessToken();
             $service_response = $this->getAppService($acces_vars['access_token'],'getbit',$arrayparams,'ctac');
         }
-        
         
         $response = array(
             'status' => 'success',
