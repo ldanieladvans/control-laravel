@@ -12,6 +12,9 @@ use Illuminate\Http\Request;
 use Sinergi\BrowserDetector\Browser;
 use App\Munic;
 use App\Cpmex;
+use App\Package;
+use App\Packageassignation;
+use Illuminate\Support\Facades\Auth;
 
 class Controller extends BaseController
 {
