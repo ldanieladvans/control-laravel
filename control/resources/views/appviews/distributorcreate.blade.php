@@ -45,14 +45,14 @@
 
                       <div class="item form-group">	                    
 	                    <div class="col-md-9 col-sm-9 col-xs-12">
-	                      <input id="distrib_nom" class="form-control has-feedback-left" name="distrib_nom" placeholder="Nombre del Distribuidor *" required="required" type="text">
+	                      <input id="distrib_nom" class="form-control has-feedback-left" name="distrib_nom" placeholder="Nombre del Distribuidor *" required="required" type="text" title="Nombre del Distribuidor">
 	                      <span class="fa fa-user form-control-feedback left" aria-hidden="true"></span>
 	                    </div>
 	                  </div>
 
 	                  <div class="item form-group {{ $errors->has('distrib_rfc') ? 'bad' : '' }}">	                    
 	                    <div class="col-md-9 col-sm-9 col-xs-12">
-	                      <input id="distrib_rfc" class="form-control has-feedback-left" name="distrib_rfc" placeholder="RFC *" required="required" type="text" data-validate-words="1">
+	                      <input id="distrib_rfc" class="form-control has-feedback-left" name="distrib_rfc" placeholder="RFC *" required="required" type="text" data-validate-words="1" title="RFC">
 	                      <span class="fa fa-institution form-control-feedback left" aria-hidden="true"></span>
 	                    </div>
 	                    <div class="col-md-3 col-sm-3 col-xs-12">
@@ -64,35 +64,35 @@
 
                   	  <div class="item form-group">
 	                    <div class="col-md-9 col-sm-9 col-xs-12">
-	                      <input type="number" id="distrib_limitgig" name="distrib_limitgig" placeholder="Límite Gigas" data-validate-minmax="1,10000000000" class="form-control has-feedback-left">
+	                      <input type="number" id="distrib_limitgig" name="distrib_limitgig" placeholder="Límite Gigas" data-validate-minmax="1,10000000000" class="form-control has-feedback-left" title="Límite Gigas">
 	                      <span class="fa fa-bar-chart form-control-feedback left" aria-hidden="true"></span>
 	                    </div>
 	                  </div>
 
 	                  <div class="item form-group">
 	                    <div class="col-md-9 col-sm-9 col-xs-12">
-	                      <input type="numberint" id="distrib_limitrfc" name="distrib_limitrfc" placeholder="Límite RFCs" data-validate-minmax="1,10000000000" class="form-control has-feedback-left">
+	                      <input type="numberint" id="distrib_limitrfc" name="distrib_limitrfc" placeholder="Límite RFCs" data-validate-minmax="1,10000000000" class="form-control has-feedback-left" title="Límite RFCs">
 	                      <span class="fa fa-bar-chart form-control-feedback left" aria-hidden="true"></span>
 	                    </div>
 	                  </div>
 
 	                  <div class="item form-group">	                    
 	                    <div class="col-md-9 col-sm-9 col-xs-12">
-	                      <input id="distrib_tel" class="form-control has-feedback-left" name="distrib_tel" placeholder="Teléfono *" required="required" type="tel">
+	                      <input id="distrib_tel" class="form-control has-feedback-left" name="distrib_tel" placeholder="Teléfono *" required="required" type="tel" title="Teléfono">
 	                      <span class="fa fa-phone form-control-feedback left" aria-hidden="true"></span>
 	                    </div>
 	                  </div>
 
 	                  <div class="item form-group">	                    
 	                    <div class="col-md-9 col-sm-9 col-xs-12">
-	                      <input id="distrib_correo" class="form-control has-feedback-left" name="distrib_correo" placeholder="Correo *" required="required" type="email">
+	                      <input id="distrib_correo" class="form-control has-feedback-left" name="distrib_correo" placeholder="Correo *" required="required" type="email" title="Correo">
 	                      <span class="fa fa-envelope form-control-feedback left" aria-hidden="true"></span>
 	                    </div>
 	                  </div>
 
 	                  <div class="item form-group">	                    
 	                    <div class="col-md-9 col-sm-9 col-xs-12">
-	                      <input id="distrib_nac" class="form-control has-feedback-left" name="distrib_nac" placeholder="Nacionalidad" type="text">
+	                      <input id="distrib_nac" class="form-control has-feedback-left" name="distrib_nac" placeholder="Nacionalidad" type="text" title="Nacionalidad">
 	                      <span class="fa fa-globe form-control-feedback left" aria-hidden="true"></span>
 	                    </div>
 	                  </div>
