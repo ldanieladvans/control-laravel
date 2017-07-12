@@ -14,88 +14,59 @@
 <div class="container">
     <div class="row">
         <div class="col-md-12 col-sm-12 col-xs-12">
-                <div class="x_panel">
-                  <div class="x_title">
+            <div class="x_panel">
+                <div class="x_title">
                     <h2>Asignaciones a Distribuidores</h2>
-                    
                     <div class="clearfix"></div>
-                  </div>
+                </div>
 
-                  @if (Session::has('message'))
-                  <div class="alert alert-success alert-dismissible fade in" role="alert" id="ctams">
-                    <button type="button" id="alertmsgcta" class="close" data-dismiss="alert" aria-label="Close"><span aria-hidden="true">×</span>
-                    </button>
-                    <strong>{{ Session::get('message') }}</strong>
-                  </div>
-                  @endif
+                @if (Session::has('message'))
+                    <div class="alert alert-success alert-dismissible fade in" role="alert" id="ctams">
+                        <button type="button" id="alertmsgcta" class="close" data-dismiss="alert" aria-label="Close"><span aria-hidden="true">×</span>
+                        </button>
+                        <strong>{{ Session::get('message') }}</strong>
+                    </div>
+                @endif
 
-                  <div class="x_content">
+                <div class="x_content">
                     <button type="button" style=" background-color:#053666 " onclick="location.href = 'asigpaq/create';" class="btn btn-primary">Agregar</button>
                     <table id="datatable-responsive" class="table table-striped table-bordered dt-responsive nowrap" cellspacing="0" width="100%">
-                      <thead>
-                        <tr>
-                          <!--<th>Id</th>-->
-                          <th>Distribuidor</th>
-                          <th>RFCs</th>
-                          <th>Gigas</th>
-                          
-                          <!--<th>Paquete</th>-->
-                          <th>Fecha Venta</th>
-                          <th>Fecha Act.</th>
-                          <!--<th>Fecha Fin</th>
-                          <th>Fecha Cad.</th>-->
-                          <th>Acciones</th>
-                        </tr>
-                      </thead>
-
-
-                      <tbody>
-                        @foreach($asigpaqs as $asigpaq)
-                        <tr>
-                          <!--<td>{{ $asigpaq->id }}</td>-->
-                          
-                          <td>{{ $asigpaq->distributor ? $asigpaq->distributor->distrib_nom : ''  }}</td>
-                          <td>{{ $asigpaq->asigpaq_rfc }}</td>
-                          <td>{{ $asigpaq->asigpaq_gig }}</td>
-                          
-
-                          <!--<td>{{ $asigpaq->package ? $asigpaq->package->paq_nom : ''  }}</td>-->
-                          
-                          <td>{{ $asigpaq->asigpaq_f_vent }}</td>
-                          <td>{{ $asigpaq->asigpaq_f_act }}</td>
-                          <!--<td>{{ $asigpaq->asigpaq_f_fin }}</td>
-                          <td>{{ $asigpaq->asigpaq_f_caduc }}</td>-->
-
-
-                        
-
-                            <td class=" last" width="13%">
-                                      
-                                      
-                                      <div class="btn-group">
-                                          <div class="btn-group">
-                                              <button onclick="location.href = 'asigpaq/{{$asigpaq->id}}/edit';" class="btn btn-xs" data-placement="left" title="Editar" ><i class="fa fa-edit fa-2x"></i> </button>
-                                          </div>
-
-                                              
-                                              {{ Form::open(['route' => ['asigpaq.destroy', $asigpaq->id], 'class'=>'pull-right']) }}
-                                              {{ Form::hidden('_method', 'DELETE') }}
-                                              <button  href="#" class="btn btn-xs" onclick="return confirm('¿Está seguro que quiere eliminar este registro?')" type="submit" data-placement="left" title="Borrar" ><i class="fa fa-trash fa-2x"></i></button>
+                        <thead>
+                            <tr>
+                                <th>Distribuidor</th>
+                                <th>RFCs</th>
+                                <th>Gigas</th>
+                                <th>Fecha Venta</th>
+                                <th>Fecha Act.</th>
+                                <th>Acciones</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            @foreach($asigpaqs as $asigpaq)
+                                <tr>
+                                    <td>{{ $asigpaq->distributor ? $asigpaq->distributor->distrib_nom : ''  }}</td>
+                                    <td>{{ $asigpaq->asigpaq_rfc }}</td>
+                                    <td>{{ $asigpaq->asigpaq_gig }}</td>                        
+                                    <td>{{ $asigpaq->asigpaq_f_vent }}</td>
+                                    <td>{{ $asigpaq->asigpaq_f_act }}</td>
+                                    <td class=" last" width="13%">
+                                        <div class="btn-group">
+                                            <div class="btn-group">
+                                                <button onclick="location.href = 'asigpaq/{{$asigpaq->id}}/edit';" class="btn btn-xs" data-placement="left" title="Editar" ><i class="fa fa-edit fa-2x"></i> </button>
+                                            </div>
+                                            {{ Form::open(['route' => ['asigpaq.destroy', $asigpaq->id], 'class'=>'pull-right']) }}
+                                                {{ Form::hidden('_method', 'DELETE') }}
+                                                <button  href="#" class="btn btn-xs" onclick="return confirm('¿Está seguro que quiere eliminar este registro?')" type="submit" data-placement="left" title="Borrar" ><i class="fa fa-trash fa-2x"></i></button>
                                             {{ Form::close() }}
-
-                                          </div>
-
-
-                                  </td>
-
-
-                        </tr>
-                        @endforeach
-                      </tbody>
+                                        </div>
+                                    </td>
+                                </tr>
+                            @endforeach
+                        </tbody>
                     </table>
-                  </div>
                 </div>
-              </div>
+            </div>
+        </div>
     </div>
 </div>
 @endsection
@@ -104,7 +75,6 @@
   @parent
     <!-- Datatables -->
     <script src="{{ asset('controlassets/vendors/datatables.net/js/jquery.dataTables.js') }}"></script>
-
     <script src="{{ asset('controlassets/vendors/datatables.net-bs/js/dataTables.bootstrap.min.js') }}"></script>
     <script src="{{ asset('controlassets/vendors/datatables.net-buttons/js/dataTables.buttons.min.js') }}"></script>
     <script src="{{ asset('controlassets/vendors/datatables.net-buttons-bs/js/buttons.bootstrap.min.js') }}"></script>
@@ -116,12 +86,10 @@
     <script src="{{ asset('controlassets/vendors/datatables.net-responsive/js/dataTables.responsive.min.js') }}"></script>
     <script src="{{ asset('controlassets/vendors/datatables.net-responsive-bs/js/responsive.bootstrap.js') }}"></script>
     <script src="{{ asset('controlassets/vendors/datatables.net-scroller/js/dataTables.scroller.min.js') }}"></script>
-
     <!-- FastClick -->
     <script src="{{ asset('controlassets/vendors/fastclick/lib/fastclick.js') }}"></script>
     <!-- Custom Theme Scripts -->
     <script src="{{ asset('controlassets/build/js/custom.js') }}"></script>
-
     <script>
       $( function() {
           $('#alertmsgcta').click(function() {

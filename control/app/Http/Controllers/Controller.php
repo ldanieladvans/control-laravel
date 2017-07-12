@@ -129,4 +129,53 @@ class Controller extends BaseController
         );
         return \Response::json($response);
     }
+
+    public function auxGigRfcCalc($paqid)
+    {
+        $rfc = 0;
+        $gig = 0;
+        $return_rfc = 0;
+        $return_gig = 0;
+        $asig_distrib_rfc = 0;
+        $asig_distrib_gig = 0;
+        $distrib = false;
+
+        if($paqid!=false){
+            $paq_obj = Package::find($paqid);
+            $rfc = $paq_obj->paq_rfc;
+            $gig = $paq_obj->paq_gig;
+            $distrib = Auth::user()->distributor ? Auth::user()->distributor : false;
+            if($distrib!=false){
+                $distribassignations = Packageassignation::where('asigpaq_distrib_id','=',$distrib->id)->where('asigpaq_f_caduc','>=',date("Y-m-d"))->get();
+                foreach ($distribassignations as $distribassignation) {
+                    $asig_distrib_rfc += $distribassignation->asigpaq_rfc;
+                    $asig_distrib_gig += $distribassignation->asigpaq_gig;
+                }
+                $rfc_assigs = ($distrib->distrib_limitrfc + ($asig_distrib_rfc));
+                $gig_assigs = ($distrib->distrib_limitgig + ($asig_distrib_gig));
+                if($rfc <= $rfc_assigs){
+                    $return_rfc = $rfc;
+                }else{
+                    $return_rfc = $rfc_assigs;
+                }
+                if($gig <= $gig_assigs){
+                    $return_gig = $gig;
+                }else{
+                    $return_gig = $gig_assigs;
+                }
+            }else{
+                $return_gig = $gig;
+                $return_rfc = $rfc;
+            }
+
+        }else{
+            $return_gig = $gig;
+            $return_rfc = $rfc;
+        }
+        $response = array(
+            'gig' => $return_gig ,
+            'rfc' => $return_rfc,
+        );
+        return $response;
+    }
 }
