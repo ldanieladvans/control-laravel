@@ -14,14 +14,13 @@ use App\Cpmex;
 class ClientController extends Controller
 {
     /**
-     * Create a new controller instance.
+     * Create a new controller instance. Validating Authentication and Role
      *
      * @return void
      */
     public function __construct()
     {
         $this->middleware('auth');
-        //This allow only to apps users
         $this->middleware('role:app');
     }
 
@@ -45,7 +44,6 @@ class ClientController extends Controller
     {
         $references = Reference::all();
         $domiciles = Domicile::all();
-        //$cps = Cpmex::all();
         return view('appviews.clientcreate',['references'=>$references,'domiciles'=>$domiciles]);
     }
 
@@ -58,40 +56,21 @@ class ClientController extends Controller
     public function store(Request $request)
     {
         $alldata = $request->all();
-
         $parseCert = false;
-
         if(array_key_exists('client_cert',$alldata)){
-            
             $cert     = request()->file('client_cert');
-
-            
-
             $path = $request->file('client_cert')->storeAs('public', $alldata['cliente_rfc'].'.'.$cert->getClientOriginalName());
-            
-
             $parseCert = openssl_x509_parse(file_get_contents(storage_path().DIRECTORY_SEPARATOR.'app'.DIRECTORY_SEPARATOR.'public'.DIRECTORY_SEPARATOR.$alldata['cliente_rfc'].'.'.$cert->getClientOriginalName()));
-            
             if ($parseCert == FALSE) {
                 /* Convert .cer to .pem, cURL uses .pem */
-                
                 $certificateCApemContent = '-----BEGIN CERTIFICATE-----' . PHP_EOL
                         . chunk_split(base64_encode($cert), 64, PHP_EOL)
                         . '-----END CERTIFICATE-----' . PHP_EOL;
                 $certificateCApem = $certificateCApemContent  . '.pem';
-
-                
-                
                 $parseCert = openssl_x509_parse($certificateCApemContent);
-
-                /*echo "<pre>";
-                print_r($parseCert);die();
-                echo "</pre>";*/
             }
             $alldata['cert_f_ini'] = $parseCert['validFrom_time_t'];
-            $alldata['cert_f_fin'] = $parseCert['validTo_time_t'];
-       
-            
+            $alldata['cert_f_fin'] = $parseCert['validTo_time_t'];  
         }
 
         $dom_vals = array();
@@ -101,7 +80,6 @@ class ClientController extends Controller
         $refer_id = array_key_exists('cliente_refer_id',$alldata) ? $alldata['cliente_refer_id'] : false;
         if (array_key_exists('checkdom',$alldata)){           
             if (array_key_exists('dom_calle',$alldata) && isset($alldata['dom_calle'])){
-
                 $dom_vals['dom_calle'] = $alldata['dom_calle'];
                 if (array_key_exists('dom_col',$alldata)){
                 $dom_vals['dom_col'] = $alldata['dom_col'];
@@ -130,11 +108,10 @@ class ClientController extends Controller
                 $domicile = new Domicile($dom_vals);
                 $domicile->save();
                 $domicile_id = $domicile->id;
-                }
+            }
         }
 
-        if (array_key_exists('checkrefer',$alldata) && isset($alldata['refer_nom'])){
-            
+        if(array_key_exists('checkrefer',$alldata) && isset($alldata['refer_nom'])){
             if (array_key_exists('refer_nom',$alldata)){
                 $refer_vals['refer_nom'] = $alldata['refer_nom'];
                 if (array_key_exists('refer_rfc',$alldata)){
@@ -149,32 +126,20 @@ class ClientController extends Controller
         $client_vals['cliente_nom'] = $alldata['cliente_nom'];
         $client_vals['cliente_correo'] = $alldata['cliente_correo'];
         $client_vals['cliente_tel'] = $alldata['cliente_tel'];
-
-
         $rules = ['cliente_rfc' => 'required|rfc'];
         $messages = ['rfc' => 'RFC inválido'];
-
         $validator = Validator::make($alldata, $rules, $messages)->validate();
-
         $client_vals['cliente_rfc'] = $alldata['cliente_rfc'];
         $client_vals['cliente_nac'] = $alldata['cliente_nac'];
         $client_vals['cliente_tipo'] = $alldata['cliente_tipo'];
-        //$client_vals['cliente_sexo'] = $alldata['gender'];
-
         $client = new Client($client_vals);
-
         if ($domicile_id != "null"){
             $client->cliente_dom_id = $domicile_id;
         }
         if ($refer_id != "null"){
             $client->cliente_refer_id = $refer_id;
         }
-        
-        
         $client->save();
-
-        
-
         $fmessage = 'Se ha creado el cliente: '.$alldata['cliente_nom'];
         \Session::flash('message',$fmessage);
         $this->registeredBinnacle($request,'store',$fmessage);
@@ -215,14 +180,12 @@ class ClientController extends Controller
     public function update(Request $request, Client $client)
     {
         $alldata = $request->all();
-
         $dom_vals = array();
         $refer_vals = array();
         $domicile_id = array_key_exists('cliente_dom_id',$alldata) ? $alldata['cliente_dom_id'] : false;
         $refer_id = array_key_exists('cliente_refer_id',$alldata) ? $alldata['cliente_refer_id'] : false;
         if (array_key_exists('checkdom',$alldata)){           
             if (array_key_exists('dom_calle',$alldata) && isset($alldata['dom_calle'])){
-
                 $dom_vals['dom_calle'] = $alldata['dom_calle'];
                 if (array_key_exists('dom_col',$alldata)){
                 $dom_vals['dom_col'] = $alldata['dom_col'];
@@ -251,11 +214,10 @@ class ClientController extends Controller
                 $domicile = new Domicile($dom_vals);
                 $domicile->save();
                 $domicile_id = $domicile->id;
-                }
+            }
         }
 
         if (array_key_exists('checkrefer',$alldata) && isset($alldata['refer_nom'])){
-            
             if (array_key_exists('refer_nom',$alldata)){
                 $refer_vals['refer_nom'] = $alldata['refer_nom'];
                 if (array_key_exists('refer_rfc',$alldata)){
@@ -270,29 +232,19 @@ class ClientController extends Controller
         $client->cliente_nom = $alldata['cliente_nom'];
         $client->cliente_correo = $alldata['cliente_correo'];
         $client->cliente_tel = $alldata['cliente_tel'];
-
         $rules = ['cliente_rfc' => 'required|rfc'];
         $messages = ['rfc' => 'RFC inválido'];
-
         $validator = Validator::make($alldata, $rules, $messages)->validate();
-
         $client->cliente_rfc = $alldata['cliente_rfc'];
         $client->cliente_nac = $alldata['cliente_nac'];
         $client->cliente_tipo = $alldata['cliente_tipo'];
-        //$client->cliente_sexo = $alldata['gender'];
-
         if ($domicile_id != "null"){
             $client->cliente_dom_id = $domicile_id;
         }
         if ($refer_id != "null"){
             $client->cliente_refer_id = $refer_id;
         }
-        
-        
         $client->save();
-
-        
-
         $fmessage = 'Se ha actualizado el cliente: '.$alldata['cliente_nom'];
         \Session::flash('message',$fmessage);
         $this->registeredBinnacle($request,'update',$fmessage);
@@ -312,7 +264,6 @@ class ClientController extends Controller
             \Session::flash('message',$fmessage);
             $this->registeredBinnacle($request,'destroy',$fmessage);
             $client->delete();
-
         }
         return redirect()->route('client.index');
     }

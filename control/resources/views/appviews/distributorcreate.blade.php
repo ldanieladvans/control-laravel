@@ -312,16 +312,16 @@
     	});
 
 		function toggleCheckbox(element){
-		   element.checked = !element.checked;
-		   if (element.checked){
+		    element.checked = !element.checked;
+		    if (element.checked){
 	   			$("#dom_new_data").show();
 	   			$("#dom_exits_data").hide();
 	   			document.getElementById("dom_calle").required = true;
-		   }else{
+		    }else{
 		   		$("#dom_new_data").hide();
 		   		$("#dom_exits_data").show();
 		   		document.getElementById("dom_calle").required = false;
-		   }
+		    }
 		}
 
 		$("#dom_estado_aux").on('change', function(){
