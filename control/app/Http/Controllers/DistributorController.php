@@ -1,7 +1,6 @@
 <?php
 
 namespace App\Http\Controllers;
-
 use Illuminate\Http\Request;
 use App\Distributor;
 use App\Domicile;
@@ -10,14 +9,13 @@ use Illuminate\Support\Facades\Validator;
 class DistributorController extends Controller
 {
     /**
-     * Create a new controller instance.
+     * Create a new controller instance. Validating Authentication and Role
      *
      * @return void
      */
     public function __construct()
     {
         $this->middleware('auth');
-        //This allow only to apps users
         $this->middleware('role:app');
     }
 
@@ -52,15 +50,11 @@ class DistributorController extends Controller
     public function store(Request $request)
     {
         $alldata = $request->all();
-
-
-
         $dom_vals = array();
         $distributor_vals = array();
         $domicile_id = array_key_exists('distrib_dom_id',$alldata) ? $alldata['distrib_dom_id'] : false;
         if (array_key_exists('checkdom',$alldata)){           
             if (array_key_exists('dom_calle',$alldata) && isset($alldata['dom_calle'])){
-
                 $dom_vals['dom_calle'] = $alldata['dom_calle'];
                 if (array_key_exists('dom_col',$alldata)){
                 $dom_vals['dom_col'] = $alldata['dom_col'];
@@ -89,16 +83,13 @@ class DistributorController extends Controller
                 $domicile = new Domicile($dom_vals);
                 $domicile->save();
                 $domicile_id = $domicile->id;
-                }
+            }
         }
 
         $distributor_vals['distrib_nom'] = $alldata['distrib_nom'];
-
         $rules = ['distrib_rfc' => 'required|rfc'];
         $messages = ['rfc' => 'RFC inválido'];
-
         $validator = Validator::make($alldata, $rules, $messages)->validate();
-
         $distributor_vals['distrib_rfc'] = $alldata['distrib_rfc'];
         $distributor_vals['distrib_limitgig'] = $alldata['distrib_limitgig'];
         $distributor_vals['distrib_limitrfc'] = $alldata['distrib_limitrfc'];
@@ -106,18 +97,13 @@ class DistributorController extends Controller
         $distributor_vals['distrib_correo'] = $alldata['distrib_correo'];
         $distributor_vals['distrib_nac'] = $alldata['distrib_nac'];
         $distributor_vals['distrib_sup'] = $alldata['distrib_sup'];
-
         $distributor = new Distributor($distributor_vals);
 
         if ($domicile_id != "null"){
             $distributor->distrib_dom_id = $domicile_id;
         }
-        
-        
+
         $distributor->save();
-
-        
-
         $fmessage = 'Se ha creado el distribuidor: '.$alldata['distrib_nom'];
         \Session::flash('message',$fmessage);
         $this->registeredBinnacle($request,'store',$fmessage);
@@ -157,9 +143,6 @@ class DistributorController extends Controller
     public function update(Request $request, Distributor $distributor)
     {
         $alldata = $request->all();
-
-
-
         $dom_vals = array();
         $distributor_vals = array();
         $domicile_id = array_key_exists('distrib_dom_id',$alldata) ? $alldata['distrib_dom_id'] : false;
@@ -194,16 +177,13 @@ class DistributorController extends Controller
                 $domicile = new Domicile($dom_vals);
                 $domicile->save();
                 $domicile_id = $domicile->id;
-                }
+            }
         }
 
         $distributor->distrib_nom = $alldata['distrib_nom'];
-
         $rules = ['distrib_rfc' => 'required|rfc'];
         $messages = ['rfc' => 'RFC inválido'];
-
         $validator = Validator::make($alldata, $rules, $messages)->validate();
-        
         $distributor->distrib_rfc = $alldata['distrib_rfc'];
         $distributor->distrib_limitgig = $alldata['distrib_limitgig'];
         $distributor->distrib_limitrfc = $alldata['distrib_limitrfc'];
@@ -215,13 +195,8 @@ class DistributorController extends Controller
         if ($domicile_id != "null"){
             $distributor->distrib_dom_id = $domicile_id;
         }
-        
-        /*echo "<pre>";
-        print_r($alldata);die();
-        echo "</pre>";*/
-        $distributor->save();
 
-        
+        $distributor->save();
 
         $fmessage = 'Se ha actualizado el distribuidor: '.$alldata['distrib_nom'];
         \Session::flash('message',$fmessage);
@@ -242,7 +217,6 @@ class DistributorController extends Controller
             \Session::flash('message',$fmessage);
             $this->registeredBinnacle($request,'destroy',$fmessage);
             $distributor->delete();
-
         }
         return redirect()->route('distributor.index');
     }
