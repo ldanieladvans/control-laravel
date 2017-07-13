@@ -9,14 +9,13 @@ use Bican\Roles\Models\Permission;
 class PermissionController extends Controller
 {
     /**
-     * Create a new controller instance.
+     * Create a new controller instance. Validating Authentication and Role
      *
      * @return void
      */
     public function __construct()
     {
         $this->middleware('auth');
-        //This allow only to apps users
         $this->middleware('role:app');
     }
 
@@ -88,9 +87,7 @@ class PermissionController extends Controller
         $permission = Permission::findOrFail($id);
         $permission->name = $alldata['name'];
         $permission->description = $alldata['description'];
-
         $permission->save();
-
         $fmessage = 'Se ha modificado el permiso: '.$alldata['name'];
         \Session::flash('message',$fmessage);
         $this->registeredBinnacle($request,'update',$fmessage);
