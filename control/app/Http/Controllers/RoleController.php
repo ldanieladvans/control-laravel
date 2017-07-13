@@ -9,14 +9,13 @@ use Bican\Roles\Models\Permission;
 class RoleController extends Controller
 {
     /**
-     * Create a new controller instance.
+     * Create a new controller instance. Validating Authentication and Role
      *
      * @return void
      */
     public function __construct()
     {
         $this->middleware('auth');
-        //This allow only to apps users
         $this->middleware('role:app');
     }
 
@@ -52,24 +51,19 @@ class RoleController extends Controller
     public function store(Request $request)
     {
         $alldata = $request->all();
-
         $permisos = false;
-
         if(array_key_exists('permisos',$alldata)){
             $permisos = $alldata['permisos'];
             unset($alldata['permisos']);
         }
-
         $rol = new Role($alldata);
         $rol->save();
-
         if($permisos != false){
             foreach ($permisos as $perm) {
                 $permobj = Permission::find($perm);
                 $rol->attachPermission($permobj);
             }
         }
-
         $fmessage = 'Se ha creado el rol: '.$alldata['name'];
         \Session::flash('message',$fmessage);
         $this->registeredBinnacle($request,'store',$fmessage);
@@ -97,8 +91,6 @@ class RoleController extends Controller
     {
         $rol = Role::findOrFail($id);
         $permissions = Permission::all();
-
-
         return view('appviews.roledit',['permissions'=>$permissions,'rol'=>$rol]);
     }
 
@@ -112,21 +104,16 @@ class RoleController extends Controller
     public function update(Request $request,$rol_id)
     {
         $alldata = $request->all();
-
         $permisos = false;
-
         if(array_key_exists('permisos',$alldata)){
             $permisos = $alldata['permisos'];
             unset($alldata['permisos']);
         }
-
         $rol = Role::findOrFail($rol_id);
         $rol->name = $alldata['name'];
         $rol->slug = $alldata['slug'];
         $rol->description = $alldata['description'];
-
         $rol->save();
-
         if($permisos != false){
             $rol->detachAllPermissions();
             foreach ($permisos as $perm) {
@@ -134,7 +121,6 @@ class RoleController extends Controller
                 $rol->attachPermission($permobj);
             }
         }
-
         $fmessage = 'Se ha actualizado el rol: '.$alldata['name'];
         \Session::flash('message',$fmessage);
         $this->registeredBinnacle($request,'update',$fmessage);
@@ -164,7 +150,6 @@ class RoleController extends Controller
     {
         $alldata = $request->all();
         $return_array = array();
-        //print_r($alldata);
         if(array_key_exists('rol',$alldata) && isset($alldata['rol'])){
             $role = Role::find($alldata['rol']);
             $role->detachAllPermissions();
@@ -175,7 +160,6 @@ class RoleController extends Controller
                 }
             }
         }
-
         $response = array(
             'status' => 'success',
             'msg' => 'Se asignaron los permisos satisfactoriamente',
