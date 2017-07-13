@@ -18,14 +18,13 @@ class UserController extends Controller
 
     use RegistersUsers;
     /**
-     * Create a new controller instance.
+     * Create a new controller instance. Validating Authentication and Role
      *
      * @return void
      */
     public function __construct()
     {
         $this->middleware('auth');
-        //This allow only to apps users
         $this->middleware('role:app');
     }
 
@@ -66,11 +65,8 @@ class UserController extends Controller
     public function customregister(Request $request, $values)
     {
         $this->customvalidator($values)->validate();
-
         event(new Registered($user = $this->customcreate($values)));
-
         $this->registered($request, $user);
-        
         return $user;
     }
 
@@ -94,7 +90,6 @@ class UserController extends Controller
      */
     public function create()
     {
-        
         $distributors = Distributor::all();
         $roles = Role::all();
         $permissions = Permission::all();
@@ -110,55 +105,39 @@ class UserController extends Controller
     public function store(Request $request)
     {
         $alldata = $request->all();
-
         $user = $this->customregister($request,$alldata);
-
         $file     = false;
         if(array_key_exists('usrc_pic',$alldata)){
             $file     = request()->file('usrc_pic');
-            $path = $request->file('usrc_pic')->storeAs(
-            'public', $user->id.'.'.$file->getClientOriginalName()
-        );
+            $path = $request->file('usrc_pic')->storeAs('public', $user->id.'.'.$file->getClientOriginalName());
         }
-
         if($file!=false){
             $user->usrc_pic = $user->id.'.'.$file->getClientOriginalName();
         }
-
         if(array_key_exists('usrc_tel',$alldata) && isset($alldata['usrc_tel'])){
             $user->usrc_tel = $alldata['usrc_tel'];
         }
-
         if(array_key_exists('usrc_super',$alldata) && isset($alldata['usrc_super'])){
             $user->usrc_super = $alldata['usrc_super'];
         }
-
         if(array_key_exists('usrc_distrib_id',$alldata) && isset($alldata['usrc_distrib_id'])){
             if($alldata['usrc_distrib_id'] != 'null'){
                 $user->usrc_distrib_id = $alldata['usrc_distrib_id'];
             }           
         }
-
         $user->save();
-
-
-
         if(array_key_exists('roles',$alldata)){
             foreach ($alldata['roles'] as $rol) {
                 $rolobj = Role::find($rol);
                 $user->attachRole($rolobj);
             }
         }
-
-
         if(array_key_exists('permisos',$alldata)){
             foreach ($alldata['permisos'] as $perm) {
                 $permobj = Permission::find($perm);
                 $user->attachPermission($permobj);
             }
-        }
-
-        
+        }        
         $fmessage = 'Se ha creado el usuario: '.$alldata['name'];
         \Session::flash('message',$fmessage);
         $this->registeredBinnacle($request,'store',$fmessage);
@@ -188,8 +167,6 @@ class UserController extends Controller
         $distributors = Distributor::all();
         $roles = Role::all();
         $permissions = Permission::all();
-
-
         return view('appviews.useredit',['distributors'=>$distributors,'roles'=>$roles,'permissions'=>$permissions,'user'=>$user]);
     }
 
@@ -203,8 +180,6 @@ class UserController extends Controller
     public function update(Request $request, User $user)
     {
         $alldata = $request->all();
-
-
         $file     = false;
         if(array_key_exists('usrc_pic',$alldata)){
             $file     = request()->file('usrc_pic');
@@ -218,46 +193,33 @@ class UserController extends Controller
                 }
             }
         }
-        
-
         if($file!=false){
             $user->usrc_pic = $user->id.'.'.$file->getClientOriginalName();
         }
-
         if(array_key_exists('usrc_tel',$alldata) && isset($alldata['usrc_tel'])){
             $user->usrc_tel = $alldata['usrc_tel'];
         }
-
         if(array_key_exists('usrc_super',$alldata) && isset($alldata['usrc_super'])){
             $user->usrc_super = $alldata['usrc_super'];
         }
-
         if(array_key_exists('usrc_distrib_id',$alldata) && isset($alldata['usrc_distrib_id'])){
             if($alldata['usrc_distrib_id'] != 'null'){
                 $user->usrc_distrib_id = $alldata['usrc_distrib_id'];
             }           
         }
-
         if(array_key_exists('name',$alldata) && isset($alldata['name'])){
             $user->name = $alldata['name'];
         }
-
         if(array_key_exists('usrc_nick',$alldata) && isset($alldata['usrc_nick'])){
             $user->usrc_nick = $alldata['usrc_nick'];
         }
-
         if(array_key_exists('email',$alldata) && isset($alldata['email'])){
                 $user->email = $alldata['email'];       
         }
-
         if(array_key_exists('usrc_super',$alldata) && isset($alldata['usrc_super'])){
                 $user->usrc_super = $alldata['usrc_super'];       
         }
-
         $user->save();
-
-
-
         $user->detachAllRoles();
         if(array_key_exists('roles',$alldata)){
             
@@ -266,8 +228,6 @@ class UserController extends Controller
                 $user->attachRole($rolobj);
             }
         }
-
-
         $user->detachAllPermissions();
         if(array_key_exists('permisos',$alldata)){
             
@@ -277,8 +237,6 @@ class UserController extends Controller
 
             }
         }
-
-
         $fmessage = 'Se ha actualizado el usuario: '.$alldata['name'];
         \Session::flash('message',$fmessage);
         $this->registeredBinnacle($request,'update',$fmessage);
@@ -303,8 +261,6 @@ class UserController extends Controller
                 $this->registeredBinnacle($request,'destroy',$fmessage);
                 $user->delete();
             }
-            
-
         }
         return redirect()->route('user.index');
     }
@@ -327,15 +283,11 @@ class UserController extends Controller
                         $permstr = $permstr . $test->name . ',';
                     }
                 }
-
-                
             }
         }
-
         $fmessage = 'Se han asignado los permisos: '.$permstr.' a los roles: '.$rolestr;
         //\Session::flash('message',$fmessage);
         $this->registeredBinnacle($request,'permsbyroles',$fmessage);
-
         $response = array(
             'status' => 'success',
             'msg' => 'Setting created successfully',
@@ -349,23 +301,18 @@ class UserController extends Controller
         $alldata = $request->all();
         $return_array = array();
         $user = false;
-
         if(array_key_exists('user',$alldata) && isset($alldata['user'])){
             $user = User::find($alldata['user']);
         }
-
         if($user!=false){
             if(array_key_exists('password',$alldata) && isset($alldata['password'])){
                 $user->password = bcrypt($alldata['password']);
             }
         }
-
         $user->save();
-
         $fmessage = 'Se ha cambiado la contraseña del usuario: '.$user->name;
         //\Session::flash('message',$fmessage);
         $this->registeredBinnacle($request,'changepass',$fmessage);
-
         $response = array(
             'status' => 'success',
             'msg' => 'Se cambió la contraseña satisfactoriamente',
@@ -380,14 +327,11 @@ class UserController extends Controller
         $permstr = '';
         $alldata = $request->all();
         $return_array = array();
-
         $user = false;
         $perms = false;
-
         if(array_key_exists('user',$alldata) && isset($alldata['user'])){
             $user = User::find($alldata['user']);
         }
-
         if($user!=false){
             $user->detachAllRoles();
             if(array_key_exists('selected',$alldata) && isset($alldata['selected'])){  
@@ -402,11 +346,9 @@ class UserController extends Controller
                 }
             }
         }
-        
         $fmessage = 'Se han asignado los roles: '.$rolestr.' al usuario: '.($user ? $user->name : '');
         //\Session::flash('message',$fmessage);
         $this->registeredBinnacle($request,'assignroles',$fmessage);
-
         $response = array(
             'status' => 'success',
             'msg' => 'Setting created successfully',
@@ -420,32 +362,25 @@ class UserController extends Controller
         $permstr = '';
         $alldata = $request->all();
         $return_array = array();
-
         $user = false;
-
         if(array_key_exists('user',$alldata) && isset($alldata['user'])){
             $user = User::find($alldata['user']);
         }
-
         if($user!=false){
             $user->detachAllPermissions();
             if(array_key_exists('selected',$alldata) && isset($alldata['selected'])){  
                 foreach ($alldata['selected'] as $perm) {
                     $permobj = Permission::find($perm);
                     $permstr = $permstr . $permobj->name . ',';
-                    //TODO Dont know why here doesnt work
-                    //$user->attachPermission($permobj);
                     DB::table('permission_user')->insert([
                         ['permission_id' => $permobj->id, 'user_id' => $user->id, 'created_at'=>date("Y-m-d H:i:s"),'updated_at'=>date("Y-m-d H:i:s")]
                     ]);
                 }
             }
         }
-        
         $fmessage = 'Se han asignado los permisos: '.$permstr.' al usuario: '.($user ? $user->name : '');
         //\Session::flash('message',$fmessage);
         $this->registeredBinnacle($request,'assignperms',$fmessage);
-
         $response = array(
             'status' => 'success',
             'msg' => 'Setting created successfully',

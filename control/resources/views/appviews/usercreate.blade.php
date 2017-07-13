@@ -51,7 +51,7 @@
               	@endif
 
                 <div class="x_content">
-                	<form id="usercreateform" class="form-horizontal form-label-left" novalidate action="{{ route('user.store') }}" method='POST' enctype="multipart/form-data">
+                	<form id="usercreateform" class="form-horizontal form-label-left" action="{{ route('user.store') }}" method='POST' enctype="multipart/form-data">
                 		{{ csrf_field() }}
 
 	                	<div id="invimg">
@@ -167,7 +167,6 @@
 
 			                    <div id="myTabContent" class="tab-content">
 			                        <div role="tabpanel" class="tab-pane fade active in" id="tab_content1" aria-labelledby="home-tab">
-
 										<div class="item form-group">
 							                <div class="col-md-10 col-sm-10 col-xs-12">
 							                    <select id="roles" name="roles[]" tabindex="1" data-placeholder="Seleccione los roles ..." class="chosen-select form-control" onchange="onSelectUserCreate(this)" multiple="multiple">
@@ -176,18 +175,17 @@
 													@endforeach
 							                    </select>
 							                </div>
-							              </div>
+							            </div>
 
-							              <div class="item form-group">
-							                    <div class="col-md-10 col-sm-10 col-xs-12">
-							                      <select id="permisos" name="permisos[]" tabindex="2" data-placeholder="Seleccione los permisos ..." class="chosen-select form-control" multiple="multiple">
-							                      
+							            <div class="item form-group">
+						                    <div class="col-md-10 col-sm-10 col-xs-12">
+						                        <select id="permisos" name="permisos[]" tabindex="2" data-placeholder="Seleccione los permisos ..." class="chosen-select form-control" multiple="multiple">
 													@foreach($permissions as $permission)
 						                            	<option value="{{ $permission->id }}">{{ $permission->name }}</option>
 						                            @endforeach
-							                      </select>
-							                  	</div>
-							              </div>
+						                      </select>
+						                  	</div>
+							            </div>
 			                        </div>
 			                    </div>
 	                        </div>
@@ -211,54 +209,39 @@
 
 @section('app_js') 
 	@parent
-
     <!-- validator -->
     <script src="{{ asset('controlassets/vendors/validator/control.validator.js') }}"></script>
-
     <!-- Date Time -->
     <script type="text/javascript" src="{{ asset('controlassets/vendors/datetime/js/bootstrap-datetimepicker.js') }}" charset="UTF-8"></script>
 	<script type="text/javascript" src="{{ asset('controlassets/vendors/datetime/js/locales/bootstrap-datetimepicker.es.js') }}" charset="UTF-8"></script>
-
 	<!-- Switchery -->
     <script src="{{ asset('controlassets/vendors/switchery/dist/switchery.min.js') }}"></script>
-
     <!-- File Input -->
     <script src="{{ asset('controlassets/vendors/bootstrap-fileinput-master/js/fileinput.js') }}" type="text/javascript"></script>
-
 	<!-- Custom Theme Scripts -->
     <script src="{{ asset('controlassets/build/js/custom.js') }}"></script>
-
     <!-- Chosen -->
 	<script src="{{ asset('controlassets/vendors/chosen/chosen.jquery.js') }}" type="text/javascript"></script>
 	<script src="{{ asset('controlassets/vendors/chosen/docsupport/prism.js') }}" type="text/javascript" charset="utf-8"></script>
 	<script src="{{ asset('controlassets/vendors/chosen/docsupport/init.js') }}" type="text/javascript" charset="utf-8"></script>
-
-
     <script type="text/javascript">
 
-    	 function getSelectValues(select) {
-		  var result = [];
-		  var options = select && select.options;
-		  var opt;
-
-		  for (var i=0, iLen=options.length; i<iLen; i++) {
-		    opt = options[i];
-
-		    if (opt.selected) {
-		      result.push(opt.value || opt.text);
+    	function getSelectValues(select){
+		    var result = [];
+		    var options = select && select.options;
+		    var opt;
+		    for (var i=0, iLen=options.length; i<iLen; i++){
+		    	opt = options[i];
+		    	if (opt.selected) {
+		      		result.push(opt.value || opt.text);
+		    	}
 		    }
-		  }
-		  return result;
+		    return result;
 		}
 		 
-
-		 function onSelectUserCreate(element){
-		 	var selected = getSelectValues(element);
-		 	
+		function onSelectUserCreate(element){
+		 	var selected = getSelectValues(element);		 	
 		 	var CSRF_TOKEN = $('meta[name="csrf-token"]').attr('content');
-
-		 	console.log(CSRF_TOKEN);
-
 		 	$.ajax({
 			    url: 'permsbyroles',
 			    type: 'POST',
@@ -270,28 +253,22 @@
 			    	data['roles'].forEach(function(entry) {
 			    		roles.push(entry);
 					    for(var i=0;i<perms.length;i++){
-
 					    	if(String(perms[i].value)==String(entry)){
-					    		console.log(perms[i]);
 				    			perms[i].selected=true;
-				    			
-				    			
 					    	}
 					    }
 					});
-			    	console.log(perms);
 			    	$('#permisos').trigger("chosen:updated");
-			        
 			    }
 			});
-		 }
+		}
 
-		 var imgdiv = document.getElementById("invimg");
-		 var form = document.getElementById("usercreateform");
-		 form.reset();
-		 imgdiv.style.display='none';
+		var imgdiv = document.getElementById("invimg");
+		var form = document.getElementById("usercreateform");
+		form.reset();
+		imgdiv.style.display='none';
 
-		 $("#avatar-2").fileinput({
+		$("#avatar-2").fileinput({
 		    overwriteInitial: true,
 		    maxFileSize: 1500,
 		    showClose: true,
@@ -309,10 +286,6 @@
 		    browseLabel: 'Foto Usuario',
 		    allowedFileExtensions: ["jpg", "png", "gif"]
 		});
-
-
 	</script>
-
-
 @endsection
 
