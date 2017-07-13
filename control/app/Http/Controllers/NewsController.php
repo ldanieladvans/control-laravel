@@ -10,14 +10,13 @@ class NewsController extends Controller
 {
     
     /**
-     * Create a new controller instance.
+     * Create a new controller instance. Validating Authentication and Role
      *
      * @return void
      */
     public function __construct()
     {
         $this->middleware('auth');
-        //This allow only to apps users
         $this->middleware('role:app');
     }
 
@@ -51,11 +50,8 @@ class NewsController extends Controller
     public function store(Request $request)
     {
         $alldata = $request->all();
-
         $news = new News($alldata);
         $news->save();
-
-
         $fmessage = 'Se ha creado la noticia: '.$alldata['tittle'];
         \Session::flash('message',$fmessage);
         $this->registeredBinnacle($request,'store',$fmessage);
@@ -82,7 +78,6 @@ class NewsController extends Controller
     public function edit($id)
     {
         $news = News::findOrFail($id);
-
         return view('appviews.newsedit',['news'=>$news]);
     }
 
@@ -96,15 +91,12 @@ class NewsController extends Controller
     public function update(Request $request, $id)
     {
         $alldata = $request->all();
-
         $news = News::findOrFail($id);
         $news->tittle = $alldata['tittle'];
         $news->pdate = $alldata['pdate'];
         $news->description = $alldata['description'];
         $news->nactivo = $alldata['nactivo'];
         $news->save();
-
-
         $fmessage = 'Se ha actualizado la noticia: '.$alldata['tittle'];
         \Session::flash('message',$fmessage);
         $this->registeredBinnacle($request,'update',$fmessage);
