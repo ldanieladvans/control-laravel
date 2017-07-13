@@ -8,14 +8,13 @@ use App\Binnacle;
 class BinnacleController extends Controller
 {
     /**
-     * Create a new controller instance.
+     * Create a new controller instance. Validating Authentication and Role
      *
      * @return void
      */
     public function __construct()
     {
         $this->middleware('auth');
-        //This allow only to apps users
         $this->middleware('role:app');
     }
 
