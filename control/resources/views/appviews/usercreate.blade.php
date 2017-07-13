@@ -9,10 +9,7 @@
     <!-- File Input -->
     <link href="{{ asset('controlassets/vendors/bootstrap-fileinput-master/css/fileinput.css') }}" media="all" rel="stylesheet" type="text/css" />
     <!-- Chosen -->
-    
     <link href="{{ asset('controlassets/vendors/chosen/chosen.css') }}" rel="stylesheet" type="text/css" />
-
-
     <style>
 	.kv-avatar .krajee-default.file-preview-frame,.kv-avatar .krajee-default.file-preview-frame:hover {
 	    margin: 0;
@@ -38,201 +35,176 @@
     <div class="row">
         <div class="col-md-12 col-sm-12 col-xs-12">
             <div class="x_panel">
-              <div class="x_title">
-                <h2>Nuevo Usuario</h2>
-                <ul class="nav navbar-right panel_toolbox">
-                  <li><a class="collapse-link"><i class="fa fa-chevron-up"></i></a>
-                  </li>
-                  
-                </ul>
-                <div class="clearfix"></div>
-              </div>
+                <div class="x_title">
+	                <h2>Nuevo Usuario</h2>
+	                <ul class="nav navbar-right panel_toolbox">
+	                    <li><a class="collapse-link"><i class="fa fa-chevron-up"></i></a></li>
+	                </ul>
+	                <div class="clearfix"></div>
+                </div>
               	@if (Session::has('message'))
-                  <div class="alert alert-success alert-dismissible fade in" role="alert">
-                    <button type="button" class="close" data-dismiss="alert" aria-label="Close"><span aria-hidden="true">×</span>
-                    </button>
-                    <strong>{{ Session::get('message') }}</strong>
-                  </div>
-                  @endif
-              <div class="x_content">
+                    <div class="alert alert-success alert-dismissible fade in" role="alert">
+	                    <button type="button" class="close" data-dismiss="alert" aria-label="Close"><span aria-hidden="true">×</span>
+	                    </button>
+	                    <strong>{{ Session::get('message') }}</strong>
+                    </div>
+              	@endif
 
-                <!--<form class="form-horizontal form-label-left input_mask">-->
-                <form id="usercreateform" class="form-horizontal form-label-left" novalidate action="{{ route('user.store') }}" method='POST' enctype="multipart/form-data">
+                <div class="x_content">
+                	<form id="usercreateform" class="form-horizontal form-label-left" novalidate action="{{ route('user.store') }}" method='POST' enctype="multipart/form-data">
+                		{{ csrf_field() }}
 
-                	  {{ csrf_field() }}
+	                	<div id="invimg">
+	                		<img id='imageiddef' src="{{asset('default_avatar_male.jpg')}}">
+	                		<img id='imageid' src="{{asset('default_avatar_male.jpg')}}">
+	                		<input id="deleted_pic" name="deleted_pic" type="text" value="0">
+	                	</div>
 
-                	<div id="invimg">
-                		<img id='imageiddef' src="{{asset('default_avatar_male.jpg')}}">
-                		<img id='imageid' src="{{asset('default_avatar_male.jpg')}}">
-                		<input id="deleted_pic" name="deleted_pic" type="text" value="0">
-                	</div>
+	                	<table border="0" class="col-md-12 col-sm-12 col-xs-12">
+							<tr>
+								<td width="25%">
+									<div class="row">
+								        <div class="col-md-3 col-sm-3 col-xs-12">
+								            <div class="kv-avatar center-block text-center" style="width:200px">
+								                <input id="avatar-2" value="{{asset('default_avatar_male.jpg')}}" name="usrc_pic" type="file" class="file-loading">
+								            </div>
+								        </div>
+				            		</div>
+								</td>
+								<td>
+									<div class="item form-group">
+					                    <div class="col-md-9 col-sm-9 col-xs-12">
+					                        <input id="name" class="form-control has-feedback-left" name="name" placeholder="Nombre del Usuario *" required="required" type="text">
+					                        <span class="fa fa-user form-control-feedback left" aria-hidden="true"></span>
+					                        @if ($errors->has('name'))
+			                                    <span class="help-block">
+			                                        <strong>{{ $errors->first('name') }}</strong>
+			                                    </span>
+			                                @endif
+					                    </div>
+				                    </div>
+				                    <div class="item form-group">	                    
+					                    <div class="col-md-9 col-sm-9 col-xs-12">
+					                        <input id="usrc_nick" class="form-control has-feedback-left" name="usrc_nick" placeholder="Usuario *" required="required" type="text" data-validate-words="1" value="" autocomplete="off">
+					                        <span class="fa fa-user form-control-feedback left" aria-hidden="true"></span>
+					                        @if ($errors->has('usrc_nick'))
+			                                    <span class="help-block">
+			                                        <strong>{{ $errors->first('usrc_nick') }}</strong>
+			                                    </span>
+			                                @endif
+					                    </div>
+					                </div>
+					                <div class="item form-group">	                    
+					                    <div class="col-md-9 col-sm-9 col-xs-12">
+					                        <input id="password" class="form-control has-feedback-left" value="" name="password" placeholder="Contraseña *" required="required" type="password" data-validate-words="1" autocomplete="off">
+					                        <span class="fa fa-lock form-control-feedback left" aria-hidden="true"></span>
+					                        @if ($errors->has('password'))
+			                                    <span class="help-block">
+			                                        <strong>{{ $errors->first('password') }}</strong>
+			                                    </span>
+			                                @endif
+					                    </div>
+					                </div>
+					                <div class="item form-group">	                    
+					                    <div class="col-md-9 col-sm-9 col-xs-12">
+					                      	<input id="password-confirm" class="form-control has-feedback-left" value="" name="password_confirmation" placeholder="Confirmar Contraseña *" required="required" type="password" data-validate-words="1" autocomplete="off">
+					                      	<span class="fa fa-lock form-control-feedback left" aria-hidden="true"></span>
+					                    </div>
+					                </div>
+					                 <div class="item form-group">	                    
+					                    <div class="col-md-9 col-sm-9 col-xs-12">
+					                      	<input id="email" class="form-control has-feedback-left" name="email" placeholder="Correo *" required="required" type="email">
+					                      	<span class="fa fa-envelope form-control-feedback left" aria-hidden="true"></span>
+					                      	@if ($errors->has('email'))
+			                                    <span class="help-block">
+			                                        <strong>{{ $errors->first('email') }}</strong>
+			                                    </span>
+			                                @endif
+					                    </div>
+				                     </div>
 
-                	<table border="0" class="col-md-12 col-sm-12 col-xs-12">
-					<tr>
-					<td width="25%">
-						<div class="row">
-					        <div class="col-md-3 col-sm-3 col-xs-12">
-					            <div class="kv-avatar center-block text-center" style="width:200px">
-					                <input id="avatar-2" value="{{asset('default_avatar_male.jpg')}}" name="usrc_pic" type="file" class="file-loading">
+				                     <div class="item form-group">	                    
+					                    <div class="col-md-9 col-sm-9 col-xs-12">
+					                        <input id="usrc_tel" class="form-control has-feedback-left" name="usrc_tel" placeholder="Teléfono *" type="tel">
+					                        <span class="fa fa-phone form-control-feedback left" aria-hidden="true"></span>
+					                    </div>
+				                    </div>
+								</td>
+							</tr>
+						</table>
 
-					                
-					            </div>
-					        </div>
-
-	            		</div>
-					</td>
-					<td>
-						
-						<div class="item form-group">
-		                    <div class="col-md-9 col-sm-9 col-xs-12">
-		                      <input id="name" class="form-control has-feedback-left" name="name" placeholder="Nombre del Usuario *" required="required" type="text">
-		                      <span class="fa fa-user form-control-feedback left" aria-hidden="true"></span>
-		                      @if ($errors->has('name'))
-                                    <span class="help-block">
-                                        <strong>{{ $errors->first('name') }}</strong>
-                                    </span>
-                                @endif
-		                    </div>
-	                    </div>
-
-	                      <div class="item form-group">	                    
-		                    <div class="col-md-9 col-sm-9 col-xs-12">
-		                      <input id="usrc_nick" class="form-control has-feedback-left" name="usrc_nick" placeholder="Usuario *" required="required" type="text" data-validate-words="1" value="" autocomplete="off">
-		                      <span class="fa fa-user form-control-feedback left" aria-hidden="true"></span>
-		                      @if ($errors->has('usrc_nick'))
-                                    <span class="help-block">
-                                        <strong>{{ $errors->first('usrc_nick') }}</strong>
-                                    </span>
-                                @endif
-		                    </div>
-		                  </div>
-
-		                  <div class="item form-group">	                    
-		                    <div class="col-md-9 col-sm-9 col-xs-12">
-		                      <input id="password" class="form-control has-feedback-left" value="" name="password" placeholder="Contraseña *" required="required" type="password" data-validate-words="1" autocomplete="off">
-		                      <span class="fa fa-lock form-control-feedback left" aria-hidden="true"></span>
-		                      @if ($errors->has('password'))
-                                    <span class="help-block">
-                                        <strong>{{ $errors->first('password') }}</strong>
-                                    </span>
-                                @endif
-		                    </div>
-		                  </div>
-
-		                  <div class="item form-group">	                    
-		                    <div class="col-md-9 col-sm-9 col-xs-12">
-		                      <input id="password-confirm" class="form-control has-feedback-left" value="" name="password_confirmation" placeholder="Confirmar Contraseña *" required="required" type="password" data-validate-words="1" autocomplete="off">
-		                      <span class="fa fa-lock form-control-feedback left" aria-hidden="true"></span>
-		                    </div>
-		                  </div>
-
-		                  <div class="item form-group">	                    
-		                    <div class="col-md-9 col-sm-9 col-xs-12">
-		                      <input id="email" class="form-control has-feedback-left" name="email" placeholder="Correo *" required="required" type="email">
-		                      <span class="fa fa-envelope form-control-feedback left" aria-hidden="true"></span>
-		                      @if ($errors->has('email'))
-                                    <span class="help-block">
-                                        <strong>{{ $errors->first('email') }}</strong>
-                                    </span>
-                                @endif
-		                    </div>
-	                      </div>
-
-	                      <div class="item form-group">	                    
-		                    <div class="col-md-9 col-sm-9 col-xs-12">
-		                      <input id="usrc_tel" class="form-control has-feedback-left" name="usrc_tel" placeholder="Teléfono *" type="tel">
-		                      <span class="fa fa-phone form-control-feedback left" aria-hidden="true"></span>
-		                    </div>
-	                      </div>
-
-					</td>
-					</tr>
-					</table>
-
-                	
-
-					<div class="col-md-12 col-sm-12 col-xs-12">
-						</br>
-						</br>
-					</div>
+						<div class="col-md-12 col-sm-12 col-xs-12">
+							</br>
+							</br>
+						</div>
                     
-
-	                  <div class="item form-group">
-		                <label class="control-label col-md-2 col-sm-2 col-xs-12">Distribuidor Asociado: </label>
+		                <div class="item form-group">
+			                <label class="control-label col-md-2 col-sm-2 col-xs-12">Distribuidor Asociado: </label>
 		                    <div class="col-md-4 col-sm-4 col-xs-12">
-		                      <select class="select2_single form-control col-md-4 col-xs-12" name="usrc_distrib_id">
-		                        <option value="null">Seleccione una opción ...</option>
-		                        @foreach($distributors as $distributor)
-	                            	<option value="{{ $distributor->id }}">{{ $distributor->distrib_nom }}</option>
-	                            @endforeach
-		                      </select>
+		                        <select class="select2_single form-control col-md-4 col-xs-12" name="usrc_distrib_id">
+			                        <option value="null">Seleccione una opción ...</option>
+			                        @foreach($distributors as $distributor)
+		                            	<option value="{{ $distributor->id }}">{{ $distributor->distrib_nom }}</option>
+		                            @endforeach
+		                        </select>
 		                  	</div>
-
-	                  	<label class="control-label col-md-1 col-sm-1 col-xs-12">Supervisor: </label>
-	                      <div class="col-md-3 col-sm-3 col-xs-12">
-	                       <p></p>
-	                        Si:
-	                        <input type="radio" class="flat" name="usrc_super" id="usrc_super1" value="1"  /> No:
-	                        <input type="radio" class="flat" name="usrc_super" id="usrc_super0" value="0" checked/>
-	                      </div>
-		              </div>
-
-
-                  	  <div class="x_content">
-                      <div class="" role="tabpanel" data-example-id="togglable-tabs">
-	                      <ul id="myTab" class="nav nav-tabs bar_tabs" role="tablist">
-	                        <li role="presentation" class="active"><a href="#tab_content1" id="home-tab" role="tab" data-toggle="tab" aria-expanded="true">Roles y Permisos</a>
-	                        </li>
-	                      </ul>
-
-	                      <div id="myTabContent" class="tab-content">
-	                        <div role="tabpanel" class="tab-pane fade active in" id="tab_content1" aria-labelledby="home-tab">
-
-
-								<div class="item form-group">
-					                    <div class="col-md-10 col-sm-10 col-xs-12">
-					                      <select id="roles" name="roles[]" tabindex="1" data-placeholder="Seleccione los roles ..." class="chosen-select form-control" onchange="onSelectUserCreate(this)" multiple="multiple">
-					                        @foreach($roles as $role)
-												<option value="{{ $role->id }}">{{ $role->name }}</option>
-											@endforeach
-					                      </select>
-					                  	</div>
-					              </div>
-
-					              <div class="item form-group">
-					                    <div class="col-md-10 col-sm-10 col-xs-12">
-					                      <select id="permisos" name="permisos[]" tabindex="2" data-placeholder="Seleccione los permisos ..." class="chosen-select form-control" multiple="multiple">
-					                      
-											@foreach($permissions as $permission)
-				                            	<option value="{{ $permission->id }}">{{ $permission->name }}</option>
-				                            @endforeach
-					                      </select>
-					                  	</div>
-					              </div>
-
-
-                        	  
+		                  	<label class="control-label col-md-1 col-sm-1 col-xs-12">Supervisor: </label>
+	                        <div class="col-md-3 col-sm-3 col-xs-12">
+		                        <p></p>
+		                        Si:
+		                        <input type="radio" class="flat" name="usrc_super" id="usrc_super1" value="1"  /> No:
+		                        <input type="radio" class="flat" name="usrc_super" id="usrc_super0" value="0" checked/>
 	                        </div>
+			            </div>
 
 
-	                      </div>
+                  	  	<div class="x_content">
+                      		<div class="" role="tabpanel" data-example-id="togglable-tabs">
+			                    <ul id="myTab" class="nav nav-tabs bar_tabs" role="tablist">
+			                        <li role="presentation" class="active"><a href="#tab_content1" id="home-tab" role="tab" data-toggle="tab" aria-expanded="true">Roles y Permisos</a>
+			                        </li>
+			                    </ul>
+
+			                    <div id="myTabContent" class="tab-content">
+			                        <div role="tabpanel" class="tab-pane fade active in" id="tab_content1" aria-labelledby="home-tab">
+
+										<div class="item form-group">
+							                <div class="col-md-10 col-sm-10 col-xs-12">
+							                    <select id="roles" name="roles[]" tabindex="1" data-placeholder="Seleccione los roles ..." class="chosen-select form-control" onchange="onSelectUserCreate(this)" multiple="multiple">
+							                        @foreach($roles as $role)
+														<option value="{{ $role->id }}">{{ $role->name }}</option>
+													@endforeach
+							                    </select>
+							                </div>
+							              </div>
+
+							              <div class="item form-group">
+							                    <div class="col-md-10 col-sm-10 col-xs-12">
+							                      <select id="permisos" name="permisos[]" tabindex="2" data-placeholder="Seleccione los permisos ..." class="chosen-select form-control" multiple="multiple">
+							                      
+													@foreach($permissions as $permission)
+						                            	<option value="{{ $permission->id }}">{{ $permission->name }}</option>
+						                            @endforeach
+							                      </select>
+							                  	</div>
+							              </div>
+			                        </div>
+			                    </div>
+	                        </div>
+                	    </div>
+
+                        <div class="ln_solid"></div>
+	                    <div class="form-group">
+	                        <div class="col-md-9 col-sm-9 col-xs-12 col-md-offset-3">
+	                            <button id="cancel" type="button" onclick="location.href = '/security/user';" class="btn btn-info">Cancelar</button>
+	                            <button type="reset" class="btn btn-primary">Borrar Datos</button>
+	                  		    <button id="send" type="submit" class="btn btn-success">Guardar</button>
+	                        </div>
 	                    </div>
-                	</div>
-
-                      <div class="ln_solid"></div>
-                      <div class="form-group">
-                        <div class="col-md-9 col-sm-9 col-xs-12 col-md-offset-3">
-                          <button id="cancel" type="button" onclick="location.href = '/security/user';" class="btn btn-info">Cancelar</button>
-                          <button type="reset" class="btn btn-primary">Borrar Datos</button>
-                  		  <button id="send" type="submit" class="btn btn-success">Guardar</button>
-                        </div>
-                      </div>
-
                     </form>
-
-              </div>
+                </div>
             </div>
-          </div>
+         </div>
     </div>
 </div>
 @endsection
