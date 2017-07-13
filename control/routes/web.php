@@ -61,8 +61,8 @@ Route::post('/getclientrfc', 'AccountController@getClientRfc');
 Route::post('/getctausers', 'AccountController@getCtaUsers');
 Route::post('/unblockuser', 'AccountController@unblockUser');
 Route::post('/getctabin', 'AccountController@getCtaBin');
-Route::post('/getmunic', 'Controller@getMunic');
 Route::post('/getcpdata', 'Controller@getCpData');
+
 
 
 

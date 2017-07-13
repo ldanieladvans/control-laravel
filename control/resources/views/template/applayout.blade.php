@@ -18,6 +18,7 @@
     <link href="{{ asset('controlassets/jquery-loadmask-master/jquery.loadmask.css') }}" rel="stylesheet" type="text/css" />
     <!-- PNotify -->
     <link href="{{ asset('controlassets/pnotify/pnotify.custom.min.css') }}" rel="stylesheet" type="text/css" />
+    
 
     <style type="text/css">
 

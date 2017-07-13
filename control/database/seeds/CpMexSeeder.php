@@ -3,6 +3,7 @@
 use Illuminate\Database\Seeder;
 
 use App\Munic;
+use App\Country;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Log;
 
@@ -17,8 +18,22 @@ class CpMexSeeder extends Seeder
     {
         /*$excel = file_get_contents(storage_path().DIRECTORY_SEPARATOR.'app'.DIRECTORY_SEPARATOR.'public'.DIRECTORY_SEPARATOR.'CPdescarga.xls');*/
         
+        
+        Excel::load('paises.xls', function($reader) {
+			$reader->each(function($row) {
+					$objcreated = Country::create([
+						    'c_char_min_code' => $row['c_char_min_code'],
+						    'c_char_code' => $row['c_char_code'],
+						    'c_code' => $row['c_code'],
+						    'c_name_es' => mb_convert_encoding($row['c_name_es'], "UTF-8"),
+						    'c_name_en' => mb_convert_encoding($row['c_name_en'], "UTF-8"),
+						]);
+
+			});
+
+		});
+
         Excel::load('c_Municipio.xls', function($reader) {
-		    // Loop through all sheets
 			$reader->each(function($row) {
 
 					$objcreated = Munic::create([

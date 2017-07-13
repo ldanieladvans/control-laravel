@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 use Illuminate\Http\Request;
 use App\Distributor;
 use App\Domicile;
+use App\Country;
 use Illuminate\Support\Facades\Validator;
 
 class DistributorController extends Controller
@@ -38,7 +39,8 @@ class DistributorController extends Controller
     public function create()
     {
         $domiciles = Domicile::all();
-        return view('appviews.distributorcreate',['domiciles'=>$domiciles]);
+        $countries = Country::all();
+        return view('appviews.distributorcreate',['domiciles'=>$domiciles,'countries'=>$countries]);
     }
 
     /**
@@ -79,6 +81,13 @@ class DistributorController extends Controller
                 }
                 if (array_key_exists('dom_numint',$alldata)){
                     $dom_vals['dom_numint'] = $alldata['dom_numint'];
+                }
+                if (array_key_exists('dom_country',$alldata)){
+                    if($alldata['dom_country']!=''){
+                        $countries = Country::where('c_char_code',$alldata['dom_country'])->get();
+                        $dom_vals['dom_pais'] = $countries[0]['c_name_es'];
+                    }
+                    
                 }
                 $domicile = new Domicile($dom_vals);
                 $domicile->save();
@@ -130,7 +139,8 @@ class DistributorController extends Controller
     public function edit(Distributor $distributor)
     {
         $domiciles = Domicile::all();
-        return view('appviews.distributoredit',['distributor'=>$distributor,'domiciles'=>$domiciles]);
+        $countries = Country::all();
+        return view('appviews.distributoredit',['distributor'=>$distributor,'domiciles'=>$domiciles,'countries'=>$countries]);
     }
 
     /**
@@ -173,6 +183,13 @@ class DistributorController extends Controller
                 }
                 if (array_key_exists('dom_numint',$alldata)){
                     $dom_vals['dom_numint'] = $alldata['dom_numint'];
+                }
+                if (array_key_exists('dom_country',$alldata)){
+                    if($alldata['dom_country']!=''){
+                        $countries = Country::where('c_char_code',$alldata['dom_country'])->get();
+                        $dom_vals['dom_pais'] = $countries[0]['c_name_es'];
+                    }
+                    
                 }
                 $domicile = new Domicile($dom_vals);
                 $domicile->save();

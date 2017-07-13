@@ -122,7 +122,7 @@
 					                            <select class="form-control" name="cliente_dom_id">
 						                            <option value="">Seleccione ...</option>
 						                            @foreach($domiciles as $domicile)
-						                            	<option value="{{ $domicile->id }}" {{$client->cliente_dom_id == $domicile->id ? 'selected':''}}>{{ $domicile->dom_cp }} - {{ $domicile->dom_estado }} - {{ $domicile->dom_ciudad }} - {{ $domicile->dom_col }}</option>
+						                            	<option value="{{ $domicile->id }}" {{$client->cliente_dom_id == $domicile->id ? 'selected':''}}>{{ $domicile->dom_numext }} - {{ $domicile->dom_cp }} - {{ $domicile->dom_estado }} - {{ $domicile->dom_ciudad }} - {{ $domicile->dom_col }} - {{ $domicile->dom_pais }}</option>
 						                            @endforeach
 					                            </select>
 					                        </div>

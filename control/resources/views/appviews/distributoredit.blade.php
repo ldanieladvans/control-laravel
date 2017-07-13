@@ -12,6 +12,8 @@
     <link href="{{ asset('controlassets/vendors/datatables.net-fixedheader-bs/css/fixedHeader.bootstrap.min.css') }}" rel="stylesheet">
     <link href="{{ asset('controlassets/vendors/datatables.net-responsive-bs/css/responsive.bootstrap.min.css') }}" rel="stylesheet">
     <link href="{{ asset('controlassets/vendors/datatables.net-scroller-bs/css/scroller.bootstrap.min.css') }}" rel="stylesheet">
+    <!-- Select 2 -->
+    <link href="{{ asset('controlassets/vendors/select2/dist/css/select2.css') }}" rel="stylesheet">
 @endsection
 
 @section('app_content')
@@ -129,10 +131,10 @@
 			                        	  	<div class="col-md-12 col-sm-12 col-xs-12 form-group ">
 						                        <label class="control-label col-md-1 col-sm-1 col-xs-12">Domicilio: </label>
 						                        <div class="col-md-11 col-sm-11 col-xs-12">
-						                            <select class="form-control" name="distrib_dom_id">
+						                            <select class="js-example-basic-single js-states form-control" name="distrib_dom_id" id="distrib_dom_id" style="width: 100%; display: none;">
 							                            <option value="">Seleccione ...</option>
 							                            @foreach($domiciles as $domicile)
-							                            	<option value="{{ $domicile->id }}" {{$distributor->distrib_dom_id == $domicile->id ? 'selected':''}}>{{ $domicile->dom_cp }} - {{ $domicile->dom_estado }} - {{ $domicile->dom_ciudad }} - {{ $domicile->dom_col }}</option>
+							                            	<option value="{{ $domicile->id }}" {{$distributor->distrib_dom_id == $domicile->id ? 'selected':''}}>{{ $domicile->dom_numext }} - {{ $domicile->dom_cp }} - {{ $domicile->dom_estado }} - {{ $domicile->dom_ciudad }} - {{ $domicile->dom_col }} - {{ $domicile->dom_pais }}</option>
 							                            @endforeach
 						                            </select>
 						                        </div>
@@ -140,11 +142,16 @@
 		                        	    </div>
 
 		                        	    <div id="dom_new_data" {{$distributor->distrib_dom_id ? 'hidden':''}}>
+		                        	    	<div class="col-md-2 col-sm-2 col-xs-12">
+						                        <input id="dom_search_cp" class="form-control has-feedback-left" name="dom_search_cp" placeholder="Buscar C.P." type="text" title="Buscar Código Postal">
+						                        <span class="fa fa-envelope form-control-feedback left" aria-hidden="true"></span>
+						                    </div>
+
 			                    	  		<div class="item form-group">
-			                        	  		<div class="col-md-6 col-sm-6 col-xs-12 form-group ">
-							                        <label class="control-label col-md-4 col-sm-4 col-xs-12">Estado: </label>
-							                        <div class="col-md-8 col-sm-8 col-xs-12">
-								                        <select class="form-control" name="dom_estado_aux" id="dom_estado_aux">
+			                        	  		<div class="col-md-5 col-sm-5 col-xs-12 form-group ">
+							                        <label class="control-label col-md-2 col-sm-2 col-xs-12">Estado: </label>
+							                        <div class="col-md-10 col-sm-10 col-xs-12">
+								                        <select class="js-example-basic-single js-states form-control" name="dom_estado_aux" id="dom_estado_aux" style="width: 100%; display: none;">
 								                            <option value="">Seleccione ...</option>
 								                            <option value="AGU">Aguascalientes</option>
 								                            <option value="BCN">Baja California</option>
@@ -182,10 +189,10 @@
 							                        </div>
 							                    </div>
 
-						                        <div class="col-md-6 col-sm-6 col-xs-6 form-group ">
-							                        <label class="control-label col-md-4 col-sm-4 col-xs-12">Municipio: </label>
-							                        <div class="col-md-8 col-sm-8 col-xs-12">
-							                            <select class="form-control" name="dom_munic" id="dom_munic">
+						                        <div class="col-md-5 col-sm-5 col-xs-12 form-group ">
+							                        <label class="control-label col-md-2 col-sm-2 col-xs-12">Municipio: </label>
+							                        <div class="col-md-10 col-sm-10 col-xs-12">
+							                            <select class="js-example-basic-single js-states form-control" name="dom_munic" id="dom_munic" style="width: 100%; display: none;">
 							                            	<option value="">Seleccione ...</option>
 							                            </select>
 							                        </div>
@@ -212,44 +219,55 @@
 							                    </div>
 						                    </div>
 
-				                            <div class="item form-group">	                    
-							                    <div class="col-md-2 col-sm-2 col-xs-12">
-							                    	<input id="dom_cp" class="form-control has-feedback-left" name="dom_cp" placeholder="Código Postal"  type="text" >
+				                            <div class="item form-group">
+				                            	<div class="col-md-4 col-sm-4 col-xs-12 form-group ">
+							                        <div class="col-md-12 col-sm-12 col-xs-12">
+							                          	<select class="js-example-basic-single js-states form-control" name="dom_country" id="dom_country" style="width: 100%; display: none;">
+							                            	<option value="">Seleccione ...</option>
+							                            	@foreach($countries as $country)
+								                            	<option value="{{ $country->c_char_code }}" {{ $country->c_char_code == 'MEX' ? 'selected' : '' }}>{{ $country->c_name_es }}</option>
+								                            @endforeach
+							                          	</select>
+							                        </div>
+						                        </div>							   
+
+							                    <div class="col-md-4 col-sm-4 col-xs-12">
+							                        <input id="dom_estado" class="form-control has-feedback-left" name="dom_estado" placeholder="Estado" required type="text">
+							                        <span class="fa fa-home form-control-feedback left" aria-hidden="true"></span>
+							                    </div>
+
+							                    <div class="col-md-4 col-sm-4 col-xs-12">
+							                        <input id="dom_ciudad" class="form-control has-feedback-left" name="dom_ciudad" placeholder="Ciudad" type="text">
+							                        <span class="fa fa-home form-control-feedback left" aria-hidden="true"></span>
+							                    </div>							                    
+						                    </div>
+
+						                    <div class="item form-group">
+						                    	<div class="col-md-4 col-sm-4 col-xs-12">
+							                    	<input id="dom_cp" class="form-control has-feedback-left" name="dom_cp" placeholder="Código Postal" required type="text">
 							                    	<span class="fa fa-home form-control-feedback left" aria-hidden="true"></span>
 							                    </div>
 
 							                    <div class="col-md-4 col-sm-4 col-xs-12">
-							                    	<input id="dom_estado" class="form-control has-feedback-left" name="dom_estado" placeholder="Estado"  type="text" >
-							                    	<span class="fa fa-home form-control-feedback left" aria-hidden="true"></span>
+							                        <input id="dom_col" class="form-control has-feedback-left" name="dom_col" placeholder="Asentamiento" type="text">
+							                        <span class="fa fa-home form-control-feedback left" aria-hidden="true"></span>
 							                    </div>
 
-							                    <div class="col-md-3 col-sm-3 col-xs-12">
-							                    	<input id="dom_ciudad" class="form-control has-feedback-left" name="dom_ciudad" placeholder="Ciudad" type="text" >
-							                    	<span class="fa fa-home form-control-feedback left" aria-hidden="true"></span>
-							                    </div>
-
-							                    <div class="col-md-3 col-sm-3 col-xs-12">
-							                    	<input id="dom_col" class="form-control has-feedback-left" name="dom_col" placeholder="Asentamiento" type="text" >
+							                  	<div class="col-md-4 col-sm-4 col-xs-12">
+							                    	<input id="dom_calle" class="form-control has-feedback-left" name="dom_calle" placeholder="Calle" required type="text">
 							                    	<span class="fa fa-home form-control-feedback left" aria-hidden="true"></span>
 							                    </div>
 						                    </div>
 
-						                    <div class="item form-group">
-							                  	<div class="col-md-12 col-sm-12 col-xs-12">
-							                     	<input id="dom_calle" class="form-control has-feedback-left" name="dom_calle" placeholder="Calle"  type="text" >
-							                     	<span class="fa fa-home form-control-feedback left" aria-hidden="true"></span>
-							                    </div>
-						                    </div>
-
-					                  	    <div class="item form-group">
+					                  		<div class="item form-group">
 						                  	  	<div class="col-md-6 col-sm-6 col-xs-12">
-							                    	<input id="dom_numext" class="form-control has-feedback-left" name="dom_numext" placeholder="# Ext" type="text" >
-							                    	<span class="fa fa-home form-control-feedback left" aria-hidden="true"></span>
+							                        <input id="dom_numext" class="form-control has-feedback-left" name="dom_numext" placeholder="# Ext" type="text">
+							                        <span class="fa fa-home form-control-feedback left" aria-hidden="true"></span>
 							                    </div>
 
 							                    <div class="col-md-6 col-sm-6 col-xs-12">
-							                    	<input id="dom_numint" class="form-control has-feedback-left" name="dom_numint" placeholder="# Int" type="text" >
-							                    	<span class="fa fa-home form-control-feedback left" aria-hidden="true"></span>
+							                        <input id="dom_numint" class="form-control has-feedback-left" name="dom_numint" placeholder="# Int" type="text">
+							                        <span class="fa fa-home form-control-feedback left" aria-hidden="true"></span>
 							                    </div>					                  
 						                    </div>
 			                      		</div>
@@ -298,12 +316,81 @@
     <script src="{{ asset('controlassets/vendors/datatables.net-responsive/js/dataTables.responsive.min.js') }}"></script>
     <script src="{{ asset('controlassets/vendors/datatables.net-responsive-bs/js/responsive.bootstrap.js') }}"></script>
     <script src="{{ asset('controlassets/vendors/datatables.net-scroller/js/dataTables.scroller.min.js') }}"></script>
+    <!-- Select 2 -->
+    <script src="{{ asset('controlassets/vendors/select2/dist/js/select2.min.js') }}"></script>
     <script type="text/javascript">
     	var dom_estado_serv = '';
     	var dom_munic_serv = '';
     	var dom_cp_serv = '';
     	var dom_munic_text = '';
     	var dtobj = null;
+
+    	$("#dom_country").select2({
+		  	placeholder: "Selecciona el país",
+		  	allowClear: true
+		});
+
+		$("#dom_estado_aux").select2({
+		  	placeholder: "Selecciona el estado",
+		  	allowClear: true
+		});
+
+		$("#dom_munic").select2({
+		  	placeholder: "Selecciona el municipio",
+		  	allowClear: true
+		});
+
+		$("#distrib_dom_id").select2({
+		  	placeholder: "Selecciona el domicilio",
+		  	allowClear: true
+		});
+
+		document.getElementById('dom_search_cp').onkeypress = function(e){
+		    if (!e) e = window.event;
+		    var keyCode = e.keyCode || e.which;
+		    if (keyCode == '13'){
+		    	$('#loadingmodal').modal('show');
+		    	if(this.value!=''){
+		    		var CSRF_TOKEN = $('meta[name="csrf-token"]').attr('content');
+		    		$.ajax({
+		                url: '/getcpdata',
+	                	type: 'POST',
+	                	data: {_token: CSRF_TOKEN,dommunicserv:dom_munic_serv,domestadoserv:dom_estado_serv,cp:document.getElementById("dom_search_cp").value},
+		                dataType: 'JSON',
+		                success: function (data) {
+		                	
+	                	    $('#loadingmodal').modal('hide');
+
+		                    var dataTablevalues = [];
+		                    var table_counter = 0;
+
+		                    data['tabledata'].forEach(function(item){
+		                        dataTablevalues.push([item.d_codigo,item.d_estado,item.d_ciudad,item.d_asenta,item.d_tipo_asenta,"<div class='btn-group'><div class='btn-group'><a id='accbtn"+item.id+"' onclick='getRowData("+table_counter+")' class='btn btn-xs' data-placement='left' title='Seleccionar' ><i class='fa fa-check fa-2x'></i> </a></div>"]);
+		                        table_counter ++;
+		                    });
+
+		                    $('#datatable-responsive').dataTable().fnDestroy();
+		                    dtobj = $('#datatable-responsive').DataTable( {
+					        	data: dataTablevalues,
+					        });
+		                },
+		                error: function(XMLHttpRequest, textStatus, errorThrown) { 
+		                    new PNotify({
+		                    title: "Notificación",
+		                    type: "info",
+		                    text: "Ha ocurrido un error",
+		                    nonblock: {
+		                      nonblock: true
+		                    },
+		                    addclass: 'dark',
+		                    styling: 'bootstrap3'
+		                  });
+		                }
+		            });
+		    	}
+		    }
+
+		}
 
     	$("#distrib_rfc").on('change', function(){
 			document.getElementById("span_distrib_rfc").setAttribute('hidden','1');
@@ -323,12 +410,12 @@
 		}
 
 		$("#dom_estado_aux").on('change', function(){
-    		var CSRF_TOKEN = $('meta[name="csrf-token"]').attr('content');
-    		dom_estado_serv = this.value;
+			var CSRF_TOKEN = $('meta[name="csrf-token"]').attr('content');
+			dom_estado_serv = this.value;
 
     		$("#dom_munic option").each(function() {
-				  $(this).remove();
-		    });
+				$(this).remove();
+			});
 
 			$('#dom_munic').append($('<option>', {
 			    value: '',
@@ -338,13 +425,14 @@
     		if(this.value!=''){
     		  	$('#loadingmodal').modal('show');
 	            $.ajax({
-	                url: '/getmunic',
+	                url: '/getcpdata',
 	                type: 'POST',
-	                data: {_token: CSRF_TOKEN,domstate:this.value},
+	                data: {_token: CSRF_TOKEN,domestadoserv:this.value,cp:document.getElementById("dom_search_cp").value,dommunicserv:dom_munic_serv},
 	                dataType: 'JSON',
 	                success: function (data) {
-                		$('#loadingmodal').modal('hide');
-	                	data['munics'].forEach(function(item){
+                	    $('#loadingmodal').modal('hide');
+	                  
+	                    data['munics'].forEach(function(item){
 		                  	$('#dom_munic').append($('<option>', {
 							    value: item.m_code,
 							    text: item.m_description
@@ -361,7 +449,6 @@
 	                    });
 
 	                    $('#datatable-responsive').dataTable().fnDestroy();
-
 	                    dtobj = $('#datatable-responsive').DataTable( {
 				        	data: dataTablevalues,
 				    	});
@@ -379,8 +466,7 @@
 	                  });
 	                }
 	            });
-    		}
-               
+    		}       
     	});
 
 
@@ -390,7 +476,7 @@
 	        var rowCount = table.rows.length;
 
 	        while(table.rows.length > 1){
-	          table.deleteRow(1);
+	        	table.deleteRow(1);
 	        }
 
     		dom_munic_serv = this.value;
@@ -401,7 +487,7 @@
 	            $.ajax({
 	                url: '/getcpdata',
 	                type: 'POST',
-	                data: {_token: CSRF_TOKEN,dommunicserv:dom_munic_serv,domcpserv:dom_cp_serv,domestadoserv:dom_estado_serv},
+	                data: {_token: CSRF_TOKEN,dommunicserv:dom_munic_serv,domcpserv:dom_cp_serv,domestadoserv:dom_estado_serv,cp:document.getElementById("dom_search_cp").value},
 	                dataType: 'JSON',
 	                success: function (data) {
                 	    $('#loadingmodal').modal('hide');
@@ -433,8 +519,7 @@
 	                  });
 	                }
 	            });
-    		}
-               
+    		}    
     	});
 
 	    function getRowData(table_counter){
@@ -450,7 +535,7 @@
 				}
 				document.getElementById('dom_estado').value = rowdata[1];
 			}
-	    }	 
+	    } 
 	</script>
 @endsection
 
