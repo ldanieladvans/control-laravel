@@ -33,6 +33,8 @@
                     </div>
                 @endif
 
+                <input id="apps_aux" type="text" value="{{$apps}}">
+
                 <div class="x_content">
                     {{ Form::open(['route' => ['account.update', $account], 'class'=>'form-horizontal form-label-left']) }}
                         {{ Form::hidden('_method', 'PUT') }}
@@ -93,6 +95,31 @@
                                                 <span class="fa fa-certificate form-control-feedback left" aria-hidden="true"></span>
                                             </div>
                                         </div>
+                                        <div class="item form-group">                       
+                                            <div class="col-md-12 col-sm-12 col-xs-12">
+                                                <table id="editable-dt1" class="table table-striped table-bordered" width="100%">
+                                                    <thead>
+                                                        <tr>
+                                                            <th align="left">#</th>
+                                                            <th align="left">Aplicaciones</th>
+                                                            <th align="left">Unidad de Medida</th>
+                                                            <th align="left">cantidad</th>
+                                                        </tr>
+                                                    </thead>
+                                                    <tbody>
+                                                        @foreach($account->packages as $appcta)
+                                                            <tr data-id="{{$appcta->id}}">
+                                                                <td class="tabledit-data">{{$appcta->id}}</td>
+                                                                <td class="tabledit-data"></td>
+                                                                <td class="tabledit-data"></td>
+                                                                <td class="tabledit-data">{{$appcta->appcta_gig}}</td>
+                                                            </tr>
+                                                        @endforeach
+                                                    </tbody>
+                                                    <button id="testbtn" type="button" onclick="addLine()" >+</button>
+                                                </table>
+                                            </div>
+                                        </div>
                                     </div>
 
                                     <div role="tabpanel" class="tab-pane fade" id="tab_content2" aria-labelledby="profile-tab">
@@ -140,7 +167,54 @@
     <script type="text/javascript" src="{{ asset('controlassets/vendors/datetime/js/locales/bootstrap-datetimepicker.es.js') }}" charset="UTF-8"></script>
     <!-- Select 2 -->
     <script src="{{ asset('controlassets/vendors/select2/dist/js/select2.min.js') }}"></script>
+    <!-- Table Edit -->
+    <script src="{{ asset('controlassets/vendors/Tabledit/jquery.tabledit.js') }}"></script>
     <script type="text/javascript">
+
+        function addLine(){
+            var tableditTableName = '#editable-dt1'; 
+            var newID = parseInt($(tableditTableName + " tr:last").attr("data-id")) + 1; 
+            var clone = $("table tr:last").clone(); 
+            $(".tabledit-data span", clone).text(""); 
+            $(".tabledit-data input", clone).val(""); 
+            clone.appendTo("table"); $
+            (tableditTableName + " tr:last").attr("data-id", newID); 
+            $(tableditTableName + " tr:last td .tabledit-span.tabledit-identifier").text(newID); $(tableditTableName + " tr:last td .tabledit-input.tabledit-identifier").val(newID);
+        }
+
+        console.log($("#apps_aux").val());
+
+        $('#editable-dt1').Tabledit({
+            url: '/crudtabledit',
+            columns: {
+                identifier: [0, 'id'],
+                editable: [[1, 'apps',$("#apps_aux").val()],[2, 'um','{"u": "Unidad", "g": "Gigas"}'],[3, 'appcta_gig']]
+            },
+            onDraw: function() {
+                console.log('onDraw()');
+            },
+            onSuccess: function(data, textStatus, jqXHR) {
+                console.log('onSuccess(data, textStatus, jqXHR)');
+                console.log(data);
+                console.log(textStatus);
+                console.log(jqXHR);
+            },
+            onFail: function(jqXHR, textStatus, errorThrown) {
+                console.log('onFail(jqXHR, textStatus, errorThrown)');
+                console.log(jqXHR);
+                console.log(textStatus);
+                console.log(errorThrown);
+            },
+            onAlways: function() {
+                console.log('onAlways()');
+            },
+            onAjax: function(action, serialize) {
+                console.log('onAjax(action, serialize)');
+                console.log(action);
+                console.log(serialize);
+            }
+        });
+
         $('.form_datetime').datetimepicker({
             language:  'es',
             weekStart: 1,

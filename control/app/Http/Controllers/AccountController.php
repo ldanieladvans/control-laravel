@@ -6,6 +6,7 @@ use App\Account;
 use App\Client;
 use App\Distributor;
 use App\Package;
+use App\Appaccount;
 use Illuminate\Http\Request;
 
 use App\Mail\ClientCreate;
@@ -58,9 +59,11 @@ class AccountController extends Controller
      */
     public function store(Request $request)
     {
+
         $cta_distrib_id = 0;
         $cta_cliente_id = 0;
         $alldata = $request->all();
+
         if(array_key_exists('cta_distrib_id',$alldata)){
             if($alldata['cta_distrib_id']=='null'){
                 unset($alldata['cta_distrib_id']);
@@ -115,7 +118,8 @@ class AccountController extends Controller
         $clients = Client::all();
         $distributors = Distributor::all();
         $packages = Package::all();
-        return view('appviews.accountedit',['account'=>$account,'clients'=>$clients,'distributors'=>$distributors,'packages'=>$packages]);
+        $apps = config('app.advans_apps');
+        return view('appviews.accountedit',['account'=>$account,'clients'=>$clients,'distributors'=>$distributors,'packages'=>$packages,'apps'=>json_encode($apps)]);
     }
 
     /**
@@ -301,5 +305,28 @@ class AccountController extends Controller
             'rfc' => $alldata['rfc']
         );
         return \Response::json($response);
+    }
+
+    public function crudTablEdit(Request $request)
+    {
+        $alldata = $request->all();
+        $arrayparams = array();
+
+        $input = filter_input_array(INPUT_POST);
+
+        if ($input['action'] == 'edit') {
+            $app_cta = Appaccount::find($input['id']);
+            $app_cta->appcta_gig = $input['appcta_gig'];
+            $app_cta->save();
+            //$mysqli->query("UPDATE users SET username='" . $input['username'] . "', email='" . $input['email'] . "', avatar='" . $input['avatar'] . "' WHERE id='" . $input['id'] . "'");
+        } else if ($input['action'] == 'delete') {
+            $app_cta = Appaccount::find($input['id']);
+            //$mysqli->query("UPDATE users SET deleted=1 WHERE id='" . $input['id'] . "'");
+        } else if ($input['action'] == 'restore') {
+            $app_cta = Appaccount::find($input['id']);
+            //$mysqli->query("UPDATE users SET deleted=0 WHERE id='" . $input['id'] . "'");
+        }
+
+        return json_encode($input);
     }
 }

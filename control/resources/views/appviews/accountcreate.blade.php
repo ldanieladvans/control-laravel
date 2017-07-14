@@ -120,6 +120,7 @@
     <!-- Select 2 -->
     <script src="{{ asset('controlassets/vendors/select2/dist/js/select2.min.js') }}"></script>
 	<script type="text/javascript">
+
 	    $('.form_datetime').datetimepicker({
 	        language:  'es',
 	        weekStart: 1,

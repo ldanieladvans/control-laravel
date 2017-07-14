@@ -62,6 +62,7 @@ Route::post('/getctausers', 'AccountController@getCtaUsers');
 Route::post('/unblockuser', 'AccountController@unblockUser');
 Route::post('/getctabin', 'AccountController@getCtaBin');
 Route::post('/getcpdata', 'Controller@getCpData');
+Route::post('/crudtabledit', 'AccountController@crudTablEdit');
 
 
 

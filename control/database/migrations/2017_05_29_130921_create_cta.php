@@ -24,6 +24,8 @@ class CreateCta extends Migration
             $table->date('cta_fecha')->nullable();
             $table->string('cta_nom_bd',25)->nullable();
             $table->string('cta_estado',20)->nullable();
+            $table->string('cta_periodicity',20)->nullable();
+            $table->boolean('cta_recursive')->default(1);
         });
     }
 

@@ -9,7 +9,7 @@ class Account extends Model
     protected $table = 'cta';
 
     protected $fillable = [
-        'cta_cliente_id', 'cta_distrib_id', 'cta_nomservd', 'cta_num', 'cta_fecha', 'cta_nom_bd', 'cta_estado'
+        'cta_cliente_id', 'cta_distrib_id', 'cta_nomservd', 'cta_num', 'cta_fecha', 'cta_nom_bd', 'cta_estado', 'cta_periodicity', 'cta_recursive'
     ];
 
     //Uncomment for multibd
@@ -31,6 +31,7 @@ class Account extends Model
 
     public function packages()
     {
-        return $this->hasMany('App\Package','appcta_cuenta_id');
+        return $this->hasMany('App\Appaccount','appcta_cuenta_id');
     }
+
 }
