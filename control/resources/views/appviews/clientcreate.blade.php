@@ -222,7 +222,7 @@
 						                        </div>							   
 
 							                    <div class="col-md-4 col-sm-4 col-xs-12">
-							                        <input id="dom_estado" class="form-control has-feedback-left" name="dom_estado" placeholder="Estado" required type="text">
+							                        <input id="dom_estado" class="form-control has-feedback-left" name="dom_estado" placeholder="Estado" type="text">
 							                        <span class="fa fa-home form-control-feedback left" aria-hidden="true"></span>
 							                    </div>
 
@@ -234,7 +234,7 @@
 
 						                    <div class="item form-group">
 						                    	<div class="col-md-4 col-sm-4 col-xs-12">
-							                    	<input id="dom_cp" class="form-control has-feedback-left" name="dom_cp" placeholder="Código Postal" required type="text">
+							                    	<input id="dom_cp" class="form-control has-feedback-left" name="dom_cp" placeholder="Código Postal" type="text">
 							                    	<span class="fa fa-home form-control-feedback left" aria-hidden="true"></span>
 							                    </div>
 
@@ -244,7 +244,7 @@
 							                    </div>
 
 							                  	<div class="col-md-4 col-sm-4 col-xs-12">
-							                    	<input id="dom_calle" class="form-control has-feedback-left" name="dom_calle" placeholder="Calle" required type="text">
+							                    	<input id="dom_calle" class="form-control has-feedback-left" name="dom_calle" placeholder="Calle" type="text">
 							                    	<span class="fa fa-home form-control-feedback left" aria-hidden="true"></span>
 							                    </div>
 						                    </div>
@@ -296,7 +296,7 @@
 		                        	    <div id="refer_new_data">
 			                        	    <div class="item form-group">	                    
 							                    <div class="col-md-9 col-sm-9 col-xs-12">
-							                    	<input id="refer_nom" class="form-control has-feedback-left" name="refer_nom" placeholder="Nombre" required type="text" title="Nombre">
+							                    	<input id="refer_nom" class="form-control has-feedback-left" name="refer_nom" placeholder="Nombre" type="text" title="Nombre">
 							                    	<span class="fa fa-user form-control-feedback left" aria-hidden="true"></span>
 							                    </div>
 						                    </div>

@@ -10,6 +10,8 @@
     <link href="{{ asset('controlassets/vendors/bootstrap-fileinput-master/css/fileinput.css') }}" media="all" rel="stylesheet" type="text/css" />
     <!-- Chosen -->
     <link href="{{ asset('controlassets/vendors/chosen/chosen.css') }}" rel="stylesheet" type="text/css" />
+    <!-- Select 2 -->
+    <link href="{{ asset('controlassets/vendors/select2/dist/css/select2.css') }}" rel="stylesheet">
     <style>
 	.kv-avatar .krajee-default.file-preview-frame,.kv-avatar .krajee-default.file-preview-frame:hover {
 	    margin: 0;
@@ -141,8 +143,8 @@
 		                <div class="item form-group">
 			                <label class="control-label col-md-2 col-sm-2 col-xs-12">Distribuidor Asociado: </label>
 		                    <div class="col-md-4 col-sm-4 col-xs-12">
-		                        <select class="select2_single form-control col-md-4 col-xs-12" name="usrc_distrib_id">
-			                        <option value="null">Seleccione una opción ...</option>
+		                        <select class="js-example-basic-single js-states form-control" name="usrc_distrib_id" id="usrc_distrib_id">
+			                        <option value="">Seleccione una opción ...</option>
 			                        @foreach($distributors as $distributor)
 		                            	<option value="{{ $distributor->id }}">{{ $distributor->distrib_nom }}</option>
 		                            @endforeach
@@ -224,7 +226,14 @@
 	<script src="{{ asset('controlassets/vendors/chosen/chosen.jquery.js') }}" type="text/javascript"></script>
 	<script src="{{ asset('controlassets/vendors/chosen/docsupport/prism.js') }}" type="text/javascript" charset="utf-8"></script>
 	<script src="{{ asset('controlassets/vendors/chosen/docsupport/init.js') }}" type="text/javascript" charset="utf-8"></script>
+	<!-- Select 2 -->
+    <script src="{{ asset('controlassets/vendors/select2/dist/js/select2.min.js') }}"></script>
     <script type="text/javascript">
+
+    	$("#usrc_distrib_id").select2({
+		  	placeholder: "Selecciona el dictribuidor asociado",
+		  	allowClear: true
+		});
 
     	function getSelectValues(select){
 		    var result = [];

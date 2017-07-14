@@ -8,6 +8,8 @@
     <link href="{{ asset('controlassets/build/css/custom.css') }}" rel="stylesheet">
     <!-- Chosen -->    
     <link href="{{ asset('controlassets/vendors/chosen/chosen.css') }}" rel="stylesheet" type="text/css" />
+    <!-- Select 2 -->
+    <link href="{{ asset('controlassets/vendors/select2/dist/css/select2.css') }}" rel="stylesheet">
     <style>
 	    .errorType {
 	        border-color: #F00 !important;
@@ -43,7 +45,7 @@
 	                    <div class="item form-group">
                             <label class="control-label col-md-1 col-sm-1 col-xs-12">Cuenta*</label>
                             <div class="col-md-8 col-sm-8 col-xs-12">
-                                <select class="select2_single form-control col-md-7 col-xs-12" id="appcta_cuenta_id" name="appcta_cuenta_id" required>
+                                <select class="js-example-basic-single js-states form-control" id="appcta_cuenta_id" name="appcta_cuenta_id" required>
                                     <option value="">Seleccione una opción ...</option>
                                     @foreach($accounts as $account)
                                         <option value="{{ $account->id }}">{{ $account->cta_num }}</option>
@@ -55,7 +57,7 @@
                         <div class="item form-group">
                             <label class="control-label col-md-1 col-sm-1 col-xs-12">Paquete</label>
                             <div class="col-md-8 col-sm-8 col-xs-12">
-                                <select class="select2_single form-control col-md-7 col-xs-12" name="appcta_paq_id" id="appcta_paq_id" disabled="disabled">
+                                <select class="js-example-basic-single js-states form-control" name="appcta_paq_id" id="appcta_paq_id" disabled="disabled">
                                     <option value="">Seleccione una opción ...</option>
                                         @foreach($packages as $package)
                                             <option value="{{ $package->id }}">{{ $package->paq_nom }}</option>
@@ -166,8 +168,20 @@
     <script src="{{ asset('controlassets/vendors/chosen/docsupport/init.js') }}" type="text/javascript" charset="utf-8"></script>
 	<!-- Custom Theme Scripts -->
     <script src="{{ asset('controlassets/build/js/custom.js') }}"></script>
+    <!-- Select 2 -->
+    <script src="{{ asset('controlassets/vendors/select2/dist/js/select2.min.js') }}"></script>
     <script type="text/javascript">
         $('.chosen-select', this).chosen('destroy').chosen();
+
+        $("#appcta_cuenta_id").select2({
+            placeholder: "Selecciona la cuenta",
+            allowClear: true
+        });
+
+        $("#appcta_paq_id").select2({
+            placeholder: "Selecciona el paquete",
+            allowClear: true
+        });
 
         var cta_aux = false;
         var CSRF_TOKEN = $('meta[name="csrf-token"]').attr('content');

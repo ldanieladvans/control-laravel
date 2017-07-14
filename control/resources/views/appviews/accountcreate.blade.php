@@ -8,6 +8,8 @@
     <link href="{{ asset('controlassets/vendors/datetime/css/bootstrap-datetimepicker.min.css') }}" rel="stylesheet" media="screen">
     <!-- Chosen -->
     <link href="{{ asset('controlassets/vendors/chosen/chosen.css') }}" rel="stylesheet" type="text/css" />
+    <!-- Select 2 -->
+    <link href="{{ asset('controlassets/vendors/select2/dist/css/select2.css') }}" rel="stylesheet">
 @endsection
 
 @section('app_content')
@@ -38,7 +40,7 @@
                         <div class="item form-group">
                             <label class="control-label col-md-1 col-sm-1 col-xs-12">Cliente*</label>
                             <div class="col-md-8 col-sm-8 col-xs-12">
-                                <select class="select2_single form-control col-md-7 col-xs-12" name="cta_cliente_id" id="cta_cliente_id" required>
+                                <select class="js-example-basic-single js-states form-control" name="cta_cliente_id" id="cta_cliente_id" required>
                                     <option value="">Seleccione una opción ...</option>
                                     @foreach($clients as $client)
                                         <option value="{{ $client->id }}">{{ $client->cliente_nom }}</option>
@@ -50,7 +52,7 @@
                         <div class="item form-group">
                             <label class="control-label col-md-1 col-sm-1 col-xs-12">Distribuidor*</label>
                             <div class="col-md-8 col-sm-8 col-xs-12">
-                                <select class="select2_single form-control col-md-7 col-xs-12" name="cta_distrib_id" id="cta_distrib_id" required>
+                                <select class="js-example-basic-single js-states form-control" name="cta_distrib_id" id="cta_distrib_id" required>
                                     <option value="">Seleccione una opción ...</option>
                                     @foreach($distributors as $distributor)
                                         <option value="{{ $distributor->id }}">{{ $distributor->distrib_nom }}</option>
@@ -115,7 +117,8 @@
     <!-- Date Time -->
     <script type="text/javascript" src="{{ asset('controlassets/vendors/datetime/js/bootstrap-datetimepicker.js') }}" charset="UTF-8"></script>
 	<script type="text/javascript" src="{{ asset('controlassets/vendors/datetime/js/locales/bootstrap-datetimepicker.es.js') }}" charset="UTF-8"></script>
-
+    <!-- Select 2 -->
+    <script src="{{ asset('controlassets/vendors/select2/dist/js/select2.min.js') }}"></script>
 	<script type="text/javascript">
 	    $('.form_datetime').datetimepicker({
 	        language:  'es',
@@ -127,6 +130,16 @@
 			forceParse: 0,
 	        showMeridian: 1
 	    });
+
+        $("#cta_cliente_id").select2({
+            placeholder: "Selecciona el cliente",
+            allowClear: true
+        });
+
+        $("#cta_distrib_id").select2({
+            placeholder: "Selecciona el distribuidor",
+            allowClear: true
+        });
 
         var CSRF_TOKEN = $('meta[name="csrf-token"]').attr('content');
 

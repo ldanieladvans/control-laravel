@@ -6,6 +6,8 @@
     <link href="{{ asset('controlassets/vendors/switchery/dist/switchery.min.css') }}" rel="stylesheet">
     <!-- Custom Theme Style -->
     <link href="{{ asset('controlassets/build/css/custom.css') }}" rel="stylesheet">
+    <!-- Select 2 -->
+    <link href="{{ asset('controlassets/vendors/select2/dist/css/select2.css') }}" rel="stylesheet">
     <style>
 	    .errorType {
 	        border-color: #F00 !important;
@@ -41,7 +43,7 @@
                         <div class="item form-group">
                             <label class="control-label col-md-1 col-sm-1 col-xs-12">Distribuidor*</label>
                             <div class="col-md-8 col-sm-8 col-xs-12">
-                                <select class="select2_single form-control col-md-7 col-xs-12" id="asigpaq_distrib_id" name="asigpaq_distrib_id" required>
+                                <select class="js-example-basic-single js-states form-control" id="asigpaq_distrib_id" name="asigpaq_distrib_id" required>
                                     <option value="">Seleccione una opción ...</option>
                                     @foreach($distributors as $distributor)
                                         <option value="{{ $distributor->id }}" {{$asigpaq->asigpaq_distrib_id == $distributor->id ? 'selected':''}}>{{ $distributor->distrib_nom }}</option>
@@ -116,10 +118,17 @@
     <script src="{{ asset('controlassets/vendors/switchery/dist/switchery.min.js') }}"></script>
 	<!-- Custom Theme Scripts -->
     <script src="{{ asset('controlassets/build/js/custom.js') }}"></script>
+    <!-- Select 2 -->
+    <script src="{{ asset('controlassets/vendors/select2/dist/js/select2.min.js') }}"></script>
     <script type="text/javascript">
 	    $( "#packassigform" ).submit(function( event ) {
 	        event.preventDefault();
 	    });
+
+        $("#asigpaq_distrib_id").select2({
+            placeholder: "Selecciona el distribuidor",
+            allowClear: true
+        });
 	</script>
 @endsection
 
