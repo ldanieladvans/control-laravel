@@ -9,7 +9,7 @@ use App\Domicile;
 use Illuminate\Support\Facades\Validator;
 use App\Munic;
 use App\Cpmex;
-
+use App\Country;
 
 class ClientController extends Controller
 {
@@ -44,7 +44,8 @@ class ClientController extends Controller
     {
         $references = Reference::all();
         $domiciles = Domicile::all();
-        return view('appviews.clientcreate',['references'=>$references,'domiciles'=>$domiciles]);
+        $countries = Country::all();
+        return view('appviews.clientcreate',['references'=>$references,'domiciles'=>$domiciles,'countries'=>$countries]);
     }
 
     /**
@@ -104,6 +105,13 @@ class ClientController extends Controller
                 }
                 if (array_key_exists('dom_numint',$alldata)){
                     $dom_vals['dom_numint'] = $alldata['dom_numint'];
+                }
+                if (array_key_exists('dom_country',$alldata)){
+                    if($alldata['dom_country']!=''){
+                        $countries = Country::where('c_char_code',$alldata['dom_country'])->get();
+                        $dom_vals['dom_pais'] = $countries[0]['c_name_es'];
+                    }
+                    
                 }
                 $domicile = new Domicile($dom_vals);
                 $domicile->save();
@@ -167,7 +175,8 @@ class ClientController extends Controller
     {
         $references = Reference::all();
         $domiciles = Domicile::all();
-        return view('appviews.clientedit',['client'=>$client,'references'=>$references,'domiciles'=>$domiciles]);
+        $countries = Country::all();
+        return view('appviews.clientedit',['client'=>$client,'references'=>$references,'domiciles'=>$domiciles,'countries'=>$countries]);
     }
 
     /**
@@ -210,6 +219,13 @@ class ClientController extends Controller
                 }
                 if (array_key_exists('dom_numint',$alldata)){
                     $dom_vals['dom_numint'] = $alldata['dom_numint'];
+                }
+                if (array_key_exists('dom_country',$alldata)){
+                    if($alldata['dom_country']!=''){
+                        $countries = Country::where('c_char_code',$alldata['dom_country'])->get();
+                        $dom_vals['dom_pais'] = $countries[0]['c_name_es'];
+                    }
+                    
                 }
                 $domicile = new Domicile($dom_vals);
                 $domicile->save();
