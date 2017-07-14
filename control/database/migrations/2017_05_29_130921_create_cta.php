@@ -22,6 +22,7 @@ class CreateCta extends Migration
             $table->string('cta_nomservd',20)->nullable();
             $table->string('cta_num',25)->nullable();
             $table->date('cta_fecha')->nullable();
+            $table->date('cta_fecha_act')->nullable();
             $table->string('cta_nom_bd',25)->nullable();
             $table->string('cta_estado',20)->nullable();
             $table->string('cta_periodicity',20)->nullable();

@@ -369,7 +369,7 @@ if (typeof jQuery === 'undefined') {
          */
         function ajax(action)
         {
-            var serialize = $table.find('.tabledit-input').serialize() + '&action=' + action+'&_token='+$('meta[name="csrf-token"]').attr('content');
+            var serialize = $table.find('.tabledit-input').serialize() + '&action=' + action+'&_token='+$('meta[name="csrf-token"]').attr('content')+'&objid='+$("#obj_id").val();
             
             var result = settings.onAjax(action, serialize);
 

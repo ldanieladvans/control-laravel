@@ -194,17 +194,15 @@
 					            		<li><a href="{{ route('asigpaq.index') }}"><strong>ASIGNACIÓN DISTRIBUIDORES</strong></a></li>
 						            	<li><a href="{{ route('account.index') }}"><strong>CUENTAS</strong></a></li>
 						            	
-						                <li><a href="{{ route('appcta.index') }}"><strong>ASIGNACIÓN CLIENTES</strong></a></li>
+						                <li><a href="{{ route('appcta.index') }}"><strong>DETALLES CUENTAS</strong></a></li>
 					                </ul>
 					            </li>
-					            
 
-
-					            <li><a><i class="fa fa-gears"></i> <strong>CONFIGURACIÓN</strong> <span class="fa fa-chevron-down"></span></a>
+					            <!--<li><a><i class="fa fa-gears"></i> <strong>CONFIGURACIÓN</strong> <span class="fa fa-chevron-down"></span></a>
 					              <ul class="nav child_menu">
 					                <li><a href="{{ route('package.index') }}"><strong>PAQUETES</strong></a></li>
 					              </ul>
-					            </li>
+					            </li>-->
 
 					            <li><a><i class="fa fa-unlock-alt"></i> <strong>SEGURIDAD</strong> <span class="fa fa-chevron-down"></span></a>
 					              <ul class="nav child_menu">

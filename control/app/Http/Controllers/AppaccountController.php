@@ -62,29 +62,7 @@ class AppaccountController extends Controller
         $apps_ret = array();
         $appcta_cuenta_id = 0;
         $appcta_paq_id = 0;
-        if(array_key_exists('apps',$alldata)){
-            if(isset($alldata['apps']) && $alldata['apps'] != ''){
-                $apps = $alldata['apps'];
-                unset($alldata['apps']);
-            }
-        }
-        
         $apps_conf = config('app.advans_apps');
-        if(array_key_exists('appcta_cuenta_id',$alldata)){
-            if($alldata['appcta_cuenta_id']==''){
-                unset($alldata['appcta_cuenta_id']);
-            }else{
-                $appcta_cuenta_id = $alldata['appcta_cuenta_id'];
-            }
-        }
-
-        if(array_key_exists('appcta_paq_id',$alldata)){
-            if($alldata['appcta_paq_id']==''){
-                unset($alldata['appcta_paq_id']);
-            }else{
-                $appcta_paq_id = $alldata['appcta_paq_id'];
-            }
-        }
 
         $exist_acc = Appaccount::where('appcta_cuenta_id',$appcta_cuenta_id)->where('appcta_paq_id',$appcta_paq_id)->get();
 
@@ -93,21 +71,13 @@ class AppaccountController extends Controller
             \Session::flash('message',$fmessage);
         }else{
             $appcta = new Appaccount($alldata);
-            $appcta->appcta_app = 'SEO1002227C3';
+            $appcta->appcta_app = 'xxxxxxxxxxxx';
             $appcta->appcta_f_vent = date('Y-m-d');
             if(array_key_exists('appcta_f_fin',$alldata)){
                 if($alldata['appcta_f_fin']==''){
                     $appcta->appcta_f_fin = date('Y-m-d');
                 }else{
                     $appcta->appcta_f_fin = $alldata['appcta_f_fin'];
-                }
-            }
-
-            if(array_key_exists('appcta_f_caduc',$alldata)){
-                if($alldata['appcta_f_caduc']==''){
-                    $appcta->appcta_f_caduc = date('Y-m-d');
-                }else{
-                    $appcta->appcta_f_caduc = $alldata['appcta_f_caduc'];
                 }
             }
 
@@ -123,15 +93,13 @@ class AppaccountController extends Controller
                                     'paqapp_control_id'=>$appcta->id,
                                     ]);
 
-            if($apps!=false){
-                foreach ($apps as $key => $value) {
+            if(array_key_exists('appcta_app_char',$alldata)){
                     $appc = new Appcontrol();
-                    $appc->app_nom = $apps_conf[$value];
-                    $appc->app_code = $value;
+                    $appc->app_nom = $apps_conf[$alldata['appcta_app_char']];
+                    $appc->app_code = $alldata['appcta_app_char'];
                     $appc->app_appcta_id = $appcta->id;
                     $appc->save();
-                    array_push($apps_ret,['app_cod'=>$value,'app_nom'=>$apps_conf[$value]]);
-                }
+                    array_push($apps_ret,['app_cod'=>$alldata['appcta_app_char'],'app_nom'=>$apps_conf[$alldata['appcta_app_char']]]);
             }
 
             $arrayparams['rfc_nombrebd'] = $appcta->account ? $appcta->account->cta_num : $client_rfc;
@@ -143,8 +111,8 @@ class AppaccountController extends Controller
             $arrayparams['account_id'] = $appcta ? $appcta->id : 'false';
             $arrayparams['apps_cta'] = json_encode($apps_ret);
             $arrayparams['paq_cta'] = json_encode($packs);
-            $acces_vars = $this->getAccessToken();
-            $service_response = $this->getAppService($acces_vars['access_token'],'addpaq',$arrayparams,'ctac');
+            /*$acces_vars = $this->getAccessToken();
+            $service_response = $this->getAppService($acces_vars['access_token'],'addpaq',$arrayparams,'ctac');*/
             $fmessage = 'Se ha asignado un paquete a una cuenta con nombre: '.$arrayparams['rfc_nombrebd'];
             \Session::flash('message',$fmessage);
             $this->registeredBinnacle($request,'store',$fmessage);
@@ -468,9 +436,10 @@ class AppaccountController extends Controller
                 $arrayparams['rfc_nombrebd'] = ($appcta->account ? $appcta->account->cta_num : '');
                 $arrayparams['account_id'] = $appcta ? $appcta->id : 'false';
                 $arrayparams['apps_cta'] = json_encode($array_apps);
-                $acces_vars = $this->getAccessToken();
-                $service_response = $this->getAppService($acces_vars['access_token'],'addapp',$arrayparams,'ctac');
+                /*$acces_vars = $this->getAccessToken();
+                $service_response = $this->getAppService($acces_vars['access_token'],'addapp',$arrayparams,'ctac');*/
                 $testmsg = 'entro';
+                DB::table('app')->where('app_appcta_id', '=', $appcta->id)->delete();
                 foreach ($alldata['selected'] as $key => $value) {
                     $appc = new Appcontrol();
                     $appc->app_nom = $apps[$value];

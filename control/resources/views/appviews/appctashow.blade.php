@@ -18,7 +18,7 @@
         <div class="col-md-12 col-sm-12 col-xs-12">
             <div class="x_panel">
                 <div class="x_title">
-                    <h2>Asignaciones a Clientes</h2>
+                    <h2>Detalles Cuentas</h2>
                     <div class="clearfix"></div>
                 </div>
 
@@ -35,22 +35,18 @@
                     <table id="datatable-responsive" class="table table-striped table-bordered dt-responsive nowrap" cellspacing="0" width="100%">
                         <thead>
                             <tr>
-                                <th>Nombre App</th>
                                 <th>Cliente</th>
-                                <th>Paquete</th>
                                 <th>Cuenta</th>
                                 <th>Gigas</th>
-                                <th>RFCs</th>
-                                <th>Aplicaciones</th>
+                                <th>Cantidad Instancias</th>
+                                <th>Aplicacion</th>
                                 <th>Acciones</th>
                             </tr>
                         </thead>
                         <tbody>
                             @foreach($appctas as $appcta)
                                 <tr>
-                            	    <td>{{ $appcta->appcta_app }}</td>
                                     <td>{{ $appcta->account ? ($appcta->account->client ? $appcta->account->client->cliente_nom:'') : ''  }}</td>
-                        	        <td>{{ $appcta->package ? $appcta->package->paq_nom : ''  }}</td>
                             	    <td>{{ $appcta->account ? $appcta->account->cta_num : ''  }}</td>
                                     <td>{{ $appcta->appcta_gig }}</td>
                                     <td>{{ $appcta->appcta_rfc }}</td>
@@ -59,7 +55,7 @@
                                         @if ($loop->last)
                                             {{ $apploop->app_nom }} <br />
                                         @else
-                                            {{ $apploop->app_nom }}, <br />
+                                            {{ $apploop->app_nom }} <br />
                                         @endif
                                     @endforeach 
                                     </td>
@@ -70,18 +66,18 @@
                                             </div>
 
                                             <div class="btn-group">
-                                                <button onclick="showModal('appsmodal'+{{$appcta->id}})" class="btn btn-xs" data-placement="left" title="Añadir Apps" ><i class="fa fa-plus-square-o fa-2x"></i> </button>
+                                                <button onclick="showModal('appsmodal'+{{$appcta->id}})" class="btn btn-xs" data-placement="left" title="Configurar App" ><i class="fa fa-plus-square-o fa-2x"></i> </button>
                                             </div>
 
-                                            <div class="btn-group">
+                                            <!--<div class="btn-group">
                                                 <button onclick="showModal('appsmodalquit'+{{$appcta->id}})" class="btn btn-xs" data-placement="left" title="Quitar Apps" ><i class="fa fa-minus-square-o fa-2x"></i> </button>
-                                            </div>
+                                            </div>-->
 
                                             <div class="modal fade" id="appsmodal{{$appcta->id}}" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
                                                 <div class="modal-dialog" role="document">
                                                     <div class="modal-content">
                                                         <div class="modal-header">
-                                                            <h5 class="modal-title" id="exampleModalLabel">Añadir Aplicaciones: {{$appcta->appcta_app}}</h5>
+                                                            <h5 class="modal-title" id="exampleModalLabel">Configurar Aplicación: {{$appcta->appcta_app}}</h5>
                                                             <button type="button" class="close" data-dismiss="modal" aria-label="Close">
                                                                 <span aria-hidden="true">&times;</span>
                                                             </button>
@@ -90,11 +86,9 @@
                                                             <form>
                                                                 <div class="item form-group">
                                                                     <div class="col-md-12 col-sm-12 col-xs-12">
-                                                                        <select id="roles" name="roles[]" tabindex="2" data-placeholder="Seleccione los permisos ..." name="rolesapp" class="chosen-select form-control" onchange="onSelectAssignApps(this)" multiple="multiple" style="width: 500px; display: none;">
+                                                                        <select id="roles" name="roles[]" tabindex="2" data-placeholder="Seleccione los permisos ..." name="rolesapp" class="chosen-select form-control" onchange="onSelectAssignApps(this)" style="width: 500px; display: none;">
                                                                             @foreach($apps as $key => $value)
-                                                                                @if ($appcta->hasApp($key,true) == 0)
-                                                                                    <option value="{{ $key }}" >{{ $value }}</option>
-                                                                                @endif
+                                                                                    <option value="{{ $key }}" {{$appcta->hasApp($key,true) > 0 ? 'selected':''}}>{{ $value }}</option>
                                                                             @endforeach
                                                                         </select>
                                                                     </div>
@@ -110,7 +104,7 @@
                                                 </div>
                                             </div>
 
-                                            <div class="modal fade" id="appsmodalquit{{$appcta->id}}" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+                                            <!--<div class="modal fade" id="appsmodalquit{{$appcta->id}}" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
                                                 <div class="modal-dialog" role="document">
                                                     <div class="modal-content">
                                                         <div class="modal-header">
@@ -141,7 +135,7 @@
                                                         </div>
                                                     </div>
                                                 </div>
-                                            </div>
+                                            </div>-->
                                         </div>
                                     </td>
                                 </tr>

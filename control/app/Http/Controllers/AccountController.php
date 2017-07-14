@@ -7,6 +7,7 @@ use App\Client;
 use App\Distributor;
 use App\Package;
 use App\Appaccount;
+use App\Appcontrol;
 use Illuminate\Http\Request;
 
 use App\Mail\ClientCreate;
@@ -48,7 +49,8 @@ class AccountController extends Controller
         $clients = Client::all();
         $distributors = Distributor::all();
         $packages = Package::all();
-        return view('appviews.accountcreate',['clients'=>$clients,'distributors'=>$distributors,'packages'=>$packages]);
+        $fecha = date('Y-m-d');
+        return view('appviews.accountcreate',['clients'=>$clients,'distributors'=>$distributors,'packages'=>$packages,'fecha'=>$fecha]);
     }
 
     /**
@@ -59,38 +61,14 @@ class AccountController extends Controller
      */
     public function store(Request $request)
     {
-
-        $cta_distrib_id = 0;
-        $cta_cliente_id = 0;
         $alldata = $request->all();
 
-        if(array_key_exists('cta_distrib_id',$alldata)){
-            if($alldata['cta_distrib_id']=='null'){
-                unset($alldata['cta_distrib_id']);
-            }else{
-                $cta_distrib_id = $alldata['cta_distrib_id'];
-            }
-        }
-        if(array_key_exists('cta_cliente_id',$alldata)){
-            if($alldata['cta_cliente_id']=='null'){
-                unset($alldata['cta_cliente_id']);
-            }else{
-                $cta_cliente_id = $alldata['cta_cliente_id'];
-            }
-        }
+        $cta = new Account($alldata);
+        $cta->save();
 
-        $exist_account = Account::where('cta_distrib_id',$cta_distrib_id)->where('cta_cliente_id',$cta_cliente_id)->get();
-        
-        if(count($exist_account) > 0){
-            $fmessage = 'Ya existe una cuenta para estos datos.';
-            \Session::flash('message',$fmessage);
-        }else{
-            $cta = new Account($alldata);
-            $cta->save();
-            $fmessage = 'Se ha creado la cuenta: '.$alldata['cta_num'];
-            \Session::flash('message',$fmessage);
-            $this->registeredBinnacle($request,'store',$fmessage);
-        }
+        $fmessage = 'Se ha creado la cuenta: '.$alldata['cta_num'];
+        \Session::flash('message',$fmessage);
+        $this->registeredBinnacle($request,'store',$fmessage);
 
         return redirect()->route('account.index');
     }
@@ -119,7 +97,7 @@ class AccountController extends Controller
         $distributors = Distributor::all();
         $packages = Package::all();
         $apps = config('app.advans_apps');
-        return view('appviews.accountedit',['account'=>$account,'clients'=>$clients,'distributors'=>$distributors,'packages'=>$packages,'apps'=>json_encode($apps)]);
+        return view('appviews.accountedit',['account'=>$account,'clients'=>$clients,'distributors'=>$distributors,'packages'=>$packages,'apps'=>json_encode($apps),'appsne'=>$apps]);
     }
 
     /**
@@ -190,6 +168,21 @@ class AccountController extends Controller
                     $resultm = preg_match('/^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[$@$!%*?&#.$($)$-$_])[a-zA-Z\d$@$!%*?&#.$($‌​)$-$_]{8,50}$/u', $password, $matchesm);
                 }
 
+                $arrayparams['password'] = $password;
+
+                $app_cta = new Appaccount();
+                $app_cta->appcta_rfc = 0;
+                $app_cta->appcta_gig = 0;
+                $app_cta->appcta_f_vent = date('Y-m-d');
+                $fecha = date_create(date('Y-m-d'));
+                $aux_months = $account ? $account->cta_periodicity : '1';
+                date_add($fecha, date_interval_create_from_date_string($aux_months.' months'));
+                $app_cta->appcta_f_fin = date_format($fecha, 'Y-m-d');
+                $app_cta->appcta_cuenta_id = $account ? $account->id : false;
+                $app_cta->appcta_app = $account ? $account->cta_num : 'false';
+                $app_cta->appcta_estado = 'Activa';
+                $app_cta->save();
+
                 $cliente_correo = $account->client ? $account->client->cliente_correo : false;
                 if ($cliente_correo){
                     $aaa = 1;
@@ -205,7 +198,7 @@ class AccountController extends Controller
             $arrayparams['client_rfc'] = $account->client ? $account->client->cliente_rfc : '';
             $arrayparams['client_email'] = $account->client ? $account->client->cliente_correo : '';
             $arrayparams['client_name'] = $account->client ? $account->client->cliente_nom : '';
-            $arrayparams['password'] = $password;
+            
             $arrayparams['client_nick'] = count(explode('@',$arrayparams['client_email'])) > 1 ? explode('@',$arrayparams['client_email'])[0] : '';
             $arrayparams['account_id'] = $account->id;
 
@@ -314,17 +307,44 @@ class AccountController extends Controller
 
         $input = filter_input_array(INPUT_POST);
 
+        $cta_obj = false;
+
+        $apps = config('app.advans_apps');
+
+        if(array_key_exists('objid',$input)){
+            $cta_obj = Account::find($input['objid']);
+        }
+
         if ($input['action'] == 'edit') {
             $app_cta = Appaccount::find($input['id']);
-            $app_cta->appcta_gig = $input['appcta_gig'];
+            if($app_cta){
+                $app_cta->appcta_rfc = $input['appcta_rfc'];
+                $app_cta->appcta_gig = $input['appcta_gig'];
+                \DB::table('app')->where('app_appcta_id', '=', $input['id'])->delete();
+            }else{
+                $app_cta = new Appaccount();
+                $app_cta->appcta_rfc = $input['appcta_rfc'];
+                $app_cta->appcta_gig = $input['appcta_gig'];
+                $app_cta->appcta_f_vent = date('Y-m-d');
+                $fecha = date_create(date('Y-m-d'));
+                $aux_months = $cta_obj ? $cta_obj->cta_periodicity : '1';
+                date_add($fecha, date_interval_create_from_date_string($aux_months.' months'));
+                $app_cta->appcta_f_fin = date_format($fecha, 'Y-m-d');
+                $app_cta->appcta_cuenta_id = $cta_obj ? $cta_obj->id : false;
+                $app_cta->appcta_app = $cta_obj ? $cta_obj->cta_num : 'false';
+            }
+            $appc = new Appcontrol();
+            $appc->app_nom = $apps[$input['apps']];
+            $appc->app_code = $input['apps'];
+            $appc->app_appcta_id = $input['id'];
+            $appc->save();
             $app_cta->save();
-            //$mysqli->query("UPDATE users SET username='" . $input['username'] . "', email='" . $input['email'] . "', avatar='" . $input['avatar'] . "' WHERE id='" . $input['id'] . "'");
         } else if ($input['action'] == 'delete') {
             $app_cta = Appaccount::find($input['id']);
-            //$mysqli->query("UPDATE users SET deleted=1 WHERE id='" . $input['id'] . "'");
-        } else if ($input['action'] == 'restore') {
-            $app_cta = Appaccount::find($input['id']);
-            //$mysqli->query("UPDATE users SET deleted=0 WHERE id='" . $input['id'] . "'");
+            /*$fmessage = 'Se ha eliminado un detalle de la cuenta: '.$app_cta->appcta_app;
+            \Session::flash('message',$fmessage);
+            $this->registeredBinnacle($request,'destroy',$fmessage);*/
+            $app_cta->delete();
         }
 
         return json_encode($input);

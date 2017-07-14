@@ -23,7 +23,7 @@
         <div class="col-md-12 col-sm-12 col-xs-12">
             <div class="x_panel">
                 <div class="x_title">
-                    <h2>Editar Asignación a Cliente</h2>
+                    <h2>Editar Detalle de Cuenta</h2>
                     <ul class="nav navbar-right panel_toolbox">
                         <li><a class="collapse-link"><i class="fa fa-chevron-up"></i></a></li>
                     </ul>
@@ -56,13 +56,13 @@
                         </div>
 
                         <div class="item form-group">
-                            <label class="control-label col-md-1 col-sm-1 col-xs-12">Paquete*</label>
+                            <label class="control-label col-md-1 col-sm-1 col-xs-12">Aplicación* </label>
                             <div class="col-md-8 col-sm-8 col-xs-12">
-                                <select class="js-example-basic-single js-states form-control" name="appcta_paq_id" id="appcta_paq_id" disabled>
+                                <select class="js-example-basic-single js-states form-control" name="appcta_app_char" id="appcta_app_char" required>
                                     <option value="">Seleccione una opción ...</option>
-                                    @foreach($packages as $package)
-                                        <option value="{{ $package->id }}" {{$appcta->appcta_paq_id == $package->id ? 'selected':''}}>{{ $package->paq_nom }}</option>
-                                    @endforeach
+                                        @foreach($apps as $key => $value)
+                                            <option value="{{ $key }}" {{$appcta->hasApp($key,true) > 0 ? 'selected':''}}>{{ $value }}</option>
+                                        @endforeach
                                 </select>
                             </div>
                         </div>
@@ -72,8 +72,6 @@
                                 <ul id="myTab" class="nav nav-tabs bar_tabs" role="tablist">
                                   <li role="presentation" class="active"><a href="#tab_content1" id="home-tab" role="tab" data-toggle="tab" aria-expanded="true">Detalles</a>
                                   </li>
-                                  <li role="presentation" class=""><a href="#tab_content3" role="tab" id="date-tab" data-toggle="tab" aria-expanded="false">Fechas</a>
-                                  </li>
                                 </ul>
 
                                 <div id="myTabContent" class="tab-content">
@@ -81,7 +79,7 @@
 
                                         <div class="item form-group">                     
                                             <div class="col-md-9 col-sm-9 col-xs-12">
-                                                <input id="appcta_rfc" class="form-control has-feedback-left" name="appcta_rfc" title="Cantidad de RFCs" placeholder="Cantidad RFC *" required="required" type="numberint" value="{{$appcta->appcta_rfc}}" data-validate-minmax="0,{{$rfc > $appcta->appcta_rfc ? $rfc : $appcta->appcta_rfc}}">
+                                                <input id="appcta_rfc" class="form-control has-feedback-left" name="appcta_rfc" title="Cantidad de Instancias" placeholder="Cantidad Instancias *" required="required" type="numberint" value="{{$appcta->appcta_rfc}}" data-validate-minmax="0,{{$rfc > $appcta->appcta_rfc ? $rfc : $appcta->appcta_rfc}}">
                                                 <span class="fa fa-bank form-control-feedback left" aria-hidden="true"></span>
                                             </div>
                                         </div>
@@ -93,28 +91,9 @@
                                             </div>
                                         </div>
 
-                                        <div class="item form-group">
-                                            <div class="col-md-9 col-sm-9 col-xs-12">
-                                                <select id="apps" name="apps[]" tabindex="2" data-placeholder="Seleccione las aplicaciones ..." class="select form-control" multiple="multiple" disabled>
-                                                    @foreach($apps as $key => $value)
-                                                        <option value="{{ $key }}" {{$appcta->hasApp($key,true) > 0 ? 'selected':''}}>{{ $value }}</option>
-                                                    @endforeach
-                                                </select>
-                                            </div>
-                                        </div>
-                                    </div>
-
-                                    <div role="tabpanel" class="tab-pane fade" id="tab_content3" aria-labelledby="profile-tab">
                                         <div class="item form-group">                     
                                             <div class="col-md-9 col-sm-9 col-xs-12">
-                                                <input id="appcta_f_vent" title="Fecha de Venta o Asignación" class="form-control has-feedback-left" name="appcta_f_vent" placeholder="Fecha Venta" required="required" type="date" value="{{$appcta->appcta_f_vent}}" disabled>
-                                                <span class="fa fa-calendar form-control-feedback left" aria-hidden="true"></span>
-                                            </div>
-                                        </div>
-
-                                        <div class="item form-group">                     
-                                            <div class="col-md-9 col-sm-9 col-xs-12">
-                                                <input id="appcta_f_act" title="Fecha de Activación" class="form-control has-feedback-left" name="appcta_f_act" placeholder="Fecha Activación" required="required" type="date" value="{{$appcta->appcta_f_act}}" disabled>
+                                                <input id="appcta_f_vent" title="Fecha de Venta" class="form-control has-feedback-left" name="appcta_f_vent" placeholder="Fecha Venta" required="required" type="date" value="{{$appcta->appcta_f_vent}}" disabled>
                                                 <span class="fa fa-calendar form-control-feedback left" aria-hidden="true"></span>
                                             </div>
                                         </div>
@@ -124,14 +103,7 @@
                                                 <input id="appcta_f_fin" title="Fecha de Fin" class="form-control has-feedback-left" name="appcta_f_fin" placeholder="Fecha Fin" required="required" type="date" value="{{$appcta->appcta_f_fin}}">
                                                 <span class="fa fa-calendar form-control-feedback left" aria-hidden="true"></span>
                                             </div>
-                                        </div>
-
-                                        <div class="item form-group">                     
-                                            <div class="col-md-9 col-sm-9 col-xs-12">
-                                              <input id="appcta_f_caduc" title="Fecha de Caducidad" class="form-control has-feedback-left" name="appcta_f_caduc" placeholder="Fecha Caducidad" required="required" type="date" value="{{$appcta->appcta_f_caduc}}">
-                                              <span class="fa fa-calendar form-control-feedback left" aria-hidden="true"></span>
-                                            </div>
-                                        </div>
+                                        </div>                                        
                                     </div>
                                 </div>
                             </div>
@@ -178,7 +150,7 @@
             allowClear: true
         });
 
-        $("#appcta_paq_id").select2({
+        $("#appcta_app_char").select2({
             placeholder: "Selecciona el paquete",
             allowClear: true
         });
@@ -200,7 +172,7 @@
             $("#appcta_gig").val("");
         });
 
-        $('#appcta_paq_id').change(function(){
+        /*$('#appcta_paq_id').change(function(){
             $.ajax({
                 url: '/getgigrfcbypack',
                 type: 'POST',
@@ -213,7 +185,7 @@
                     document.getElementById('appcta_gig').setAttribute("data-validate-minmax", "0,"+data['gig']);
                 }
             });
-        });
+        });*/
 
         $( "#packassigform" ).submit(function( event ) {
             event.preventDefault();

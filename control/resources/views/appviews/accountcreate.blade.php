@@ -2,6 +2,8 @@
 
 @section('app_css')
 	@parent
+    <!-- Switchery -->
+    <link href="{{ asset('controlassets/vendors/switchery/dist/switchery.min.css') }}" rel="stylesheet">
     <!-- Custom Theme Style -->
     <link href="{{ asset('controlassets/build/css/custom.css') }}" rel="stylesheet">
     <!-- Datetime -->
@@ -50,6 +52,14 @@
                         </div>
 
                         <div class="item form-group">
+                            <label class="control-label col-md-1 col-sm-1 col-xs-12">Número</label>                     
+                            <div class="col-md-8 col-sm-8 col-xs-12">
+                                <input id="cta_num" title="RFC" class="form-control has-feedback-left" name="cta_num" placeholder="Número de Cuenta / RFC *" type="text" readonly="readonly">
+                                <span class="fa fa-bar-chart form-control-feedback left" aria-hidden="true"></span>
+                            </div>
+                        </div>
+
+                        <div class="item form-group">
                             <label class="control-label col-md-1 col-sm-1 col-xs-12">Distribuidor*</label>
                             <div class="col-md-8 col-sm-8 col-xs-12">
                                 <select class="js-example-basic-single js-states form-control" name="cta_distrib_id" id="cta_distrib_id" required>
@@ -61,30 +71,34 @@
                             </div>
                         </div>
 
-                        <div class="x_content">
-                            <div class="" role="tabpanel" data-example-id="togglable-tabs">
-                                <ul id="myTab" class="nav nav-tabs bar_tabs" role="tablist">
-                                    <li role="presentation" class="active"><a href="#tab_content1" id="home-tab" role="tab" data-toggle="tab" aria-expanded="true">Detalles</a>
-                                    </li>
-                                </ul>
+                        <div class="item form-group">
+                            <label class="control-label col-md-1 col-sm-1 col-xs-12">Estado</label>                     
+                            <div class="col-md-8 col-sm-8 col-xs-12">
+                                <input id="cta_estado" title="Estado" class="form-control has-feedback-left" name="cta_estado" placeholder="Estado *" required="required" type="text" readonly="readonly" value="Inactiva">
+                                <span class="fa fa-certificate form-control-feedback left" aria-hidden="true"></span>
+                            </div>
+                        </div>
 
-                                <div id="myTabContent" class="tab-content">
-                                    <div role="tabpanel" class="tab-pane fade active in" id="tab_content1" aria-labelledby="home-tab">
-                                        <div class="item form-group">                     
-                                            <div class="col-md-9 col-sm-9 col-xs-12">
-                                                <input id="cta_num" title="RFC" class="form-control has-feedback-left" name="cta_num" placeholder="Número de Cuenta / RFC *" type="text" readonly="readonly">
-                                                <span class="fa fa-bar-chart form-control-feedback left" aria-hidden="true"></span>
-                                            </div>
-                                        </div>
-                                    </div>
-
-                                    <div class="item form-group">                     
-                                        <div class="col-md-9 col-sm-9 col-xs-12">
-                                            <input id="cta_estado" title="Estado" class="form-control has-feedback-left" name="cta_estado" placeholder="Estado *" required="required" type="text" readonly="readonly" value="Inactiva">
-                                            <span class="fa fa-certificate form-control-feedback left" aria-hidden="true"></span>
-                                        </div>
-                                    </div>       
-                                </div>
+                        <div class="item form-group">
+                            <label class="control-label col-md-1 col-sm-1 col-xs-12">Fecha: </label>
+                            <div class="col-md-3 col-sm-3 col-xs-12">
+                                <input id="cta_fecha" title="Fecha" class="form-control has-feedback-left" name="cta_fecha" placeholder="Fecha" type="date" disabled>
+                                <span class="fa fa-calendar form-control-feedback left" aria-hidden="true"></span>
+                            </div>
+                            <label class="control-label col-md-1 col-sm-1 col-xs-12">Periodicidad: </label>
+                            <div class="col-md-2 col-sm-2 col-xs-12">
+                                <select class="js-example-basic-single js-states form-control" name="cta_periodicity" id="cta_periodicity" required>
+                                    <option value="3" selected>Trimestral</option>
+                                    <option value="6" >Semestral</option>
+                                    <option value="12" >Anual</option>
+                                </select>
+                            </div>
+                            <label class="control-label col-md-1 col-sm-1 col-xs-12">Recursivo: </label>
+                            <div class="col-md-2 col-sm-2 col-xs-12">
+                                <p></p>
+                                Si:
+                                <input type="radio" class="flat" name="cta_recursive" id="cta_recursive1" value="1" checked /> No:
+                                <input type="radio" class="flat" name="cta_recursive" id="cta_recursive0" value="0" />
                             </div>
                         </div>
 
@@ -119,6 +133,8 @@
 	<script type="text/javascript" src="{{ asset('controlassets/vendors/datetime/js/locales/bootstrap-datetimepicker.es.js') }}" charset="UTF-8"></script>
     <!-- Select 2 -->
     <script src="{{ asset('controlassets/vendors/select2/dist/js/select2.min.js') }}"></script>
+    <!-- Switchery -->
+    <script src="{{ asset('controlassets/vendors/switchery/dist/switchery.min.js') }}"></script>
 	<script type="text/javascript">
 
 	    $('.form_datetime').datetimepicker({
