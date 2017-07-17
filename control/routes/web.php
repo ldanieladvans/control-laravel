@@ -26,6 +26,7 @@ Route::group(['prefix' => 'account'], function () {
 
 Route::group(['prefix' => 'config'], function () {
     Route::resource('package', 'PackageController');
+    Route::resource('apps', 'AppsController');
 });
 
 Route::group(['prefix' => 'directory'], function () {

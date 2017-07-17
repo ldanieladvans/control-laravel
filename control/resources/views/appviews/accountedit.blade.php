@@ -211,7 +211,7 @@
 
         $('#editable-dt1').Tabledit({
             url: '/crudtabledit',
-            deleteButton: false,
+            restoreButton: false,
             buttons: {
                 edit: {
                     class: 'btn btn-sm btn-primary',
@@ -222,6 +222,11 @@
                     class: 'btn btn-sm btn-success',
                     html: '<span class="glyphicon glyphicon-check"></span> &nbsp Guardar',
                     action: 'save'
+                },
+                delete: {
+                    class: 'btn btn-sm btn-danger',
+                    html: '<span class="glyphicon glyphicon-trash"></span> &nbsp Borrar',
+                    action: 'delete'
                 },
             },
             columns: {
@@ -236,6 +241,7 @@
                 console.log(data);
                 console.log(textStatus);
                 console.log(jqXHR);
+                window.location.href = window.location.href;
             },
             onFail: function(jqXHR, textStatus, errorThrown) {
                 console.log('onFail(jqXHR, textStatus, errorThrown)');

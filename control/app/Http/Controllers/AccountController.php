@@ -9,7 +9,7 @@ use App\Package;
 use App\Appaccount;
 use App\Appcontrol;
 use Illuminate\Http\Request;
-
+use Illuminate\Support\Facades\Log;
 use App\Mail\ClientCreate;
 use Illuminate\Support\Facades\Mail;
 
@@ -169,7 +169,7 @@ class AccountController extends Controller
                 }
 
                 $arrayparams['password'] = $password;
-
+                Log::info($password);
                 $app_cta = new Appaccount();
                 $app_cta->appcta_rfc = 0;
                 $app_cta->appcta_gig = 0;
@@ -187,7 +187,7 @@ class AccountController extends Controller
                 if ($cliente_correo){
                     $aaa = 1;
                     //TODO Descomentar cuando se desbloquee el puerto 587
-                    //Mail::to($cliente_correo)->send(new ClientCreate(['user'=>$cliente_correo,'password'=>$password]));
+                    Mail::to($cliente_correo)->send(new ClientCreate(['user'=>$cliente_correo,'password'=>$password]));
                 }
                 
             }
@@ -336,14 +336,16 @@ class AccountController extends Controller
             $appc = new Appcontrol();
             $appc->app_nom = $apps[$input['apps']];
             $appc->app_code = $input['apps'];
-            $appc->app_appcta_id = $input['id'];
-            $appc->save();
             $app_cta->save();
+            $appc->app_appcta_id = $app_cta->id;
+            $appc->save();
+
+            $fmessage = 'Se ha creado un detalle de la cuenta: '.$app_cta->appcta_app;
+            \Session::flash('message',$fmessage);
+            $this->registeredBinnacle($request,'create',$fmessage);
+            
         } else if ($input['action'] == 'delete') {
             $app_cta = Appaccount::find($input['id']);
-            /*$fmessage = 'Se ha eliminado un detalle de la cuenta: '.$app_cta->appcta_app;
-            \Session::flash('message',$fmessage);
-            $this->registeredBinnacle($request,'destroy',$fmessage);*/
             $app_cta->delete();
         }
 

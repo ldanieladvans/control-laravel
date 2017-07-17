@@ -15,5 +15,6 @@ class AppsSeeder extends Seeder
     {
         $this->call(RolePermissionSeeder::class);
         $this->call(CpMexSeeder::class);
+        $this->call(AppsTableSeeder::class);
     }
 }

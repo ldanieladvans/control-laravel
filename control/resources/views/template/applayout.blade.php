@@ -198,11 +198,11 @@
 					                </ul>
 					            </li>
 
-					            <!--<li><a><i class="fa fa-gears"></i> <strong>CONFIGURACIÓN</strong> <span class="fa fa-chevron-down"></span></a>
+					            <li><a><i class="fa fa-gears"></i> <strong>CONFIGURACIÓN</strong> <span class="fa fa-chevron-down"></span></a>
 					              <ul class="nav child_menu">
-					                <li><a href="{{ route('package.index') }}"><strong>PAQUETES</strong></a></li>
+					                <li><a href="{{ route('apps.index') }}"><strong>APLICACIONES</strong></a></li>
 					              </ul>
-					            </li>-->
+					            </li>
 
 					            <li><a><i class="fa fa-unlock-alt"></i> <strong>SEGURIDAD</strong> <span class="fa fa-chevron-down"></span></a>
 					              <ul class="nav child_menu">
