@@ -545,6 +545,7 @@ class ComposerStaticInitab4f8949bd1040d5a84662f6d8ddae60
         'Collective\\Html\\HtmlServiceProvider' => __DIR__ . '/..' . '/laravelcollective/html/src/HtmlServiceProvider.php',
         'CpMex' => __DIR__ . '/../..' . '/database/migrations/2017_07_06_163221_cp_mex.php',
         'CpMexSeeder' => __DIR__ . '/../..' . '/database/seeds/CpMexSeeder.php',
+        'CreateAccounttl' => __DIR__ . '/../..' . '/database/migrations/2017_07_17_174451_create_accounttl.php',
         'CreateAppcta' => __DIR__ . '/../..' . '/database/migrations/2017_05_29_131453_create_appcta.php',
         'CreateApps' => __DIR__ . '/../..' . '/database/migrations/2017_07_17_122023_create_apps.php',
         'CreateAsigpaq' => __DIR__ . '/../..' . '/database/migrations/2017_05_29_125114_create_asigpaq.php',

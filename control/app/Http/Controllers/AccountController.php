@@ -8,6 +8,8 @@ use App\Distributor;
 use App\Package;
 use App\Appaccount;
 use App\Appcontrol;
+use App\Apps;
+use App\AccountTl;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Log;
 use App\Mail\ClientCreate;
@@ -96,8 +98,13 @@ class AccountController extends Controller
         $clients = Client::all();
         $distributors = Distributor::all();
         $packages = Package::all();
-        $apps = config('app.advans_apps');
-        return view('appviews.accountedit',['account'=>$account,'clients'=>$clients,'distributors'=>$distributors,'packages'=>$packages,'apps'=>json_encode($apps),'appsne'=>$apps]);
+        //$apps = config('app.advans_apps');
+        $apps = Apps::all();
+        $apps_array = array();
+        foreach ($apps as $app) {
+            $apps_array[$app->code] = $app->name;
+        }
+        return view('appviews.accountedit',['account'=>$account,'clients'=>$clients,'distributors'=>$distributors,'packages'=>$packages,'apps'=>json_encode($apps_array),'appsne'=>$apps]);
     }
 
     /**
@@ -309,7 +316,8 @@ class AccountController extends Controller
 
         $cta_obj = false;
 
-        $apps = config('app.advans_apps');
+        //$apps = config('app.advans_apps');
+        $apps = Apps::all();
 
         if(array_key_exists('objid',$input)){
             $cta_obj = Account::find($input['objid']);
@@ -318,13 +326,13 @@ class AccountController extends Controller
         if ($input['action'] == 'edit') {
             $app_cta = Appaccount::find($input['id']);
             if($app_cta){
-                $app_cta->appcta_rfc = $input['appcta_rfc'];
-                $app_cta->appcta_gig = $input['appcta_gig'];
+                $app_cta->appcta_rfc = $input['appcta_rfc'] ? $input['appcta_rfc'] : 0;
+                $app_cta->appcta_gig = $input['appcta_gig'] ? $input['appcta_gig'] : 0;
                 \DB::table('app')->where('app_appcta_id', '=', $input['id'])->delete();
             }else{
                 $app_cta = new Appaccount();
-                $app_cta->appcta_rfc = $input['appcta_rfc'];
-                $app_cta->appcta_gig = $input['appcta_gig'];
+                $app_cta->appcta_rfc = $input['appcta_rfc'] ? $input['appcta_rfc'] : 0;
+                $app_cta->appcta_gig = $input['appcta_gig'] ? $input['appcta_gig'] : 0;
                 $app_cta->appcta_f_vent = date('Y-m-d');
                 $fecha = date_create(date('Y-m-d'));
                 $aux_months = $cta_obj ? $cta_obj->cta_periodicity : '1';
@@ -333,8 +341,18 @@ class AccountController extends Controller
                 $app_cta->appcta_cuenta_id = $cta_obj ? $cta_obj->id : false;
                 $app_cta->appcta_app = $cta_obj ? $cta_obj->cta_num : 'false';
             }
+            $sale_estado = 'Prueba';
+            if($input['sale_estado']=='prod'){
+                $sale_estado = 'Producción';
+                $app_cta->appcta_f_act = date('Y-m-d');
+            }
+            $app_cta->sale_estado = $sale_estado;
             $appc = new Appcontrol();
-            $appc->app_nom = $apps[$input['apps']];
+            $app_aux = Apps::where('code', $input['apps'])
+                           ->orderBy('id', 'desc')
+                           ->take(1)
+                           ->get();
+            $appc->app_nom = $app_aux[0]->name;
             $appc->app_code = $input['apps'];
             $app_cta->save();
             $appc->app_appcta_id = $app_cta->id;
@@ -347,8 +365,54 @@ class AccountController extends Controller
         } else if ($input['action'] == 'delete') {
             $app_cta = Appaccount::find($input['id']);
             $app_cta->delete();
+            $app_cta = Appaccount::where('appcta_cuenta_id', $cta_obj->id)->get();
+            if(count($app_cta)==0){
+                $app_cta = new Appaccount();
+                $app_cta->appcta_rfc = 0;
+                $app_cta->appcta_gig = 0;
+                $app_cta->appcta_f_vent = date('Y-m-d');
+                $fecha = date_create(date('Y-m-d'));
+                $aux_months = $cta_obj ? $cta_obj->cta_periodicity : '1';
+                date_add($fecha, date_interval_create_from_date_string($aux_months.' months'));
+                $app_cta->appcta_f_fin = date_format($fecha, 'Y-m-d');
+                $app_cta->appcta_cuenta_id = $cta_obj ? $cta_obj->id : false;
+                $app_cta->appcta_app = $cta_obj ? $cta_obj->cta_num : 'false';
+                $app_cta->appcta_estado = 'Activa';
+                $app_cta->save();
+            }
         }
 
         return json_encode($input);
+    }
+
+    public function addTl(Request $request)
+    {
+        $alldata = $request->all();
+        if(array_key_exists('accid',$alldata)){
+            $f_ini = date('Y-m-d');
+            $fecha = date_create(date('Y-m-d'));
+            date_add($fecha, date_interval_create_from_date_string('30 days'));
+            $f_fin = date_format($fecha, 'Y-m-d');
+            $f_corte = $f_fin;
+            if(array_key_exists('f_ini',$alldata)){
+                $f_ini = $alldata['f_ini'];
+                $fecha = date_create($f_ini);
+                date_add($fecha, date_interval_create_from_date_string('30 days'));
+                $f_fin = date_format($fecha, 'Y-m-d');
+                $f_corte = $f_fin;
+            }
+            if(array_key_exists('f_fin',$alldata)){
+                $f_fin = $alldata['f_fin'];
+            }
+            if(array_key_exists('f_corte',$alldata)){
+                $f_corte = $alldata['f_corte'];
+            }
+        }
+        
+        $response = array(
+            'status' => 'success',
+            'msg' => 'Ok',
+        );
+        return \Response::json($response);
     }
 }

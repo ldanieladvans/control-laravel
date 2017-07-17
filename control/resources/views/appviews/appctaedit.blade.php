@@ -60,8 +60,8 @@
                             <div class="col-md-8 col-sm-8 col-xs-12">
                                 <select class="js-example-basic-single js-states form-control" name="appcta_app_char" id="appcta_app_char" required>
                                     <option value="">Seleccione una opción ...</option>
-                                        @foreach($apps as $key => $value)
-                                            <option value="{{ $key }}" {{$appcta->hasApp($key,true) > 0 ? 'selected':''}}>{{ $value }}</option>
+                                        @foreach($apps as $app)
+                                            <option value="{{ $app->code }}" {{$appcta->hasApp($app->code,true) > 0 ? 'selected':''}}>{{ $app->name }}</option>
                                         @endforeach
                                 </select>
                             </div>

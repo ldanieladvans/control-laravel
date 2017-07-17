@@ -34,4 +34,9 @@ class Account extends Model
         return $this->hasMany('App\Appaccount','appcta_cuenta_id');
     }
 
+    public function timelines()
+    {
+        return $this->hasMany('App\AccountTl','cta_id');
+    }
+
 }

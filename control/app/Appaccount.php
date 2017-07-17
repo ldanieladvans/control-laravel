@@ -10,7 +10,7 @@ class Appaccount extends Model
     protected $table = 'appcta';
 
     protected $fillable = [
-        'app_nom', 'appcta_cuenta_id', 'appcta_paq_id', 'appcta_gig', 'appcta_rfc', 'appcta_f_vent', 'appcta_f_act', 'appcta_f_fin', 'appcta_f_caduc', 'appcta_activo'
+        'app_nom', 'appcta_cuenta_id', 'appcta_paq_id', 'appcta_gig', 'appcta_rfc', 'appcta_f_vent', 'appcta_f_act', 'appcta_f_fin', 'appcta_f_caduc', 'appcta_activo', 'appcta_estado', 'sale_estado'
     ];
 
     //Uncomment for multibd

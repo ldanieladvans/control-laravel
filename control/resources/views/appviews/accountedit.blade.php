@@ -105,60 +105,109 @@
                                 </select>
                             </div>
                             <label class="control-label col-md-1 col-sm-1 col-xs-12">Recursivo: </label>
-                            <div class="col-md-2 col-sm-2 col-xs-12">
-                                <p></p>
-                                Si:
-                                <input type="radio" class="flat" name="cta_recursive" id="cta_recursive1" value="1" checked /> No:
-                                <input type="radio" class="flat" name="cta_recursive" id="cta_recursive0" value="0" />
+                            <div class="col-md-1 col-sm-1 col-xs-12">
+                                <select class="js-example-basic-single js-states form-control" name="cta_recursive" id="cta_recursive">
+                                    <option value="1" selected>Si</option>
+                                    <option value="0" >No</option>
+                                </select>
                             </div>
                         </div>
 
-                        @if ($account->cta_estado=='Activa')
-                            <div class="x_content">
-                                <div class="" role="tabpanel" data-example-id="togglable-tabs">
-                                    <ul id="myTab" class="nav nav-tabs bar_tabs" role="tablist">
-                                        <li role="presentation" class="active"><a href="#tab_content1" id="home-tab" role="tab" data-toggle="tab" aria-expanded="true">Detalles</a>
-                                        </li>
-                                    </ul>
+                        <div class="x_content" id="tabaccedit">
+                            <div class="" role="tabpanel" data-example-id="togglable-tabs">
+                                <ul id="myTab" class="nav nav-tabs bar_tabs" role="tablist">
+                                    <li role="presentation" class="active"><a href="#tab_content1" id="home-tab" role="tab" data-toggle="tab" aria-expanded="true">Detalles</a>
+                                    </li>
+                                    <li role="presentation"><a href="#tab_content2" id="home-tab" role="tab" data-toggle="tab" aria-expanded="true">Historial Fechas-Contratos</a>
+                                    </li>
+                                </ul>
 
-                                    <div id="myTabContent" class="tab-content">
-                                        <div role="tabpanel" class="tab-pane fade active in" id="tab_content1" aria-labelledby="home-tab"> 
-                                            <div class="item form-group">                       
-                                                <div class="col-md-12 col-sm-12 col-xs-12">
-                                                    <table id="editable-dt1" class="table table-striped table-bordered" width="100%">
-                                                        <thead>
-                                                            <tr>
-                                                                <th align="left">#</th>
-                                                                <th align="left">Aplicación</th>
-                                                                <th align="left">Cantidad Instancias</th>
-                                                                <th align="left">Cantidad Gigas</th>
+                                <div id="myTabContent" class="tab-content">
+                                    <div role="tabpanel" class="tab-pane fade active in" id="tab_content1" aria-labelledby="home-tab"> 
+                                        <div class="item form-group">                       
+                                            <div class="col-md-12 col-sm-12 col-xs-12">
+                                                <table id="editable-dt1" class="table table-striped table-bordered" width="100%">
+                                                    <thead>
+                                                        <tr>
+                                                            <th align="left">#</th>
+                                                            <th align="left">Aplicación</th>
+                                                            <th align="left">Cantidad Instancias</th>
+                                                            <th align="left">Cantidad Gigas</th>
+                                                            <!--<th align="left">Fecha Venta</th>-->
+                                                            
+                                                            <!--<th align="left">Fecha Fin</th>
+                                                            <th align="left">Fecha Caducidad</th>-->
+                                                            <th align="left">Estado</th>
+                                                            <th align="left">Fecha Activación</th>
+                                                        </tr>
+                                                    </thead>
+                                                    <tbody>
+                                                        @foreach($account->packages as $appcta)
+                                                            <tr data-id="{{$appcta->id}}">
+                                                                <td class="tabledit-data">{{$appcta->id}}</td>
+                                                                <td class="tabledit-data">
+                                                                    @foreach($appsne as $appne)
+                                                                        @if ($appcta->hasApp($appne->code,true))
+                                                                            {{$appne->name}}
+                                                                        @endif
+                                                                    @endforeach
+                                                                </td>
+                                                                <td class="tabledit-data">{{$appcta->appcta_rfc}}</td>
+                                                                <td class="tabledit-data">{{$appcta->appcta_gig}}</td>
+                                                                <!--<td class="tabledit-data">{{$appcta->appcta_f_vent}}</td>-->
+                                                                
+                                                                <!--<td class="tabledit-data">{{$appcta->appcta_f_fin}}</td>
+                                                                <td class="tabledit-data">{{$appcta->appcta_f_caduc}}</td>-->
+                                                                <td class="tabledit-data">{{$appcta->sale_estado}}</td>
+                                                                <td class="tabledit-data">{{$appcta->appcta_f_act}}</td>
                                                             </tr>
-                                                        </thead>
-                                                        <tbody>
-                                                            @foreach($account->packages as $appcta)
-                                                                <tr data-id="{{$appcta->id}}">
-                                                                    <td class="tabledit-data">{{$appcta->id}}</td>
-                                                                    <td class="tabledit-data">
-                                                                        @foreach($appsne as $key => $value)
-                                                                            @if ($appcta->hasApp($key,true))
-                                                                                {{$value}}
-                                                                            @endif
-                                                                        @endforeach
-                                                                    </td>
-                                                                    <td class="tabledit-data">{{$appcta->appcta_rfc}}</td>
-                                                                    <td class="tabledit-data">{{$appcta->appcta_gig}}</td>
-                                                                </tr>
-                                                            @endforeach
-                                                        </tbody>
-                                                        <button id="testbtn" type="button" onclick="addLine()" >+</button>
-                                                    </table>
-                                                </div>
+                                                        @endforeach
+                                                    </tbody>
+                                                    <button id="testbtn" type="button" onclick="addLine()" >Agregar [+]</button>
+                                                </table>
                                             </div>
-                                        </div> 
+                                        </div>
                                     </div>
+                                    <div role="tabpanel" class="tab-pane fade" id="tab_content2" aria-labelledby="home-tab"> 
+                                        <div class="item form-group" id="dates_div" hidden>
+                                            <div class="col-md-3 col-sm-3 col-xs-12">
+                                                <input id="acctl_f_ini" title="Fecha Inicio" class="form-control has-feedback-left" name="acctl_f_ini" placeholder="Fecha Inicio" type="date">
+                                                <span class="fa fa-calendar form-control-feedback left" aria-hidden="true"></span>
+                                            </div>
+
+                                            <div class="col-md-3 col-sm-3 col-xs-12">
+                                                <input id="acctl_f_fin" title="Fecha Fin" class="form-control has-feedback-left" name="acctl_f_fin" placeholder="Fecha Fin" type="date">
+                                                <span class="fa fa-calendar form-control-feedback left" aria-hidden="true"></span>
+                                            </div>
+                                            
+                                            <div class="col-md-3 col-sm-3 col-xs-12">
+                                                <input id="acctl_f_corte" title="Fecha Corte" class="form-control has-feedback-left" name="acctl_f_corte" placeholder="Fecha Corte" type="date">
+                                                <span class="fa fa-calendar form-control-feedback left" aria-hidden="true"></span>
+                                            </div>
+
+                                            <div class="col-md-3 col-sm-3 col-xs-12">
+                                                <button id="addline" type="button" onclick="addtl({{$account->id}})" class="btn btn-success">Agregar</button>
+                                            </div>
+                                        </div>
+                                        <div class="item form-group" >
+                                            <table id="tabletl1" class="table table-striped table-bordered" width="100%">
+                                                <thead>
+                                                    <tr>
+                                                        <th>Fecha Inicio</th>
+                                                        <th>Fecha Fin</th>
+                                                        <th>Fecha Corte</th>
+                                                        <th>Estado</th>
+                                                        <th>Fecha de Pago</th>
+                                                    </tr>
+                                                </thead>
+                                                <tbody>
+                                                </tbody>
+                                            </table>
+                                        </div>
+                                    </div> 
                                 </div>
                             </div>
-                        @endif
+                        </div>
 
                         <div class="ln_solid"></div>
                         <div class="form-group">
@@ -196,6 +245,14 @@
     <script src="{{ asset('controlassets/vendors/switchery/dist/switchery.min.js') }}"></script>
     <script type="text/javascript">
 
+        $('#cta_recursive').on('change', function() {
+             if(this.value==='1'){
+                document.getElementById('dates_div').hidden = true;
+             }else{
+                document.getElementById('dates_div').hidden = false;
+             }
+        });
+
         function addLine(){
             var tableditTableName = '#editable-dt1'; 
             var newID = parseInt($(tableditTableName + " tr:last").attr("data-id")) + 1; 
@@ -207,7 +264,16 @@
             $(tableditTableName + " tr:last td .tabledit-span.tabledit-identifier").text(newID); $(tableditTableName + " tr:last td .tabledit-input.tabledit-identifier").val(newID);
         }
 
-        console.log($("#apps_aux").val());
+        var rowCount = document.getElementById('editable-dt1').rows.length;
+
+
+        if(rowCount < 2){
+            document.getElementById("testbtn").hidden = true;
+            document.getElementById("tabaccedit").hidden = true;
+        }else{
+            document.getElementById("testbtn").hidden = false;
+            document.getElementById("tabaccedit").hidden = false;
+        }
 
         $('#editable-dt1').Tabledit({
             url: '/crudtabledit',
@@ -231,7 +297,7 @@
             },
             columns: {
                 identifier: [0, 'id'],
-                editable: [[1, 'apps',$("#apps_aux").val()],[2, 'appcta_rfc'],[3, 'appcta_gig']]
+                editable: [[1, 'apps',$("#apps_aux").val()],[2, 'appcta_rfc'],[3, 'appcta_gig',],[4, 'sale_estado','{"test": "Prueba", "prod": "Producción"}']]
             },
             onDraw: function() {
                 console.log('onDraw()');
@@ -302,6 +368,18 @@
               document.getElementById('cta_num').value='';
             }
         });
+
+        function addtl(accid){
+            $.ajax({
+                url: '/getclientrfc',
+                type: 'POST',
+                data: {_token: CSRF_TOKEN,clientid:this.value},
+                dataType: 'JSON',
+                success: function (data) {
+                    document.getElementById('cta_num').value=data['rfc'];
+                }
+            });
+        }
   </script>
 
 @endsection

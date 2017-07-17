@@ -59,8 +59,8 @@
                             <div class="col-md-8 col-sm-8 col-xs-12">
                                 <select class="js-example-basic-single js-states form-control" name="appcta_app_char" id="appcta_app_char" required>
                                     <option value="">Seleccione una opción ...</option>
-                                        @foreach($apps as $key => $value)
-                                            <option value="{{ $key }}">{{ $value }}</option>
+                                        @foreach($apps as $app)
+                                            <option value="{{ $app->code }}">{{ $app->name }}</option>
                                         @endforeach
                                 </select>
                             </div>

@@ -8,6 +8,7 @@ use App\Appcontrol;
 use App\Package;
 use App\Account;
 use App\Packageassignation;
+use App\Apps;
 use Illuminate\Support\Facades\DB;
 
 class AppaccountController extends Controller
@@ -31,7 +32,8 @@ class AppaccountController extends Controller
     public function index()
     {
         $appctas = Appaccount::all();
-        $apps = config('app.advans_apps');
+        //$apps = config('app.advans_apps');
+        $apps = Apps::all();
         return view('appviews.appctashow',['appctas'=>$appctas,'apps'=>$apps]);
     }
 
@@ -44,7 +46,8 @@ class AppaccountController extends Controller
     {
         $packages = Package::all();
         $accounts = Account::where('cta_estado','=','Activa')->get();
-        $apps = config('app.advans_apps');
+        //$apps = config('app.advans_apps');
+        $apps = Apps::all();
         return view('appviews.appctacreate',['packages'=>$packages,'accounts'=>$accounts,'apps'=>$apps]);
     }
 
@@ -94,12 +97,16 @@ class AppaccountController extends Controller
                                     ]);
 
             if(array_key_exists('appcta_app_char',$alldata)){
+                    $app_aux = Apps::where('code', $alldata['appcta_app_char'])
+                                   ->orderBy('id', 'desc')
+                                   ->take(1)
+                                   ->get();
                     $appc = new Appcontrol();
-                    $appc->app_nom = $apps_conf[$alldata['appcta_app_char']];
+                    $appc->app_nom = $app_aux[0]->name;
                     $appc->app_code = $alldata['appcta_app_char'];
                     $appc->app_appcta_id = $appcta->id;
                     $appc->save();
-                    array_push($apps_ret,['app_cod'=>$alldata['appcta_app_char'],'app_nom'=>$apps_conf[$alldata['appcta_app_char']]]);
+                    array_push($apps_ret,['app_cod'=>$alldata['appcta_app_char'],'app_nom'=>$app_aux[0]->name]);
             }
 
             $arrayparams['rfc_nombrebd'] = $appcta->account ? $appcta->account->cta_num : $client_rfc;
@@ -111,8 +118,8 @@ class AppaccountController extends Controller
             $arrayparams['account_id'] = $appcta ? $appcta->id : 'false';
             $arrayparams['apps_cta'] = json_encode($apps_ret);
             $arrayparams['paq_cta'] = json_encode($packs);
-            /*$acces_vars = $this->getAccessToken();
-            $service_response = $this->getAppService($acces_vars['access_token'],'addpaq',$arrayparams,'ctac');*/
+            $acces_vars = $this->getAccessToken();
+            $service_response = $this->getAppService($acces_vars['access_token'],'addpaq',$arrayparams,'ctac');
             $fmessage = 'Se ha asignado un paquete a una cuenta con nombre: '.$arrayparams['rfc_nombrebd'];
             \Session::flash('message',$fmessage);
             $this->registeredBinnacle($request,'store',$fmessage);
@@ -144,7 +151,8 @@ class AppaccountController extends Controller
         $appcta = Appaccount::findOrFail($id);
         $packages = Package::all();
         $accounts = Account::where('cta_estado','=','Activa')->get();
-        $apps = config('app.advans_apps');
+        //$apps = config('app.advans_apps');
+        $apps = Apps::all();
         $gig_rfc = $this->getgigrfcbypackaux($id);
         return view('appviews.appctaedit',['packages'=>$packages,'accounts'=>$accounts,'appcta'=>$appcta,'apps'=>$apps,'gig'=>$gig_rfc['gig'],'rfc'=>$gig_rfc['rfc']]);
     }
@@ -158,7 +166,8 @@ class AppaccountController extends Controller
      */
     public function update(Request $request, $id)
     {
-        $apps = config('app.advans_apps');
+        //$apps = config('app.advans_apps');
+        $apps = Apps::all();
         $alldata = $request->all();
         $packs = array();
         $arrayparams = array();
@@ -423,21 +432,25 @@ class AppaccountController extends Controller
         $rfc = '';
         $appcta_id = '';
         $array_apps = array();
-        $apps = config('app.advans_apps');
-        $testmsg = 'no entro';
+        //$apps = config('app.advans_apps');
+        $apps = Apps::all();
         if(array_key_exists('appctaid',$alldata) && isset($alldata['appctaid'])){
             $appcta = Appaccount::findOrFail($alldata['appctaid']);
             $rfc = $appcta->account ? ($appcta->account->client ? $appcta->account->client->cliente_rfc : '') : '';
             $appcta_id = $appcta->id;
             if(array_key_exists('selected',$alldata)){
                 foreach ($alldata['selected'] as $key => $value) {
-                    array_push($array_apps,['app_cod'=>$value,'app_nom'=>$apps[$value]]);
+                    $app_aux = Apps::where('code', $value)
+                                   ->orderBy('id', 'desc')
+                                   ->take(1)
+                                   ->get();
+                    array_push($array_apps,['app_cod'=>$value,'app_nom'=>$app_aux[0]->name]);
                 }
                 $arrayparams['rfc_nombrebd'] = ($appcta->account ? $appcta->account->cta_num : '');
                 $arrayparams['account_id'] = $appcta ? $appcta->id : 'false';
                 $arrayparams['apps_cta'] = json_encode($array_apps);
-                /*$acces_vars = $this->getAccessToken();
-                $service_response = $this->getAppService($acces_vars['access_token'],'addapp',$arrayparams,'ctac');*/
+                $acces_vars = $this->getAccessToken();
+                $service_response = $this->getAppService($acces_vars['access_token'],'addapp',$arrayparams,'ctac');
                 $testmsg = 'entro';
                 DB::table('app')->where('app_appcta_id', '=', $appcta->id)->delete();
                 foreach ($alldata['selected'] as $key => $value) {
@@ -477,7 +490,11 @@ class AppaccountController extends Controller
             $appcta_id = $appcta->id;
             if(array_key_exists('selected',$alldata)){
                 foreach ($alldata['selected'] as $key => $value) {
-                    array_push($array_apps,['app_cod'=>$value,'app_nom'=>$apps[$value]]);
+                    $app_aux = Apps::where('code', $value)
+                                   ->orderBy('id', 'desc')
+                                   ->take(1)
+                                   ->get();
+                    array_push($array_apps,['app_cod'=>$value,'app_nom'=>$app_aux[0]->id]);
                 }
                 $arrayparams['rfc_nombrebd'] = ($appcta->account ? $appcta->account->cta_num : '');
                 $arrayparams['account_id'] = $appcta ? $appcta->id : 'false';
