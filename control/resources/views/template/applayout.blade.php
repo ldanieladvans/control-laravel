@@ -194,7 +194,7 @@
 					            		<li><a href="{{ route('asigpaq.index') }}"><strong>ASIGNACIÓN DISTRIBUIDORES</strong></a></li>
 						            	<li><a href="{{ route('account.index') }}"><strong>CUENTAS</strong></a></li>
 						            	
-						                <li><a href="{{ route('appcta.index') }}"><strong>DETALLES CUENTAS</strong></a></li>
+						                <!--<li><a href="{{ route('appcta.index') }}"><strong>DETALLES CUENTAS</strong></a></li>-->
 					                </ul>
 					            </li>
 

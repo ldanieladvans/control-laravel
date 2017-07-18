@@ -66,6 +66,7 @@ Route::post('/getcpdata', 'Controller@getCpData');
 Route::post('/crudtabledit', 'AccountController@crudTablEdit');
 Route::post('/addtl', 'AccountController@addTl');
 Route::post('/quittl', 'AccountController@quitTl');
+Route::post('/addapp', 'AccountController@addApp');
 
 
 

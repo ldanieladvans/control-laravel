@@ -94,11 +94,11 @@
                                 </select>
                             </div>
                             <label class="control-label col-md-1 col-sm-1 col-xs-12">Recursivo: </label>
-                            <div class="col-md-2 col-sm-2 col-xs-12">
-                                <p></p>
-                                Si:
-                                <input type="radio" class="flat" name="cta_recursive" id="cta_recursive1" value="1" checked /> No:
-                                <input type="radio" class="flat" name="cta_recursive" id="cta_recursive0" value="0" />
+                            <div class="col-md-1 col-sm-1 col-xs-12">
+                                <select class="js-example-basic-single js-states form-control" name="cta_recursive" id="cta_recursive">
+                                    <option value="1" selected>Si</option>
+                                    <option value="0" >No</option>
+                                </select>
                             </div>
                         </div>
 

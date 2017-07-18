@@ -53,7 +53,7 @@
               	@endif
 
                 <div class="x_content">
-                	<form id="usercreateform" class="form-horizontal form-label-left" action="{{ route('user.store') }}" method='POST' enctype="multipart/form-data">
+                	<form id="usercreateform" class="form-horizontal form-label-left" novalidate action="{{ route('user.store') }}" method='POST' enctype="multipart/form-data">
                 		{{ csrf_field() }}
 
 	                	<div id="invimg">

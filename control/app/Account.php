@@ -3,6 +3,7 @@
 namespace App;
 
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Support\Facades\DB;
 
 class Account extends Model
 {
@@ -34,9 +35,32 @@ class Account extends Model
         return $this->hasMany('App\Appaccount','appcta_cuenta_id');
     }
 
+    public function apps()
+    {
+        return $this->hasMany('App\Appcontrol','app_cta_id');
+    }
+
     public function timelines()
     {
         return $this->hasMany('App\AccountTl','cta_id');
+    }
+
+    public function hasApp($app_code,$count=false)
+    {
+        if($count!=false){
+            $perms = DB::table('app')->where([
+                ['app_code', '=', $app_code],
+                ['app_cta_id', '=', $this->id],
+            ])->count();
+        }else{
+            $perms = DB::table('app')->where([
+                ['app_code', '=', $app_code],
+                ['app_cta_id', '=', $this->id],
+            ])->get();
+        }
+        
+
+        return $perms;
     }
 
 }

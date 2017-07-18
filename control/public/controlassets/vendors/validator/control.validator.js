@@ -279,6 +279,7 @@ var validator = (function($){
             return true;
         },
         select : function(a){
+
             if( !tests.hasValue(a) ){
                 alertTxt = message.select;
                 return false;
@@ -299,12 +300,14 @@ var validator = (function($){
             warning;
 
         if( item.hasClass(defaults.classes.bad) ){
+            console.log(item);
             if( defaults.alerts )
                 item.find('.'+defaults.classes.alert).html(text);
         }
 
 
         else if( defaults.alerts ){
+            console.log(item);
             warning = $('<div class="'+ defaults.classes.alert +'">').html( text );
             item.append( warning );
         }
@@ -469,10 +472,13 @@ var validator = (function($){
             submit = true, // save the scope
             // get all the input/textareas/select fields which are required or optional (meaning, they need validation only if they were filled)
             fieldsToCheck = $form.find(':input').filter('[required=required], .required, .optional').not('[disabled=disabled]');
+            console.log(fieldsToCheck);
         fieldsToCheck.each(function(){
             // use an AND operation, so if any of the fields returns 'false' then the submitted result will be also FALSE
             submit = submit * checkField.apply(this);
         });
+
+        console.log(submit);
 
         return !!submit;  // casting the variable to make sure it's a boolean
     }

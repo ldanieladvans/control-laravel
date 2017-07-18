@@ -204,28 +204,31 @@
 
         function changeAccountState(accstate,user,accid){
             var CSRF_TOKEN = $('meta[name="csrf-token"]').attr('content');
-            $('#loadingmodal').modal('show');
-            $.ajax({
-                url: 'account/changeAccState',
-                type: 'POST',
-                data: {_token: CSRF_TOKEN,accstate:accstate,user:user,accid:accid},
-                dataType: 'JSON',
-                success: function (data) {
-                    window.location.href = window.location.href;   
-                },
-                error: function(XMLHttpRequest, textStatus, errorThrown) { 
-                    new PNotify({
-                    title: "Notificación",
-                    type: "info",
-                    text: "Ha ocurrido un error. No se ha podido cambiar el estado de la cuenta",
-                    nonblock: {
-                      nonblock: true
+            var result = confirm("Debe tener en cuenta que un cambio de estado en la cuenta puede implicar creación o bloqueos de las mismas. ¿Está seguro que desea continuar?");
+            if(result){
+                $('#loadingmodal').modal('show');
+                $.ajax({
+                    url: 'account/changeAccState',
+                    type: 'POST',
+                    data: {_token: CSRF_TOKEN,accstate:accstate,user:user,accid:accid},
+                    dataType: 'JSON',
+                    success: function (data) {
+                        window.location.href = window.location.href;   
                     },
-                    addclass: 'dark',
-                    styling: 'bootstrap3'
-                  });
-                }
-            });       
+                    error: function(XMLHttpRequest, textStatus, errorThrown) { 
+                        new PNotify({
+                        title: "Notificación",
+                        type: "info",
+                        text: "Ha ocurrido un error. No se ha podido cambiar el estado de la cuenta",
+                        nonblock: {
+                          nonblock: true
+                        },
+                        addclass: 'dark',
+                        styling: 'bootstrap3'
+                      });
+                    }
+                });
+            }       
         }
 
         function getCtaUsers(rfc,user,accid){

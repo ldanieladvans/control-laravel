@@ -177,7 +177,7 @@ class AccountController extends Controller
 
                 $arrayparams['password'] = $password;
                 Log::info($password);
-                $app_cta = new Appaccount();
+                /*$app_cta = new Appaccount();
                 $app_cta->appcta_rfc = 0;
                 $app_cta->appcta_gig = 0;
                 $app_cta->appcta_f_vent = date('Y-m-d');
@@ -188,7 +188,18 @@ class AccountController extends Controller
                 $app_cta->appcta_cuenta_id = $account ? $account->id : false;
                 $app_cta->appcta_app = $account ? $account->cta_num : 'false';
                 $app_cta->appcta_estado = 'Activa';
-                $app_cta->save();
+                $app_cta->save();*/
+
+                /*$acctl = new AccountTl();
+                $acctl->acctl_f_ini = date('Y-m-d');
+                $fecha = date_create(date('Y-m-d'));
+                $aux_months = $account ? $account->cta_periodicity : '1';
+                date_add($fecha, date_interval_create_from_date_string($aux_months.' months'));
+                $acctl->acctl_f_fin = date_format($fecha, 'Y-m-d');
+                $acctl->acctl_f_corte = date_format($fecha, 'Y-m-d');
+                $acctl->cta_id = $account->id;
+                $acctl->acctl_estado = 'Pendiente';
+                $acctl->save();*/
 
                 $cliente_correo = $account->client ? $account->client->cliente_correo : false;
                 if ($cliente_correo){
@@ -199,13 +210,31 @@ class AccountController extends Controller
                 
             }
 
+            $apps = array();
+            $apps_aux = Appcontrol::where('app_cta_id', $account->id)
+                       ->orderBy('id', 'desc')
+                       ->get();
+
+            foreach ($apps_aux as $app_aux) {
+                array_push($apps,['app_cod'=>$app_aux->app_code,'app_nom'=>$app_aux->app_nom,'app_insts'=>$app_aux->appcta->appcta_rfc,'app_megs'=>$app_aux->appcta->appcta_gig,'app_estado'=>$app_aux->appcta->sale_estado]);
+            }
+
+            $tls_array = array();
+            $tls = AccountTl::where('cta_id', $account->id)
+                       ->orderBy('id', 'desc')
+                       ->get();
+            foreach ($tls as $tl) {
+                array_push($tls_array, ['paqapp_f_venta'=>$tl->acctl_f_ini,'paqapp_f_fin'=>$tl->acctl_f_fin,'paqapp_f_caduc'=>$tl->acctl_f_corte,'paqapp_control_id'=>$tl->id]);
+            }
+
             $account->cta_fecha = date("Y-m-d");
             $account->save();
             $arrayparams['rfc_nombrebd'] = $account->cta_num ? $account->cta_num : '';
             $arrayparams['client_rfc'] = $account->client ? $account->client->cliente_rfc : '';
             $arrayparams['client_email'] = $account->client ? $account->client->cliente_correo : '';
             $arrayparams['client_name'] = $account->client ? $account->client->cliente_nom : '';
-            
+            $arrayparams['apps_cta'] = json_encode($apps);
+            $arrayparams['paq_cta'] = json_encode($tls_array);
             $arrayparams['client_nick'] = count(explode('@',$arrayparams['client_email'])) > 1 ? explode('@',$arrayparams['client_email'])[0] : '';
             $arrayparams['account_id'] = $account->id;
 
@@ -325,11 +354,13 @@ class AccountController extends Controller
 
         if ($input['action'] == 'edit') {
             $app_cta = Appaccount::find($input['id']);
+            $fmessage = 'Se ha modificado un detalle de la cuenta: '.$app_cta->appcta_app;
             if($app_cta){
                 $app_cta->appcta_rfc = $input['appcta_rfc'] ? $input['appcta_rfc'] : 0;
                 $app_cta->appcta_gig = $input['appcta_gig'] ? $input['appcta_gig'] : 0;
-                \DB::table('app')->where('app_appcta_id', '=', $input['id'])->delete();
+                //\DB::table('app')->where('app_appcta_id', '=', $input['id'])->delete();
             }else{
+                $fmessage = 'Se ha creado un detalle de la cuenta: '.$app_cta->appcta_app;
                 $app_cta = new Appaccount();
                 $app_cta->appcta_rfc = $input['appcta_rfc'] ? $input['appcta_rfc'] : 0;
                 $app_cta->appcta_gig = $input['appcta_gig'] ? $input['appcta_gig'] : 0;
@@ -347,25 +378,16 @@ class AccountController extends Controller
                 $app_cta->appcta_f_act = date('Y-m-d');
             }
             $app_cta->sale_estado = $sale_estado;
-            $appc = new Appcontrol();
-            $app_aux = Apps::where('code', $input['apps'])
-                           ->orderBy('id', 'desc')
-                           ->take(1)
-                           ->get();
-            $appc->app_nom = $app_aux[0]->name;
-            $appc->app_code = $input['apps'];
             $app_cta->save();
-            $appc->app_appcta_id = $app_cta->id;
-            $appc->save();
 
-            $fmessage = 'Se ha creado un detalle de la cuenta: '.$app_cta->appcta_app;
-            \Session::flash('message',$fmessage);
+            
+            //\Session::flash('message',$fmessage);
             $this->registeredBinnacle($request,'create',$fmessage);
             
         } else if ($input['action'] == 'delete') {
             $app_cta = Appaccount::find($input['id']);
             $app_cta->delete();
-            $app_cta = Appaccount::where('appcta_cuenta_id', $cta_obj->id)->get();
+            /*$app_cta = Appaccount::where('appcta_cuenta_id', $cta_obj->id)->get();
             if(count($app_cta)==0){
                 $app_cta = new Appaccount();
                 $app_cta->appcta_rfc = 0;
@@ -379,7 +401,7 @@ class AccountController extends Controller
                 $app_cta->appcta_app = $cta_obj ? $cta_obj->cta_num : 'false';
                 $app_cta->appcta_estado = 'Activa';
                 $app_cta->save();
-            }
+            }*/
         }
 
         return json_encode($input);
@@ -407,6 +429,69 @@ class AccountController extends Controller
             if(array_key_exists('f_corte',$alldata)){
                 $f_corte = $alldata['f_corte'];
             }
+            $acctl = new AccountTl();
+            $acctl->acctl_f_ini = $f_ini;
+            $acctl->acctl_f_fin = $f_fin;
+            $acctl->acctl_f_corte = $f_corte;
+            $acctl->cta_id = $alldata['accid'];
+            $acctl->acctl_estado = 'Pendiente';
+            $acctl->save();
+        }
+        
+        $response = array(
+            'status' => 'success',
+            'msg' => 'Ok',
+            'acctl_f_ini' => $acctl->acctl_f_ini,
+            'acctl_f_fin' => $acctl->acctl_f_fin,
+            'acctl_f_corte' => $acctl->acctl_f_corte,
+            'acctl_estado' => $acctl->acctl_estado,
+            'acctl_f_pago' => '',
+            'id' => $acctl->id,
+        );
+        return \Response::json($response);
+    }
+
+    public function quitTl(Request $request)
+    {
+        $alldata = $request->all();
+        if(array_key_exists('accid',$alldata)){
+            AccountTl::destroy($alldata['accid']);
+        }
+        
+        $response = array(
+            'status' => 'success',
+            'msg' => 'Ok',
+        );
+        return \Response::json($response);
+    }
+
+    public function addApp(Request $request)
+    {
+        $alldata = $request->all();
+        if(array_key_exists('accid',$alldata)){
+            $cta_obj = Account::find($alldata['accid']);
+            $app_cta = new Appaccount();
+            $app_cta->appcta_rfc = $alldata['appcta_rfc'] ? $alldata['appcta_rfc'] : 0;
+            $app_cta->appcta_gig = $alldata['appcta_gig'] ? $alldata['appcta_gig'] : 0;
+            $app_cta->appcta_f_vent = date('Y-m-d');
+            $fecha = date_create(date('Y-m-d'));
+            $aux_months = $cta_obj ? $cta_obj->cta_periodicity : '1';
+            date_add($fecha, date_interval_create_from_date_string($aux_months.' months'));
+            $app_cta->appcta_f_fin = date_format($fecha, 'Y-m-d');
+            $app_cta->appcta_cuenta_id = $cta_obj ? $cta_obj->id : false;
+            $app_cta->appcta_app = $cta_obj ? $cta_obj->cta_num : 'false';
+            $app_cta->sale_estado = 'Prueba';
+            $appc = new Appcontrol();
+            $app_aux = Apps::where('code', $alldata['app'])
+                           ->orderBy('id', 'desc')
+                           ->take(1)
+                           ->get();
+            $appc->app_nom = $app_aux[0]->name;
+            $appc->app_code = $alldata['app'];
+            $app_cta->save();
+            $appc->app_appcta_id = $app_cta->id;
+            $appc->app_cta_id = $alldata['accid'];
+            $appc->save();
         }
         
         $response = array(

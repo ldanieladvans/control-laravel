@@ -23,4 +23,9 @@ class Appcontrol extends Model
     {
         return $this->belongsTo('App\Appaccount','app_appcta_id');
     }
+
+    public function cta()
+    {
+        return $this->belongsTo('App\Account','app_cta_id');
+    }
 }

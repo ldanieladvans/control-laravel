@@ -10,7 +10,6 @@
     <link href="{{ asset('controlassets/vendors/nprogress/nprogress.css') }}" rel="stylesheet">
     <!-- bootstrap-daterangepicker -->
     <link href="{{ asset('controlassets/vendors/bootstrap-daterangepicker/daterangepicker.css') }}" rel="stylesheet">
-
     <!-- Custom Theme Style -->
     <link href="{{ asset('controlassets/build/css/custom.min.css') }}" rel="stylesheet">
 @endsection

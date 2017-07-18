@@ -18,6 +18,7 @@ class Appcontrol extends Migration
             $table->increments('id');
             $table->timestamps();
             $table->integer('app_appcta_id')->unsigned()->nullable();
+            $table->integer('app_cta_id')->unsigned()->nullable();
             $table->string('app_nom',25)->nullable();
             $table->string('app_code',4)->nullable();
         });

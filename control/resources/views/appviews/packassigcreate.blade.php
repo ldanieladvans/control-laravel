@@ -37,7 +37,7 @@
                 @endif
               
                 <div class="x_content">
-                    <form id="packassigform" class="form-horizontal form-label-left" action="{{ route('asigpaq.store') }}" method='POST'>
+                    <form id="packassigform" class="form-horizontal form-label-left" novalidate action="{{ route('asigpaq.store') }}" method='POST'>
             	       {{ csrf_field() }}
 
                         <div class="item form-group">

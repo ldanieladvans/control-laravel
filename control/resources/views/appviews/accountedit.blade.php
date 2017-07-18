@@ -85,7 +85,7 @@
                         <div class="item form-group">
                             <label class="control-label col-md-1 col-sm-1 col-xs-12">Estado</label>                     
                             <div class="col-md-8 col-sm-8 col-xs-12">
-                                <input id="cta_estado" title="Estado" class="form-control has-feedback-left" name="cta_estado" placeholder="Estado *" required="required" type="text" readonly="readonly" value="{{$account->cta_estado}}">
+                                <input id="cta_estado" title="Estado" class="form-control has-feedback-left" name="cta_estado" placeholder="Estado *"  type="text" readonly="readonly" value="{{$account->cta_estado}}">
                                 <span class="fa fa-certificate form-control-feedback left" aria-hidden="true"></span>
                             </div>
                         </div>
@@ -107,8 +107,8 @@
                             <label class="control-label col-md-1 col-sm-1 col-xs-12">Recursivo: </label>
                             <div class="col-md-1 col-sm-1 col-xs-12">
                                 <select class="js-example-basic-single js-states form-control" name="cta_recursive" id="cta_recursive">
-                                    <option value="1" selected>Si</option>
-                                    <option value="0" >No</option>
+                                    <option value="1" {{$account->cta_recursive==1 ? 'selected':''}}>Si</option>
+                                    <option value="0" {{$account->cta_recursive!=1 ? 'selected':''}}>No</option>
                                 </select>
                             </div>
                         </div>
@@ -133,10 +133,6 @@
                                                             <th align="left">Aplicación</th>
                                                             <th align="left">Cantidad Instancias</th>
                                                             <th align="left">Cantidad Gigas</th>
-                                                            <!--<th align="left">Fecha Venta</th>-->
-                                                            
-                                                            <!--<th align="left">Fecha Fin</th>
-                                                            <th align="left">Fecha Caducidad</th>-->
                                                             <th align="left">Estado</th>
                                                             <th align="left">Fecha Activación</th>
                                                         </tr>
@@ -154,22 +150,60 @@
                                                                 </td>
                                                                 <td class="tabledit-data">{{$appcta->appcta_rfc}}</td>
                                                                 <td class="tabledit-data">{{$appcta->appcta_gig}}</td>
-                                                                <!--<td class="tabledit-data">{{$appcta->appcta_f_vent}}</td>-->
-                                                                
-                                                                <!--<td class="tabledit-data">{{$appcta->appcta_f_fin}}</td>
-                                                                <td class="tabledit-data">{{$appcta->appcta_f_caduc}}</td>-->
                                                                 <td class="tabledit-data">{{$appcta->sale_estado}}</td>
                                                                 <td class="tabledit-data">{{$appcta->appcta_f_act}}</td>
                                                             </tr>
                                                         @endforeach
                                                     </tbody>
                                                     <button id="testbtn" type="button" onclick="addLine()" >Agregar [+]</button>
+                                                    <div class="modal fade" id="addappmodal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+                                                        <div class="modal-dialog" role="document">
+                                                            <div class="modal-content">
+                                                                <div class="modal-header">
+                                                                    <h5 class="modal-title" id="exampleModalLabel">Añadir Aplicación:</h5>
+                                                                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                                                                        <span aria-hidden="true">&times;</span>
+                                                                    </button>
+                                                                </div>
+                                                                <div class="modal-body">
+                                                                    <form>
+                                                                        <div class="item form-group">
+                                                                            <div class="col-md-12 col-sm-12 col-xs-12">
+                                                                                <select class="js-example-basic-single js-states form-control" name="addapps" id="addapps" style="width: 100%; display: none;">
+                                                                                    @foreach($appsne as $appne)
+                                                                                        @if ($account->hasApp($appne->code,true)==0)
+                                                                                            <option value="{{$appne->code}}" >{{$appne->name}}</option>
+                                                                                        @endif
+                                                                                    @endforeach
+                                                                                </select>
+                                                                            </div>
+                                                                        </div>
+
+                                                                        <div class="item form-group">
+                                                                            <div class="col-md-6 col-sm-6 col-xs-12">
+                                                                                <input id="appcta_rfc" class="form-control has-feedback-left" name="appcta_rfc" title="Cantidad de Instancias" placeholder="Cantidad Instancias *" type="numberint" value="0">
+                                                                                <span class="fa fa-bank form-control-feedback left" aria-hidden="true"></span>
+                                                                            </div>
+                                                                            <div class="col-md-6 col-sm-6 col-xs-12">
+                                                                                <input id="appcta_gig" class="form-control has-feedback-left" name="appcta_gig" placeholder="Cantidad Gigas *" value="0" type="number" title="Almacenamiento en Gigas">
+                                                                                <span class="fa fa-archive form-control-feedback left" aria-hidden="true"></span>
+                                                                            </div>
+                                                                        </div>
+                                                                    </form>
+
+                                                                </div>
+                                                                <div class="modal-footer">
+                                                                    <button type="button"  onclick="addApp({{$account->id}});" class="btn btn-primary">Ok</button>
+                                                                </div>
+                                                            </div>
+                                                        </div>
+                                                    </div>
                                                 </table>
                                             </div>
                                         </div>
                                     </div>
                                     <div role="tabpanel" class="tab-pane fade" id="tab_content2" aria-labelledby="home-tab"> 
-                                        <div class="item form-group" id="dates_div" hidden>
+                                        <div class="item form-group" id="dates_div" {{$account->cta_recursive==1 ? 'hidden':''}}>
                                             <div class="col-md-3 col-sm-3 col-xs-12">
                                                 <input id="acctl_f_ini" title="Fecha Inicio" class="form-control has-feedback-left" name="acctl_f_ini" placeholder="Fecha Inicio" type="date">
                                                 <span class="fa fa-calendar form-control-feedback left" aria-hidden="true"></span>
@@ -198,9 +232,22 @@
                                                         <th>Fecha Corte</th>
                                                         <th>Estado</th>
                                                         <th>Fecha de Pago</th>
+                                                        <th>Acciones</th>
                                                     </tr>
                                                 </thead>
                                                 <tbody>
+                                                    @foreach($account->timelines as $tl)
+                                                        <tr>
+                                                            <td>{{$tl->acctl_f_ini}}</td>
+                                                            <td>{{$tl->acctl_f_fin}}</td>
+                                                            <td>{{$tl->acctl_f_corte}}</td>
+                                                            <td>{{$tl->acctl_estado}}</td>
+                                                            <td>{{$tl->acctl_f_pago}}</td>
+                                                            <td>
+                                                                <div class='btn-group'><div class='btn-group'><a id='{{$tl->id}}' onclick='quittl("{{$tl->id}}",this)' class='btn btn-xs' data-placement='left' title='Borrar' ><i class='fa fa-trash fa-3x'></i></a></div>
+                                                            </td>
+                                                        </tr>
+                                                    @endforeach
                                                 </tbody>
                                             </table>
                                         </div>
@@ -253,27 +300,42 @@
              }
         });
 
+        function addApp(accid){
+            var e = document.getElementById("addapps");
+            $.ajax({
+                url: '/addapp',
+                type: 'POST',
+                data: {_token: CSRF_TOKEN,accid:accid,appcta_rfc:document.getElementById('appcta_rfc').value,'appcta_gig':document.getElementById('appcta_gig').value,'app':e.options[e.selectedIndex].value},
+                dataType: 'JSON',
+                success: function (data) {
+                    $("#addappmodal").remove();
+                    window.location.href = window.location.href;
+                }
+            });
+        }
+
         function addLine(){
-            var tableditTableName = '#editable-dt1'; 
+            $("#addappmodal").modal('show');
+            /*var tableditTableName = '#editable-dt1'; 
             var newID = parseInt($(tableditTableName + " tr:last").attr("data-id")) + 1; 
             var clone = $("table tr:last").clone(); 
             $(".tabledit-data span", clone).text(""); 
             $(".tabledit-data input", clone).val(""); 
             clone.appendTo("table"); $
             (tableditTableName + " tr:last").attr("data-id", newID); 
-            $(tableditTableName + " tr:last td .tabledit-span.tabledit-identifier").text(newID); $(tableditTableName + " tr:last td .tabledit-input.tabledit-identifier").val(newID);
+            $(tableditTableName + " tr:last td .tabledit-span.tabledit-identifier").text(newID); $(tableditTableName + " tr:last td .tabledit-input.tabledit-identifier").val(newID);*/
         }
 
         var rowCount = document.getElementById('editable-dt1').rows.length;
 
 
-        if(rowCount < 2){
+        /*if(rowCount < 2){
             document.getElementById("testbtn").hidden = true;
             document.getElementById("tabaccedit").hidden = true;
         }else{
             document.getElementById("testbtn").hidden = false;
             document.getElementById("tabaccedit").hidden = false;
-        }
+        }*/
 
         $('#editable-dt1').Tabledit({
             url: '/crudtabledit',
@@ -297,7 +359,7 @@
             },
             columns: {
                 identifier: [0, 'id'],
-                editable: [[1, 'apps',$("#apps_aux").val()],[2, 'appcta_rfc'],[3, 'appcta_gig',],[4, 'sale_estado','{"test": "Prueba", "prod": "Producción"}']]
+                editable: [[2, 'appcta_rfc'],[3, 'appcta_gig',],[4, 'sale_estado','{"test": "Prueba", "prod": "Producción"}']]
             },
             onDraw: function() {
                 console.log('onDraw()');
@@ -341,6 +403,11 @@
             allowClear: true
         });
 
+        $("#addapps").select2({
+            placeholder: "Selecciona el cliente",
+            allowClear: true
+        });
+
         $("#cta_distrib_id").select2({
             placeholder: "Selecciona el distribuidor",
             allowClear: true
@@ -371,16 +438,30 @@
 
         function addtl(accid){
             $.ajax({
-                url: '/getclientrfc',
+                url: '/addtl',
                 type: 'POST',
-                data: {_token: CSRF_TOKEN,clientid:this.value},
+                data: {_token: CSRF_TOKEN,accid:accid,f_ini:document.getElementById('acctl_f_ini').value,'f_fin':document.getElementById('acctl_f_fin').value,'f_corte':document.getElementById('acctl_f_corte').value},
                 dataType: 'JSON',
                 success: function (data) {
-                    document.getElementById('cta_num').value=data['rfc'];
+                    $('#tabletl1').find('tbody').append( "<tr><td>"+data['acctl_f_ini']+"</td><td>"+data['acctl_f_fin']+"</td><td>"+data['acctl_f_corte']+"</td><td>"+data['acctl_estado']+"</td><td>"+data['acctl_f_pago']+"</td><td><div class='btn-group'><div class='btn-group'><a id='"+data['id']+"' onclick='quittl("+data['id']+",this)' class='btn btn-xs' data-placement='left' title='Borrar' ><i class='fa fa-trash fa-3x'></i> </a></div></td></tr>");
+                    //window.location.href = window.location.href;
                 }
             });
         }
-  </script>
+
+        function quittl(accid,rrow){
+            var rowtable = rrow.parentNode.parentNode.parentNode.parentNode.rowIndex;
+            $.ajax({
+                url: '/quittl',
+                type: 'POST',
+                data: {_token: CSRF_TOKEN,accid:accid},
+                dataType: 'JSON',
+                success: function (data) {
+                    document.getElementById("tabletl1").deleteRow(rowtable);
+                }
+            });
+        }
+    </script>
 
 @endsection
 
