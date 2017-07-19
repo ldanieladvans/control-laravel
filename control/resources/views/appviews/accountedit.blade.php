@@ -237,7 +237,7 @@
                                                 </thead>
                                                 <tbody>
                                                     @foreach($account->timelines as $tl)
-                                                        <tr>
+                                                        <tr id="tbrow{{$tl->id}}">
                                                             <td>{{$tl->acctl_f_ini}}</td>
                                                             <td>{{$tl->acctl_f_fin}}</td>
                                                             <td>{{$tl->acctl_f_corte}}</td>
@@ -245,6 +245,7 @@
                                                             <td>{{$tl->acctl_f_pago}}</td>
                                                             <td>
                                                                 <div class='btn-group'><div class='btn-group'><a id='{{$tl->id}}' onclick='quittl("{{$tl->id}}",this)' class='btn btn-xs' data-placement='left' title='Borrar' ><i class='fa fa-trash fa-3x'></i></a></div>
+                                                                <div class='btn-group'><div class='btn-group'><a id='{{$tl->id}}' onclick='edittl("{{$tl->id}}",this)' class='btn btn-xs' data-placement='left' title='Editar' ><i class='fa fa-edit fa-3x'></i></a></div>
                                                             </td>
                                                         </tr>
                                                     @endforeach
@@ -326,16 +327,34 @@
             $(tableditTableName + " tr:last td .tabledit-span.tabledit-identifier").text(newID); $(tableditTableName + " tr:last td .tabledit-input.tabledit-identifier").val(newID);*/
         }
 
-        var rowCount = document.getElementById('editable-dt1').rows.length;
+        var rowCount = document.getElementById('tabletl1').rows.length;
 
+        Date.prototype.addDays = function(days) {
+          var dat = new Date(this.valueOf());
+          dat.setDate(dat.getDate() + days);
+          return dat;
+        }
 
-        /*if(rowCount < 2){
-            document.getElementById("testbtn").hidden = true;
-            document.getElementById("tabaccedit").hidden = true;
-        }else{
-            document.getElementById("testbtn").hidden = false;
-            document.getElementById("tabaccedit").hidden = false;
-        }*/
+        if(rowCount >= 2){
+            console.log(document.getElementById('tabletl1').rows[rowCount-1]);
+
+            var inidate = new Date(($('#tabletl1 tbody tr:last td:nth-child(2)').text()).replace('-','/'));
+            inidate = inidate.addDays(1);
+
+            var month = inidate.getMonth() + 1;
+            if(month<10){
+                month = '0'+month;
+            }
+            var day = inidate.getDate();
+            if(day<10){
+                day = '0'+day;
+            }
+            var year = inidate.getFullYear();
+
+            document.getElementById('acctl_f_ini').min = [year, month, day].join('-');
+            document.getElementById('acctl_f_fin').min = [year, month, day].join('-');
+            document.getElementById('acctl_f_corte').min = [year, month, day].join('-');
+        }
 
         $('#editable-dt1').Tabledit({
             url: '/crudtabledit',
@@ -460,6 +479,12 @@
                     document.getElementById("tabletl1").deleteRow(rowtable);
                 }
             });
+        }
+
+        function edittl(accid,rrow){
+            var rowtable = rrow.rowIndex;
+            var tddata1 = $('#tabletl1 tbody tr:eq('+rowtable+') td:nth-child(2)').text();
+            console.log(document.getElementById("tbrow"+rrow.id).childNodes[0]);
         }
     </script>
 

@@ -359,6 +359,7 @@ class AccountController extends Controller
                 $app_cta->appcta_rfc = $input['appcta_rfc'] ? $input['appcta_rfc'] : 0;
                 $app_cta->appcta_gig = $input['appcta_gig'] ? $input['appcta_gig'] : 0;
                 //\DB::table('app')->where('app_appcta_id', '=', $input['id'])->delete();
+                
             }else{
                 $fmessage = 'Se ha creado un detalle de la cuenta: '.$app_cta->appcta_app;
                 $app_cta = new Appaccount();
@@ -380,12 +381,24 @@ class AccountController extends Controller
             $app_cta->sale_estado = $sale_estado;
             $app_cta->save();
 
+            $arrayparams['rfc_nombrebd'] = $cta_obj->cta_num;
+            $arrayparams['account_id'] = $cta_obj->id;
+            $arrayparams['apps_cta'] = json_encode([['app_insts'=>$app_cta->appcta_rfc,'app_megs'=>$app_cta->appcta_gig,'app_estado'=>$app_cta->sale_estado,'app_cod'=>$app_cta->apps[0]->app_code]]);
+            $acces_vars = $this->getAccessToken();
+            $service_response = $this->getAppService($acces_vars['access_token'],'modapp',$arrayparams,'ctac');
+
             
             //\Session::flash('message',$fmessage);
-            $this->registeredBinnacle($request,'create',$fmessage);
+            $this->registeredBinnacle($request,'update',$fmessage);
             
         } else if ($input['action'] == 'delete') {
             $app_cta = Appaccount::find($input['id']);
+            
+            $arrayparams['rfc_nombrebd'] = $cta_obj->cta_num;
+            $arrayparams['account_id'] = $cta_obj->id;
+            $arrayparams['apps_cta'] = json_encode([['app_insts'=>$app_cta->appcta_rfc,'app_megs'=>$app_cta->appcta_gig,'app_estado'=>$app_cta->sale_estado,'app_cod'=>$app_cta->apps[0]->app_code,'app_nom'=>$app_cta->apps[0]->app_nom]]);
+            $acces_vars = $this->getAccessToken();
+            $service_response = $this->getAppService($acces_vars['access_token'],'delapp',$arrayparams,'ctac');
             $app_cta->delete();
             /*$app_cta = Appaccount::where('appcta_cuenta_id', $cta_obj->id)->get();
             if(count($app_cta)==0){
