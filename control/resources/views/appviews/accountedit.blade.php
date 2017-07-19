@@ -238,11 +238,11 @@
                                                 <tbody>
                                                     @foreach($account->timelines as $tl)
                                                         <tr id="tbrow{{$tl->id}}">
-                                                            <td>{{$tl->acctl_f_ini}}</td>
-                                                            <td>{{$tl->acctl_f_fin}}</td>
-                                                            <td>{{$tl->acctl_f_corte}}</td>
-                                                            <td>{{$tl->acctl_estado}}</td>
-                                                            <td>{{$tl->acctl_f_pago}}</td>
+                                                            <td id="tdrow{{$tl->id}}1">{{$tl->acctl_f_ini}}</td>
+                                                            <td id="tdrow{{$tl->id}}2">{{$tl->acctl_f_fin}}</td>
+                                                            <td id="tdrow{{$tl->id}}3">{{$tl->acctl_f_corte}}</td>
+                                                            <td id="tdrow{{$tl->id}}4">{{$tl->acctl_estado}}</td>
+                                                            <td id="tdrow{{$tl->id}}5">{{$tl->acctl_f_pago}}</td>
                                                             <td>
                                                                 <div class='btn-group'><div class='btn-group'><a id='{{$tl->id}}' onclick='quittl("{{$tl->id}}",this)' class='btn btn-xs' data-placement='left' title='Borrar' ><i class='fa fa-trash fa-3x'></i></a></div>
                                                                 <div class='btn-group'><div class='btn-group'><a id='{{$tl->id}}' onclick='edittl("{{$tl->id}}",this)' class='btn btn-xs' data-placement='left' title='Editar' ><i class='fa fa-edit fa-3x'></i></a></div>
@@ -484,7 +484,7 @@
         function edittl(accid,rrow){
             var rowtable = rrow.rowIndex;
             var tddata1 = $('#tabletl1 tbody tr:eq('+rowtable+') td:nth-child(2)').text();
-            console.log(document.getElementById("tbrow"+rrow.id).childNodes[0]);
+            console.log(document.getElementById("tdrow"+rrow.id+"1"));
         }
     </script>
 
