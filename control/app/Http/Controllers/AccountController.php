@@ -423,7 +423,10 @@ class AccountController extends Controller
     public function addTl(Request $request)
     {
         $alldata = $request->all();
+        $acc_id = false;
         if(array_key_exists('accid',$alldata)){
+            $acc_id = $alldata['accid'];
+            $cta_obj = Account::find($alldata['accid']);
             $f_ini = date('Y-m-d');
             $fecha = date_create(date('Y-m-d'));
             date_add($fecha, date_interval_create_from_date_string('30 days'));
@@ -442,13 +445,32 @@ class AccountController extends Controller
             if(array_key_exists('f_corte',$alldata)){
                 $f_corte = $alldata['f_corte'];
             }
-            $acctl = new AccountTl();
-            $acctl->acctl_f_ini = $f_ini;
-            $acctl->acctl_f_fin = $f_fin;
-            $acctl->acctl_f_corte = $f_corte;
-            $acctl->cta_id = $alldata['accid'];
-            $acctl->acctl_estado = 'Pendiente';
-            $acctl->save();
+            if($alldata['tlid']!='false'){
+                $acctl = AccountTl::find($alldata['tlid']);
+                $acctl->acctl_f_ini = $f_ini;
+                $acctl->acctl_f_fin = $f_fin;
+                $acctl->acctl_f_corte = $f_corte;
+                $acctl->save();
+                $arrayparams['rfc_nombrebd'] = $cta_obj->cta_num;
+                $arrayparams['account_id'] = $cta_obj->id;
+                $arrayparams['paq_cta'] = json_encode([['paqapp_f_venta'=>$f_ini,'paqapp_f_fin'=>$f_fin,'paqapp_f_caduc'=>$f_corte,'paqapp_control_id'=>$alldata['tlid']]]);
+                $acces_vars = $this->getAccessToken();
+                $service_response = $this->getAppService($acces_vars['access_token'],'modpaq',$arrayparams,'ctac');
+            }else{
+                $acctl = new AccountTl();
+                $acctl->acctl_estado = 'Pendiente';
+                $acctl->cta_id = $alldata['accid'];
+                $acctl->acctl_f_ini = $f_ini;
+                $acctl->acctl_f_fin = $f_fin;
+                $acctl->acctl_f_corte = $f_corte;
+                $acctl->save();
+                $arrayparams['rfc_nombrebd'] = $cta_obj->cta_num;
+                $arrayparams['account_id'] = $cta_obj->id;
+                $arrayparams['paq_cta'] = json_encode([['paqapp_f_venta'=>$f_ini,'paqapp_f_fin'=>$f_fin,'paqapp_f_caduc'=>$f_corte,'paqapp_control_id'=>$acctl->id]]);
+                $acces_vars = $this->getAccessToken();
+                $service_response = $this->getAppService($acces_vars['access_token'],'addpaq',$arrayparams,'ctac');
+            }
+            
         }
         
         $response = array(
@@ -457,9 +479,14 @@ class AccountController extends Controller
             'acctl_f_ini' => $acctl->acctl_f_ini,
             'acctl_f_fin' => $acctl->acctl_f_fin,
             'acctl_f_corte' => $acctl->acctl_f_corte,
+            'acctl_f_fin_next' => date('Y-m-d', strtotime($acctl->acctl_f_fin . ' +1 day')),
+            'acctl_f_corte_next' => date('Y-m-d', strtotime($acctl->acctl_f_corte . ' +1 day')),
             'acctl_estado' => $acctl->acctl_estado,
             'acctl_f_pago' => '',
             'id' => $acctl->id,
+            'tlid' => $alldata['tlid'],
+            'alldata' => $alldata,
+            'accid' => $acc_id
         );
         return \Response::json($response);
     }
@@ -468,7 +495,16 @@ class AccountController extends Controller
     {
         $alldata = $request->all();
         if(array_key_exists('accid',$alldata)){
-            AccountTl::destroy($alldata['accid']);
+            $cta_obj = Account::find($alldata['accid']);
+            if(array_key_exists('tlid',$alldata)){
+                $arrayparams['rfc_nombrebd'] = $cta_obj->cta_num;
+                $arrayparams['account_id'] = $cta_obj->id;
+                $arrayparams['paq_cta'] = json_encode([['paqapp_control_id'=>$alldata['tlid']]]);
+                $acces_vars = $this->getAccessToken();
+                $service_response = $this->getAppService($acces_vars['access_token'],'delpaq',$arrayparams,'ctac');
+                AccountTl::destroy($alldata['tlid']);
+                
+            }
         }
         
         $response = array(

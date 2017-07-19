@@ -203,7 +203,7 @@
                                         </div>
                                     </div>
                                     <div role="tabpanel" class="tab-pane fade" id="tab_content2" aria-labelledby="home-tab"> 
-                                        <div class="item form-group" id="dates_div" {{$account->cta_recursive==1 ? 'hidden':''}}>
+                                        <div class="item form-group" id="dates_div" >
                                             <div class="col-md-3 col-sm-3 col-xs-12">
                                                 <input id="acctl_f_ini" title="Fecha Inicio" class="form-control has-feedback-left" name="acctl_f_ini" placeholder="Fecha Inicio" type="date">
                                                 <span class="fa fa-calendar form-control-feedback left" aria-hidden="true"></span>
@@ -244,8 +244,8 @@
                                                             <td id="tdrow{{$tl->id}}4">{{$tl->acctl_estado}}</td>
                                                             <td id="tdrow{{$tl->id}}5">{{$tl->acctl_f_pago}}</td>
                                                             <td>
-                                                                <div class='btn-group'><div class='btn-group'><a id='{{$tl->id}}' onclick='quittl("{{$tl->id}}",this)' class='btn btn-xs' data-placement='left' title='Borrar' ><i class='fa fa-trash fa-3x'></i></a></div>
-                                                                <div class='btn-group'><div class='btn-group'><a id='{{$tl->id}}' onclick='edittl("{{$tl->id}}",this)' class='btn btn-xs' data-placement='left' title='Editar' ><i class='fa fa-edit fa-3x'></i></a></div>
+                                                                <div class='btn-group'><div class='btn-group'><a id='{{$tl->id}}' onclick='quittl("{{$tl->id}}","{{$account->id}}")' class='btn btn-xs' data-placement='left' title='Borrar' ><i class='fa fa-trash fa-3x'></i></a></div>
+                                                                <div class='btn-group'><div class='btn-group'><a id='{{$tl->id}}' onclick='edittl({{$tl->id}})' class='btn btn-xs' data-placement='left' title='Editar' ><i class='fa fa-edit fa-3x'></i></a></div>
                                                             </td>
                                                         </tr>
                                                     @endforeach
@@ -293,16 +293,14 @@
     <script src="{{ asset('controlassets/vendors/switchery/dist/switchery.min.js') }}"></script>
     <script type="text/javascript">
 
-        $('#cta_recursive').on('change', function() {
-             if(this.value==='1'){
-                document.getElementById('dates_div').hidden = true;
-             }else{
-                document.getElementById('dates_div').hidden = false;
-             }
-        });
+        var trselected = false;
+        var val_date_ini = false;
+        var val_date_fin = false;
+        var val_date_corte = false;
 
         function addApp(accid){
             var e = document.getElementById("addapps");
+            $('#loadingmodal').modal('show');
             $.ajax({
                 url: '/addapp',
                 type: 'POST',
@@ -336,7 +334,21 @@
         }
 
         if(rowCount >= 2){
-            console.log(document.getElementById('tabletl1').rows[rowCount-1]);
+
+            var inidate = new Date(($('#tabletl1 tbody tr:last td:nth-child(1)').text()).replace('-','/'));
+            inidate = inidate.addDays(1);
+
+            var month = inidate.getMonth() + 1;
+            if(month<10){
+                month = '0'+month;
+            }
+            var day = inidate.getDate();
+            if(day<10){
+                day = '0'+day;
+            }
+            var year = inidate.getFullYear();
+
+            val_date_ini = [year, month, day].join('-');
 
             var inidate = new Date(($('#tabletl1 tbody tr:last td:nth-child(2)').text()).replace('-','/'));
             inidate = inidate.addDays(1);
@@ -351,9 +363,27 @@
             }
             var year = inidate.getFullYear();
 
-            document.getElementById('acctl_f_ini').min = [year, month, day].join('-');
-            document.getElementById('acctl_f_fin').min = [year, month, day].join('-');
-            document.getElementById('acctl_f_corte').min = [year, month, day].join('-');
+            val_date_fin = [year, month, day].join('-');
+
+            var inidate = new Date(($('#tabletl1 tbody tr:last td:nth-child(3)').text()).replace('-','/'));
+            inidate = inidate.addDays(1);
+
+            var month = inidate.getMonth() + 1;
+            if(month<10){
+                month = '0'+month;
+            }
+            var day = inidate.getDate();
+            if(day<10){
+                day = '0'+day;
+            }
+            var year = inidate.getFullYear();
+
+            val_date_corte = [year, month, day].join('-');
+
+            document.getElementById('acctl_f_ini').min = val_date_fin;
+            document.getElementById('acctl_f_fin').min = val_date_fin;
+            document.getElementById('acctl_f_corte').min = val_date_corte;
+
         }
 
         $('#editable-dt1').Tabledit({
@@ -456,35 +486,86 @@
         });
 
         function addtl(accid){
+            $('#loadingmodal').modal('show');
             $.ajax({
                 url: '/addtl',
                 type: 'POST',
-                data: {_token: CSRF_TOKEN,accid:accid,f_ini:document.getElementById('acctl_f_ini').value,'f_fin':document.getElementById('acctl_f_fin').value,'f_corte':document.getElementById('acctl_f_corte').value},
+                data: {_token: CSRF_TOKEN,accid:accid,f_ini:document.getElementById('acctl_f_ini').value,'f_fin':document.getElementById('acctl_f_fin').value,'f_corte':document.getElementById('acctl_f_corte').value,tlid:trselected},
                 dataType: 'JSON',
                 success: function (data) {
-                    $('#tabletl1').find('tbody').append( "<tr><td>"+data['acctl_f_ini']+"</td><td>"+data['acctl_f_fin']+"</td><td>"+data['acctl_f_corte']+"</td><td>"+data['acctl_estado']+"</td><td>"+data['acctl_f_pago']+"</td><td><div class='btn-group'><div class='btn-group'><a id='"+data['id']+"' onclick='quittl("+data['id']+",this)' class='btn btn-xs' data-placement='left' title='Borrar' ><i class='fa fa-trash fa-3x'></i> </a></div></td></tr>");
-                    //window.location.href = window.location.href;
+                    var str = document.getElementById("tbrow"+data['tlid']);
+                    console.log(data);
+                    if(data['tlid']!='false'){
+                        document.getElementById("tbrow"+data['tlid']).innerHTML = "<tr id='tbrow"+data['id']+"'><td id='tdrow"+data['id']+"1'>"+data['acctl_f_ini']+"</td><td id='tdrow"+data['id']+"2'>"+data['acctl_f_fin']+"</td><td id='tdrow"+data['id']+"3'>"+data['acctl_f_corte']+"</td><td id='tdrow"+data['id']+"4'>"+data['acctl_estado']+"</td><td id='tdrow"+data['id']+"5'>"+data['acctl_f_pago']+"</td><td><div class='btn-group'><div class='btn-group'><a id='"+data['id']+"' onclick='quittl("+data['id']+","+data['accid']+")' class='btn btn-xs' data-placement='left' title='Borrar' ><i class='fa fa-trash fa-3x'></i> </a></div><div class='btn-group'><div class='btn-group'><a id='"+data['id']+"' onclick='edittl("+data['id']+")' class='btn btn-xs' data-placement='left' title='Editar' ><i class='fa fa-edit fa-3x'></i></a></div></td></tr>";
+                        str.removeAttribute("selected");
+                        str.style.backgroundColor='#f9f9f9';
+                        document.getElementById('acctl_f_ini').min = val_date_fin;
+                        document.getElementById('acctl_f_fin').min = val_date_fin;
+                        document.getElementById('acctl_f_corte').min = val_date_corte;
+                            
+                    }else{
+                        $('#tabletl1').find('tbody').append("<tr id='tbrow"+data['id']+"'><td id='tdrow"+data['id']+"1'>"+data['acctl_f_ini']+"</td><td id='tdrow"+data['id']+"2'>"+data['acctl_f_fin']+"</td><td id='tdrow"+data['id']+"3'>"+data['acctl_f_corte']+"</td><td id='tdrow"+data['id']+"4'>"+data['acctl_estado']+"</td><td id='tdrow"+data['id']+"5'>"+data['acctl_f_pago']+"</td><td><div class='btn-group'><div class='btn-group'><a id='"+data['id']+"' onclick='quittl("+data['id']+","+data['accid']+")' class='btn btn-xs' data-placement='left' title='Borrar' ><i class='fa fa-trash fa-3x'></i> </a></div><div class='btn-group'><div class='btn-group'><a id='"+data['id']+"' onclick='edittl("+data['id']+")' class='btn btn-xs' data-placement='left' title='Editar' ><i class='fa fa-edit fa-3x'></i></a></div></td></tr>");
+                        document.getElementById('acctl_f_ini').min = data['acctl_f_fin_next'];
+                        document.getElementById('acctl_f_fin').min = data['acctl_f_fin_next'];
+                        document.getElementById('acctl_f_corte').min = data['acctl_f_corte_next'];
+                    }
+
+                    $('#loadingmodal').modal('hide');
+                    document.getElementById('acctl_f_ini').value = "";
+                    document.getElementById('acctl_f_fin').value = "";
+                    document.getElementById('acctl_f_corte').value = "";
+                    document.getElementById("addline").innerText="Agregar";
+                    trselected = false;
+                    
                 }
             });
         }
 
-        function quittl(accid,rrow){
-            var rowtable = rrow.parentNode.parentNode.parentNode.parentNode.rowIndex;
-            $.ajax({
-                url: '/quittl',
-                type: 'POST',
-                data: {_token: CSRF_TOKEN,accid:accid},
-                dataType: 'JSON',
-                success: function (data) {
-                    document.getElementById("tabletl1").deleteRow(rowtable);
-                }
-            });
+        function quittl(tlid,accid){
+            var result = confirm("¿Está seguro que desea eliminar esta línea?");
+            if(result){
+                $('#loadingmodal').modal('show');
+                $.ajax({
+                    url: '/quittl',
+                    type: 'POST',
+                    data: {_token: CSRF_TOKEN,tlid:tlid,accid:accid},
+                    dataType: 'JSON',
+                    success: function (data) {
+                        window.location.href = window.location.href;
+                    }
+                });
+            }
         }
 
-        function edittl(accid,rrow){
-            var rowtable = rrow.rowIndex;
-            var tddata1 = $('#tabletl1 tbody tr:eq('+rowtable+') td:nth-child(2)').text();
-            console.log(document.getElementById("tdrow"+rrow.id+"1"));
+
+        function edittl(tlid){
+            var tr = document.getElementById("tbrow"+tlid);
+            console.log(tlid);
+            
+            if(tr.hasAttribute("selected")){
+                tr.removeAttribute("selected");
+                tr.style.backgroundColor='#f9f9f9';
+                document.getElementById('acctl_f_ini').value = "";
+                document.getElementById('acctl_f_fin').value = "";
+                document.getElementById('acctl_f_corte').value = "";
+                document.getElementById("addline").innerText="Agregar";
+                document.getElementById('acctl_f_ini').min = val_date_fin;
+                document.getElementById('acctl_f_fin').min = val_date_fin;
+                document.getElementById('acctl_f_corte').min = val_date_corte;
+                trselected = false;
+            }else{
+                tr.setAttribute("selected", "1");
+                tr.style.backgroundColor='#c9f2cc';
+                document.getElementById('acctl_f_ini').value = document.getElementById("tdrow"+tlid+"1").innerText;
+                document.getElementById('acctl_f_fin').value = document.getElementById("tdrow"+tlid+"2").innerText;
+                document.getElementById('acctl_f_corte').value = document.getElementById("tdrow"+tlid+"3").innerText;
+                document.getElementById("addline").innerText="Modificar";
+                document.getElementById('acctl_f_ini').min = '0001/01/01';
+                document.getElementById('acctl_f_fin').min = '0001/01/01';
+                document.getElementById('acctl_f_corte').min = '0001/01/01';
+                trselected = tlid;
+            }
+
         }
     </script>
 
