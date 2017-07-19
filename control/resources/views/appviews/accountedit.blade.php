@@ -29,7 +29,7 @@
 
                 @if (Session::has('message'))
                     <div class="alert alert-success alert-dismissible fade in" role="alert">
-                        <button type="button" class="close" data-dismiss="alert" aria-label="Close"><span aria-hidden="true">×</span>
+                        <button type="button" id="alertmsgcta" class="close" data-dismiss="alert" aria-label="Close"><span aria-hidden="true">×</span>
                         </button>
                         <strong>{{ Session::get('message') }}</strong>
                     </div>
@@ -133,8 +133,9 @@
                                                             <th align="left">Aplicación</th>
                                                             <th align="left">Cantidad Instancias</th>
                                                             <th align="left">Cantidad Gigas</th>
-                                                            <th align="left">Estado</th>
+                                                            <th align="left">Ambiente</th>
                                                             <th align="left">Fecha Activación</th>
+                                                            <th align="left">Estado</th>
                                                         </tr>
                                                     </thead>
                                                     <tbody>
@@ -152,6 +153,7 @@
                                                                 <td class="tabledit-data">{{$appcta->appcta_gig}}</td>
                                                                 <td class="tabledit-data">{{$appcta->sale_estado}}</td>
                                                                 <td class="tabledit-data">{{$appcta->appcta_f_act}}</td>
+                                                                <td class="tabledit-data">{{$appcta->appcta_estado}}</td>
                                                             </tr>
                                                         @endforeach
                                                     </tbody>
@@ -220,7 +222,7 @@
                                             </div>
 
                                             <div class="col-md-3 col-sm-3 col-xs-12">
-                                                <button id="addline" type="button" onclick="addtl({{$account->id}})" class="btn btn-success">Agregar</button>
+                                                <button id="addlinedate" type="button" onclick="addtl({{$account->id}})" class="btn btn-success">Agregar</button>
                                             </div>
                                         </div>
                                         <div class="item form-group" >
@@ -293,6 +295,16 @@
     <script src="{{ asset('controlassets/vendors/switchery/dist/switchery.min.js') }}"></script>
     <script type="text/javascript">
 
+        $( function() {
+            $('#alertmsgcta').click(function() {
+                console.log('alertmsgcta button clicked');
+            });
+          
+            setTimeout(function() {
+                $('#alertmsgcta').trigger('click');
+            }, 4e3);
+        });
+
         var trselected = false;
         var val_date_ini = false;
         var val_date_fin = false;
@@ -300,14 +312,14 @@
 
         function addApp(accid){
             var e = document.getElementById("addapps");
-            $('#loadingmodal').modal('show');
+            //$('#loadingmodal').modal('show');
             $.ajax({
                 url: '/addapp',
                 type: 'POST',
                 data: {_token: CSRF_TOKEN,accid:accid,appcta_rfc:document.getElementById('appcta_rfc').value,'appcta_gig':document.getElementById('appcta_gig').value,'app':e.options[e.selectedIndex].value},
                 dataType: 'JSON',
                 success: function (data) {
-                    $("#addappmodal").remove();
+                    $("#addappmodal").modal('hide');
                     window.location.href = window.location.href;
                 }
             });
@@ -418,6 +430,7 @@
                 console.log(data);
                 console.log(textStatus);
                 console.log(jqXHR);
+                $('#loadingmodal').modal('hide');
                 window.location.href = window.location.href;
             },
             onFail: function(jqXHR, textStatus, errorThrown) {
@@ -514,7 +527,7 @@
                     document.getElementById('acctl_f_ini').value = "";
                     document.getElementById('acctl_f_fin').value = "";
                     document.getElementById('acctl_f_corte').value = "";
-                    document.getElementById("addline").innerText="Agregar";
+                    document.getElementById("addlinedate").innerText="Agregar";
                     trselected = false;
                     
                 }
@@ -548,7 +561,7 @@
                 document.getElementById('acctl_f_ini').value = "";
                 document.getElementById('acctl_f_fin').value = "";
                 document.getElementById('acctl_f_corte').value = "";
-                document.getElementById("addline").innerText="Agregar";
+                document.getElementById("addlinedate").innerText="Agregar";
                 document.getElementById('acctl_f_ini').min = val_date_fin;
                 document.getElementById('acctl_f_fin').min = val_date_fin;
                 document.getElementById('acctl_f_corte').min = val_date_corte;
@@ -559,7 +572,7 @@
                 document.getElementById('acctl_f_ini').value = document.getElementById("tdrow"+tlid+"1").innerText;
                 document.getElementById('acctl_f_fin').value = document.getElementById("tdrow"+tlid+"2").innerText;
                 document.getElementById('acctl_f_corte').value = document.getElementById("tdrow"+tlid+"3").innerText;
-                document.getElementById("addline").innerText="Modificar";
+                document.getElementById("addlinedate").innerText="Modificar";
                 document.getElementById('acctl_f_ini').min = '0001/01/01';
                 document.getElementById('acctl_f_fin').min = '0001/01/01';
                 document.getElementById('acctl_f_corte').min = '0001/01/01';

@@ -40,6 +40,7 @@ if (typeof jQuery === 'undefined') {
             deleteButton: true,
             saveButton: true,
             restoreButton: true,
+            appactButton: true,
             buttons: {
                 edit: {
                     class: 'btn btn-sm btn-default',
@@ -62,7 +63,12 @@ if (typeof jQuery === 'undefined') {
                 },
                 confirm: {
                     class: 'btn btn-sm btn-danger',
-                    html: 'Confirm'
+                    html: 'Confirmar'
+                },
+                appact: {
+                    class: 'btn btn-sm btn-danger',
+                    html: 'Activar/Desactivar',
+                    action: 'appact'
                 }
             },
             onDraw: function() { return; },
@@ -155,10 +161,13 @@ if (typeof jQuery === 'undefined') {
                         var saveButton = '';
                         var restoreButton = '';
                         var confirmButton = '';
+                        var appactButton = '';
+
+                        console.log('s');
 
                         // Add toolbar column header if not exists.
                         if ($table.find('th.tabledit-toolbar-column').length === 0) {
-                            $table.find('tr:first').append('<th class="tabledit-toolbar-column"></th>');
+                            $table.find('tr:first').append('<th class="tabledit-toolbar-column">Acciones</th>');
                         }
 
                         // Create edit button.
@@ -182,8 +191,13 @@ if (typeof jQuery === 'undefined') {
                             restoreButton = '<button type="button" class="tabledit-restore-button ' + settings.buttons.restore.class + '" style="display: none; float: none;">' + settings.buttons.restore.html + '</button>';
                         }
 
+                        // Create delete button.
+                        if (settings.appactButton) {
+                            appactButton = '<button type="button" class="tabledit-appact-button ' + settings.buttons.delete.class + '" style="float: none;">' + settings.buttons.appact.html + '</button>';
+                        }
+
                         var toolbar = '<div class="tabledit-toolbar ' + settings.toolbarClass + '" style="text-align: left;">\n\
-                                           <div class="' + settings.groupClass + '" style="float: none;">' + editButton + deleteButton + '</div>\n\
+                                           <div class="' + settings.groupClass + '" style="float: none;">' + appactButton + editButton + deleteButton + '</div>\n\
                                            ' + saveButton + '\n\
                                            ' + confirmButton + '\n\
                                            ' + restoreButton + '\n\
@@ -295,6 +309,54 @@ if (typeof jQuery === 'undefined') {
             }
         };
 
+
+
+        var AppAct = {
+            reset: function(td) {
+                $(td).each(function() {
+                    // Get input element.
+                    var $input = $(this).find('.tabledit-input');
+                    // Get span text.
+                    var text = $(this).find('.tabledit-span').text();
+                    // Set input/select value with span text.
+                    if ($input.is('select')) {
+                        $input.find('option').filter(function() {
+                            return $.trim($(this).text()) === text;
+                        }).attr('selected', true);
+                    } else {
+                        $input.val(text);
+                    }
+                    // Change to view mode.
+                    Mode.view(this);
+                });
+            },
+            submit: function(td) {
+                // Send AJAX request to server.
+                var ajaxResult = ajax(settings.buttons.appact.action);
+
+                if (ajaxResult === false) {
+                    return;
+                }
+
+                $(td).each(function() {
+                    // Get input element.
+                    var $input = $(this).find('.tabledit-input');
+                    // Set span text with input/select new value.
+                    if ($input.is('select')) {
+                        $(this).find('.tabledit-span').text($input.find('option:selected').text());
+                    } else {
+                        $(this).find('.tabledit-span').text($input.val());
+                    }
+                    // Change to view mode.
+                    Mode.view(this);
+                });
+
+                // Set last edited column and row.
+                $lastEditedRow = $(td).parent('tr');
+            }
+        };
+
+
         /**
          * Available actions for delete function, with button as parameter.
          *
@@ -371,6 +433,9 @@ if (typeof jQuery === 'undefined') {
         {
             var serialize = $table.find('.tabledit-input').serialize() + '&action=' + action+'&_token='+$('meta[name="csrf-token"]').attr('content')+'&objid='+$("#obj_id").val();
             
+            console.log(serialize);
+            console.log(action);
+
             var result = settings.onAjax(action, serialize);
 
             if (result === false) {
@@ -414,6 +479,47 @@ if (typeof jQuery === 'undefined') {
 
         settings.onDraw();
 
+
+
+        if (settings.appactButton) {
+
+            /**
+             * Save edited row.
+             *
+             * @param {object} event
+             */
+            $table.on('click', 'button.tabledit-appact-button', function(event) {
+                if (event.handled !== true) {
+                    event.preventDefault();
+
+                    var $button = $(this);
+
+                    // Get current state before reset to view mode.
+                    var activated = $button.hasClass('active');
+
+                    // Change to view mode columns that are in edit mode.
+                    Edit.reset($table.find('td.tabledit-edit-mode'));
+
+                    if (!activated) {
+                        // Change to edit mode for all columns in reverse way.
+                        $($button.parents('tr').find('td.tabledit-view-mode').get().reverse()).each(function() {
+                            Mode.edit(this);
+                        });
+                    }
+
+                    // Submit and update all columns.
+                    $('#loadingmodal').modal('show');
+                    AppAct.submit($(this).parents('tr').find('td.tabledit-edit-mode'));
+
+                    
+
+                    event.handled = true;
+                }
+            });
+        }
+
+
+
         if (settings.deleteButton) {
             /**
              * Delete one row.
@@ -450,6 +556,7 @@ if (typeof jQuery === 'undefined') {
 
                     var $td = $(this).parents('td');
 
+                    $('#loadingmodal').modal('show');
                     Delete.submit($td);
 
                     event.handled = true;

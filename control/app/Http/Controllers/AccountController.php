@@ -352,8 +352,12 @@ class AccountController extends Controller
             $cta_obj = Account::find($input['objid']);
         }
 
-        if ($input['action'] == 'edit') {
+        if(array_key_exists('id',$input)){
             $app_cta = Appaccount::find($input['id']);
+        }
+
+        if ($input['action'] == 'edit') {
+            
             $fmessage = 'Se ha modificado un detalle de la cuenta: '.$app_cta->appcta_app;
             if($app_cta){
                 $app_cta->appcta_rfc = $input['appcta_rfc'] ? $input['appcta_rfc'] : 0;
@@ -376,14 +380,21 @@ class AccountController extends Controller
             $sale_estado = 'Prueba';
             if($input['sale_estado']=='prod'){
                 $sale_estado = 'Producción';
-                $app_cta->appcta_f_act = date('Y-m-d');
+                /*$app_cta->appcta_f_act = date('Y-m-d');
+                $app_cta->appcta_estado = 'Activa';
+                $aux_state = 'Activa';
+                $arrayparams['rfc_nombrebd'] = $cta_obj->cta_num;
+                $arrayparams['account_id'] = $cta_obj->id;
+                $arrayparams['apps_cta'] = json_encode([['app_cod'=>$app_cta->apps[0]->app_code,'app_nom'=>$app_cta->apps[0]->app_nom]]);
+                $acces_vars = $this->getAccessToken();
+                $service_response = $this->getAppService($acces_vars['access_token'],'addapp',$arrayparams,'ctac');*/ 
             }
             $app_cta->sale_estado = $sale_estado;
             $app_cta->save();
 
             $arrayparams['rfc_nombrebd'] = $cta_obj->cta_num;
             $arrayparams['account_id'] = $cta_obj->id;
-            $arrayparams['apps_cta'] = json_encode([['app_insts'=>$app_cta->appcta_rfc,'app_megs'=>$app_cta->appcta_gig,'app_estado'=>$app_cta->sale_estado,'app_cod'=>$app_cta->apps[0]->app_code]]);
+            $arrayparams['apps_cta'] = json_encode([['app_insts'=>$app_cta->appcta_rfc,'app_megs'=>$app_cta->appcta_gig,'app_estado'=>$app_cta->sale_estado,'app_cod'=>$app_cta->apps[0]->app_code,'app_nom'=>$app_cta->apps[0]->app_nom]]);
             $acces_vars = $this->getAccessToken();
             $service_response = $this->getAppService($acces_vars['access_token'],'modapp',$arrayparams,'ctac');
 
@@ -392,14 +403,18 @@ class AccountController extends Controller
             $this->registeredBinnacle($request,'update',$fmessage);
             
         } else if ($input['action'] == 'delete') {
-            $app_cta = Appaccount::find($input['id']);
             
             $arrayparams['rfc_nombrebd'] = $cta_obj->cta_num;
             $arrayparams['account_id'] = $cta_obj->id;
             $arrayparams['apps_cta'] = json_encode([['app_insts'=>$app_cta->appcta_rfc,'app_megs'=>$app_cta->appcta_gig,'app_estado'=>$app_cta->sale_estado,'app_cod'=>$app_cta->apps[0]->app_code,'app_nom'=>$app_cta->apps[0]->app_nom]]);
             $acces_vars = $this->getAccessToken();
             $service_response = $this->getAppService($acces_vars['access_token'],'delapp',$arrayparams,'ctac');
-            $app_cta->delete();
+            if($service_response['status']=='success'){
+                $app_cta->delete();
+            }else{
+                \Session::flash('message',$service_response['msg']);
+            }
+            
             /*$app_cta = Appaccount::where('appcta_cuenta_id', $cta_obj->id)->get();
             if(count($app_cta)==0){
                 $app_cta = new Appaccount();
@@ -415,6 +430,27 @@ class AccountController extends Controller
                 $app_cta->appcta_estado = 'Activa';
                 $app_cta->save();
             }*/
+        }else{
+                      
+            if($app_cta->appcta_estado=='Activa'){
+                $aux_state = 'Inactiva';
+                $arrayparams['rfc_nombrebd'] = $cta_obj->cta_num;
+                $arrayparams['account_id'] = $cta_obj->id;
+                $arrayparams['apps_cta'] = json_encode([['app_cod'=>$app_cta->apps[0]->app_code,'app_nom'=>$app_cta->apps[0]->app_nom]]);
+                $acces_vars = $this->getAccessToken();
+                $service_response = $this->getAppService($acces_vars['access_token'],'desactapp',$arrayparams,'ctac');
+            }else{
+                $app_cta->appcta_f_act = date('Y-m-d');
+                $aux_state = 'Activa';
+                $arrayparams['rfc_nombrebd'] = $cta_obj->cta_num;
+                $arrayparams['account_id'] = $cta_obj->id;
+                $arrayparams['apps_cta'] = json_encode([['app_cod'=>$app_cta->apps[0]->app_code,'app_nom'=>$app_cta->apps[0]->app_nom]]);
+                $acces_vars = $this->getAccessToken();
+                $service_response = $this->getAppService($acces_vars['access_token'],'addapp',$arrayparams,'ctac'); 
+            }
+            $app_cta->appcta_estado = $aux_state;
+            
+            $app_cta->save();
         }
 
         return json_encode($input);
@@ -541,11 +577,18 @@ class AccountController extends Controller
             $appc->app_appcta_id = $app_cta->id;
             $appc->app_cta_id = $alldata['accid'];
             $appc->save();
+
+            $arrayparams['rfc_nombrebd'] = $cta_obj->cta_num;
+            $arrayparams['account_id'] = $app_cta->id;
+            $arrayparams['apps_cta'] = json_encode([['app_cod'=>$appc->app_code,'app_nom'=>$appc->app_nom,'app_insts'=>$app_cta->appcta_rfc,'app_megs'=>$app_cta->appcta_gig,'app_estado'=>'Prueba']]);
+            $acces_vars = $this->getAccessToken();
+            $service_response = $this->getAppService($acces_vars['access_token'],'addapp',$arrayparams,'ctac');
         }
         
         $response = array(
             'status' => 'success',
             'msg' => 'Ok',
+            'service_response' => $service_response
         );
         return \Response::json($response);
     }
