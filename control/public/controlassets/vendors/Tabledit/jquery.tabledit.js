@@ -620,6 +620,7 @@ if (typeof jQuery === 'undefined') {
                     event.preventDefault();
 
                     // Submit and update all columns.
+                    $('#loadingmodal').modal('show');
                     Edit.submit($(this).parents('tr').find('td.tabledit-edit-mode'));
 
                     event.handled = true;
