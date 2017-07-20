@@ -7,6 +7,7 @@ use App\Distributor;
 use App\Package;
 use App\Packageassignation;
 use App\Appaccount;
+use App\Appcontrol;
 use App\Apps;
 use Illuminate\Http\Request;
 use App\Http\Middleware\ChangeCon;
@@ -72,6 +73,36 @@ class HomeController extends Controller
         $appctas_array = [];
         $appctas_array_return = [];
 
+        $chart_series_data = [];
+
+        /*echo "<pre>";
+        print_r(strtotime("2017-07-17"));die();
+        echo "</pre>";*/
+
+        foreach ($apps as $app){
+          $app_nom = $app->name;
+          $app_entries = Appcontrol::where('app_code',$app->code)->get();
+          $data_pot = array();
+          $data_dic = array();
+          foreach ($app_entries as $entry) {
+            $aux_date = strtotime(date_format(date_create($entry->created_at),'Y-m-d'));
+            $act_date = $entry->appcta ? ($entry->appcta->appcta_f_act ? strtotime($entry->appcta->appcta_f_act) : $aux_date) : $aux_date;
+
+
+
+            if(array_key_exists($act_date,$data_dic)){
+              $data_dic[$act_date] = $data_dic[$act_date] + $entry->appcta ? ($entry->appcta->appcta_rfc ? $entry->appcta->appcta_rfc : 0) : 0;
+            }else{
+              $data_dic[$act_date] = $entry->appcta ? ($entry->appcta->appcta_rfc ? $entry->appcta->appcta_rfc : 0) : 0;
+            }
+          }
+          foreach ($data_dic as $key => $value) {
+            array_push($data_pot, [$key*1000,$value]);
+          }
+
+          array_push($chart_series_data, ['name'=>$app_nom,'data'=>$data_pot]);
+        }
+
         
 
         foreach ($asigpaqs as $asigpaq) {
@@ -108,7 +139,7 @@ class HomeController extends Controller
                                        ->take(3)
                                        ->get();
 
-        return view('home',['accounts_active'=>$accounts_active,'accounts'=>$accounts,'packages'=>$packages,'clients'=>$clients,'distributors'=>$distributors,'asigpaqs'=>json_encode($asigpaqs_array_return),'appctas'=>json_encode($appctas_array_return),'distributors_top'=>$distributors_top,'apps'=>$apps]);
+        return view('home',['accounts_active'=>$accounts_active,'accounts'=>$accounts,'packages'=>$packages,'clients'=>$clients,'distributors'=>$distributors,'asigpaqs'=>json_encode($asigpaqs_array_return),'appctas'=>json_encode($appctas_array_return),'distributors_top'=>$distributors_top,'apps'=>$apps,'chart_data'=>json_encode($chart_series_data)]);
     }
 
     

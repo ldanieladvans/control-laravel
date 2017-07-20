@@ -435,7 +435,9 @@ class AccountController extends Controller
             $acces_vars = $this->getAccessToken();
             $service_response = $this->getAppService($acces_vars['access_token'],'delapp',$arrayparams,'ctac');
             if($service_response['status']=='success'){
+                \DB::table('app')->where('app_appcta_id', $app_cta->id)->delete(); 
                 $app_cta->delete();
+
             }else{
                 \Session::flash('message',$service_response['msg']);
             }

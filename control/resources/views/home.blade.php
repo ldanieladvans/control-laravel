@@ -57,6 +57,7 @@
 
             <input type="hidden" name="asigpaqs" id="asigpaqs" value="{{$asigpaqs}}"/>
             <input type="hidden" name="appctas" id="appctas" value="{{$appctas}}"/>
+            <input type="hidden" name="chartdata" id="chartdata" value="{{$chart_data}}"/>
 
             <div class="row">
               <div class="col-md-12">
@@ -70,9 +71,10 @@
                   </div>
                   <div class="x_content">
                     <div class="col-md-12 col-sm-12 col-xs-12">
-                      <div class="demo-container" style="height:380px">
+                      <!--<div class="demo-container" style="height:380px">
                         <div id="chart_plot_02" class="demo-placeholder"></div>
-                      </div>
+                      </div>-->
+                      <div id="container" style="min-width: 310px; height: 400px; margin: 0 auto"></div>
 
                     </div>
 
@@ -136,6 +138,83 @@
     <script src="{{ asset('controlassets/vendors/bootstrap-daterangepicker/daterangepicker.js') }}"></script>
     <!-- Custom Theme Scripts -->
     <script src="{{ asset('controlassets/build/js/custom.js') }}"></script>
+    <!-- Highcharts -->
+    <script src="https://code.highcharts.com/highcharts.js"></script>
+    <script src="https://code.highcharts.com/modules/exporting.js"></script>
+    <script type="text/javascript">
+
+     //console.log(new Date('2017-07-17').getTime());
+
+     chart_data = jQuery.parseJSON(document.getElementById('chartdata').value);
+
+     /*console.log(chart_data);
+
+     console.log(document.getElementById('chartdata').value);*/
+
+      Highcharts.setOptions({
+        lang: {
+        contextButtonTitle: "Menú contextual",
+        decimalPoint: ".",
+        downloadJPEG: "Descargar imagen JPEG",
+        downloadPDF: "Descargar documento PDF ",
+        downloadPNG: "Descargar imagen PNG",
+        downloadSVG: "Descargar SVG",
+        drillUpText: "Regresar a {series.name}",
+        loading: "Cargando...",
+        months: [ "Enero" , "Febrero" , "Marzo" , "Abril" , "Mayo" , "Junio" , "Julio" , "Agosto" , "Septiembre" , "Octubre" , "Noviembre" , "Diciembre"],
+        noData: "Sin datos para mostrar",
+        numericSymbolMagnitude: 1000,
+        numericSymbols: [ "k" , "M" , "G" , "T" , "P" , "E"],
+        printChart: "Imprimir gráfico",
+        resetZoom: "Resetear zoom",
+        resetZoomTitle: "Resetear zoom nivel 1:1",
+        shortMonths: [ "Ene" , "Feb" , "Mar" , "Abr" , "May" , "Jun" , "Jul" , "Ago" , "Sep" , "Oct" , "Nov" , "Dic"],
+        shortWeekdays: undefined,
+        thousandsSep: " ",
+        weekdays: ["Domingo", "Lunes", "Martes", "Miércoles", "Jueves", "Viernes", "Sábado"]
+        }
+      });
+
+      Highcharts.chart('container', {
+    chart: {
+        type: 'spline'
+    },
+    title: {
+        text: 'Asignaciones a cuentas'
+    },
+    subtitle: {
+        text: ''
+    },
+    xAxis: {
+        type: 'datetime',
+
+        title: {
+            text: 'Fecha'
+        }
+    },
+    yAxis: {
+        title: {
+            text: 'Cantidad'
+        },
+        min: 0
+    },
+    tooltip: {
+        headerFormat: '<b>{series.name}</b><br>',
+        pointFormat: '{point.x:%e. %b}: {point.y:.2f} instancias'
+    },
+
+    plotOptions: {
+        spline: {
+            marker: {
+                enabled: true
+            }
+        }
+    },
+
+    series: chart_data
+    });
+   
+    </script>
 @endsection
 
 

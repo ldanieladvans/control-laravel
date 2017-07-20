@@ -9,7 +9,7 @@ class Appcontrol extends Model
     protected $table = 'app';
 
     protected $fillable = [
-        'app_appcta_id', 'app_nom', 'app_code'
+        'app_appcta_id', 'app_nom', 'app_code'.'app_appcta_id','app_cta_id'
     ];
 
     //Uncomment for multibd
