@@ -45,7 +45,7 @@
                         <div class="item form-group">
                             <label class="control-label col-md-1 col-sm-1 col-xs-12">Cliente*</label>
                             <div class="col-md-8 col-sm-8 col-xs-12">
-                                <select class="js-example-basic-single js-states form-control" name="cta_cliente_id" id="cta_cliente_id" required>
+                                <select class="js-example-basic-single js-states form-control" name="cta_cliente_id" id="cta_cliente_id" disabled>
                                     <option value="">Seleccione una opción ...</option>
                                     @foreach($clients as $client)
                                         @if ($client->id == $account->cta_cliente_id)
@@ -69,7 +69,7 @@
                         <div class="item form-group">
                             <label class="control-label col-md-1 col-sm-1 col-xs-12">Distribuidor*</label>
                             <div class="col-md-8 col-sm-8 col-xs-12">
-                                <select class="js-example-basic-single js-states form-control" name="cta_distrib_id" id="cta_distrib_id" required>
+                                <select class="js-example-basic-single js-states form-control" name="cta_distrib_id" id="cta_distrib_id" disabled>
                                     <option value="">Seleccione una opción ...</option>
                                     @foreach($distributors as $distributor)
                                         @if ($distributor->id == $account->cta_distrib_id)

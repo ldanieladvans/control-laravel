@@ -17,7 +17,7 @@ var validator = (function($){
     message = {
         invalid         : 'invalid input',
         checked         : 'must be checked',
-        empty           : 'Este campo es requerido',
+        empty           : 'Campo requerido',
         min             : 'input is too short',
         max             : 'input is too long',
         number_min      : 'Muy Bajo',

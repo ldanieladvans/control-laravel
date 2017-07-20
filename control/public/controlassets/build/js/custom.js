@@ -586,15 +586,7 @@ if (typeof NProgress != 'undefined') {
 			
 			$.plot( $("#chart_plot_02"), 
 			[{ 
-				label: "Asignaciones a Distribuidores", 
-				data: chart_asigpaqs_show, 
-				lines: { 
-					fillColor: "rgba(150, 202, 89, 0.12)" 
-				}, 
-				points: { 
-					fillColor: "#fff" } 
-			},{ 
-				label: "Asignaciones a Clientes", 
+				label: "Aplicaciones asignadas", 
 				data: chart_appctas_show, 
 				lines: { 
 					fillColor: "rgba(150, 202, 89, 0.12)" 

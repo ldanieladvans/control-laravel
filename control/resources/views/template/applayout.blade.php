@@ -247,7 +247,7 @@
 				              <ul class="nav navbar-nav navbar-right">
 				                <li class="">
 				                  <a href="javascript:;" class="user-profile dropdown-toggle" data-toggle="dropdown" aria-expanded="false">
-				                    <img src="{{ Auth::user()->usrc_pic ? asset('storage/'.Auth::user()->usrc_pic) : asset('default_avatar_male.jpg')}}" alt="">{{ Auth::user()->name }}
+				                    BIENVENIDO <img src="{{ Auth::user()->usrc_pic ? asset('storage/'.Auth::user()->usrc_pic) : asset('default_avatar_male.jpg')}}" alt="">{{ Auth::user()->name }}
 				                    <span class=" fa fa-angle-down"></span>
 				                  </a>
 				                  <ul class="dropdown-menu dropdown-usermenu pull-right">

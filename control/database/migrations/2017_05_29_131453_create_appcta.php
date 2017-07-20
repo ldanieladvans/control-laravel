@@ -20,6 +20,7 @@ class CreateAppcta extends Migration
             $table->string('appcta_app',15);
             $table->integer('appcta_cuenta_id')->unsigned()->nullable();
             $table->integer('appcta_paq_id')->unsigned()->nullable();
+            $table->integer('appcta_distrib_id')->unsigned()->nullable();
             $table->float('appcta_gig')->nullable();
             $table->integer('appcta_rfc')->nullable();
             $table->date('appcta_f_vent')->nullable();

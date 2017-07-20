@@ -85,10 +85,19 @@
 	                    <div class="item form-group">
 		                	<label class="control-label col-md-1 col-sm-1 col-xs-12">Tipo: </label>
 		                    <div class="col-md-3 col-sm-3 col-xs-12">
-		                        <select class="select2_single form-control col-md-7 col-xs-12" name="cliente_tipo">
+		                        <select class="js-example-basic-single js-states form-control" name="cliente_tipo" id="cliente_tipo">
 			                        <option value="">Seleccione una opción ...</option>
 			                        <option value="moral">Moral</option>
 	                            	<option value="fisica">Física</option>
+		                        </select>
+		                  	</div>
+		                  	<label class="control-label col-md-2 col-sm-2 col-xs-12">Distribuidor Asociado: </label>
+		                    <div class="col-md-3 col-sm-3 col-xs-12">
+		                        <select class="js-example-basic-single js-states form-control" name="cliente_distrib_id" id="cliente_distrib_id">
+			                        <option value="">Seleccione una opción ...</option>
+			                        @foreach($distributors as $dist)
+		                            	<option value="{{ $dist->id }}">{{ $dist->distrib_nom }} - {{ $dist->distrib_rfc }}</option>
+		                            @endforeach
 		                        </select>
 		                  	</div>
 		                </div>
@@ -378,6 +387,16 @@
 		});
 
 		$("#cliente_dom_id").select2({
+		  	placeholder: "Selecciona el domicilio",
+		  	allowClear: true
+		});
+
+		$("#cliente_tipo").select2({
+		  	placeholder: "Selecciona el domicilio",
+		  	allowClear: true
+		});
+
+		$("#cliente_distrib_id").select2({
 		  	placeholder: "Selecciona el domicilio",
 		  	allowClear: true
 		});

@@ -116,13 +116,15 @@ class AccountController extends Controller
      */
     public function update(Request $request, Account $account)
     {
-        $account->cta_num = $request->cta_num;
-        $account->cta_nomservd = $request->cta_nomservd;
-        $account->cta_fecha = $request->cta_fecha;
-        $account->cta_nom_bd = $request->cta_nom_bd;
-        $account->cta_cliente_id = $request->cta_cliente_id;
-        $account->cta_distrib_id = $request->cta_distrib_id;
-        $account->cta_estado = $request->cta_estado;
+        //$account->cta_num = $request->cta_num;
+        //$account->cta_nomservd = $request->cta_nomservd;
+        //$account->cta_fecha = $request->cta_fecha;
+        //$account->cta_nom_bd = $request->cta_nom_bd;
+        //$account->cta_cliente_id = $request->cta_cliente_id;
+        //$account->cta_distrib_id = $request->cta_distrib_id;
+        //$account->cta_estado = $request->cta_estado;
+        $account->cta_periodicity = $request->cta_periodicity;
+        $account->cta_recursive = $request->cta_periodicity;
         $account->save();
         $fmessage = 'Se ha actualizado la cuenta: '.$request->cta_num;
         \Session::flash('message',$fmessage);
@@ -370,6 +372,7 @@ class AccountController extends Controller
                 $app_cta->appcta_rfc = $input['appcta_rfc'] ? $input['appcta_rfc'] : 0;
                 $app_cta->appcta_gig = $input['appcta_gig'] ? $input['appcta_gig'] : 0;
                 $app_cta->appcta_f_vent = date('Y-m-d');
+                $app_cta->appcta_distrib_id = $cta_obj->cta_distrib_id;
                 $fecha = date_create(date('Y-m-d'));
                 $aux_months = $cta_obj ? $cta_obj->cta_periodicity : '1';
                 date_add($fecha, date_interval_create_from_date_string($aux_months.' months'));
@@ -559,6 +562,7 @@ class AccountController extends Controller
             $app_cta->appcta_rfc = $alldata['appcta_rfc'] ? $alldata['appcta_rfc'] : 0;
             $app_cta->appcta_gig = $alldata['appcta_gig'] ? $alldata['appcta_gig'] : 0;
             $app_cta->appcta_f_vent = date('Y-m-d');
+            $app_cta->appcta_distrib_id = $cta_obj->cta_distrib_id;
             $fecha = date_create(date('Y-m-d'));
             $aux_months = $cta_obj ? $cta_obj->cta_periodicity : '1';
             date_add($fecha, date_interval_create_from_date_string($aux_months.' months'));

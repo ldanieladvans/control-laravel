@@ -10,7 +10,7 @@ class Appaccount extends Model
     protected $table = 'appcta';
 
     protected $fillable = [
-        'app_nom', 'appcta_cuenta_id', 'appcta_paq_id', 'appcta_gig', 'appcta_rfc', 'appcta_f_vent', 'appcta_f_act', 'appcta_f_fin', 'appcta_f_caduc', 'appcta_activo', 'appcta_estado', 'sale_estado'
+        'app_nom', 'appcta_cuenta_id', 'appcta_paq_id', 'appcta_gig', 'appcta_rfc', 'appcta_f_vent', 'appcta_f_act', 'appcta_f_fin', 'appcta_f_caduc', 'appcta_activo', 'appcta_estado', 'sale_estado','appcta_distrib_id'
     ];
 
     //Uncomment for multibd
@@ -28,6 +28,11 @@ class Appaccount extends Model
     public function package()
     {
         return $this->belongsTo('App\Package','appcta_paq_id');
+    }
+
+    public function distributor()
+    {
+        return $this->belongsTo('App\Distributor','appcta_distrib_id');
     }
 
     public function apps()

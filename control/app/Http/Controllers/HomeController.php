@@ -7,6 +7,7 @@ use App\Distributor;
 use App\Package;
 use App\Packageassignation;
 use App\Appaccount;
+use App\Apps;
 use Illuminate\Http\Request;
 use App\Http\Middleware\ChangeCon;
 use Illuminate\Support\Facades\DB;
@@ -41,20 +42,38 @@ class HomeController extends Controller
      */
     public function index(Request $request)
     {
-        $clients = Client::all();
-        $distributors = Distributor::all();
-        $packages = Package::all();
-        $accounts = Account::all();
+        $logued_user = Auth::user();
+        if($logued_user->usrc_admin || $logued_user->usrc_super){
+          $clients = Client::all();
+          $distributors = Distributor::all();
+          $packages = Package::all();
+          $accounts = Account::all();
+          $asigpaqs = Packageassignation::where('asigpaq_f_vent','>=',mktime(0, 0, 0, date("m")-1, date("d"),date("Y")))
+                                      ->where('asigpaq_f_vent','<=',date("Y-m-d"))->get();
+          $appctas = Appaccount::where('appcta_f_vent','>=',mktime(0, 0, 0, date("m")-1, date("d"),date("Y")))
+                                      ->where('appcta_f_vent','<=',date("Y-m-d"))->get();
+          $accounts_active = Account::where('cta_estado','=','Activa')->get();
+        }else{
+          $clients = Client::where('cliente_distrib_id',$logued_user->usrc_distrib_id)->get();
+          $distributors = [Distributor::find($logued_user->usrc_distrib_id)];
+          $packages = Package::all();
+          $accounts = Account::where('cta_distrib_id',$logued_user->usrc_distrib_id)->get();
+          $asigpaqs = Packageassignation::where('asigpaq_f_vent','>=',mktime(0, 0, 0, date("m")-1, date("d"),date("Y")))
+                                      ->where('asigpaq_f_vent','<=',date("Y-m-d"))->where('asigpaq_distrib_id',$logued_user->usrc_distrib_id)->get();
+          $appctas = Appaccount::where('appcta_f_vent','>=',mktime(0, 0, 0, date("m")-1, date("d"),date("Y")))
+                                      ->where('appcta_f_vent','<=',date("Y-m-d"))->where('appcta_distrib_id',$logued_user->usrc_distrib_id)->get();
+          $accounts_active = Account::where('cta_estado','=','Activa')->where('cta_distrib_id',$logued_user->usrc_distrib_id)->get();        
+        }
+
+        $apps = Apps::all();
+        
         $asigpaqs_array = [];
         $asigpaqs_array_return = [];
         $appctas_array = [];
         $appctas_array_return = [];
 
-        $asigpaqs = Packageassignation::where('asigpaq_f_vent','>=',mktime(0, 0, 0, date("m")-1, date("d"),date("Y")))
-                                      ->where('asigpaq_f_vent','<=',date("Y-m-d"))->get();
-        /*echo "<pre>";
-        print_r($asigpaqs);die();
-        echo "</pre>";*/
+        
+
         foreach ($asigpaqs as $asigpaq) {
             if(array_key_exists(((string)$asigpaq->asigpaq_f_vent),$asigpaqs_array)){
                 $asigpaqs_array[((string)$asigpaq->asigpaq_f_vent)] = $asigpaqs_array[((string)$asigpaq->asigpaq_f_vent)] + 1;
@@ -68,8 +87,7 @@ class HomeController extends Controller
         }
 
 
-        $appctas = Appaccount::where('appcta_f_vent','>=',mktime(0, 0, 0, date("m")-1, date("d"),date("Y")))
-                                      ->where('appcta_f_vent','<=',date("Y-m-d"))->get();
+        
         foreach ($appctas as $appcta) {
             if(array_key_exists(((string)$appcta->appcta_f_vent),$appctas_array)){
                 $appctas_array[((string)$appcta->appcta_f_vent)] = $appctas_array[((string)$appcta->appcta_f_vent)] + 1;
@@ -83,14 +101,14 @@ class HomeController extends Controller
         }
 
 
-        $accounts_active = Account::where('cta_estado','=','Activa')->get();
+        
 
         $distributors_top = Distributor::where('distrib_activo', 1)
                                        ->orderBy('distrib_limitrfc', 'desc')
                                        ->take(3)
                                        ->get();
 
-        return view('home',['accounts_active'=>$accounts_active,'accounts'=>$accounts,'packages'=>$packages,'clients'=>$clients,'distributors'=>$distributors,'asigpaqs'=>json_encode($asigpaqs_array_return),'appctas'=>json_encode($appctas_array_return),'distributors_top'=>$distributors_top]);
+        return view('home',['accounts_active'=>$accounts_active,'accounts'=>$accounts,'packages'=>$packages,'clients'=>$clients,'distributors'=>$distributors,'asigpaqs'=>json_encode($asigpaqs_array_return),'appctas'=>json_encode($appctas_array_return),'distributors_top'=>$distributors_top,'apps'=>$apps]);
     }
 
     

@@ -18,6 +18,7 @@ class CreateCliente extends Migration
             $table->timestamps();
             //Added
             $table->integer('cliente_refer_id')->unsigned()->nullable();
+            $table->integer('cliente_distrib_id')->unsigned()->nullable();
             $table->string('cliente_nom',80);
             $table->string('cliente_sexo',15)->nullable();
             $table->time('cliente_f_nac')->nullable();

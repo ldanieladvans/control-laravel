@@ -10,6 +10,7 @@ use Illuminate\Support\Facades\Validator;
 use App\Munic;
 use App\Cpmex;
 use App\Country;
+use App\Distributor;
 
 class ClientController extends Controller
 {
@@ -45,7 +46,8 @@ class ClientController extends Controller
         $references = Reference::all();
         $domiciles = Domicile::all();
         $countries = Country::all();
-        return view('appviews.clientcreate',['references'=>$references,'domiciles'=>$domiciles,'countries'=>$countries]);
+        $distributors = Distributor::all();
+        return view('appviews.clientcreate',['references'=>$references,'domiciles'=>$domiciles,'countries'=>$countries,'distributors'=>$distributors]);
     }
 
     /**
@@ -140,6 +142,11 @@ class ClientController extends Controller
         $client_vals['cliente_rfc'] = $alldata['cliente_rfc'];
         $client_vals['cliente_nac'] = $alldata['cliente_nac'];
         $client_vals['cliente_tipo'] = $alldata['cliente_tipo'];
+        if(array_key_exists('cliente_distrib_id',$alldata)){
+            if ($alldata['cliente_distrib_id']!=''){
+                $client_vals['cliente_distrib_id'] = $alldata['cliente_distrib_id'];
+            }
+        }
         $client = new Client($client_vals);
         if ($domicile_id != "null"){
             $client->cliente_dom_id = $domicile_id;
@@ -176,7 +183,8 @@ class ClientController extends Controller
         $references = Reference::all();
         $domiciles = Domicile::all();
         $countries = Country::all();
-        return view('appviews.clientedit',['client'=>$client,'references'=>$references,'domiciles'=>$domiciles,'countries'=>$countries]);
+        $distributors = Distributor::all();
+        return view('appviews.clientedit',['client'=>$client,'references'=>$references,'domiciles'=>$domiciles,'countries'=>$countries,'distributors'=>$distributors]);
     }
 
     /**
@@ -254,6 +262,11 @@ class ClientController extends Controller
         $client->cliente_rfc = $alldata['cliente_rfc'];
         $client->cliente_nac = $alldata['cliente_nac'];
         $client->cliente_tipo = $alldata['cliente_tipo'];
+        if(array_key_exists('cliente_distrib_id',$alldata)){
+            if ($alldata['cliente_distrib_id']!=''){
+                $client->cliente_distrib_id = $alldata['cliente_distrib_id'];
+            }
+        }
         if ($domicile_id != "null"){
             $client->cliente_dom_id = $domicile_id;
         }

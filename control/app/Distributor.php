@@ -44,4 +44,14 @@ class Distributor extends Model
     {
         return $this->belongsTo('App\Domicile','distrib_dom_id');
     }
+
+    public function clients()
+    {
+        return $this->hasMany('App\Client','cliente_distrib_id');
+    }
+
+    public function appctas()
+    {
+        return $this->hasMany('App\Appaccount','appcta_distrib_id');
+    }
 }

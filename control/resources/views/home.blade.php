@@ -48,8 +48,8 @@
               <div class="animated flipInY col-lg-3 col-md-3 col-sm-6 col-xs-12">
                 <div class="tile-stats">
                   <div class="icon"></br><i class="fa fa-suitcase"></i></div>
-                  <div class="count" style="color: #072542 ">{{count($packages)}}</div>
-                  <h3>Paquetes</h3>
+                  <div class="count" style="color: #072542 ">{{count($apps)}}</div>
+                  <h3>Aplicaciones Disponibles</h3>
                   </br>
                 </div>
               </div>
@@ -69,14 +69,14 @@
                     <div class="clearfix"></div>
                   </div>
                   <div class="x_content">
-                    <div class="col-md-9 col-sm-12 col-xs-12">
-                      <div class="demo-container" style="height:280px">
+                    <div class="col-md-12 col-sm-12 col-xs-12">
+                      <div class="demo-container" style="height:380px">
                         <div id="chart_plot_02" class="demo-placeholder"></div>
                       </div>
 
                     </div>
 
-                    <div class="col-md-3 col-sm-12 col-xs-12">
+                    <!--<div class="col-md-3 col-sm-12 col-xs-12">
                       <div>
                         <div class="x_title">
                           <h2>Top 3 Distribuidores (RFCs)</h2>
@@ -110,7 +110,7 @@
 
                         </ul>
                       </div>
-                    </div>
+                    </div>-->
 
                   </div>
                 </div>
