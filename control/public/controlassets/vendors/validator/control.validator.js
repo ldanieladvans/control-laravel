@@ -15,7 +15,7 @@ var validator = (function($){
     /* general text messages
     */
     message = {
-        invalid         : 'invalid input',
+        invalid         : 'campo inválido',
         checked         : 'must be checked',
         empty           : 'Campo requerido',
         min             : 'input is too short',
@@ -155,16 +155,22 @@ var validator = (function($){
 
             
             if( validateRfc ){
-
+                console.log(validateRfc);
                 var regex, jsRegex;
-                regex = /^[A-ZÑ&]{3,4}([0-9]{2})([0-1][0-9])([0-3][0-9])[A-Z0-9][A-Z0-9][0-9A]$/u;
+                regex = /^[A-ZÑ&]{3}([0-9]{2})([0-1][0-9])([0-3][0-9])[A-Z0-9][A-Z0-9][0-9A]$/u;
+                if(validateRfc=='fisica'){
+                    regex = /^[A-ZÑ&]{4}([0-9]{2})([0-1][0-9])([0-3][0-9])[A-Z0-9][A-Z0-9][0-9A]$/u;
+                }
 
                 try{
                     jsRegex = new RegExp(regex).test(a);
-                    if( a && !jsRegex )
+                    if( a && !jsRegex ){
+                        alertTxt = 'RFC inválido';
                         return false;
+                    }
                 }
                 catch(err){
+
                     console.log(err, field, 'regex is invalid');
                     return false;
                 }
@@ -396,9 +402,12 @@ var validator = (function($){
         lengthRange     = data['validateLengthRange'] ? (data['validateLengthRange']+'').split(',') : [1];
         lengthLimit     = data['validateLength'] ? (data['validateLength']+'').split(',') : false;
         minmax          = data['validateMinmax'] ? (data['validateMinmax']+'').split(',') : ''; // for type 'number', defines the minimum and/or maximum for the value as a number.
-        validateRfc     = data['validateRfc'] == '1' ? true : false;
+        //validateRfc     = data['validateRfc'] == '1' ? true : false;
+        validateRfc     = false;
+        if(data['validateRfc']){
+            validateRfc     = document.getElementById("cliente_rfc").getAttribute("data-validate-rfc");
+        }
 
-        
 
         data.valid = tests.hasValue(data.val);
 

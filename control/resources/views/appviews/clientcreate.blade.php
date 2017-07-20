@@ -64,7 +64,7 @@
 
 	                    <div class="item form-group {{ $errors->has('cliente_rfc') ? 'bad' : '' }}">	                    
 		                    <div class="col-md-9 col-sm-9 col-xs-12">
-		                        <input id="cliente_rfc" class="form-control has-feedback-left" name="cliente_rfc" placeholder="RFC *" required="required" type="text"  value="{{ old('cliente_rfc') }}" data-validate-rfc="1" title="RFC">
+		                        <input id="cliente_rfc" class="form-control has-feedback-left" name="cliente_rfc" placeholder="RFC *" required="required" type="text"  value="{{ old('cliente_rfc') }}" data-validate-rfc="fisica" title="RFC">
 		                        <span class="fa fa-institution form-control-feedback left" aria-hidden="true"></span>
 		                    </div>
 	                    
@@ -88,7 +88,7 @@
 		                        <select class="js-example-basic-single js-states form-control" name="cliente_tipo" id="cliente_tipo">
 			                        <option value="">Seleccione una opción ...</option>
 			                        <option value="moral">Moral</option>
-	                            	<option value="fisica">Física</option>
+	                            	<option value="fisica" selected>Física</option>
 		                        </select>
 		                  	</div>
 		                  	<label class="control-label col-md-2 col-sm-2 col-xs-12">Distribuidor Asociado: </label>
@@ -400,6 +400,11 @@
 		  	placeholder: "Selecciona el domicilio",
 		  	allowClear: true
 		});
+
+		$("#cliente_tipo").on('change', function(){
+    		document.getElementById("cliente_rfc").setAttribute("data-validate-rfc", this.value);
+    		document.getElementById("cliente_rfc").focus();
+    	});
 
 		document.getElementById('dom_search_cp').onkeypress = function(e){
 		    if (!e) e = window.event;

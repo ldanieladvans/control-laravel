@@ -14,6 +14,7 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Log;
 use App\Mail\ClientCreate;
 use Illuminate\Support\Facades\Mail;
+use Illuminate\Support\Facades\Auth;
 
 
 class AccountController extends Controller
@@ -109,7 +110,7 @@ class AccountController extends Controller
             $clients = Client::all();
             $distributors = Distributor::all();
         }else{
-            $clients = Client::where('cliente_distrib_id',$logued_user->usrc_distrib_id)->orWhere('cliente_distrib_id', null)->get()
+            $clients = Client::where('cliente_distrib_id',$logued_user->usrc_distrib_id)->orWhere('cliente_distrib_id', null)->get();
             $distributors = [Distributor::findOrFail($logued_user->usrc_distrib_id)];
         }
         

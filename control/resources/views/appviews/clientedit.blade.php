@@ -64,7 +64,7 @@
 
 	                <div class="item form-group {{ $errors->has('cliente_rfc') ? 'bad' : '' }}">	                    
 	                    <div class="col-md-9 col-sm-9 col-xs-12">
-	                        <input id="cliente_rfc" class="form-control has-feedback-left" name="cliente_rfc" placeholder="RFC *" required="required" type="text" data-validate-words="1" value="{{ $client->cliente_rfc }}" title="RFC">
+	                        <input id="cliente_rfc" class="form-control has-feedback-left" name="cliente_rfc" placeholder="RFC *" required="required" type="text" data-validate-rfc="{{$client->cliente_tipo == 'moral' ? 'moral':'fisica'}}" value="{{ $client->cliente_rfc }}" title="RFC">
 	                        <span class="fa fa-institution form-control-feedback left" aria-hidden="true"></span>
 	                    </div>
 	                    <div class="col-md-3 col-sm-3 col-xs-12">
@@ -398,6 +398,11 @@
 		  	placeholder: "Selecciona el domicilio",
 		  	allowClear: true
 		});
+
+		$("#cliente_tipo").on('change', function(){
+    		document.getElementById("cliente_rfc").setAttribute("data-validate-rfc", this.value);
+    		document.getElementById("cliente_rfc").focus();
+    	});
 
 		document.getElementById('dom_search_cp').onkeypress = function(e){
 		    if (!e) e = window.event;
