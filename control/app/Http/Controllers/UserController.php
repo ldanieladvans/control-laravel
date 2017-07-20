@@ -77,7 +77,14 @@ class UserController extends Controller
      */
     public function index()
     {
-        $users = User::all();
+        $logued_user = Auth::user();
+        if($logued_user->usrc_admin){
+            $users = User::all();
+        }elseif($logued_user->usrc_super){
+            $users = User::where('usrc_admin',0)->get();
+        }else{
+            $users = User::where('usrc_distrib_id',$logued_user->usrc_distrib_id)->get();
+        }
         $roles = Role::all();
         $permissions = Permission::all();
         return view('appviews.usershow',['users'=>$users,'roles'=>$roles,'permissions'=>$permissions]);
@@ -164,6 +171,9 @@ class UserController extends Controller
     public function edit($id)
     {
         $user = User::findOrFail($id);
+        if(!$this->controllerUserCanAccess(Auth::user(),$user->usrc_distrib_id)){
+            return view('errors.403');
+        }
         $distributors = Distributor::all();
         $roles = Role::all();
         $permissions = Permission::all();
@@ -181,6 +191,9 @@ class UserController extends Controller
     {
         $alldata = $request->all();
         $file     = false;
+        if(!$this->controllerUserCanAccess(Auth::user(),$user->usrc_distrib_id)){
+            return view('errors.403');
+        }
         if(array_key_exists('usrc_pic',$alldata)){
             $file     = request()->file('usrc_pic');
             $path = $request->file('usrc_pic')->storeAs(
@@ -252,6 +265,9 @@ class UserController extends Controller
     public function destroy(User $user,Request $request)
     {
         if (isset($user)){
+            if(!$this->controllerUserCanAccess(Auth::user(),$user->usrc_distrib_id)){
+                return view('errors.403');
+            }
             if($user->usrc_admin == 1){
                 $fmessage = 'No se puede eliminar el usuario administrador';
                 \Session::flash('message',$fmessage);

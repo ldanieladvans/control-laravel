@@ -6,6 +6,7 @@ use App\Distributor;
 use App\Domicile;
 use App\Country;
 use Illuminate\Support\Facades\Validator;
+use Illuminate\Support\Facades\Auth;
 
 class DistributorController extends Controller
 {
@@ -27,7 +28,12 @@ class DistributorController extends Controller
      */
     public function index()
     {
-        $distributors = Distributor::all();
+        $logued_user = Auth::user();
+        if($logued_user->usrc_admin || $logued_user->usrc_super){
+            $distributors = Distributor::all();
+        }else{
+            $distributors = [Distributor::findOrFail($logued_user->usrc_distrib_id)];
+        }
         return view('appviews.distributorshow',['distributors'=>$distributors]);
     }
 
@@ -140,6 +146,9 @@ class DistributorController extends Controller
     {
         $domiciles = Domicile::all();
         $countries = Country::all();
+        if(!$this->controllerUserCanAccess(Auth::user(),$distributor->id)){
+            return view('errors.403');
+        }
         return view('appviews.distributoredit',['distributor'=>$distributor,'domiciles'=>$domiciles,'countries'=>$countries]);
     }
 
@@ -156,6 +165,9 @@ class DistributorController extends Controller
         $dom_vals = array();
         $distributor_vals = array();
         $domicile_id = array_key_exists('distrib_dom_id',$alldata) ? $alldata['distrib_dom_id'] : false;
+        if(!$this->controllerUserCanAccess(Auth::user(),$distributor->id)){
+            return view('errors.403');
+        }
         if (array_key_exists('checkdom',$alldata)){           
             if (array_key_exists('dom_calle',$alldata) && isset($alldata['dom_calle'])){
 
@@ -229,6 +241,9 @@ class DistributorController extends Controller
      */
     public function destroy(Distributor $distributor, Request $request)
     {
+        if(!$this->controllerUserCanAccess(Auth::user(),$distributor->id)){
+            return view('errors.403');
+        }
         if (isset($distributor)){
             $fmessage = 'Se ha eliminado el distribuidor: '.$distributor->distrib_nom;
             \Session::flash('message',$fmessage);

@@ -11,6 +11,7 @@ use App\Munic;
 use App\Cpmex;
 use App\Country;
 use App\Distributor;
+use Illuminate\Support\Facades\Auth;
 
 class ClientController extends Controller
 {
@@ -32,7 +33,12 @@ class ClientController extends Controller
      */
     public function index()
     {
-        $clients = Client::all();
+        $logued_user = Auth::user();
+        if($logued_user->usrc_admin || $logued_user->usrc_super){
+            $clients = Client::all();
+        }else{
+            $clients = Client::where('cliente_distrib_id',$logued_user->usrc_distrib_id)->orWhere('cliente_distrib_id', null)->get();
+        }
         return view('appviews.clientshow',['clients'=>$clients]);
     }
 
@@ -184,6 +190,9 @@ class ClientController extends Controller
         $domiciles = Domicile::all();
         $countries = Country::all();
         $distributors = Distributor::all();
+        if(!$this->controllerUserCanAccess(Auth::user(),$client->cliente_distrib_id)){
+            return view('errors.403');
+        }
         return view('appviews.clientedit',['client'=>$client,'references'=>$references,'domiciles'=>$domiciles,'countries'=>$countries,'distributors'=>$distributors]);
     }
 
@@ -201,6 +210,9 @@ class ClientController extends Controller
         $refer_vals = array();
         $domicile_id = array_key_exists('cliente_dom_id',$alldata) ? $alldata['cliente_dom_id'] : false;
         $refer_id = array_key_exists('cliente_refer_id',$alldata) ? $alldata['cliente_refer_id'] : false;
+        if(!$this->controllerUserCanAccess(Auth::user(),$client->cliente_distrib_id)){
+            return view('errors.403');
+        }
         if (array_key_exists('checkdom',$alldata)){           
             if (array_key_exists('dom_calle',$alldata) && isset($alldata['dom_calle'])){
                 $dom_vals['dom_calle'] = $alldata['dom_calle'];
@@ -288,6 +300,9 @@ class ClientController extends Controller
      */
     public function destroy(Client $client,Request $request)
     {
+        if(!$this->controllerUserCanAccess(Auth::user(),$client->cliente_distrib_id)){
+            return view('errors.403');
+        }
         if (isset($client)){
             $fmessage = 'Se ha eliminado el cliente: '.$client->cliente_nom;
             \Session::flash('message',$fmessage);

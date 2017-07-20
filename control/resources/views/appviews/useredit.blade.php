@@ -131,23 +131,23 @@
 						</div>
 
 		                <div class="item form-group">
+		                	<label class="control-label col-md-4 col-sm-4 col-xs-12">Supervisor: </label>
+	                        <div class="col-md-1 col-sm-1 col-xs-12">
+		                    	<p></p>
+		                        Si:
+		                        <input type="radio" class="flat" name="usrc_super" id="usrc_super1" value="1" {{$user->usrc_super == '1' ? 'checked':''}} /> No:
+		                        <input type="radio" class="flat" name="usrc_super" id="usrc_super0" value="0" {{$user->usrc_super == '0' ? 'checked':''}}/>
+		                    </div>
+
 			                <label class="control-label col-md-2 col-sm-2 col-xs-12">Distribuidor Asociado: </label>
-			                <div class="col-md-4 col-sm-4 col-xs-12">
-			                    <select class="js-example-basic-single js-states form-control" name="usrc_distrib_id" id="usrc_distrib_id">
+		                    <div class="col-md-2 col-sm-2 col-xs-12">
+			                    <select class="js-example-basic-single js-states form-control" name="usrc_distrib_id" id="usrc_distrib_id" required>
 			                        <option value="">Seleccione una opción ...</option>
 			                        @foreach($distributors as $distributor)
 		                            	<option value="{{ $distributor->id }}" {{$distributor->id == $user->usrc_distrib_id ? 'selected':''}} >{{ $distributor->distrib_nom }}</option>
 		                            @endforeach
 			                    </select>
 			                </div>
-
-		                  	<label class="control-label col-md-1 col-sm-1 col-xs-12">Supervisor: </label>
-		                    <div class="col-md-3 col-sm-3 col-xs-12">
-		                    	<p></p>
-		                        Si:
-		                        <input type="radio" class="flat" name="usrc_super" id="usrc_super1" value="1" {{$user->usrc_super == '1' ? 'checked':''}} /> No:
-		                        <input type="radio" class="flat" name="usrc_super" id="usrc_super0" value="0" {{$user->usrc_super == '0' ? 'checked':''}}/>
-		                    </div>
 			            </div>
 
                   	    <div class="x_content">
@@ -161,7 +161,7 @@
 									<div role="tabpanel" class="tab-pane fade active in" id="tab_content1" aria-labelledby="home-tab">
 										<div class="item form-group">
 							                <div class="col-md-10 col-sm-10 col-xs-12">
-							                    <select id="roles" name="roles[]" tabindex="1" data-placeholder="Seleccione los roles ..." name="rolesapp" class="chosen-select form-control" onchange="onSelectUserCreate(this)" multiple="multiple">
+							                    <select id="roles" name="roles[]" tabindex="1" data-placeholder="Seleccione los roles ..." name="rolesapp" class="js-example-basic-multiple" onchange="onSelectUserCreate(this)" multiple="multiple" style="width: 100%; display: none;">
 							                        @foreach($roles as $role)
 														<option value="{{ $role->id }}" {{$user->hasRole($role->id) ? 'selected':''}} >{{ $role->name }}</option>
 													@endforeach
@@ -171,7 +171,7 @@
 
 							            <div class="item form-group">
 							                <div class="col-md-10 col-sm-10 col-xs-12">
-							                    <select id="permisos" name="permisos[]" tabindex="2" data-placeholder="Seleccione los permisos ..." name="rolesapp" class="chosen-select form-control" multiple="multiple">
+							                    <select id="permisos" name="permisos[]" tabindex="2" data-placeholder="Seleccione los permisos ..." class="js-example-basic-multiple" multiple="multiple" style="width: 100%; display: none;">
 													@foreach($permissions as $permission)
 						                            	<option value="{{ $permission->id }}" {{$user->customGetUserPerms($permission->id,true) ? 'selected':''}} >{{ $permission->name }}</option>
 						                            @endforeach
@@ -223,6 +223,16 @@
 		  	placeholder: "Selecciona el dictribuidor asociado",
 		  	allowClear: true
 		});
+
+		$("#roles").select2({
+            placeholder: "Selecciona los roles",
+            allowClear: true
+        });
+        
+        $("#permisos").select2({
+            placeholder: "Selecciona los permisos",
+            allowClear: true
+        });
 
 		function getSelectValues(select){
 		    var result = [];

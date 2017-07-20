@@ -36,7 +36,13 @@ class AccountController extends Controller
      */
     public function index()
     {
-        $accounts = Account::all();
+        $logued_user = Auth::user();
+        if($logued_user->usrc_admin || $logued_user->usrc_super){
+            $accounts = Account::all();
+        }else{
+            $accounts = Account::where('cta_distrib_id',$logued_user->usrc_distrib_id)->get();
+        }
+        
         $packages = Package::all();
         return view('appviews.accountshow',['accounts'=>$accounts,'packages'=>$packages]);
     }
@@ -95,10 +101,19 @@ class AccountController extends Controller
      */
     public function edit(Account $account)
     {
-        $clients = Client::all();
-        $distributors = Distributor::all();
+        if(!$this->controllerUserCanAccess(Auth::user(),$account->cta_distrib_id)){
+            return view('errors.403');
+        }
+        $logued_user = Auth::user();
+        if($logued_user->usrc_admin || $logued_user->usrc_super){
+            $clients = Client::all();
+            $distributors = Distributor::all();
+        }else{
+            $clients = Client::where('cliente_distrib_id',$logued_user->usrc_distrib_id)->orWhere('cliente_distrib_id', null)->get()
+            $distributors = [Distributor::findOrFail($logued_user->usrc_distrib_id)];
+        }
+        
         $packages = Package::all();
-        //$apps = config('app.advans_apps');
         $apps = Apps::all();
         $apps_array = array();
         foreach ($apps as $app) {
@@ -123,6 +138,9 @@ class AccountController extends Controller
         //$account->cta_cliente_id = $request->cta_cliente_id;
         //$account->cta_distrib_id = $request->cta_distrib_id;
         //$account->cta_estado = $request->cta_estado;
+        if(!$this->controllerUserCanAccess(Auth::user(),$account->cta_distrib_id)){
+            return view('errors.403');
+        }
         $account->cta_periodicity = $request->cta_periodicity;
         $account->cta_recursive = $request->cta_periodicity;
         $account->save();
@@ -141,6 +159,9 @@ class AccountController extends Controller
     public function destroy(Account $account,Request $request)
     {
         if (isset($account)){
+            if(!$this->controllerUserCanAccess(Auth::user(),$account->cta_distrib_id)){
+                return view('errors.403');
+            }
             $fmessage = 'Se ha eliminado la cuenta: '.$account->cta_num;
             \Session::flash('message',$fmessage);
             $this->registeredBinnacle($request,'destroy',$fmessage);

@@ -28,7 +28,12 @@ class PackageassignationController extends Controller
      */
     public function index()
     {
-        $asigpaqs = Packageassignation::all();
+        $logued_user = Auth::user();
+        if($logued_user->usrc_admin || $logued_user->usrc_super){
+            $asigpaqs = Packageassignation::all();
+        }else{
+            $asigpaqs = Packageassignation::where('asigpaq_distrib_id',$logued_user->usrc_distrib_id)->get();
+        }
         return view('appviews.packassigshow',['asigpaqs'=>$asigpaqs]);
     }
 
@@ -89,6 +94,9 @@ class PackageassignationController extends Controller
         $return_gig = 0;
         $compute_rfc = 0;
         $compute_gig = 0;
+        if(!$this->controllerUserCanAccess(Auth::user(),$asigpaq->asigpaq_distrib_id)){
+            return view('errors.403');
+        }
         $self_rfc = $asigpaq->asigpaq_rfc ? $asigpaq->asigpaq_rfc : 0;
         $self_gig = $asigpaq->asigpaq_gig ? $asigpaq->asigpaq_gig : 0;
         if(isset($asigpaq->asigpaq_paq_id)){
@@ -112,6 +120,9 @@ class PackageassignationController extends Controller
     {
         $alldata = $request->all();
         $asigpaq = Packageassignation::findOrFail($id);
+        if(!$this->controllerUserCanAccess(Auth::user(),$asigpaq->asigpaq_distrib_id)){
+            return view('errors.403');
+        }
         $asigpaq->asigpaq_rfc = $alldata['asigpaq_rfc'];
         $asigpaq->asigpaq_gig = $alldata['asigpaq_gig'];
         $asigpaq->asigpaq_f_fin = $alldata['asigpaq_f_fin'];
@@ -143,6 +154,9 @@ class PackageassignationController extends Controller
     {
         if (isset($id)){
             $asigpaq = Packageassignation::findOrFail($id);
+            if(!$this->controllerUserCanAccess(Auth::user(),$asigpaq->asigpaq_distrib_id)){
+                return view('errors.403');
+            }
             $fmessage = 'Se ha eliminado la asignacion de distribuidor-paquete: '.$asigpaq->asigpaq_rfc.' '.$asigpaq->asigpaq_gig.' '.$asigpaq->asigpaq_distrib_id.' '.$asigpaq->asigpaq_paq_id;
             \Session::flash('message',$fmessage);
             $this->registeredBinnacle($request,'destroy',$fmessage);

@@ -167,4 +167,15 @@ class Controller extends BaseController
         return $response;
     }
 
+    public function controllerUserCanAccess($user,$distrib_id){
+        if($user->usrc_admin || $user->usrc_super){
+            return true;
+        }else{
+            if($user->usrc_distrib_id==$distrib_id){
+                return true;
+            }
+        }
+        return false;
+    }
+
 }

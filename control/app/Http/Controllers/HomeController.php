@@ -54,8 +54,8 @@ class HomeController extends Controller
                                       ->where('appcta_f_vent','<=',date("Y-m-d"))->get();
           $accounts_active = Account::where('cta_estado','=','Activa')->get();
         }else{
-          $clients = Client::where('cliente_distrib_id',$logued_user->usrc_distrib_id)->get();
-          $distributors = [Distributor::find($logued_user->usrc_distrib_id)];
+          $clients = Client::where('cliente_distrib_id',$logued_user->usrc_distrib_id)->orWhere('cliente_distrib_id', null)->get();
+          $distributors = [Distributor::findOrFail($logued_user->usrc_distrib_id)];
           $packages = Package::all();
           $accounts = Account::where('cta_distrib_id',$logued_user->usrc_distrib_id)->get();
           $asigpaqs = Packageassignation::where('asigpaq_f_vent','>=',mktime(0, 0, 0, date("m")-1, date("d"),date("Y")))
