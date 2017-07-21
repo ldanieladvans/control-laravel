@@ -6,14 +6,14 @@ return [
     //Advans Apps
     'advans_apps' => ['cont'=>'Contabilidad','bov'=>'Bóveda','nom'=>'Nómina','pld'=>'PLD','cc'=>'Control de Calidad','not'=>'Notaría','fact'=>'Facturación Electrónica'],
 
-    'advans_apps_url' => ['ctac'=>'http://advans.cuenta.mx','cont'=>'http://advans.cuenta.mx','bov'=>'Bóveda','nom'=>'Nómina','pld'=>'PLD','cc'=>'Control de Calidad','not'=>'Notaría'],
+    'advans_apps_url' => ['ctac'=>'http://devcta.advans.mx','cont'=>'http://devcta.advans.mx','bov'=>'Bóveda','nom'=>'Nómina','pld'=>'PLD','cc'=>'Control de Calidad','not'=>'Notaría'],
 
     'advans_apps_security' => ['ctac'=> [
                                     'grant_type' => 'password',
-                                    'client_id' => '5',
-                                    'client_secret' => 'ngTt2N0zUch6IHuj0WJubHI0hD4Qp4emdE8spDvn',
-                                    'username' => 'mabel@gmail.com',
-                                    'password' => 'Daniel123',
+                                    'client_id' => '1',
+                                    'client_secret' => '7L0RvlYGtF0JdXy6zJTOVEUpAa1RIFwk8TC0dta3',
+                                    'username' => 'cuenta.admin@advans.mx',
+                                    'password' => 'Admin123*',
                                     'scope' => '*',
                                     ]
                           ],
@@ -72,7 +72,7 @@ return [
     |
     */
 
-    'url' => env('APP_URL', 'http://localhost'),
+    'url' => env('APP_URL', 'http://devctrl.advans.mx'),
 
     /*
     |--------------------------------------------------------------------------
