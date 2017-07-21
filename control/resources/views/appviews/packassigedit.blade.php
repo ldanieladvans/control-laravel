@@ -62,14 +62,14 @@
         	                        <div role="tabpanel" class="tab-pane fade active in" id="tab_content1" aria-labelledby="home-tab">
                                 	    <div class="item form-group">                      
                                             <div class="col-md-9 col-sm-9 col-xs-12">
-                                                <input id="asigpaq_rfc" class="form-control has-feedback-left" name="asigpaq_rfc" title="Cantidad de RFCs" placeholder="Cantidad RFC *" required="required" type="numberint" value="{{$asigpaq->asigpaq_rfc}}" >
+                                                <input id="asigpaq_rfc" class="form-control has-feedback-left" name="asigpaq_rfc" title="Cantidad de Instancias" placeholder="Cantidad Instancias *" data-validate-minmax="1,999999" required="required" type="numberint" value="{{$asigpaq->asigpaq_rfc}}" >
                                                 <span class="fa fa-bank form-control-feedback left" aria-hidden="true"></span>
                                             </div>
                                         </div>
 
                                         <div class="item form-group">                     
                                             <div class="col-md-9 col-sm-9 col-xs-12">
-                                                <input id="asigpaq_gig" class="form-control has-feedback-left" name="asigpaq_gig" placeholder="Cantidad Gigas *" required="required" type="number" title="Almacenamiento en Gigas" value="{{$asigpaq->asigpaq_gig}}" >
+                                                <input id="asigpaq_gig" class="form-control has-feedback-left" name="asigpaq_gig" placeholder="Cantidad Gigas *" data-validate-minmax="1,999999" required="required" type="number" title="Almacenamiento en Gigas" value="{{$asigpaq->asigpaq_gig}}" >
                                                 <span class="fa fa-archive form-control-feedback left" aria-hidden="true"></span>
                                             </div>
                                         </div>

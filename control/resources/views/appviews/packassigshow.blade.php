@@ -34,7 +34,7 @@
                         <thead>
                             <tr>
                                 <th>Distribuidor</th>
-                                <th>RFCs</th>
+                                <th>Instancias</th>
                                 <th>Gigas</th>
                                 <th>Fecha Venta</th>
                                 <th>Fecha Act.</th>
