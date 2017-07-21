@@ -180,6 +180,7 @@ var validator = (function($){
         },
         number : function(a){
             // if not not a number
+
             if( isNaN(parseFloat(a)) && !isFinite(a) ){
                 alertTxt = message.number;
                 return false;
@@ -313,7 +314,6 @@ var validator = (function($){
 
 
         else if( defaults.alerts ){
-            console.log(item);
             warning = $('<div class="'+ defaults.classes.alert +'">').html( text );
             item.append( warning );
         }

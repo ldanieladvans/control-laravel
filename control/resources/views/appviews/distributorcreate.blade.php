@@ -62,14 +62,14 @@
 
                   	    <div class="item form-group">
 		                    <div class="col-md-9 col-sm-9 col-xs-12">
-		                    	<input type="number" id="distrib_limitgig" name="distrib_limitgig" placeholder="Límite Gigas" data-validate-minmax="1,10000000000" class="form-control has-feedback-left" title="Límite Gigas">
+		                    	<input type="number" id="distrib_limitgig" name="distrib_limitgig" placeholder="Límite Gigas * (999999)" data-validate-minmax="1,999999" class="form-control has-feedback-left" title="Límite Gigas (999999)" required>
 		                    	<span class="fa fa-bar-chart form-control-feedback left" aria-hidden="true"></span>
 		                    </div>
 	                    </div>
 
 	                    <div class="item form-group">
 		                    <div class="col-md-9 col-sm-9 col-xs-12">
-		                    	<input type="numberint" id="distrib_limitrfc" name="distrib_limitrfc" placeholder="Límite RFCs" data-validate-minmax="1,10000000000" class="form-control has-feedback-left" title="Límite RFCs">
+		                    	<input type="numberint" id="distrib_limitrfc" name="distrib_limitrfc" placeholder="Límite Instancias * (999999)" data-validate-minmax="1,999999" class="form-control has-feedback-left" title="Límite Instancias (999999)" required>
 		                    	<span class="fa fa-bar-chart form-control-feedback left" aria-hidden="true"></span>
 		                    </div>
 	                    </div>
@@ -346,7 +346,7 @@
 		  	allowClear: true
 		});
 
-		document.getElementById('dom_search_cp').onkeypress = function(e){
+		/*document.getElementById('dom_search_cp').onkeypress = function(e){
 		    if (!e) e = window.event;
 		    var keyCode = e.keyCode || e.which;
 		    if (keyCode == '13'){
@@ -391,7 +391,49 @@
 		    	}
 		    }
 
-		}
+		}*/
+
+		$("#dom_search_cp").on('blur', function(){
+			if(this.value!=''){
+				$('#loadingmodal').modal('show');
+	    		var CSRF_TOKEN = $('meta[name="csrf-token"]').attr('content');
+	    		$.ajax({
+	                url: '/getcpdata',
+                	type: 'POST',
+                	data: {_token: CSRF_TOKEN,dommunicserv:dom_munic_serv,domestadoserv:dom_estado_serv,cp:document.getElementById("dom_search_cp").value},
+	                dataType: 'JSON',
+	                success: function (data) {
+	                	
+                	    $('#loadingmodal').modal('hide');
+
+	                    var dataTablevalues = [];
+	                    var table_counter = 0;
+
+	                    data['tabledata'].forEach(function(item){
+	                        dataTablevalues.push([item.d_codigo,item.d_estado,item.d_ciudad,item.d_asenta,item.d_tipo_asenta,"<div class='btn-group'><div class='btn-group'><a id='accbtn"+item.id+"' onclick='getRowData("+table_counter+")' class='btn btn-xs' data-placement='left' title='Seleccionar' ><i class='fa fa-check fa-2x'></i> </a></div>"]);
+	                        table_counter ++;
+	                    });
+
+	                    $('#datatable-responsive').dataTable().fnDestroy();
+	                    dtobj = $('#datatable-responsive').DataTable( {
+				        	data: dataTablevalues,
+				        });
+	                },
+	                error: function(XMLHttpRequest, textStatus, errorThrown) { 
+	                    new PNotify({
+	                    title: "Notificación",
+	                    type: "info",
+	                    text: "Ha ocurrido un error",
+	                    nonblock: {
+	                      nonblock: true
+	                    },
+	                    addclass: 'dark',
+	                    styling: 'bootstrap3'
+	                  });
+	                }
+	            });
+	    	}
+    	});
 
     	$("#distrib_rfc").on('change', function(){
 			document.getElementById("span_distrib_rfc").setAttribute('hidden','1');

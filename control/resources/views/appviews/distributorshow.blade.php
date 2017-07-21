@@ -36,7 +36,7 @@
                                 <th>Nombre</th>
                                 <th>RFC</th>
                                 <th>Límite Gigas</th>
-                                <th>Límite RFC</th>
+                                <th>Límite Instancias</th>
                                 <th>Teléfono</th>
                                 <th>Correo</th>
                                 <th>Supervisor</th>
