@@ -610,7 +610,7 @@ class AccountController extends Controller
             $app_cta->appcta_cuenta_id = $cta_obj ? $cta_obj->id : false;
             $app_cta->appcta_app = $cta_obj ? $cta_obj->cta_num : 'false';
             $app_cta->sale_estado = 'Prueba';
-            $app_cta->cta_estado = 'Activa';
+            $app_cta->appcta_estado = 'Activa';
             $app_cta->appcta_f_act = date('Y-m-d');
             $appc = new Appcontrol();
             $app_aux = Apps::where('code', $alldata['app'])
