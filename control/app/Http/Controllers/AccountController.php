@@ -420,10 +420,10 @@ class AccountController extends Controller
             $arrayparams['rfc_nombrebd'] = $cta_obj->cta_num;
             $arrayparams['account_id'] = $cta_obj->id;
             $arrayparams['apps_cta'] = json_encode([['app_insts'=>$app_cta->appcta_rfc,'app_megs'=>$app_cta->appcta_gig,'app_estado'=>$app_cta->sale_estado,'app_cod'=>$app_cta->apps[0]->app_code,'app_nom'=>$app_cta->apps[0]->app_nom]]);
-            $acces_vars = $this->getAccessToken();
-            $service_response = $this->getAppService($acces_vars['access_token'],'modapp',$arrayparams,'ctac');
-
-            
+            if($cta_obj->cta_fecha){
+                $acces_vars = $this->getAccessToken();
+                $service_response = $this->getAppService($acces_vars['access_token'],'modapp',$arrayparams,'ctac');
+            }
             //\Session::flash('message',$fmessage);
             $this->registeredBinnacle($request,'update',$fmessage);
             
@@ -432,14 +432,19 @@ class AccountController extends Controller
             $arrayparams['rfc_nombrebd'] = $cta_obj->cta_num;
             $arrayparams['account_id'] = $cta_obj->id;
             $arrayparams['apps_cta'] = json_encode([['app_insts'=>$app_cta->appcta_rfc,'app_megs'=>$app_cta->appcta_gig,'app_estado'=>$app_cta->sale_estado,'app_cod'=>$app_cta->apps[0]->app_code,'app_nom'=>$app_cta->apps[0]->app_nom]]);
-            $acces_vars = $this->getAccessToken();
-            $service_response = $this->getAppService($acces_vars['access_token'],'delapp',$arrayparams,'ctac');
-            if($service_response['status']=='success'){
-                \DB::table('app')->where('app_appcta_id', $app_cta->id)->delete(); 
-                $app_cta->delete();
+            if($cta_obj->cta_fecha){
+                $acces_vars = $this->getAccessToken();
+                $service_response = $this->getAppService($acces_vars['access_token'],'delapp',$arrayparams,'ctac');
+            
+                if($service_response['status']=='success'){
+                    \DB::table('app')->where('app_appcta_id', $app_cta->id)->delete(); 
+                    $app_cta->delete();
 
+                }else{
+                    \Session::flash('message',$service_response['msg']);
+                }
             }else{
-                \Session::flash('message',$service_response['msg']);
+                $app_cta->delete();
             }
             
             /*$app_cta = Appaccount::where('appcta_cuenta_id', $cta_obj->id)->get();
@@ -464,16 +469,20 @@ class AccountController extends Controller
                 $arrayparams['rfc_nombrebd'] = $cta_obj->cta_num;
                 $arrayparams['account_id'] = $cta_obj->id;
                 $arrayparams['apps_cta'] = json_encode([['app_cod'=>$app_cta->apps[0]->app_code,'app_nom'=>$app_cta->apps[0]->app_nom]]);
-                $acces_vars = $this->getAccessToken();
-                $service_response = $this->getAppService($acces_vars['access_token'],'desactapp',$arrayparams,'ctac');
+                if($cta_obj->cta_fecha){
+                    $acces_vars = $this->getAccessToken();
+                    $service_response = $this->getAppService($acces_vars['access_token'],'desactapp',$arrayparams,'ctac');
+                }
             }else{
                 $app_cta->appcta_f_act = date('Y-m-d');
                 $aux_state = 'Activa';
                 $arrayparams['rfc_nombrebd'] = $cta_obj->cta_num;
                 $arrayparams['account_id'] = $cta_obj->id;
                 $arrayparams['apps_cta'] = json_encode([['app_cod'=>$app_cta->apps[0]->app_code,'app_nom'=>$app_cta->apps[0]->app_nom]]);
-                $acces_vars = $this->getAccessToken();
-                $service_response = $this->getAppService($acces_vars['access_token'],'addapp',$arrayparams,'ctac'); 
+                if($cta_obj->cta_fecha){
+                    $acces_vars = $this->getAccessToken();
+                    $service_response = $this->getAppService($acces_vars['access_token'],'addapp',$arrayparams,'ctac');
+                } 
             }
             $app_cta->appcta_estado = $aux_state;
             
@@ -517,8 +526,11 @@ class AccountController extends Controller
                 $arrayparams['rfc_nombrebd'] = $cta_obj->cta_num;
                 $arrayparams['account_id'] = $cta_obj->id;
                 $arrayparams['paq_cta'] = json_encode([['paqapp_f_venta'=>$f_ini,'paqapp_f_fin'=>$f_fin,'paqapp_f_caduc'=>$f_corte,'paqapp_control_id'=>$alldata['tlid']]]);
-                $acces_vars = $this->getAccessToken();
-                $service_response = $this->getAppService($acces_vars['access_token'],'modpaq',$arrayparams,'ctac');
+                if($cta_obj->cta_fecha){
+                    $acces_vars = $this->getAccessToken();
+                    $service_response = $this->getAppService($acces_vars['access_token'],'modpaq',$arrayparams,'ctac');
+                }
+                
             }else{
                 $acctl = new AccountTl();
                 $acctl->acctl_estado = 'Pendiente';
@@ -530,8 +542,10 @@ class AccountController extends Controller
                 $arrayparams['rfc_nombrebd'] = $cta_obj->cta_num;
                 $arrayparams['account_id'] = $cta_obj->id;
                 $arrayparams['paq_cta'] = json_encode([['paqapp_f_venta'=>$f_ini,'paqapp_f_fin'=>$f_fin,'paqapp_f_caduc'=>$f_corte,'paqapp_control_id'=>$acctl->id]]);
-                $acces_vars = $this->getAccessToken();
-                $service_response = $this->getAppService($acces_vars['access_token'],'addpaq',$arrayparams,'ctac');
+                if($cta_obj->cta_fecha){
+                    $acces_vars = $this->getAccessToken();
+                    $service_response = $this->getAppService($acces_vars['access_token'],'addpaq',$arrayparams,'ctac');
+                }
             }
             
         }
@@ -563,8 +577,10 @@ class AccountController extends Controller
                 $arrayparams['rfc_nombrebd'] = $cta_obj->cta_num;
                 $arrayparams['account_id'] = $cta_obj->id;
                 $arrayparams['paq_cta'] = json_encode([['paqapp_control_id'=>$alldata['tlid']]]);
-                $acces_vars = $this->getAccessToken();
-                $service_response = $this->getAppService($acces_vars['access_token'],'delpaq',$arrayparams,'ctac');
+                if($cta_obj->cta_fecha){
+                    $acces_vars = $this->getAccessToken();
+                    $service_response = $this->getAppService($acces_vars['access_token'],'delpaq',$arrayparams,'ctac');
+                }
                 AccountTl::destroy($alldata['tlid']);
                 
             }
@@ -594,6 +610,8 @@ class AccountController extends Controller
             $app_cta->appcta_cuenta_id = $cta_obj ? $cta_obj->id : false;
             $app_cta->appcta_app = $cta_obj ? $cta_obj->cta_num : 'false';
             $app_cta->sale_estado = 'Prueba';
+            $app_cta->cta_estado = 'Activa';
+            $app_cta->appcta_f_act = date('Y-m-d');
             $appc = new Appcontrol();
             $app_aux = Apps::where('code', $alldata['app'])
                            ->orderBy('id', 'desc')
@@ -609,14 +627,17 @@ class AccountController extends Controller
             $arrayparams['rfc_nombrebd'] = $cta_obj->cta_num;
             $arrayparams['account_id'] = $app_cta->id;
             $arrayparams['apps_cta'] = json_encode([['app_cod'=>$appc->app_code,'app_nom'=>$appc->app_nom,'app_insts'=>$app_cta->appcta_rfc,'app_megs'=>$app_cta->appcta_gig,'app_estado'=>'Prueba']]);
-            $acces_vars = $this->getAccessToken();
-            $service_response = $this->getAppService($acces_vars['access_token'],'addapp',$arrayparams,'ctac');
+            if($cta_obj->cta_fecha){
+                $acces_vars = $this->getAccessToken();
+                $service_response = $this->getAppService($acces_vars['access_token'],'addapp',$arrayparams,'ctac');
+            }
+            
         }
         
         $response = array(
             'status' => 'success',
             'msg' => 'Ok',
-            'service_response' => $service_response
+            //'service_response' => $service_response
         );
         return \Response::json($response);
     }

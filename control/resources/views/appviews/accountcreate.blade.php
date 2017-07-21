@@ -80,7 +80,7 @@
                         </div>
 
                         <div class="item form-group">
-                            <label class="control-label col-md-1 col-sm-1 col-xs-12">Fecha: </label>
+                            <label class="control-label col-md-1 col-sm-1 col-xs-12">Fecha Activación</label>
                             <div class="col-md-3 col-sm-3 col-xs-12">
                                 <input id="cta_fecha" title="Fecha" class="form-control has-feedback-left" name="cta_fecha" placeholder="Fecha" type="date" disabled>
                                 <span class="fa fa-calendar form-control-feedback left" aria-hidden="true"></span>

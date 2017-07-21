@@ -11,7 +11,7 @@
         "guzzlehttp/guzzle": "^6.2",
         "icomefromthenet/reverse-regex": "v0.0.6.3",
         "laravel/framework": "5.4.*",
-        "laravel/passport": "^2.0",
+        "laravel/passport": "^3.0",
         "laravel/tinker": "~1.0",
         "laravelcollective/html": "^5.4.0",
         "sinergi/browser-detector": "^6.1",
