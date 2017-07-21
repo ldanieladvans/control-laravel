@@ -56,7 +56,7 @@
                         <div class="ln_solid"></div>
                         <div class="form-group">
                             <div class="col-md-6 col-md-offset-3">
-                                <button id="cancel" type="button" onclick="location.href = '/apps/package';" class="btn btn-info">Cancelar</button>                                                                           
+                                <button id="cancel" type="button" onclick="location.href = '/config/apps';" class="btn btn-info">Cancelar</button>                                                                        
                                 <button id="send" type="submit" class="btn btn-success">Guardar</button>
                             </div>
                         </div>
