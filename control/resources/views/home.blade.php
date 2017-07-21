@@ -147,9 +147,9 @@
 
      chart_data = jQuery.parseJSON(document.getElementById('chartdata').value);
 
-     /*console.log(chart_data);
+     console.log(chart_data);
 
-     console.log(document.getElementById('chartdata').value);*/
+     console.log(document.getElementById('chartdata').value);
 
       Highcharts.setOptions({
         lang: {
