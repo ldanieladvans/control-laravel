@@ -194,7 +194,7 @@
     },
     yAxis: {
         title: {
-            text: 'Cantidad'
+            text: 'Cantidad de Instancias'
         },
         min: 0
     },
