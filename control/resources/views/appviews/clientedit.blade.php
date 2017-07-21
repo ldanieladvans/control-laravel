@@ -404,7 +404,7 @@
     		document.getElementById("cliente_rfc").focus();
     	});
 
-		document.getElementById('dom_search_cp').onkeypress = function(e){
+		/*document.getElementById('dom_search_cp').onkeypress = function(e){
 		    if (!e) e = window.event;
 		    var keyCode = e.keyCode || e.which;
 		    if (keyCode == '13'){
@@ -449,7 +449,49 @@
 		    	}
 		    }
 
-		}
+		}*/
+
+		$("#dom_search_cp").on('blur', function(){
+			if(this.value!=''){
+				$('#loadingmodal').modal('show');
+	    		var CSRF_TOKEN = $('meta[name="csrf-token"]').attr('content');
+	    		$.ajax({
+	                url: '/getcpdata',
+                	type: 'POST',
+                	data: {_token: CSRF_TOKEN,dommunicserv:dom_munic_serv,domestadoserv:dom_estado_serv,cp:document.getElementById("dom_search_cp").value},
+	                dataType: 'JSON',
+	                success: function (data) {
+	                	
+                	    $('#loadingmodal').modal('hide');
+
+	                    var dataTablevalues = [];
+	                    var table_counter = 0;
+
+	                    data['tabledata'].forEach(function(item){
+	                        dataTablevalues.push([item.d_codigo,item.d_estado,item.d_ciudad,item.d_asenta,item.d_tipo_asenta,"<div class='btn-group'><div class='btn-group'><a id='accbtn"+item.id+"' onclick='getRowData("+table_counter+")' class='btn btn-xs' data-placement='left' title='Seleccionar' ><i class='fa fa-check fa-2x'></i> </a></div>"]);
+	                        table_counter ++;
+	                    });
+
+	                    $('#datatable-responsive').dataTable().fnDestroy();
+	                    dtobj = $('#datatable-responsive').DataTable( {
+				        	data: dataTablevalues,
+				        });
+	                },
+	                error: function(XMLHttpRequest, textStatus, errorThrown) { 
+	                    new PNotify({
+	                    title: "Notificación",
+	                    type: "info",
+	                    text: "Ha ocurrido un error",
+	                    nonblock: {
+	                      nonblock: true
+	                    },
+	                    addclass: 'dark',
+	                    styling: 'bootstrap3'
+	                  });
+	                }
+	            });
+	    	}
+    	});
 
     	$("#cliente_rfc").on('change', function(){
     		document.getElementById("span_cliente_rfc").setAttribute('hidden','1');
