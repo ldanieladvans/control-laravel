@@ -141,13 +141,21 @@
 						</div>
                     
 		                <div class="item form-group">
-		                <label class="control-label col-md-4 col-sm-4 col-xs-12">Supervisor: </label>
+		                <label class="control-label col-md-1 col-sm-1 col-xs-12">Supervisor: </label>
 	                        <div class="col-md-1 col-sm-1 col-xs-12">
 		                        <p></p>
 		                        Si:
 		                        <input type="radio" class="flat" name="usrc_super" id="usrc_super1" value="1"  /> No:
 		                        <input type="radio" class="flat" name="usrc_super" id="usrc_super0" value="0" checked/>
 	                        </div>
+
+	                        <label class="control-label col-md-1 col-sm-1 col-xs-12">Tipo de Usuario: </label>
+		                    <div class="col-md-2 col-sm-2 col-xs-12">
+		                        <select class="js-example-basic-single js-states form-control" name="usrc_type" id="usrc_type" required>
+			                        <option value="app" selected>Aplicación</option>
+			                        <option value="api">Servicio</option>
+		                        </select>
+		                  	</div>
 
 			                <label class="control-label col-md-2 col-sm-2 col-xs-12">Distribuidor Asociado: </label>
 		                    <div class="col-md-2 col-sm-2 col-xs-12">
@@ -161,7 +169,7 @@
 			            </div>
 
 
-                  	  	<div class="x_content">
+                  	  	<div class="x_content" id="usrctabcontainer">
                       		<div class="" role="tabpanel" data-example-id="togglable-tabs">
 			                    <ul id="myTab" class="nav nav-tabs bar_tabs" role="tablist">
 			                        <li role="presentation" class="active"><a href="#tab_content1" id="home-tab" role="tab" data-toggle="tab" aria-expanded="true">Roles y Permisos</a>
@@ -306,6 +314,14 @@
 		    browseLabel: 'Foto Usuario',
 		    allowedFileExtensions: ["jpg", "png", "gif"]
 		});
+
+		$('#usrc_type').change(function(){
+            if(this.value=="api"){
+                document.getElementById('usrctabcontainer').setAttribute('hidden',true);
+            }else{
+              document.getElementById('usrctabcontainer').removeAttribute('hidden');
+            }
+        });
 	</script>
 @endsection
 

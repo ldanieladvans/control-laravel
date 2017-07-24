@@ -65,6 +65,7 @@ class ClientController extends Controller
     public function store(Request $request)
     {
         $alldata = $request->all();
+        $logued_user = Auth::user();
         $parseCert = false;
         if(array_key_exists('client_cert',$alldata)){
             $cert     = request()->file('client_cert');
@@ -163,7 +164,7 @@ class ClientController extends Controller
         $client->save();
         $fmessage = 'Se ha creado el cliente: '.$alldata['cliente_nom'];
         \Session::flash('message',$fmessage);
-        $this->registeredBinnacle($request,'store',$fmessage);
+        $this->registeredBinnacle($request->all(), 'store', $fmessage, $logued_user ? $logued_user->id : '', $logued_user ? $logued_user->name : '');
         return redirect()->route('client.index');
     }
 
@@ -206,6 +207,7 @@ class ClientController extends Controller
     public function update(Request $request, Client $client)
     {
         $alldata = $request->all();
+        $logued_user = Auth::user();
         $dom_vals = array();
         $refer_vals = array();
         $domicile_id = array_key_exists('cliente_dom_id',$alldata) ? $alldata['cliente_dom_id'] : false;
@@ -288,7 +290,7 @@ class ClientController extends Controller
         $client->save();
         $fmessage = 'Se ha actualizado el cliente: '.$alldata['cliente_nom'];
         \Session::flash('message',$fmessage);
-        $this->registeredBinnacle($request,'update',$fmessage);
+        $this->registeredBinnacle($request->all(), 'update', $fmessage, $logued_user ? $logued_user->id : '', $logued_user ? $logued_user->name : '');
         return redirect()->route('client.index');
     }
 
@@ -300,13 +302,14 @@ class ClientController extends Controller
      */
     public function destroy(Client $client,Request $request)
     {
+        $logued_user = Auth::user();
         if(!$this->controllerUserCanAccess(Auth::user(),$client->cliente_distrib_id)){
             return view('errors.403');
         }
         if (isset($client)){
             $fmessage = 'Se ha eliminado el cliente: '.$client->cliente_nom;
             \Session::flash('message',$fmessage);
-            $this->registeredBinnacle($request,'destroy',$fmessage);
+            $this->registeredBinnacle($request->all(), 'destroy', $fmessage, $logued_user ? $logued_user->id : '', $logued_user ? $logued_user->name : '');
             $client->delete();
         }
         return redirect()->route('client.index');

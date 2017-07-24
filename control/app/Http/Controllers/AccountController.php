@@ -71,13 +71,13 @@ class AccountController extends Controller
     public function store(Request $request)
     {
         $alldata = $request->all();
-
+        $logued_user = Auth::user();
         $cta = new Account($alldata);
         $cta->save();
 
         $fmessage = 'Se ha creado la cuenta: '.$alldata['cta_num'];
         \Session::flash('message',$fmessage);
-        $this->registeredBinnacle($request,'store',$fmessage);
+        $this->registeredBinnacle($request->all(), 'store', $fmessage, $logued_user ? $logued_user->id : '', $logued_user ? $logued_user->name : '');
 
         return redirect()->route('account.index');
     }
@@ -132,6 +132,7 @@ class AccountController extends Controller
      */
     public function update(Request $request, Account $account)
     {
+        $logued_user = Auth::user();
         //$account->cta_num = $request->cta_num;
         //$account->cta_nomservd = $request->cta_nomservd;
         //$account->cta_fecha = $request->cta_fecha;
@@ -147,7 +148,7 @@ class AccountController extends Controller
         $account->save();
         $fmessage = 'Se ha actualizado la cuenta: '.$request->cta_num;
         \Session::flash('message',$fmessage);
-        $this->registeredBinnacle($request,'update',$fmessage);
+        $this->registeredBinnacle($request->all(), 'update', $fmessage, $logued_user ? $logued_user->id : '', $logued_user ? $logued_user->name : '');
         return redirect()->route('account.index');
     }
 
@@ -159,13 +160,14 @@ class AccountController extends Controller
      */
     public function destroy(Account $account,Request $request)
     {
+        $logued_user = Auth::user();
         if (isset($account)){
             if(!$this->controllerUserCanAccess(Auth::user(),$account->cta_distrib_id)){
                 return view('errors.403');
             }
             $fmessage = 'Se ha eliminado la cuenta: '.$account->cta_num;
             \Session::flash('message',$fmessage);
-            $this->registeredBinnacle($request,'destroy',$fmessage);
+            $this->registeredBinnacle($request->all(), 'destroy', $fmessage, $logued_user ? $logued_user->id : '', $logued_user ? $logued_user->name : '');
             $account->delete();
 
         }
@@ -174,6 +176,7 @@ class AccountController extends Controller
 
     public function changeAccState(Request $request)
     {
+        $logued_user = Auth::user();
         $account = false;
         $alldata = $request->all();
         $return_array = array();
@@ -264,13 +267,14 @@ class AccountController extends Controller
 
             $acces_vars = $this->getAccessToken();
             $service_response = $this->getAppService($acces_vars['access_token'],'createbd',$arrayparams,'ctac');
+            $this->registeredBinnacle($arrayparams, 'service', 'Se ha creado una nueva cuenta en la app de cuenta', $logued_user ? $logued_user->id : '', $logued_user ? $logued_user->name : '');
         }
         
 
         if($account!=false){
             $fmessage = 'El estado de la cuenta: '.$account->cta_num.' cambió a: '.$account->cta_estado;
             \Session::flash('message',$fmessage);
-            $this->registeredBinnacle($request,'update',$fmessage);
+            $this->registeredBinnacle($request->all(), 'update', $fmessage, $logued_user ? $logued_user->id : '', $logued_user ? $logued_user->name : '');
         }
         
 
@@ -321,6 +325,7 @@ class AccountController extends Controller
 
     public function unblockUser(Request $request)
     {
+        $logued_user = Auth::user();
         $alldata = $request->all();
         $arrayparams = array();
 
@@ -329,6 +334,7 @@ class AccountController extends Controller
             $arrayparams['dbname'] = $alldata['rfc'];
             $acces_vars = $this->getAccessToken();
             $service_response = $this->getAppService($acces_vars['access_token'],'unlockusr',$arrayparams,'ctac');
+            $this->registeredBinnacle($request->all(), 'service', 'Se ha desbloqueado el usuario con id: '.$alldata['userid'].' de la cuenta'.$alldata['rfc'], $logued_user ? $logued_user->id : '', $logued_user ? $logued_user->name : '');
         }
         
         $response = array(
@@ -364,7 +370,7 @@ class AccountController extends Controller
     {
         $alldata = $request->all();
         $arrayparams = array();
-
+        $logued_user = Auth::user();
         $input = filter_input_array(INPUT_POST);
 
         $cta_obj = false;
@@ -401,6 +407,7 @@ class AccountController extends Controller
                 $app_cta->appcta_f_fin = date_format($fecha, 'Y-m-d');
                 $app_cta->appcta_cuenta_id = $cta_obj ? $cta_obj->id : false;
                 $app_cta->appcta_app = $cta_obj ? $cta_obj->cta_num : 'false';
+
             }
             $sale_estado = 'Prueba';
             if($input['sale_estado']=='prod'){
@@ -423,15 +430,17 @@ class AccountController extends Controller
             if($cta_obj->cta_fecha){
                 $acces_vars = $this->getAccessToken();
                 $service_response = $this->getAppService($acces_vars['access_token'],'modapp',$arrayparams,'ctac');
+                $this->registeredBinnacle($arrayparams, 'service', $fmessage, $logued_user ? $logued_user->id : '', $logued_user ? $logued_user->name : '');
             }
             //\Session::flash('message',$fmessage);
-            $this->registeredBinnacle($request,'update',$fmessage);
+            
             
         } else if ($input['action'] == 'delete') {
             
             $arrayparams['rfc_nombrebd'] = $cta_obj->cta_num;
             $arrayparams['account_id'] = $cta_obj->id;
             $arrayparams['apps_cta'] = json_encode([['app_insts'=>$app_cta->appcta_rfc,'app_megs'=>$app_cta->appcta_gig,'app_estado'=>$app_cta->sale_estado,'app_cod'=>$app_cta->apps[0]->app_code,'app_nom'=>$app_cta->apps[0]->app_nom]]);
+            $app_nom = $app_cta->apps[0]->app_nom;
             if($cta_obj->cta_fecha){
                 $acces_vars = $this->getAccessToken();
                 $service_response = $this->getAppService($acces_vars['access_token'],'delapp',$arrayparams,'ctac');
@@ -439,6 +448,7 @@ class AccountController extends Controller
                 if($service_response['status']=='success'){
                     \DB::table('app')->where('app_appcta_id', $app_cta->id)->delete(); 
                     $app_cta->delete();
+                    $this->registeredBinnacle($arrayparams, 'service', 'Se ha eliminado la aplicación '.$app_nom.' de la cuenta '.$arrayparams['rfc_nombrebd'], $logued_user ? $logued_user->id : '', $logued_user ? $logued_user->name : '');
 
                 }else{
                     \Session::flash('message',$service_response['msg']);
@@ -462,6 +472,7 @@ class AccountController extends Controller
                 $app_cta->appcta_estado = 'Activa';
                 $app_cta->save();
             }*/
+            
         }else{
                       
             if($app_cta->appcta_estado=='Activa'){
@@ -472,6 +483,7 @@ class AccountController extends Controller
                 if($cta_obj->cta_fecha){
                     $acces_vars = $this->getAccessToken();
                     $service_response = $this->getAppService($acces_vars['access_token'],'desactapp',$arrayparams,'ctac');
+                    $this->registeredBinnacle($arrayparams, 'service', 'Se ha desactivado la aplicación '.$app_cta->apps[0]->app_nom.' de la cuenta '.$arrayparams['rfc_nombrebd'], $logued_user ? $logued_user->id : '', $logued_user ? $logued_user->name : '');
                 }
             }else{
                 $app_cta->appcta_f_act = date('Y-m-d');
@@ -482,12 +494,16 @@ class AccountController extends Controller
                 if($cta_obj->cta_fecha){
                     $acces_vars = $this->getAccessToken();
                     $service_response = $this->getAppService($acces_vars['access_token'],'addapp',$arrayparams,'ctac');
+                    $this->registeredBinnacle($arrayparams, 'service', 'Se ha activado la aplicación '.$app_cta->apps[0]->app_nom.' de la cuenta '.$arrayparams['rfc_nombrebd'], $logued_user ? $logued_user->id : '', $logued_user ? $logued_user->name : '');
                 } 
             }
             $app_cta->appcta_estado = $aux_state;
+
+            $this->registeredBinnacle($request->all(), 'update', 'Se ha modificado la cuenta '.$app_cta->appcta_app, $logued_user ? $logued_user->id : '', $logued_user ? $logued_user->name : '');
             
             $app_cta->save();
         }
+
 
         return json_encode($input);
     }
@@ -495,7 +511,11 @@ class AccountController extends Controller
     public function addTl(Request $request)
     {
         $alldata = $request->all();
+        $logued_user = Auth::user();
         $acc_id = false;
+        $response = array(
+            'status' => 'failure',
+        );
         if(array_key_exists('accid',$alldata)){
             $acc_id = $alldata['accid'];
             $cta_obj = Account::find($alldata['accid']);
@@ -529,6 +549,7 @@ class AccountController extends Controller
                 if($cta_obj->cta_fecha){
                     $acces_vars = $this->getAccessToken();
                     $service_response = $this->getAppService($acces_vars['access_token'],'modpaq',$arrayparams,'ctac');
+                    $this->registeredBinnacle($arrayparams, 'service', 'Se ha modificado la linea de tiempo con id: '.$alldata['tlid'].' de la cuenta '.$arrayparams['rfc_nombrebd'], $logued_user ? $logued_user->id : '', $logued_user ? $logued_user->name : '');
                 }
                 
             }else{
@@ -545,31 +566,39 @@ class AccountController extends Controller
                 if($cta_obj->cta_fecha){
                     $acces_vars = $this->getAccessToken();
                     $service_response = $this->getAppService($acces_vars['access_token'],'addpaq',$arrayparams,'ctac');
+                    $this->registeredBinnacle($arrayparams, 'service', 'Se ha creado una nueva linea de tiempo con id: '.$acctl->id.' a la cuenta '.$arrayparams['rfc_nombrebd'], $logued_user ? $logued_user->id : '', $logued_user ? $logued_user->name : '');
                 }
             }
+
+            $this->registeredBinnacle($request->all(), 'update', 'Se ha modificado la cuenta '.$cta_obj->cta_num, $logued_user ? $logued_user->id : '', $logued_user ? $logued_user->name : '');
+
+            $response = array(
+                'status' => 'success',
+                'msg' => 'Ok',
+                'acctl_f_ini' => $acctl->acctl_f_ini,
+                'acctl_f_fin' => $acctl->acctl_f_fin,
+                'acctl_f_corte' => $acctl->acctl_f_corte,
+                'acctl_f_fin_next' => date('Y-m-d', strtotime($acctl->acctl_f_fin . ' +1 day')),
+                'acctl_f_corte_next' => date('Y-m-d', strtotime($acctl->acctl_f_corte . ' +1 day')),
+                'acctl_estado' => $acctl->acctl_estado,
+                'acctl_f_pago' => '',
+                'id' => $acctl->id,
+                'tlid' => $alldata['tlid'],
+                'alldata' => $alldata,
+                'accid' => $acc_id
+            );
             
         }
         
-        $response = array(
-            'status' => 'success',
-            'msg' => 'Ok',
-            'acctl_f_ini' => $acctl->acctl_f_ini,
-            'acctl_f_fin' => $acctl->acctl_f_fin,
-            'acctl_f_corte' => $acctl->acctl_f_corte,
-            'acctl_f_fin_next' => date('Y-m-d', strtotime($acctl->acctl_f_fin . ' +1 day')),
-            'acctl_f_corte_next' => date('Y-m-d', strtotime($acctl->acctl_f_corte . ' +1 day')),
-            'acctl_estado' => $acctl->acctl_estado,
-            'acctl_f_pago' => '',
-            'id' => $acctl->id,
-            'tlid' => $alldata['tlid'],
-            'alldata' => $alldata,
-            'accid' => $acc_id
-        );
+        
         return \Response::json($response);
     }
 
     public function quitTl(Request $request)
     {
+        $response = array(
+            'status' => 'failure',
+        );
         $alldata = $request->all();
         if(array_key_exists('accid',$alldata)){
             $cta_obj = Account::find($alldata['accid']);
@@ -580,22 +609,27 @@ class AccountController extends Controller
                 if($cta_obj->cta_fecha){
                     $acces_vars = $this->getAccessToken();
                     $service_response = $this->getAppService($acces_vars['access_token'],'delpaq',$arrayparams,'ctac');
+                    $this->registeredBinnacle($arrayparams, 'service', 'Se ha eliminado un detalle de la cuenta '.$arrayparams['rfc_nombrebd'], $logued_user ? $logued_user->id : '', $logued_user ? $logued_user->name : '');
                 }
                 AccountTl::destroy($alldata['tlid']);
-                
             }
+            $this->registeredBinnacle($request->all(), 'update', 'Se ha modificado la cuenta '.$cta_obj->cta_num, $logued_user ? $logued_user->id : '', $logued_user ? $logued_user->name : '');
+            $response = array(
+                'status' => 'success',
+                'msg' => 'Ok',
+            );
         }
         
-        $response = array(
-            'status' => 'success',
-            'msg' => 'Ok',
-        );
+        
         return \Response::json($response);
     }
 
     public function addApp(Request $request)
     {
         $alldata = $request->all();
+        $response = array(
+            'status' => 'failure',
+        );
         if(array_key_exists('accid',$alldata)){
             $cta_obj = Account::find($alldata['accid']);
             $app_cta = new Appaccount();
@@ -630,15 +664,17 @@ class AccountController extends Controller
             if($cta_obj->cta_fecha){
                 $acces_vars = $this->getAccessToken();
                 $service_response = $this->getAppService($acces_vars['access_token'],'addapp',$arrayparams,'ctac');
+                $this->registeredBinnacle($arrayparams, 'service', 'Se ha añadido la aplicación '.$appc->app_nom.' a la cuenta '.$arrayparams['rfc_nombrebd'], $logued_user ? $logued_user->id : '', $logued_user ? $logued_user->name : '');
             }
-            
+            $response = array(
+                'status' => 'success',
+                'msg' => 'Ok',
+                //'service_response' => $service_response
+            );
+            $this->registeredBinnacle($request->all(), 'update', 'Se ha modificado la cuenta '.$cta_obj->cta_num, $logued_user ? $logued_user->id : '', $logued_user ? $logued_user->name : '');
         }
         
-        $response = array(
-            'status' => 'success',
-            'msg' => 'Ok',
-            //'service_response' => $service_response
-        );
+        
         return \Response::json($response);
     }
 }

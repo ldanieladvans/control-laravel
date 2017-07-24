@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use Illuminate\Http\Request;
 use Bican\Roles\Models\Role;
 use Bican\Roles\Models\Permission;
+use Illuminate\Support\Facades\Auth;
 
 class PermissionController extends Controller
 {
@@ -90,7 +91,7 @@ class PermissionController extends Controller
         $permission->save();
         $fmessage = 'Se ha modificado el permiso: '.$alldata['name'];
         \Session::flash('message',$fmessage);
-        $this->registeredBinnacle($request,'update',$fmessage);
+        $this->registeredBinnacle($request->all(), 'update', $fmessage, $logued_user ? $logued_user->id : '', $logued_user ? $logued_user->name : '');
         return redirect()->route('permission.index');
     }
 

@@ -86,7 +86,7 @@ class UserController extends Controller
         }else{
             $users = User::where('usrc_distrib_id',$logued_user->usrc_distrib_id)->get();
         }
-        $roles = Role::all();
+        $roles = Role::whereNotIn('slug',['app','api'])->get();
         $permissions = Permission::all();
         return view('appviews.usershow',['users'=>$users,'roles'=>$roles,'permissions'=>$permissions]);
     }
@@ -99,7 +99,7 @@ class UserController extends Controller
     public function create()
     {
         $distributors = Distributor::all();
-        $roles = Role::all();
+        $roles = Role::whereNotIn('slug',['app','api'])->get();
         $permissions = Permission::all();
         return view('appviews.usercreate',['distributors'=>$distributors,'roles'=>$roles,'permissions'=>$permissions]);
     }
@@ -112,9 +112,11 @@ class UserController extends Controller
      */
     public function store(Request $request)
     {
+        $logued_user = Auth::user();
         $alldata = $request->all();
         $user = $this->customregister($request,$alldata);
         $file     = false;
+        $usrc_type = false;
         if(array_key_exists('usrc_pic',$alldata)){
             $file     = request()->file('usrc_pic');
             $path = $request->file('usrc_pic')->storeAs('public', $user->id.'.'.$file->getClientOriginalName());
@@ -133,22 +135,39 @@ class UserController extends Controller
                 $user->usrc_distrib_id = $alldata['usrc_distrib_id'];
             }           
         }
+        if(array_key_exists('usrc_type',$alldata) && isset($alldata['usrc_type'])){
+            $user->usrc_type = $alldata['usrc_type'];
+            $usrc_type = $alldata['usrc_type'];
+        }
         $user->save();
-        if(array_key_exists('roles',$alldata)){
-            foreach ($alldata['roles'] as $rol) {
-                $rolobj = Role::find($rol);
-                $user->attachRole($rolobj);
+
+        if($usrc_type=='app'){
+            if(array_key_exists('roles',$alldata)){
+                foreach ($alldata['roles'] as $rol) {
+                    $rolobj = Role::find($rol);
+                    $user->attachRole($rolobj);
+                }
+            }
+            if(array_key_exists('permisos',$alldata)){
+                foreach ($alldata['permisos'] as $perm) {
+                    $permobj = Permission::find($perm);
+                    $user->attachPermission($permobj);
+                }
+            }
+            $permobj = Permission::where('slug','app')->get();
+            if($permobj){
+                $user->attachPermission($permobj[0]->id);
+            }
+        }else{
+            $permobj = Permission::where('slug','api')->get();
+            if($permobj){
+                $user->attachPermission($permobj[0]->id);
             }
         }
-        if(array_key_exists('permisos',$alldata)){
-            foreach ($alldata['permisos'] as $perm) {
-                $permobj = Permission::find($perm);
-                $user->attachPermission($permobj);
-            }
-        }        
+                
         $fmessage = 'Se ha creado el usuario: '.$alldata['name'];
         \Session::flash('message',$fmessage);
-        $this->registeredBinnacle($request,'store',$fmessage);
+        $this->registeredBinnacle($request->all(), 'store', $fmessage, $logued_user ? $logued_user->id : '', $logued_user ? $logued_user->name : '');
         return redirect()->route('user.index');
     }
 
@@ -176,7 +195,7 @@ class UserController extends Controller
             return view('errors.403');
         }
         $distributors = Distributor::all();
-        $roles = Role::all();
+        $roles = Role::whereNotIn('slug',['app','api'])->get();
         $permissions = Permission::all();
         return view('appviews.useredit',['distributors'=>$distributors,'roles'=>$roles,'permissions'=>$permissions,'user'=>$user]);
     }
@@ -190,6 +209,7 @@ class UserController extends Controller
      */
     public function update(Request $request, User $user)
     {
+        $logued_user = Auth::user();
         $alldata = $request->all();
         $file     = false;
         if(!$this->controllerUserCanAccess(Auth::user(),$user->usrc_distrib_id)){
@@ -253,7 +273,7 @@ class UserController extends Controller
         }
         $fmessage = 'Se ha actualizado el usuario: '.$alldata['name'];
         \Session::flash('message',$fmessage);
-        $this->registeredBinnacle($request,'update',$fmessage);
+        $this->registeredBinnacle($request->all(), 'update', $fmessage, $logued_user ? $logued_user->id : '', $logued_user ? $logued_user->name : '');
         return redirect()->route('user.index');
     }
 
@@ -265,6 +285,7 @@ class UserController extends Controller
      */
     public function destroy(User $user,Request $request)
     {
+        $logued_user = Auth::user();
         if (isset($user)){
             if(!$this->controllerUserCanAccess(Auth::user(),$user->usrc_distrib_id)){
                 return view('errors.403');
@@ -275,7 +296,7 @@ class UserController extends Controller
             }else{
                 $fmessage = 'Se ha eliminado el usuario: '.$user->name;
                 \Session::flash('message',$fmessage);
-                $this->registeredBinnacle($request,'destroy',$fmessage);
+                $this->registeredBinnacle($request->all(), 'destroy', $fmessage, $logued_user ? $logued_user->id : '', $logued_user ? $logued_user->name : '');
                 $user->delete();
             }
         }
@@ -329,7 +350,7 @@ class UserController extends Controller
         $user->save();
         $fmessage = 'Se ha cambiado la contraseña del usuario: '.$user->name;
         //\Session::flash('message',$fmessage);
-        $this->registeredBinnacle($request,'changepass',$fmessage);
+        $this->registeredBinnacle($request->all(), 'update', $fmessage, $logued_user ? $logued_user->id : '', $logued_user ? $logued_user->name : '');
         $response = array(
             'status' => 'success',
             'msg' => 'Se cambió la contraseña satisfactoriamente',
@@ -365,7 +386,7 @@ class UserController extends Controller
         }
         $fmessage = 'Se han asignado los roles: '.$rolestr.' al usuario: '.($user ? $user->name : '');
         //\Session::flash('message',$fmessage);
-        $this->registeredBinnacle($request,'assignroles',$fmessage);
+        $this->registeredBinnacle($request->all(), 'update', $fmessage, $logued_user ? $logued_user->id : '', $logued_user ? $logued_user->name : '');
         $response = array(
             'status' => 'success',
             'msg' => 'Setting created successfully',
@@ -397,7 +418,7 @@ class UserController extends Controller
         }
         $fmessage = 'Se han asignado los permisos: '.$permstr.' al usuario: '.($user ? $user->name : '');
         //\Session::flash('message',$fmessage);
-        $this->registeredBinnacle($request,'assignperms',$fmessage);
+        $this->registeredBinnacle($request->all(), 'update', $fmessage, $logued_user ? $logued_user->id : '', $logued_user ? $logued_user->name : '');
         $response = array(
             'status' => 'success',
             'msg' => 'Setting created successfully',

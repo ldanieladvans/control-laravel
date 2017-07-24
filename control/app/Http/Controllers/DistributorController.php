@@ -57,6 +57,7 @@ class DistributorController extends Controller
      */
     public function store(Request $request)
     {
+        $logued_user = Auth::user();
         $alldata = $request->all();
         $dom_vals = array();
         $distributor_vals = array();
@@ -121,7 +122,7 @@ class DistributorController extends Controller
         $distributor->save();
         $fmessage = 'Se ha creado el distribuidor: '.$alldata['distrib_nom'];
         \Session::flash('message',$fmessage);
-        $this->registeredBinnacle($request,'store',$fmessage);
+        $this->registeredBinnacle($request->all(), 'store', $fmessage, $logued_user ? $logued_user->id : '', $logued_user ? $logued_user->name : '');
         return redirect()->route('distributor.index');
     }
 
@@ -161,6 +162,7 @@ class DistributorController extends Controller
      */
     public function update(Request $request, Distributor $distributor)
     {
+        $logued_user = Auth::user();
         $alldata = $request->all();
         $dom_vals = array();
         $distributor_vals = array();
@@ -229,7 +231,7 @@ class DistributorController extends Controller
 
         $fmessage = 'Se ha actualizado el distribuidor: '.$alldata['distrib_nom'];
         \Session::flash('message',$fmessage);
-        $this->registeredBinnacle($request,'update',$fmessage);
+        $this->registeredBinnacle($request->all(), 'update', $fmessage, $logued_user ? $logued_user->id : '', $logued_user ? $logued_user->name : '');
         return redirect()->route('distributor.index');
     }
 
@@ -241,13 +243,14 @@ class DistributorController extends Controller
      */
     public function destroy(Distributor $distributor, Request $request)
     {
+        $logued_user = Auth::user();
         if(!$this->controllerUserCanAccess(Auth::user(),$distributor->id)){
             return view('errors.403');
         }
         if (isset($distributor)){
             $fmessage = 'Se ha eliminado el distribuidor: '.$distributor->distrib_nom;
             \Session::flash('message',$fmessage);
-            $this->registeredBinnacle($request,'destroy',$fmessage);
+            $this->registeredBinnacle($request->all(), 'destroy', $fmessage, $logued_user ? $logued_user->id : '', $logued_user ? $logued_user->name : '');
             $distributor->delete();
         }
         return redirect()->route('distributor.index');

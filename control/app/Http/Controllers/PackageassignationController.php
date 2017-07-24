@@ -57,14 +57,15 @@ class PackageassignationController extends Controller
      */
     public function store(Request $request)
     {
+        $logued_user = Auth::user();
         $alldata = $request->all();
         $asigpaq = new Packageassignation($alldata);
         $asigpaq->asigpaq_f_vent = date('Y-m-d');
         $asigpaq->asigpaq_f_act = date('Y-m-d');
         $asigpaq->save();
-        $fmessage = 'Se ha asignado un paquete a un distribuidor ocn id: '.$asigpaq->id;
+        $fmessage = 'Se ha realizado un asignación al distribuidor: '.($asigpaq->asigpaq_distrib_id ? $asigpaq->distributor->distrib_nom : '');
         \Session::flash('message',$fmessage);
-        $this->registeredBinnacle($request,'store',$fmessage);
+        $this->registeredBinnacle($request->all(), 'store', $fmessage, $logued_user ? $logued_user->id : '', $logued_user ? $logued_user->name : '');
         return redirect()->route('asigpaq.index');
     }
 
@@ -118,6 +119,7 @@ class PackageassignationController extends Controller
      */
     public function update(Request $request, $id)
     {
+        $logued_user = Auth::user();
         $alldata = $request->all();
         $asigpaq = Packageassignation::findOrFail($id);
         if(!$this->controllerUserCanAccess(Auth::user(),$asigpaq->asigpaq_distrib_id)){
@@ -138,9 +140,9 @@ class PackageassignationController extends Controller
             }
         }
         $asigpaq->save();
-        $fmessage = 'Se ha actualizado un paquete a un distribuidor ocn id: '.$asigpaq->id;
+        $fmessage = 'Se ha actualizado la asignación con id: '.$asigpaq->id;
         \Session::flash('message',$fmessage);
-        $this->registeredBinnacle($request,'update',$fmessage);
+        $this->registeredBinnacle($request->all(), 'update', $fmessage, $logued_user ? $logued_user->id : '', $logued_user ? $logued_user->name : '');
         return redirect()->route('asigpaq.index');
     }
 
@@ -152,14 +154,15 @@ class PackageassignationController extends Controller
      */
     public function destroy($id,Request $request)
     {
+        $logued_user = Auth::user();
         if (isset($id)){
             $asigpaq = Packageassignation::findOrFail($id);
             if(!$this->controllerUserCanAccess(Auth::user(),$asigpaq->asigpaq_distrib_id)){
                 return view('errors.403');
             }
-            $fmessage = 'Se ha eliminado la asignacion de distribuidor-paquete: '.$asigpaq->asigpaq_rfc.' '.$asigpaq->asigpaq_gig.' '.$asigpaq->asigpaq_distrib_id.' '.$asigpaq->asigpaq_paq_id;
+            $fmessage = 'Se ha eliminado la asignación: '.($asigpaq->asigpaq_rfc.' - '.$asigpaq->asigpaq_gig.' - '.($asigpaq->asigpaq_distrib_id ? $asigpaq->distributor->distrib_nom : '').' - '.$id);
             \Session::flash('message',$fmessage);
-            $this->registeredBinnacle($request,'destroy',$fmessage);
+            $this->registeredBinnacle($request->all(), 'destroy', $fmessage, $logued_user ? $logued_user->id : '', $logued_user ? $logued_user->name : '');
             $asigpaq->delete();
 
         }

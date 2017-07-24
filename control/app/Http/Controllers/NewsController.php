@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
 use App\News;
+use Illuminate\Support\Facades\Auth;
 
 class NewsController extends Controller
 {
@@ -49,12 +50,13 @@ class NewsController extends Controller
      */
     public function store(Request $request)
     {
+        $logued_user = Auth::user();
         $alldata = $request->all();
         $news = new News($alldata);
         $news->save();
         $fmessage = 'Se ha creado la noticia: '.$alldata['tittle'];
         \Session::flash('message',$fmessage);
-        $this->registeredBinnacle($request,'store',$fmessage);
+        $this->registeredBinnacle($request->all(), 'store', $fmessage, $logued_user ? $logued_user->id : '', $logued_user ? $logued_user->name : '');
         return redirect()->route('news.index');
     }
 
@@ -90,6 +92,7 @@ class NewsController extends Controller
      */
     public function update(Request $request, $id)
     {
+        $logued_user = Auth::user();
         $alldata = $request->all();
         $news = News::findOrFail($id);
         $news->tittle = $alldata['tittle'];
@@ -99,7 +102,7 @@ class NewsController extends Controller
         $news->save();
         $fmessage = 'Se ha actualizado la noticia: '.$alldata['tittle'];
         \Session::flash('message',$fmessage);
-        $this->registeredBinnacle($request,'update',$fmessage);
+        $this->registeredBinnacle($request->all(), 'update', $fmessage, $logued_user ? $logued_user->id : '', $logued_user ? $logued_user->name : '');
         return redirect()->route('news.index');
     }
 
@@ -111,11 +114,12 @@ class NewsController extends Controller
      */
     public function destroy($id,Request $request)
     {
+        $logued_user = Auth::user();
         if (isset($id)){
             $news = News::findOrFail($id);
             $fmessage = 'Se ha eliminado la noticia: '.$news->tittle;
             \Session::flash('message',$fmessage);
-            $this->registeredBinnacle($request,'destroy',$fmessage);
+            $this->registeredBinnacle($request->all(), 'destroy', $fmessage, $logued_user ? $logued_user->id : '', $logued_user ? $logued_user->name : '');
             $news->delete();
 
         }

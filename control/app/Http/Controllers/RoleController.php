@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use Illuminate\Http\Request;
 use Bican\Roles\Models\Role;
 use Bican\Roles\Models\Permission;
+use Illuminate\Support\Facades\Auth;
 
 class RoleController extends Controller
 {
@@ -50,6 +51,7 @@ class RoleController extends Controller
      */
     public function store(Request $request)
     {
+        $logued_user = Auth::user();
         $alldata = $request->all();
         $permisos = false;
         if(array_key_exists('permisos',$alldata)){
@@ -66,7 +68,7 @@ class RoleController extends Controller
         }
         $fmessage = 'Se ha creado el rol: '.$alldata['name'];
         \Session::flash('message',$fmessage);
-        $this->registeredBinnacle($request,'store',$fmessage);
+        $this->registeredBinnacle($request->all(), 'store', $fmessage, $logued_user ? $logued_user->id : '', $logued_user ? $logued_user->name : '');
         return redirect()->route('role.index');
     }
 
@@ -103,6 +105,7 @@ class RoleController extends Controller
      */
     public function update(Request $request,$rol_id)
     {
+        $logued_user = Auth::user();
         $alldata = $request->all();
         $permisos = false;
         if(array_key_exists('permisos',$alldata)){
@@ -123,7 +126,7 @@ class RoleController extends Controller
         }
         $fmessage = 'Se ha actualizado el rol: '.$alldata['name'];
         \Session::flash('message',$fmessage);
-        $this->registeredBinnacle($request,'update',$fmessage);
+        $this->registeredBinnacle($request->all(), 'update', $fmessage, $logued_user ? $logued_user->id : '', $logued_user ? $logued_user->name : '');
         return redirect()->route('role.index');
     }
 
@@ -135,11 +138,12 @@ class RoleController extends Controller
      */
     public function destroy($rol_id,Request $request)
     {
+        $logued_user = Auth::user();
         if (isset($rol_id)){
             $rol = Role::findOrFail($rol_id);
             $fmessage = 'Se ha eliminado el rol: '.$rol->name;
             \Session::flash('message',$fmessage);
-            $this->registeredBinnacle($request,'destroy',$fmessage);
+            $this->registeredBinnacle($request->all(), 'destroy', $fmessage, $logued_user ? $logued_user->id : '', $logued_user ? $logued_user->name : '');
             $rol->delete();
 
         }
@@ -148,8 +152,12 @@ class RoleController extends Controller
 
     public function assignPerm(Request $request)
     {
+        $logued_user = Auth::user();
         $alldata = $request->all();
         $return_array = array();
+        $response = array(
+            'status' => 'failure',
+        );
         if(array_key_exists('rol',$alldata) && isset($alldata['rol'])){
             $role = Role::find($alldata['rol']);
             $role->detachAllPermissions();
@@ -159,12 +167,15 @@ class RoleController extends Controller
                     $role->attachPermission($select);
                 }
             }
+            $this->registeredBinnacle($request->all(), 'update', 'Se han asignado permisos al rol con id: '.$alldata['rol'], $logued_user ? $logued_user->id : '', $logued_user ? $logued_user->name : '');
+            $response = array(
+                'status' => 'success',
+                'msg' => 'Se asignaron los permisos satisfactoriamente',
+                'rol' => $alldata['rol'] ? $alldata['rol']:'false',
+            );
         }
-        $response = array(
-            'status' => 'success',
-            'msg' => 'Se asignaron los permisos satisfactoriamente',
-            'rol' => $alldata['rol'] ? $alldata['rol']:'false',
-        );
+
+        
         return \Response::json($response);
     }
 }

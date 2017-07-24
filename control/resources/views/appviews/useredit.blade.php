@@ -131,13 +131,21 @@
 						</div>
 
 		                <div class="item form-group">
-		                	<label class="control-label col-md-4 col-sm-4 col-xs-12">Supervisor: </label>
+		                	<label class="control-label col-md-1 col-sm-1 col-xs-12">Supervisor: </label>
 	                        <div class="col-md-1 col-sm-1 col-xs-12">
 		                    	<p></p>
 		                        Si:
 		                        <input type="radio" class="flat" name="usrc_super" id="usrc_super1" value="1" {{$user->usrc_super == '1' ? 'checked':''}} /> No:
 		                        <input type="radio" class="flat" name="usrc_super" id="usrc_super0" value="0" {{$user->usrc_super == '0' ? 'checked':''}}/>
 		                    </div>
+
+		                    <label class="control-label col-md-1 col-sm-1 col-xs-12">Tipo de Usuario: </label>
+		                    <div class="col-md-2 col-sm-2 col-xs-12">
+		                        <select class="js-example-basic-single js-states form-control" name="usrc_type" id="usrc_type" disabled>
+			                        <option value="app" {{$user->usrc_type=='app' ? 'selected' : ''}}>Aplicación</option>
+			                        <option value="api" {{$user->usrc_type=='api' ? 'selected' : ''}}>Servicio</option>
+		                        </select>
+		                  	</div>
 
 			                <label class="control-label col-md-2 col-sm-2 col-xs-12">Distribuidor Asociado: </label>
 		                    <div class="col-md-2 col-sm-2 col-xs-12">
