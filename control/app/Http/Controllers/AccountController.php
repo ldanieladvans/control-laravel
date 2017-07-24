@@ -596,6 +596,7 @@ class AccountController extends Controller
 
     public function quitTl(Request $request)
     {
+        $logued_user = Auth::user();
         $response = array(
             'status' => 'failure',
         );
@@ -626,6 +627,7 @@ class AccountController extends Controller
 
     public function addApp(Request $request)
     {
+        $logued_user = Auth::user();
         $alldata = $request->all();
         $response = array(
             'status' => 'failure',
