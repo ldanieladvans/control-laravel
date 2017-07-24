@@ -182,13 +182,15 @@
 					            <li><a href="{{ route('home') }}"><i class="fa fa-home"></i> <strong>INICIO</strong> </span></a>
 					              
 					            </li>
-					            <li><a><i class="fa fa-group"></i> <strong>DIRECTORIO</strong> <span class="fa fa-chevron-down"></span></a>
-					              <ul class="nav child_menu">
-					              	<li><a href="{{ route('distributor.index') }}"><strong>DISTRIBUIDORES</strong></a></li>
-					                <li><a href="{{ route('client.index') }}"><strong>CLIENTES</strong></a></li>
-					                
-					              </ul>
-					            </li>
+					            @if(Auth::user()->usrc_admin || Auth::user()->isRole('fact|super.general|ventas|soporte.tecnico|auditor|asist.soporte.tecnico'))
+						            <li><a><i class="fa fa-group"></i> <strong>DIRECTORIO</strong> <span class="fa fa-chevron-down"></span></a>
+						              <ul class="nav child_menu">
+						              	<li><a href="{{ route('distributor.index') }}"><strong>DISTRIBUIDORES</strong></a></li>
+						                <li><a href="{{ route('client.index') }}"><strong>CLIENTES</strong></a></li>
+						                
+						              </ul>
+						            </li>
+					            @endif
 					            <li><a><i class="fa fa-exchange"></i> <strong>ASIGNACIONES</strong> <span class="fa fa-chevron-down"></span></a>
 					            	<ul class="nav child_menu">
 					            		<li><a href="{{ route('asigpaq.index') }}"><strong>ASIGNACIÓN DISTRIBUIDORES</strong></a></li>

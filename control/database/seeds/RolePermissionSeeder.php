@@ -510,11 +510,9 @@ class RolePermissionSeeder extends Seeder
 		$roles['aistSopTecRole']->attachPermission($perms['newsReadPermission']);
 
 		$roles['aistSopTecRole']->attachPermission($perms['permsReadPermission']);
-
-
 	}
 
-	public function createsuperuser($app_role_id){
+	public function createsuperuser($app_role_id,$gen_role_id){
 		//TODO here goes the app roles
 		$adminUser = User::create([
 		    'name' => 'Admin',
@@ -527,6 +525,10 @@ class RolePermissionSeeder extends Seeder
 		DB::table('role_user')->insert([
             ['role_id' => $app_role_id, 'user_id' => $adminUser->id, 'created_at'=>date("Y-m-d H:i:s"),'updated_at'=>date("Y-m-d H:i:s")]
         ]);
+
+        DB::table('role_user')->insert([
+            ['role_id' => $gen_role_id, 'user_id' => $adminUser->id, 'created_at'=>date("Y-m-d H:i:s"),'updated_at'=>date("Y-m-d H:i:s")]
+        ]);
 	}
 
     /**
@@ -538,6 +540,7 @@ class RolePermissionSeeder extends Seeder
     {
         $roles = $this->createroles();
         $perms = $this->createpermissions();
-        $this->createsuperuser($roles['appRole']->id);
+        $this->assignrolesperms($roles,$perms);
+        $this->createsuperuser($roles['appRole']->id,$roles['superGeneralRole']->id);
     }
 }
