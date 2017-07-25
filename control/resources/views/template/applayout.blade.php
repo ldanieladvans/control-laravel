@@ -239,7 +239,12 @@
 					            @if(Auth::user()->usrc_admin || Auth::user()->can('see.news'))
 						            <li><a><i class="fa fa-newspaper-o"></i> <strong>SERV. EXTERNOS</strong> <span class="fa fa-chevron-down"></span></a>
 						              <ul class="nav child_menu">
-						                <li><a href="{{ route('news.index') }}"><strong>NOTICIAS</strong></a></li>
+						              	@if(Auth::user()->usrc_admin || Auth::user()->can('see.news'))
+						                	<li><a href="{{ route('news.index') }}"><strong>NOTICIAS</strong></a></li>
+					                	@endif
+					                	@if(Auth::user()->usrc_admin)
+						                	<li><a href="{{ route('arts.index') }}"><strong>ART. 69</strong></a></li>
+						                @endif
 						              </ul>
 						            </li>
 					            @endif

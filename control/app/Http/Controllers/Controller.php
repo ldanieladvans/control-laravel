@@ -15,6 +15,7 @@ use App\Cpmex;
 use App\Package;
 use App\Packageassignation;
 use Illuminate\Support\Facades\Auth;
+use App\Art69;
 
 class Controller extends BaseController
 {
@@ -175,6 +176,19 @@ class Controller extends BaseController
             }
         }
         return false;
+    }
+
+
+    public function getArt(Request $request)
+    {
+        $alldata = $request->all();
+        
+        $response = array(
+            'status' => 'success',
+            'msg' => 'Ok',
+            'tabledata' => Art69::all()
+        );
+        return \Response::json($response);
     }
 
 }

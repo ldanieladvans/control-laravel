@@ -43,6 +43,7 @@ Route::group(['prefix' => 'security'], function () {
 
 Route::group(['prefix' => 'exts'], function () {
     Route::resource('news', 'NewsController');
+    Route::resource('arts', 'Art69Controller');
 });
 
 //Ajax routes
@@ -67,6 +68,8 @@ Route::post('/crudtabledit', 'AccountController@crudTablEdit');
 Route::post('/addtl', 'AccountController@addTl');
 Route::post('/quittl', 'AccountController@quitTl');
 Route::post('/addapp', 'AccountController@addApp');
+Route::post('/getart', 'Controller@getArt');
+Route::post('/destroyajax', 'Art69Controller@destroyAjax');
 
 
 
