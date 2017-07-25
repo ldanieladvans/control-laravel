@@ -98,7 +98,7 @@
                             </div>
                             <label class="control-label col-md-1 col-sm-1 col-xs-12">Periodicidad: </label>
                             <div class="col-md-2 col-sm-2 col-xs-12">
-                                <select class="js-example-basic-single js-states form-control" name="cta_periodicity" id="cta_periodicity">
+                                <select class="js-example-basic-single js-states form-control" name="cta_periodicity" id="cta_periodicity" {{ (Auth::user()->can('change.period.accounts') || Auth::user()->usrc_admin) ? '' : 'disabled'}}>
                                     <option value="3" selected>Trimestral</option>
                                     <option value="6" >Semestral</option>
                                     <option value="12" >Anual</option>
@@ -106,7 +106,7 @@
                             </div>
                             <label class="control-label col-md-1 col-sm-1 col-xs-12">Recursivo: </label>
                             <div class="col-md-1 col-sm-1 col-xs-12">
-                                <select class="js-example-basic-single js-states form-control" name="cta_recursive" id="cta_recursive">
+                                <select class="js-example-basic-single js-states form-control" name="cta_recursive" id="cta_recursive" {{ (Auth::user()->can('change.rec.accounts') || Auth::user()->usrc_admin) ? '' : 'disabled'}}>
                                     <option value="1" {{$account->cta_recursive==1 ? 'selected':''}}>Si</option>
                                     <option value="0" {{$account->cta_recursive!=1 ? 'selected':''}}>No</option>
                                 </select>
