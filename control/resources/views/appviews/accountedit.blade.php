@@ -113,151 +113,157 @@
                             </div>
                         </div>
 
-                        <div class="x_content" id="tabaccedit">
-                            <div class="" role="tabpanel" data-example-id="togglable-tabs">
-                                <ul id="myTab" class="nav nav-tabs bar_tabs" role="tablist">
-                                    <li role="presentation" class="active"><a href="#tab_content1" id="home-tab" role="tab" data-toggle="tab" aria-expanded="true">Detalles</a>
-                                    </li>
-                                    <li role="presentation"><a href="#tab_content2" id="home-tab" role="tab" data-toggle="tab" aria-expanded="true">Historial Fechas-Contratos</a>
-                                    </li>
-                                </ul>
+                        @if(Auth::user()->usrc_admin || Auth::user()->can('manage.details.accounts') || Auth::user()->can('manage.tls.accounts'))
+                            <div class="x_content" id="tabaccedit">
+                                <div class="" role="tabpanel" data-example-id="togglable-tabs">
+                                    <ul id="myTab" class="nav nav-tabs bar_tabs" role="tablist">
+                                        <li role="presentation" class="active"><a href="#tab_content1" id="home-tab" role="tab" data-toggle="tab" aria-expanded="true">Detalles</a>
+                                        </li>
+                                        <li role="presentation"><a href="#tab_content2" id="home-tab" role="tab" data-toggle="tab" aria-expanded="true">Historial Fechas-Contratos</a>
+                                        </li>
+                                    </ul>
 
-                                <div id="myTabContent" class="tab-content">
-                                    <div role="tabpanel" class="tab-pane fade active in" id="tab_content1" aria-labelledby="home-tab"> 
-                                        <div class="item form-group">                       
-                                            <div class="col-md-12 col-sm-12 col-xs-12">
-                                                <table id="editable-dt1" class="table table-striped table-bordered" width="100%">
-                                                    <thead>
-                                                        <tr>
-                                                            <th align="left">#</th>
-                                                            <th align="left">Aplicación</th>
-                                                            <th align="left">Cantidad Instancias</th>
-                                                            <th align="left">Cantidad Gigas</th>
-                                                            <th align="left">Ambiente</th>
-                                                            <th align="left">Fecha Activación</th>
-                                                            <th align="left">Estado</th>
-                                                        </tr>
-                                                    </thead>
-                                                    <tbody>
-                                                        @foreach($account->packages as $appcta)
-                                                            <tr data-id="{{$appcta->id}}">
-                                                                <td class="tabledit-data">{{$appcta->id}}</td>
-                                                                <td class="tabledit-data">
-                                                                    @foreach($appsne as $appne)
-                                                                        @if ($appcta->hasApp($appne->code,true))
-                                                                            {{$appne->name}}
-                                                                        @endif
-                                                                    @endforeach
-                                                                </td>
-                                                                <td class="tabledit-data">{{$appcta->appcta_rfc}}</td>
-                                                                <td class="tabledit-data">{{$appcta->appcta_gig}}</td>
-                                                                <td class="tabledit-data">{{$appcta->sale_estado}}</td>
-                                                                <td class="tabledit-data">{{$appcta->appcta_f_act}}</td>
-                                                                <td class="tabledit-data">{{$appcta->appcta_estado}}</td>
-                                                            </tr>
-                                                        @endforeach
-                                                    </tbody>
-                                                    <button id="testbtn" type="button" onclick="addLine()" >Agregar [+]</button>
-                                                    <div class="modal fade" id="addappmodal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
-                                                        <div class="modal-dialog" role="document">
-                                                            <div class="modal-content">
-                                                                <div class="modal-header">
-                                                                    <h5 class="modal-title" id="exampleModalLabel">Añadir Aplicación:</h5>
-                                                                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                                                                        <span aria-hidden="true">&times;</span>
-                                                                    </button>
-                                                                </div>
-                                                                <div class="modal-body">
-                                                                    <form>
-                                                                        <div class="item form-group">
-                                                                            <div class="col-md-12 col-sm-12 col-xs-12">
-                                                                                <select class="js-example-basic-single js-states form-control" name="addapps" id="addapps" style="width: 100%; display: none;">
-                                                                                    @foreach($appsne as $appne)
-                                                                                        @if ($account->hasApp($appne->code,true)==0)
-                                                                                            <option value="{{$appne->code}}" >{{$appne->name}}</option>
-                                                                                        @endif
-                                                                                    @endforeach
-                                                                                </select>
-                                                                            </div>
+                                    <div id="myTabContent" class="tab-content">
+                                        @if(Auth::user()->usrc_admin || Auth::user()->can('manage.details.accounts'))
+                                            <div role="tabpanel" class="tab-pane fade active in" id="tab_content1" aria-labelledby="home-tab"> 
+                                                <div class="item form-group">                       
+                                                    <div class="col-md-12 col-sm-12 col-xs-12">
+                                                        <table id="editable-dt1" class="table table-striped table-bordered" width="100%">
+                                                            <thead>
+                                                                <tr>
+                                                                    <th align="left">#</th>
+                                                                    <th align="left">Aplicación</th>
+                                                                    <th align="left">Cantidad Instancias</th>
+                                                                    <th align="left">Cantidad Gigas</th>
+                                                                    <th align="left">Ambiente</th>
+                                                                    <th align="left">Fecha Activación</th>
+                                                                    <th align="left">Estado</th>
+                                                                </tr>
+                                                            </thead>
+                                                            <tbody>
+                                                                @foreach($account->packages as $appcta)
+                                                                    <tr data-id="{{$appcta->id}}">
+                                                                        <td class="tabledit-data">{{$appcta->id}}</td>
+                                                                        <td class="tabledit-data">
+                                                                            @foreach($appsne as $appne)
+                                                                                @if ($appcta->hasApp($appne->code,true))
+                                                                                    {{$appne->name}}
+                                                                                @endif
+                                                                            @endforeach
+                                                                        </td>
+                                                                        <td class="tabledit-data">{{$appcta->appcta_rfc}}</td>
+                                                                        <td class="tabledit-data">{{$appcta->appcta_gig}}</td>
+                                                                        <td class="tabledit-data">{{$appcta->sale_estado}}</td>
+                                                                        <td class="tabledit-data">{{$appcta->appcta_f_act}}</td>
+                                                                        <td class="tabledit-data">{{$appcta->appcta_estado}}</td>
+                                                                    </tr>
+                                                                @endforeach
+                                                            </tbody>
+                                                            <button id="testbtn" type="button" onclick="addLine()" >Agregar [+]</button>
+                                                            <div class="modal fade" id="addappmodal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+                                                                <div class="modal-dialog" role="document">
+                                                                    <div class="modal-content">
+                                                                        <div class="modal-header">
+                                                                            <h5 class="modal-title" id="exampleModalLabel">Añadir Aplicación:</h5>
+                                                                            <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                                                                                <span aria-hidden="true">&times;</span>
+                                                                            </button>
                                                                         </div>
+                                                                        <div class="modal-body">
+                                                                            <form>
+                                                                                <div class="item form-group">
+                                                                                    <div class="col-md-12 col-sm-12 col-xs-12">
+                                                                                        <select class="js-example-basic-single js-states form-control" name="addapps" id="addapps" style="width: 100%; display: none;">
+                                                                                            @foreach($appsne as $appne)
+                                                                                                @if ($account->hasApp($appne->code,true)==0)
+                                                                                                    <option value="{{$appne->code}}" >{{$appne->name}}</option>
+                                                                                                @endif
+                                                                                            @endforeach
+                                                                                        </select>
+                                                                                    </div>
+                                                                                </div>
 
-                                                                        <div class="item form-group">
-                                                                            <div class="col-md-6 col-sm-6 col-xs-12">
-                                                                                <input id="appcta_rfc" class="form-control has-feedback-left" name="appcta_rfc" title="Cantidad de Instancias" placeholder="Cantidad Instancias *" type="numberint" value="0">
-                                                                                <span class="fa fa-bank form-control-feedback left" aria-hidden="true"></span>
-                                                                            </div>
-                                                                            <div class="col-md-6 col-sm-6 col-xs-12">
-                                                                                <input id="appcta_gig" class="form-control has-feedback-left" name="appcta_gig" placeholder="Cantidad Gigas *" value="0" type="number" title="Almacenamiento en Gigas">
-                                                                                <span class="fa fa-archive form-control-feedback left" aria-hidden="true"></span>
-                                                                            </div>
+                                                                                <div class="item form-group">
+                                                                                    <div class="col-md-6 col-sm-6 col-xs-12">
+                                                                                        <input id="appcta_rfc" class="form-control has-feedback-left" name="appcta_rfc" title="Cantidad de Instancias" placeholder="Cantidad Instancias *" type="numberint" value="0">
+                                                                                        <span class="fa fa-bank form-control-feedback left" aria-hidden="true"></span>
+                                                                                    </div>
+                                                                                    <div class="col-md-6 col-sm-6 col-xs-12">
+                                                                                        <input id="appcta_gig" class="form-control has-feedback-left" name="appcta_gig" placeholder="Cantidad Gigas *" value="0" type="number" title="Almacenamiento en Gigas">
+                                                                                        <span class="fa fa-archive form-control-feedback left" aria-hidden="true"></span>
+                                                                                    </div>
+                                                                                </div>
+                                                                            </form>
+
                                                                         </div>
-                                                                    </form>
-
-                                                                </div>
-                                                                <div class="modal-footer">
-                                                                    <button type="button"  onclick="addApp({{$account->id}});" class="btn btn-primary">Ok</button>
+                                                                        <div class="modal-footer">
+                                                                            <button type="button"  onclick="addApp({{$account->id}});" class="btn btn-primary">Ok</button>
+                                                                        </div>
+                                                                    </div>
                                                                 </div>
                                                             </div>
-                                                        </div>
+                                                        </table>
                                                     </div>
-                                                </table>
+                                                </div>
                                             </div>
-                                        </div>
+                                        @endif
+                                        @if(Auth::user()->usrc_admin || Auth::user()->can('manage.tls.accounts'))
+                                            <div role="tabpanel" class="tab-pane fade" id="tab_content2" aria-labelledby="home-tab"> 
+                                                <div class="item form-group" id="dates_div" >
+                                                    <div class="col-md-3 col-sm-3 col-xs-12">
+                                                        <input id="acctl_f_ini" title="Fecha Inicio" class="form-control has-feedback-left" name="acctl_f_ini" placeholder="Fecha Inicio" type="date">
+                                                        <span class="fa fa-calendar form-control-feedback left" aria-hidden="true"></span>
+                                                    </div>
+
+                                                    <div class="col-md-3 col-sm-3 col-xs-12">
+                                                        <input id="acctl_f_fin" title="Fecha Fin" class="form-control has-feedback-left" name="acctl_f_fin" placeholder="Fecha Fin" type="date">
+                                                        <span class="fa fa-calendar form-control-feedback left" aria-hidden="true"></span>
+                                                    </div>
+                                                    
+                                                    <div class="col-md-3 col-sm-3 col-xs-12">
+                                                        <input id="acctl_f_corte" title="Fecha Corte" class="form-control has-feedback-left" name="acctl_f_corte" placeholder="Fecha Corte" type="date">
+                                                        <span class="fa fa-calendar form-control-feedback left" aria-hidden="true"></span>
+                                                    </div>
+
+                                                    <div class="col-md-3 col-sm-3 col-xs-12">
+                                                        <button id="addlinedate" type="button" onclick="addtl({{$account->id}})" class="btn btn-success">Agregar</button>
+                                                    </div>
+                                                </div>
+                                                <div class="item form-group" >
+                                                    <table id="tabletl1" class="table table-striped table-bordered" width="100%">
+                                                        <thead>
+                                                            <tr>
+                                                                <th>Fecha Inicio</th>
+                                                                <th>Fecha Fin</th>
+                                                                <th>Fecha Corte</th>
+                                                                <th>Estado</th>
+                                                                <th>Fecha de Pago</th>
+                                                                <th>Acciones</th>
+                                                            </tr>
+                                                        </thead>
+                                                        <tbody>
+                                                            @foreach($account->timelines as $tl)
+                                                                <tr id="tbrow{{$tl->id}}">
+                                                                    <td id="tdrow{{$tl->id}}1">{{$tl->acctl_f_ini}}</td>
+                                                                    <td id="tdrow{{$tl->id}}2">{{$tl->acctl_f_fin}}</td>
+                                                                    <td id="tdrow{{$tl->id}}3">{{$tl->acctl_f_corte}}</td>
+                                                                    <td id="tdrow{{$tl->id}}4">{{$tl->acctl_estado}}</td>
+                                                                    <td id="tdrow{{$tl->id}}5">{{$tl->acctl_f_pago}}</td>
+                                                                    <td>
+                                                                        <div class='btn-group'><div class='btn-group'><a id='{{$tl->id}}' onclick='quittl("{{$tl->id}}","{{$account->id}}")' class='btn btn-xs' data-placement='left' title='Borrar' ><i class='fa fa-trash fa-3x'></i></a></div>
+                                                                        <div class='btn-group'><div class='btn-group'><a id='{{$tl->id}}' onclick='edittl({{$tl->id}})' class='btn btn-xs' data-placement='left' title='Editar' ><i class='fa fa-edit fa-3x'></i></a></div>
+                                                                    </td>
+                                                                </tr>
+                                                            @endforeach
+                                                        </tbody>
+                                                    </table>
+                                                </div>
+                                            </div>
+                                        @endif 
                                     </div>
-                                    <div role="tabpanel" class="tab-pane fade" id="tab_content2" aria-labelledby="home-tab"> 
-                                        <div class="item form-group" id="dates_div" >
-                                            <div class="col-md-3 col-sm-3 col-xs-12">
-                                                <input id="acctl_f_ini" title="Fecha Inicio" class="form-control has-feedback-left" name="acctl_f_ini" placeholder="Fecha Inicio" type="date">
-                                                <span class="fa fa-calendar form-control-feedback left" aria-hidden="true"></span>
-                                            </div>
-
-                                            <div class="col-md-3 col-sm-3 col-xs-12">
-                                                <input id="acctl_f_fin" title="Fecha Fin" class="form-control has-feedback-left" name="acctl_f_fin" placeholder="Fecha Fin" type="date">
-                                                <span class="fa fa-calendar form-control-feedback left" aria-hidden="true"></span>
-                                            </div>
-                                            
-                                            <div class="col-md-3 col-sm-3 col-xs-12">
-                                                <input id="acctl_f_corte" title="Fecha Corte" class="form-control has-feedback-left" name="acctl_f_corte" placeholder="Fecha Corte" type="date">
-                                                <span class="fa fa-calendar form-control-feedback left" aria-hidden="true"></span>
-                                            </div>
-
-                                            <div class="col-md-3 col-sm-3 col-xs-12">
-                                                <button id="addlinedate" type="button" onclick="addtl({{$account->id}})" class="btn btn-success">Agregar</button>
-                                            </div>
-                                        </div>
-                                        <div class="item form-group" >
-                                            <table id="tabletl1" class="table table-striped table-bordered" width="100%">
-                                                <thead>
-                                                    <tr>
-                                                        <th>Fecha Inicio</th>
-                                                        <th>Fecha Fin</th>
-                                                        <th>Fecha Corte</th>
-                                                        <th>Estado</th>
-                                                        <th>Fecha de Pago</th>
-                                                        <th>Acciones</th>
-                                                    </tr>
-                                                </thead>
-                                                <tbody>
-                                                    @foreach($account->timelines as $tl)
-                                                        <tr id="tbrow{{$tl->id}}">
-                                                            <td id="tdrow{{$tl->id}}1">{{$tl->acctl_f_ini}}</td>
-                                                            <td id="tdrow{{$tl->id}}2">{{$tl->acctl_f_fin}}</td>
-                                                            <td id="tdrow{{$tl->id}}3">{{$tl->acctl_f_corte}}</td>
-                                                            <td id="tdrow{{$tl->id}}4">{{$tl->acctl_estado}}</td>
-                                                            <td id="tdrow{{$tl->id}}5">{{$tl->acctl_f_pago}}</td>
-                                                            <td>
-                                                                <div class='btn-group'><div class='btn-group'><a id='{{$tl->id}}' onclick='quittl("{{$tl->id}}","{{$account->id}}")' class='btn btn-xs' data-placement='left' title='Borrar' ><i class='fa fa-trash fa-3x'></i></a></div>
-                                                                <div class='btn-group'><div class='btn-group'><a id='{{$tl->id}}' onclick='edittl({{$tl->id}})' class='btn btn-xs' data-placement='left' title='Editar' ><i class='fa fa-edit fa-3x'></i></a></div>
-                                                            </td>
-                                                        </tr>
-                                                    @endforeach
-                                                </tbody>
-                                            </table>
-                                        </div>
-                                    </div> 
                                 </div>
                             </div>
-                        </div>
+                        @endif
 
                         <div class="ln_solid"></div>
                         <div class="form-group">

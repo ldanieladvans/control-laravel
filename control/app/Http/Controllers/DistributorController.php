@@ -29,7 +29,7 @@ class DistributorController extends Controller
     public function index()
     {
         $logued_user = Auth::user();
-        if($logued_user->usrc_admin || $logued_user->isRole('fact|super.general|ventas|soporte.tecnico|asist.soporte.tecnico')){
+        if($logued_user->usrc_admin || $logued_user->can('see.dist')){
             if($logued_user->usrc_admin || $logued_user->usrc_super){
                 $distributors = Distributor::all();
             }else{
@@ -50,7 +50,7 @@ class DistributorController extends Controller
     public function create()
     {
         $logued_user = Auth::user();
-        if($logued_user->usrc_admin || $logued_user->isRole('super.general')){
+        if($logued_user->usrc_admin || $logued_user->can('create.dist')){
             $domiciles = Domicile::all();
             $countries = Country::all();
             return view('appviews.distributorcreate',['domiciles'=>$domiciles,'countries'=>$countries]);
@@ -69,7 +69,7 @@ class DistributorController extends Controller
     public function store(Request $request)
     {
         $logued_user = Auth::user();
-        if($logued_user->usrc_admin || $logued_user->isRole('super.general')){
+        if($logued_user->usrc_admin || $logued_user->can('create.dist')){
             $alldata = $request->all();
             $dom_vals = array();
             $distributor_vals = array();
@@ -161,7 +161,7 @@ class DistributorController extends Controller
     public function edit(Distributor $distributor)
     {
         $logued_user = Auth::user();
-        if($logued_user->usrc_admin || $logued_user->isRole('super.general|fact')){
+        if($logued_user->usrc_admin || $logued_user->can('edit.dist')){
             $domiciles = Domicile::all();
             $countries = Country::all();
             if(!$this->controllerUserCanAccess(Auth::user(),$distributor->id)){
@@ -184,7 +184,7 @@ class DistributorController extends Controller
     public function update(Request $request, Distributor $distributor)
     {
         $logued_user = Auth::user();
-        if($logued_user->usrc_admin || $logued_user->isRole('super.general|fact')){
+        if($logued_user->usrc_admin || $logued_user->can('edit.dist')){
             $alldata = $request->all();
             $dom_vals = array();
             $distributor_vals = array();
@@ -269,7 +269,7 @@ class DistributorController extends Controller
     public function destroy(Distributor $distributor, Request $request)
     {
         $logued_user = Auth::user();
-        if($logued_user->usrc_admin || $logued_user->isRole('super.general')){
+        if($logued_user->usrc_admin || $logued_user->can('delete.dist')){
             if(!$this->controllerUserCanAccess(Auth::user(),$distributor->id)){
                 return view('errors.403');
             }

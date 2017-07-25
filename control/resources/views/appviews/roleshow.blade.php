@@ -31,7 +31,9 @@
                 @endif
 
                 <div class="x_content">
-                    <button type="button" style=" background-color:#053666 " onclick="location.href = 'role/create';" class="btn btn-primary">Agregar</button>
+                    @if(Auth::user()->usrc_admin || Auth::user()->can('create.roles'))
+                        <button type="button" style=" background-color:#053666 " onclick="location.href = 'role/create';" class="btn btn-primary">Agregar</button>
+                    @endif
                     <table id="datatable-responsive" class="table table-striped table-bordered dt-responsive nowrap" cellspacing="0" width="100%">
                         <thead>
                             <tr>
@@ -47,13 +49,17 @@
                         	        <td>{{ $rol->slug }}</td>
                                     <td class=" last" width="15%">
                                         <div class="btn-group">
-                                            <div class="btn-group">
-                                                <button onclick="location.href = 'role/{{$rol->id}}/edit';" class="btn btn-xs" data-placement="left" title="Editar"><i class="fa fa-edit fa-2x"></i> </button>
-                                            </div>
+                                            @if(Auth::user()->usrc_admin || Auth::user()->can('edit.roles'))
+                                                <div class="btn-group">
+                                                    <button onclick="location.href = 'role/{{$rol->id}}/edit';" class="btn btn-xs" data-placement="left" title="Editar"><i class="fa fa-edit fa-2x"></i> </button>
+                                                </div>
+                                            @endif
 
-                                            <div class="btn-group">
-                                                <button  onclick="showModal({{$rol->id}})" class="btn btn-xs" data-placement="left" title="Asignar Permisos"><i class="fa fa-thumbs-o-up fa-2x"></i> </button>
-                                            </div>
+                                            @if(Auth::user()->usrc_admin || Auth::user()->can('assign.perms.roles'))
+                                                <div class="btn-group">
+                                                    <button  onclick="showModal({{$rol->id}})" class="btn btn-xs" data-placement="left" title="Asignar Permisos"><i class="fa fa-thumbs-o-up fa-2x"></i> </button>
+                                                </div>
+                                            @endif
 
                                             <div class="modal fade" id="permsmodal{{$rol->id}}" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
                                                 <div class="modal-dialog" role="document">
@@ -85,10 +91,13 @@
                                                     </div>
                                                 </div>
                                             </div>
-                                            {{ Form::open(['route' => ['role.destroy', $rol->id], 'class'=>'pull-right']) }}
-                                                {{ Form::hidden('_method', 'DELETE') }}
-                                                <button  href="#" class="btn btn-xs" onclick="return confirm('¿Está seguro que quiere eliminar este registro?')" type="submit" data-placement="left" title="Borrar" ><i class="fa fa-trash fa-2x"></i></button>
-                                            {{ Form::close() }}
+
+                                            @if(Auth::user()->usrc_admin || Auth::user()->can('delete.roles'))
+                                                {{ Form::open(['route' => ['role.destroy', $rol->id], 'class'=>'pull-right']) }}
+                                                    {{ Form::hidden('_method', 'DELETE') }}
+                                                    <button  href="#" class="btn btn-xs" onclick="return confirm('¿Está seguro que quiere eliminar este registro?')" type="submit" data-placement="left" title="Borrar" ><i class="fa fa-trash fa-2x"></i></button>
+                                                {{ Form::close() }}
+                                            @endif
                                         </div>
                                     </td>
                                 </tr>

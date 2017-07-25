@@ -182,44 +182,67 @@
 					            <li><a href="{{ route('home') }}"><i class="fa fa-home"></i> <strong>INICIO</strong> </span></a>
 					              
 					            </li>
-					            @if(Auth::user()->usrc_admin || Auth::user()->isRole('fact|super.general|ventas|soporte.tecnico|auditor|asist.soporte.tecnico'))
+					            @if(Auth::user()->usrc_admin || Auth::user()->can('see.dist') || Auth::user()->can('see.clients'))
 						            <li><a><i class="fa fa-group"></i> <strong>DIRECTORIO</strong> <span class="fa fa-chevron-down"></span></a>
 						              <ul class="nav child_menu">
-						              	<li><a href="{{ route('distributor.index') }}"><strong>DISTRIBUIDORES</strong></a></li>
-						                <li><a href="{{ route('client.index') }}"><strong>CLIENTES</strong></a></li>
-						                
+						              	@if(Auth::user()->usrc_admin || Auth::user()->can('see.dist'))
+						              		<li><a href="{{ route('distributor.index') }}"><strong>DISTRIBUIDORES</strong></a></li>
+						              	@endif
+						                @if(Auth::user()->usrc_admin || Auth::user()->can('see.clients'))
+						                	<li><a href="{{ route('client.index') }}"><strong>CLIENTES</strong></a></li>
+						                @endif
 						              </ul>
 						            </li>
 					            @endif
-					            <li><a><i class="fa fa-exchange"></i> <strong>ASIGNACIONES</strong> <span class="fa fa-chevron-down"></span></a>
-					            	<ul class="nav child_menu">
-					            		<li><a href="{{ route('asigpaq.index') }}"><strong>ASIGNACIÓN DISTRIBUIDORES</strong></a></li>
-						            	<li><a href="{{ route('account.index') }}"><strong>CUENTAS</strong></a></li>
-						            	
-						                <!--<li><a href="{{ route('appcta.index') }}"><strong>DETALLES CUENTAS</strong></a></li>-->
-					                </ul>
-					            </li>
 
-					            <li><a><i class="fa fa-gears"></i> <strong>CONFIGURACIÓN</strong> <span class="fa fa-chevron-down"></span></a>
-					              <ul class="nav child_menu">
-					                <li><a href="{{ route('apps.index') }}"><strong>APLICACIONES</strong></a></li>
-					              </ul>
-					            </li>
+					            @if(Auth::user()->usrc_admin || Auth::user()->can('see.assigs') || Auth::user()->can('see.accounts'))
+						            <li><a><i class="fa fa-exchange"></i> <strong>ASIGNACIONES</strong> <span class="fa fa-chevron-down"></span></a>
+						            	<ul class="nav child_menu">
+						            		@if(Auth::user()->usrc_admin || Auth::user()->can('see.assigs'))
+						            			<li><a href="{{ route('asigpaq.index') }}"><strong>ASIGNACIÓN DISTRIBUIDORES</strong></a></li>
+						            		@endif
+						            		@if(Auth::user()->usrc_admin || Auth::user()->can('see.accounts'))
+							            		<li><a href="{{ route('account.index') }}"><strong>CUENTAS</strong></a></li>
+							            	@endif
+							                <!--<li><a href="{{ route('appcta.index') }}"><strong>DETALLES CUENTAS</strong></a></li>-->
+						                </ul>
+						            </li>
+					            @endif
 
-					            <li><a><i class="fa fa-unlock-alt"></i> <strong>SEGURIDAD</strong> <span class="fa fa-chevron-down"></span></a>
-					              <ul class="nav child_menu">
-					                <li><a href="{{ route('user.index') }}"><strong>USUARIOS</strong></a></li>
-					                <li><a href="{{ route('role.index') }}"><strong>ROLES</strong></a></li>
-					                <li><a href="{{ route('permission.index') }}"><strong>PERMISOS</strong></a></li>
-					                <li><a href="{{ route('binnacle.index') }}"><strong>BITÁCORA</strong></a></li>
-					              </ul>
-					            </li>
+					            @if(Auth::user()->usrc_admin || Auth::user()->can('see.apps'))
+						            <li><a><i class="fa fa-gears"></i> <strong>CONFIGURACIÓN</strong> <span class="fa fa-chevron-down"></span></a>
+						              <ul class="nav child_menu">
+						                <li><a href="{{ route('apps.index') }}"><strong>APLICACIONES</strong></a></li>
+						              </ul>
+						            </li>
+					            @endif
 
-					            <li><a><i class="fa fa-newspaper-o"></i> <strong>SERV. EXTERNOS</strong> <span class="fa fa-chevron-down"></span></a>
-					              <ul class="nav child_menu">
-					                <li><a href="{{ route('news.index') }}"><strong>NOTICIAS</strong></a></li>
-					              </ul>
-					            </li>
+					            @if(Auth::user()->usrc_admin || Auth::user()->can('see.users') || Auth::user()->can('see.roles') || Auth::user()->can('see.perms') || Auth::user()->can('see.bit'))
+						            <li><a><i class="fa fa-unlock-alt"></i> <strong>SEGURIDAD</strong> <span class="fa fa-chevron-down"></span></a>
+						              <ul class="nav child_menu">
+						              	@if(Auth::user()->usrc_admin || Auth::user()->can('see.users'))
+						                	<li><a href="{{ route('user.index') }}"><strong>USUARIOS</strong></a></li>
+						                @endif
+						                @if(Auth::user()->usrc_admin || Auth::user()->can('see.roles'))
+						                	<li><a href="{{ route('role.index') }}"><strong>ROLES</strong></a></li>
+						                @endif
+						                @if(Auth::user()->usrc_admin || Auth::user()->can('see.perms'))
+						                	<li><a href="{{ route('permission.index') }}"><strong>PERMISOS</strong></a></li>
+						                @endif
+						                @if(Auth::user()->usrc_admin || Auth::user()->can('see.bit'))
+						                	<li><a href="{{ route('binnacle.index') }}"><strong>BITÁCORA</strong></a></li>
+						                @endif
+						              </ul>
+						            </li>
+					            @endif
+
+					            @if(Auth::user()->usrc_admin || Auth::user()->can('see.news'))
+						            <li><a><i class="fa fa-newspaper-o"></i> <strong>SERV. EXTERNOS</strong> <span class="fa fa-chevron-down"></span></a>
+						              <ul class="nav child_menu">
+						                <li><a href="{{ route('news.index') }}"><strong>NOTICIAS</strong></a></li>
+						              </ul>
+						            </li>
+					            @endif
 					           
 					          </ul>
 					        </div>

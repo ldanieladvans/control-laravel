@@ -27,8 +27,13 @@ class AppsController extends Controller
      */
     public function index()
     {
-        $apps = Apps::all();
-        return view('appviews.appshow',['apps'=>$apps]);
+        $logued_user = Auth::user();
+        if($logued_user->usrc_admin || $logued_user->can('see.apps')){
+            $apps = Apps::all();
+            return view('appviews.appshow',['apps'=>$apps]);
+        }else{
+            return view('errors.403');
+        }
     }
 
     /**
@@ -38,7 +43,12 @@ class AppsController extends Controller
      */
     public function create()
     {
-        return view('appviews.appscreate');
+        $logued_user = Auth::user();
+        if($logued_user->usrc_admin || $logued_user->can('create.apps')){
+            return view('appviews.appscreate');
+        }else{
+            return view('errors.403');
+        }
     }
 
     /**
@@ -49,14 +59,18 @@ class AppsController extends Controller
      */
     public function store(Request $request)
     {
-        $alldata = $request->all();
         $logued_user = Auth::user();
-        $app = new Apps($alldata);
-        $app->save();
-        $fmessage = 'Se ha creado la aplicación: '.$app->name;
-        \Session::flash('message',$fmessage);
-        $this->registeredBinnacle($request->all(), 'store', $fmessage, $logued_user ? $logued_user->id : '', $logued_user ? $logued_user->name : '');
-        return redirect()->route('apps.index');
+        if($logued_user->usrc_admin || $logued_user->can('create.apps')){
+            $alldata = $request->all(); 
+            $app = new Apps($alldata);
+            $app->save();
+            $fmessage = 'Se ha creado la aplicación: '.$app->name;
+            \Session::flash('message',$fmessage);
+            $this->registeredBinnacle($request->all(), 'store', $fmessage, $logued_user ? $logued_user->id : '', $logued_user ? $logued_user->name : '');
+            return redirect()->route('apps.index');
+        }else{
+            return view('errors.403');
+        }
     }
 
     /**
@@ -79,7 +93,12 @@ class AppsController extends Controller
      */
     public function edit(Apps $app)
     {
-        return view('appviews.appsedit',['app'=>$app]);
+        $logued_user = Auth::user();
+        if($logued_user->usrc_admin || $logued_user->can('edit.apps')){
+            return view('appviews.appsedit',['app'=>$app]);
+        }else{
+            return view('errors.403');
+        }
     }
 
     /**
@@ -91,17 +110,21 @@ class AppsController extends Controller
      */
     public function update(Request $request, Apps $app)
     {
-        $alldata = $request->all();
         $logued_user = Auth::user();
-        $app->name = $alldata['name'];
-        $app->code = $alldata['code'];
-        $app->base_price = $alldata['base_price'];
-        $app->trial_days = $alldata['trial_days'];
-        $app->save();
-        $fmessage = 'Se ha actualizado la aplicación: '.$app->name;
-        \Session::flash('message',$fmessage);
-        $this->registeredBinnacle($request->all(), 'update', $fmessage, $logued_user ? $logued_user->id : '', $logued_user ? $logued_user->name : '');
-        return redirect()->route('apps.index');
+        if($logued_user->usrc_admin || $logued_user->can('edit.apps')){
+            $alldata = $request->all();
+            $app->name = $alldata['name'];
+            $app->code = $alldata['code'];
+            $app->base_price = $alldata['base_price'];
+            $app->trial_days = $alldata['trial_days'];
+            $app->save();
+            $fmessage = 'Se ha actualizado la aplicación: '.$app->name;
+            \Session::flash('message',$fmessage);
+            $this->registeredBinnacle($request->all(), 'update', $fmessage, $logued_user ? $logued_user->id : '', $logued_user ? $logued_user->name : '');
+            return redirect()->route('apps.index');
+        }else{
+            return view('errors.403');
+        }
     }
 
     /**
@@ -112,13 +135,18 @@ class AppsController extends Controller
      */
     public function destroy(Apps $app,Request $request)
     {
-        if (isset($app)){
-            $logued_user = Auth::user();
-            $fmessage = 'Se ha eliminado el paquete: '.$app->name;
-            \Session::flash('message',$fmessage);
-            $this->registeredBinnacle($request->all(), 'destroy', $fmessage, $logued_user ? $logued_user->id : '', $logued_user ? $logued_user->name : '');
-            $app->delete();
+        $logued_user = Auth::user();
+        if($logued_user->usrc_admin || $logued_user->can('delete.apps')){
+            if (isset($app)){
+                $logued_user = Auth::user();
+                $fmessage = 'Se ha eliminado el paquete: '.$app->name;
+                \Session::flash('message',$fmessage);
+                $this->registeredBinnacle($request->all(), 'destroy', $fmessage, $logued_user ? $logued_user->id : '', $logued_user ? $logued_user->name : '');
+                $app->delete();
+            }
+            return redirect()->route('apps.index');
+        }else{
+            return view('errors.403');
         }
-        return redirect()->route('apps.index');
     }
 }

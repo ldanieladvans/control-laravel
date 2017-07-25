@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
 use App\Binnacle;
+use Illuminate\Support\Facades\Auth;
 
 class BinnacleController extends Controller
 {
@@ -25,8 +26,13 @@ class BinnacleController extends Controller
      */
     public function index()
     {
-        $binnacles = Binnacle::all();
-        return view('appviews.binnacleshow',['binnacles'=>$binnacles]);
+        $logued_user = Auth::user();
+        if($logued_user->usrc_admin || $logued_user->can('see.clients')){
+            $binnacles = Binnacle::all();
+            return view('appviews.binnacleshow',['binnacles'=>$binnacles]);
+        }else{
+            return view('errors.403');
+        }
     }
 
     /**

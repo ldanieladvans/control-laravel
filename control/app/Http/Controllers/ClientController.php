@@ -34,7 +34,7 @@ class ClientController extends Controller
     public function index()
     {
         $logued_user = Auth::user();
-        if($logued_user->usrc_admin || $logued_user->isRole('fact|super.general|ventas|soporte.tecnico|asist.soporte.tecnico')){
+        if($logued_user->usrc_admin || $logued_user->can('see.clients')){
             if($logued_user->usrc_admin || $logued_user->usrc_super){
                 $clients = Client::all();
             }else{
@@ -55,7 +55,7 @@ class ClientController extends Controller
     public function create()
     {
         $logued_user = Auth::user();
-        if($logued_user->usrc_admin || $logued_user->isRole('fact|super.general|ventas|soporte.tecnico|asist.soporte.tecnico')){
+        if($logued_user->usrc_admin || $logued_user->can('create.clients')){
             $references = Reference::all();
             $domiciles = Domicile::all();
             $countries = Country::all();
@@ -76,7 +76,7 @@ class ClientController extends Controller
     public function store(Request $request)
     {
         $logued_user = Auth::user();
-        if($logued_user->usrc_admin || $logued_user->isRole('fact|super.general|ventas|soporte.tecnico|asist.soporte.tecnico')){
+        if($logued_user->usrc_admin || $logued_user->can('create.clients')){
             $alldata = $request->all();
             
             $parseCert = false;
@@ -205,7 +205,7 @@ class ClientController extends Controller
     public function edit(Client $client)
     {
         $logued_user = Auth::user();
-        if($logued_user->usrc_admin || $logued_user->isRole('fact|super.general|ventas|soporte.tecnico|asist.soporte.tecnico')){
+        if($logued_user->usrc_admin || $logued_user->can('edit.clients')){
             $references = Reference::all();
             $domiciles = Domicile::all();
             $countries = Country::all();
@@ -230,7 +230,7 @@ class ClientController extends Controller
     public function update(Request $request, Client $client)
     {
         $logued_user = Auth::user();
-        if($logued_user->usrc_admin || $logued_user->isRole('fact|super.general|ventas|soporte.tecnico|asist.soporte.tecnico')){
+        if($logued_user->usrc_admin || $logued_user->can('edit.clients')){
             $alldata = $request->all();
             $dom_vals = array();
             $refer_vals = array();
@@ -330,7 +330,7 @@ class ClientController extends Controller
     public function destroy(Client $client,Request $request)
     {
         $logued_user = Auth::user();
-        if($logued_user->usrc_admin || $logued_user->isRole('fact|super.general|ventas|soporte.tecnico|asist.soporte.tecnico')){
+        if($logued_user->usrc_admin || $logued_user->can('delete.clients')){
             if(!$this->controllerUserCanAccess(Auth::user(),$client->cliente_distrib_id)){
                 return view('errors.403');
             }

@@ -31,7 +31,9 @@
                 @endif
 
                 <div class="x_content">
-                    <button type="button" style=" background-color:#053666 " onclick="location.href = 'user/create';" class="btn btn-primary">Agregar</button>
+                    @if(Auth::user()->usrc_admin || Auth::user()->can('create.users'))
+                        <button type="button" style=" background-color:#053666 " onclick="location.href = 'user/create';" class="btn btn-primary">Agregar</button>
+                    @endif
                     <table id="datatable-responsive" class="table table-striped table-bordered dt-responsive nowrap" cellspacing="0" width="100%">
                         <thead>
                             <tr>
@@ -55,21 +57,29 @@
                                 	<td>{{ $user->usrc_super ? 'Si' : 'No' }}</td>
                                     <td class=" last" width="18%">
                                         <div class="btn-group">
-                                            <div class="btn-group">
-                                                <button onclick="location.href = 'user/{{$user->id}}/edit';" class="btn btn-xs" data-placement="left" title="Editar"><i class="fa fa-edit fa-2x"></i> </button>
-                                            </div>
+                                            @if(Auth::user()->usrc_admin || Auth::user()->can('edit.users'))
+                                                <div class="btn-group">
+                                                    <button onclick="location.href = 'user/{{$user->id}}/edit';" class="btn btn-xs" data-placement="left" title="Editar"><i class="fa fa-edit fa-2x"></i> </button>
+                                                </div>
+                                            @endif
 
-                                            <div class="btn-group">
-                                                <button onclick="showModal('passmodal'+{{$user->id}})" class="btn btn-xs" data-placement="left" title="Cambiar contraseña"><i class="fa fa-lock fa-2x"></i> </button>
-                                            </div>
+                                            @if(Auth::user()->usrc_admin || Auth::user()->can('change.password.users'))
+                                                <div class="btn-group">
+                                                    <button onclick="showModal('passmodal'+{{$user->id}})" class="btn btn-xs" data-placement="left" title="Cambiar contraseña"><i class="fa fa-lock fa-2x"></i> </button>
+                                                </div>
+                                            @endif
 
-                                            <div class="btn-group">
-                                                <button onclick="showModal('rolesmodal'+{{$user->id}})" class="btn btn-xs" data-placement="left" title="Asignar Roles"><i class="fa fa-group fa-2x"></i> </button>
-                                            </div>
+                                            @if(Auth::user()->usrc_admin || Auth::user()->can('assign.roles.users'))
+                                                <div class="btn-group">
+                                                    <button onclick="showModal('rolesmodal'+{{$user->id}})" class="btn btn-xs" data-placement="left" title="Asignar Roles"><i class="fa fa-group fa-2x"></i> </button>
+                                                </div>
+                                            @endif
 
-                                            <div class="btn-group">
-                                                <button onclick="showModal('permsmodal'+{{$user->id}})" class="btn btn-xs" data-placement="left" title="Asignar Permisos"><i class="fa fa-thumbs-o-up fa-2x"></i> </button>
-                                            </div>
+                                            @if(Auth::user()->usrc_admin || Auth::user()->can('assign.perms.users'))
+                                                <div class="btn-group">
+                                                    <button onclick="showModal('permsmodal'+{{$user->id}})" class="btn btn-xs" data-placement="left" title="Asignar Permisos"><i class="fa fa-thumbs-o-up fa-2x"></i> </button>
+                                                </div>
+                                            @endif
 
                                             <div class="modal fade" id="passmodal{{$user->id}}" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
                                                 <div class="modal-dialog" role="document">
@@ -155,10 +165,12 @@
                                                 </div>
                                             </div>
 
-                                            {{ Form::open(['route' => ['user.destroy', $user], 'class'=>'pull-right']) }}
-                                                {{ Form::hidden('_method', 'DELETE') }}
-                                                    <button  href="#" class="btn btn-xs" onclick="return confirm('¿Está seguro que quiere eliminar este registro?')" type="submit" data-placement="left" title="Borrar" ><i class="fa fa-trash fa-2x"></i></button>
-                                            {{ Form::close() }}
+                                            @if(Auth::user()->usrc_admin || Auth::user()->can('delete.users'))
+                                                {{ Form::open(['route' => ['user.destroy', $user], 'class'=>'pull-right']) }}
+                                                    {{ Form::hidden('_method', 'DELETE') }}
+                                                        <button  href="#" class="btn btn-xs" onclick="return confirm('¿Está seguro que quiere eliminar este registro?')" type="submit" data-placement="left" title="Borrar" ><i class="fa fa-trash fa-2x"></i></button>
+                                                {{ Form::close() }}
+                                            @endif
                                         </div>
                                     </td>
                                 </tr>
