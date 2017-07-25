@@ -630,14 +630,18 @@ class AccountController extends Controller
 
                 $this->registeredBinnacle($request->all(), 'update', 'Se ha modificado la cuenta '.$cta_obj->cta_num, $logued_user ? $logued_user->id : '', $logued_user ? $logued_user->name : '');
 
+                $acctl_f_ini_next = date('Y-m-d', strtotime($acctl->acctl_f_fin . ' +1 day'));
+                $acctl_f_fin_next = date('Y-m-d', strtotime($acctl->acctl_f_fin . ' +'.$cta_obj->cta_periodicity.' months'));
+                $acctl_f_corte_next = date('Y-m-d', strtotime($acctl->acctl_f_corte . ' +'.$cta_obj->cta_periodicity.' months'));
                 $response = array(
                     'status' => 'success',
                     'msg' => 'Ok',
                     'acctl_f_ini' => $acctl->acctl_f_ini,
                     'acctl_f_fin' => $acctl->acctl_f_fin,
                     'acctl_f_corte' => $acctl->acctl_f_corte,
-                    'acctl_f_fin_next' => date('Y-m-d', strtotime($acctl->acctl_f_fin . ' +1 day')),
-                    'acctl_f_corte_next' => date('Y-m-d', strtotime($acctl->acctl_f_corte . ' +1 day')),
+                    'acctl_f_ini_next' => $acctl_f_ini_next,
+                    'acctl_f_fin_next' => date('Y-m-d', strtotime($acctl_f_fin_next . ' -1 day')),
+                    'acctl_f_corte_next' => date('Y-m-d', strtotime($acctl_f_corte_next . ' -1 day')),
                     'acctl_estado' => $acctl->acctl_estado,
                     'acctl_f_pago' => '',
                     'id' => $acctl->id,

@@ -301,6 +301,15 @@
     <script src="{{ asset('controlassets/vendors/switchery/dist/switchery.min.js') }}"></script>
     <script type="text/javascript">
 
+        var cta_periodicity = document.getElementById('cta_periodicity').value;
+
+        
+
+
+        $('#cta_periodicity').change(function() {
+            cta_periodicity = this.value;
+        });
+
         $( function() {
             $('#alertmsgcta').click(function() {
                 console.log('alertmsgcta button clicked');
@@ -351,22 +360,15 @@
           return dat;
         }
 
+        Date.prototype.addMonths = function (value) {
+            var n = this.getDate();
+            this.setDate(1);
+            this.setMonth(this.getMonth() + value);
+            this.setDate(Math.min(n, this.getDaysInMonth()));
+            return this;
+        };
+
         if(rowCount >= 2){
-
-            var inidate = new Date(($('#tabletl1 tbody tr:last td:nth-child(1)').text()).replace('-','/'));
-            inidate = inidate.addDays(1);
-
-            var month = inidate.getMonth() + 1;
-            if(month<10){
-                month = '0'+month;
-            }
-            var day = inidate.getDate();
-            if(day<10){
-                day = '0'+day;
-            }
-            var year = inidate.getFullYear();
-
-            val_date_ini = [year, month, day].join('-');
 
             var inidate = new Date(($('#tabletl1 tbody tr:last td:nth-child(2)').text()).replace('-','/'));
             inidate = inidate.addDays(1);
@@ -381,24 +383,43 @@
             }
             var year = inidate.getFullYear();
 
-            val_date_fin = [year, month, day].join('-');
+            val_date_ini = [year, month, day].join('-');
 
-            var inidate = new Date(($('#tabletl1 tbody tr:last td:nth-child(3)').text()).replace('-','/'));
-            inidate = inidate.addDays(1);
+            var enddate = new Date(($('#tabletl1 tbody tr:last td:nth-child(2)').text()).replace('-','/'));
+            //enddate = enddate.addDays(1);
+            enddate.setDate(enddate.getDate()-1);
+            enddate.setMonth(enddate.getMonth() + parseInt(cta_periodicity));
 
-            var month = inidate.getMonth() + 1;
+            var month = enddate.getMonth() + 1;
             if(month<10){
                 month = '0'+month;
             }
-            var day = inidate.getDate();
+            var day = enddate.getDate();
             if(day<10){
                 day = '0'+day;
             }
-            var year = inidate.getFullYear();
+            var year = enddate.getFullYear();
+
+            val_date_fin = [year, month, day].join('-');
+
+            var courtdate = new Date(($('#tabletl1 tbody tr:last td:nth-child(3)').text()).replace('-','/'));
+            //courtdate = courtdate.addDays(1);
+            courtdate.setDate(courtdate.getDate()-1);
+            courtdate.setMonth(courtdate.getMonth() + parseInt(cta_periodicity));
+
+            var month = courtdate.getMonth() + 1;
+            if(month<10){
+                month = '0'+month;
+            }
+            var day = courtdate.getDate();
+            if(day<10){
+                day = '0'+day;
+            }
+            var year = courtdate.getFullYear();
 
             val_date_corte = [year, month, day].join('-');
 
-            document.getElementById('acctl_f_ini').min = val_date_fin;
+            document.getElementById('acctl_f_ini').min = val_date_ini;
             document.getElementById('acctl_f_fin').min = val_date_fin;
             document.getElementById('acctl_f_corte').min = val_date_corte;
 
@@ -524,7 +545,7 @@
                             
                     }else{
                         $('#tabletl1').find('tbody').append("<tr id='tbrow"+data['id']+"'><td id='tdrow"+data['id']+"1'>"+data['acctl_f_ini']+"</td><td id='tdrow"+data['id']+"2'>"+data['acctl_f_fin']+"</td><td id='tdrow"+data['id']+"3'>"+data['acctl_f_corte']+"</td><td id='tdrow"+data['id']+"4'>"+data['acctl_estado']+"</td><td id='tdrow"+data['id']+"5'>"+data['acctl_f_pago']+"</td><td><div class='btn-group'><div class='btn-group'><a id='"+data['id']+"' onclick='quittl("+data['id']+","+data['accid']+")' class='btn btn-xs' data-placement='left' title='Borrar' ><i class='fa fa-trash fa-3x'></i> </a></div><div class='btn-group'><div class='btn-group'><a id='"+data['id']+"' onclick='edittl("+data['id']+")' class='btn btn-xs' data-placement='left' title='Editar' ><i class='fa fa-edit fa-3x'></i></a></div></td></tr>");
-                        document.getElementById('acctl_f_ini').min = data['acctl_f_fin_next'];
+                        document.getElementById('acctl_f_ini').min = data['acctl_f_ini_next'];
                         document.getElementById('acctl_f_fin').min = data['acctl_f_fin_next'];
                         document.getElementById('acctl_f_corte').min = data['acctl_f_corte_next'];
                     }
@@ -579,9 +600,9 @@
                 document.getElementById('acctl_f_fin').value = document.getElementById("tdrow"+tlid+"2").innerText;
                 document.getElementById('acctl_f_corte').value = document.getElementById("tdrow"+tlid+"3").innerText;
                 document.getElementById("addlinedate").innerText="Modificar";
-                document.getElementById('acctl_f_ini').min = '0001/01/01';
-                document.getElementById('acctl_f_fin').min = '0001/01/01';
-                document.getElementById('acctl_f_corte').min = '0001/01/01';
+                document.getElementById('acctl_f_ini').min = document.getElementById('acctl_f_ini').value;
+                document.getElementById('acctl_f_fin').min = document.getElementById('acctl_f_fin').value;
+                document.getElementById('acctl_f_corte').min = document.getElementById('acctl_f_corte').value;
                 trselected = tlid;
             }
 
