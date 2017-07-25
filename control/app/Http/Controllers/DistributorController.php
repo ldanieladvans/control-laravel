@@ -160,6 +160,7 @@ class DistributorController extends Controller
      */
     public function edit(Distributor $distributor)
     {
+        $logued_user = Auth::user();
         if($logued_user->usrc_admin || $logued_user->isRole('super.general|fact')){
             $domiciles = Domicile::all();
             $countries = Country::all();
