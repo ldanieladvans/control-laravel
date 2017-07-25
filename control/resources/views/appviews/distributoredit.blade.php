@@ -94,15 +94,17 @@
 			                    </div>
 		                    </div>
 
-		                    <div class="item form-group">
-			                  	<label class="control-label col-md-1 col-sm-1 col-xs-12">Supervisor: </label>
-			                    <div class="col-md-3 col-sm-3 col-xs-12">
-			                        <p></p>
-			                        Si:
-			                        <input type="radio" class="flat" name="distrib_sup" id="supervisor1" value="1" {{$distributor->distrib_sup == true ? 'checked':''}}/> No:
-			                        <input type="radio" class="flat" name="distrib_sup" id="supervisor0" value="0" {{$distributor->distrib_sup == false ? 'checked':''}}/>
-			                    </div>
-			                </div>
+		                    @if(Auth::user()->usrc_admin || Auth::user()->isRole('super.general'))
+			                    <div class="item form-group">
+				                  	<label class="control-label col-md-1 col-sm-1 col-xs-12">Distribuidor Maestro:</label>
+				                    <div class="col-md-3 col-sm-3 col-xs-12">
+				                        <p></p>
+				                        Si:
+				                        <input type="radio" class="flat" name="distrib_sup" id="supervisor1" value="1" {{$distributor->distrib_sup == true ? 'checked':''}}/> No:
+				                        <input type="radio" class="flat" name="distrib_sup" id="supervisor0" value="0" {{$distributor->distrib_sup == false ? 'checked':''}}/>
+				                    </div>
+				                </div>
+			                @endif
 
 	                  	<div class="x_content">
 	                      	<div class="" role="tabpanel" data-example-id="togglable-tabs">
