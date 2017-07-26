@@ -57,7 +57,7 @@
                         {{ csrf_field() }}
                         <div class="item form-group">
                             <div class="col-md-9 col-sm-9 col-xs-12">
-                                <input id="rfc" class="form-control has-feedback-left" name="rfc" placeholder="RFC *" required="required" type="text" title="RFC" value="{{$art->rfc}}" disabled>
+                                <input id="rfc" class="form-control has-feedback-left" name="rfc" placeholder="RFC *" required="required" type="text" title="RFC" value="{{$art->rfc}}">
                                 <span class="fa fa-newspaper-o form-control-feedback left" aria-hidden="true"></span>
                                 @if ($errors->has('rfc'))
                                     <span class="help-block">
@@ -81,7 +81,7 @@
 
                         <div class="item form-group">
                             <div class="col-md-9 col-sm-9 col-xs-12">
-                                <input id="tipo" class="form-control has-feedback-left" name="tipo" placeholder="Tipo *" required="required" type="text" title="Tipo" value="{{$art->tipo}}" disabled>
+                                <input id="tipo" class="form-control has-feedback-left" name="tipo" placeholder="Tipo *" required="required" type="text" title="Tipo" value="{{$art->tipo}}" >
                                 <span class="fa fa-newspaper-o form-control-feedback left" aria-hidden="true"></span>
                                 @if ($errors->has('tipo'))
                                     <span class="help-block">
@@ -93,7 +93,7 @@
 
                         <div class="item form-group">
                             <div class="col-md-9 col-sm-9 col-xs-12">
-                                <input id="oficio" class="form-control has-feedback-left" name="oficio" placeholder="Oficio *" required="required" type="text" title="Oficio" value="{{$art->oficio}}" disabled>
+                                <input id="oficio" class="form-control has-feedback-left" name="oficio" placeholder="Oficio *" required="required" type="text" title="Oficio" value="{{$art->oficio}}">
                                 <span class="fa fa-newspaper-o form-control-feedback left" aria-hidden="true"></span>
                                 @if ($errors->has('oficio'))
                                     <span class="help-block">
@@ -105,7 +105,7 @@
 
                         <div class="item form-group">	                    
                             <div class="col-md-9 col-sm-9 col-xs-12">
-                                <input id="fecha_sat" class="form-control has-feedback-left" name="fecha_sat" placeholder="Fecha SAT*" title="Fecha SAT" required="required" type="text" value="{{$art->fecha_sat}}" disabled>
+                                <input id="fecha_sat" class="form-control has-feedback-left" name="fecha_sat" placeholder="Fecha SAT*" title="Fecha SAT" required="required" type="date" value="{{$art->fecha_sat}}" required>
                                 <span class="fa fa-calendar form-control-feedback left" aria-hidden="true"></span>
                                 @if ($errors->has('fecha_sat'))
                                     <span class="help-block">
@@ -117,7 +117,7 @@
 
                         <div class="item form-group">	                    
                             <div class="col-md-9 col-sm-9 col-xs-12">
-                                <input id="fecha_dof" class="form-control has-feedback-left" name="fecha_dof" placeholder="Fecha DOF*" title="Fecha DOF" required="required" type="text" value="{{$art->fecha_dof}}" disabled>
+                                <input id="fecha_dof" class="form-control has-feedback-left" name="fecha_dof" placeholder="Fecha DOF*" title="Fecha DOF" required="required" type="date" value="{{$art->fecha_dof}}" required>
                                 <span class="fa fa-calendar form-control-feedback left" aria-hidden="true"></span>
                                 @if ($errors->has('fecha_dof'))
                                     <span class="help-block">

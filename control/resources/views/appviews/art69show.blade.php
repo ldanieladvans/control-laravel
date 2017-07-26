@@ -28,6 +28,12 @@
                     </div>
                 @endif
 
+                <!--<div class="col-md-12 col-sm-12 col-xs-12">
+                    <div class="col-md-4 col-sm-4 col-xs-12"></div>
+                    <div class="col-md-4 col-sm-4 col-xs-12"></div>
+                    <div class="col-md-4 col-sm-4 col-xs-12" align="right"><button type="button" style=" background-color:#053666;" onclick="showImportModal();" class="btn btn-primary">Importar</button></div>
+                </div>-->
+
                 <div class="x_content">
                     @if(Auth::user()->usrc_admin)
                         <button type="button" style=" background-color:#053666 " onclick="location.href = 'arts/create';" class="btn btn-primary">Agregar</button>
@@ -49,6 +55,39 @@
                         <tbody>
                         </tbody>
                     </table>
+
+                    <div class="modal fade" id="importart" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+                        <div class="modal-dialog" role="document">
+                            <div class="modal-content">
+                                <form action='/importart' method='POST' enctype="multipart/form-data">
+                                    {{ csrf_field() }}
+                                    <div class="modal-header">
+                                        <h5 class="modal-title" id="exampleModalLabel">Importar Art. 69</h5>
+                                        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                                            <span aria-hidden="true">&times;</span>
+                                        </button>
+                                    </div>
+                                    <div class="modal-body">
+                                      <form>
+                                        <div class="item form-group">
+                                            
+                                                <div class="col-md-10 col-sm-10 col-xs-12">
+                                                    <input type='file' id='impfile' accept=".xls,.xlsx" required>
+                                                </div>
+
+                                        </div>
+                                      
+                                      <div id="import_failure"></div>
+                                    </div>
+                                    <div class="modal-footer">
+                                        <button type="button" class="btn btn-secondary" data-dismiss="modal">Cerrar</button>
+                                        <button type="submit"  class="btn btn-primary">Ok</button>
+                                    </div>
+                                </form>
+                            </div>
+                        </div>
+                    </div>
+
                 </div>
             </div>
         </div>
@@ -97,7 +136,7 @@
                     data: dataTablevalues,
                 });
                 $('#loadingmodal').modal('hide');
-                console.log(dataTablevalues);
+ 
             },
             error: function(XMLHttpRequest, textStatus, errorThrown) { 
                new PNotify({
@@ -145,14 +184,22 @@
             }
         }
 
-      $( function() {
-          $('#alertmsgcta').click(function() {
-              console.log('alertmsgcta button clicked');
+        function showImportModal(){
+            $('#importart').modal('show');
+        }
+
+        function importArts(){
+            console.log(document.getElementById('impfile').value);
+        }
+
+          $( function() {
+              $('#alertmsgcta').click(function() {
+                  console.log('alertmsgcta button clicked');
+              });
+              
+              setTimeout(function() {
+                  $('#alertmsgcta').trigger('click');
+              }, 4e3);
           });
-          
-          setTimeout(function() {
-              $('#alertmsgcta').trigger('click');
-          }, 4e3);
-      });
     </script>
 @endsection

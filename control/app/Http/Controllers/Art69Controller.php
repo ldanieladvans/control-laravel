@@ -114,16 +114,16 @@ class Art69Controller extends Controller
         if($logued_user->usrc_admin){
             $alldata = $request->all();
             $art = Art69::findOrFail($id);
-            //$art->rfc = $alldata['rfc'];
+            $art->rfc = $alldata['rfc'];
             $art->contribuyente = $alldata['contribuyente'];
-            //$art->tipo = $alldata['tipo'];
-            //$art->oficio = $alldata['oficio'];
-            //$art->fecha_sat = $alldata['fecha_sat'];
-            //$art->fecha_dof = $alldata['fecha_dof'];
-            $art->url_oficio = $alldata['url_oficio'];
-            $art->url_anexo = $alldata['url_anexo'];
+            $art->tipo = $alldata['tipo'];
+            $art->oficio = $alldata['oficio'];
+            $art->fecha_sat = array_key_exists('fecha_sat', $alldata) ? $alldata['fecha_sat'] : null;
+            $art->fecha_dof = array_key_exists('fecha_dof', $alldata) ? $alldata['fecha_dof'] : null;
+            $art->url_oficio = array_key_exists('url_oficio', $alldata) ? $alldata['url_oficio'] : null;
+            $art->url_anexo = array_key_exists('url_anexo', $alldata) ? $alldata['url_anexo'] : null;
             $art->save();
-            $fmessage = 'Se ha actualizado la entrada al artiulo 69: '.$art->id;
+            $fmessage = 'Se ha actualizado la entrada al artiulo 69: '.$art->rfc;
             \Session::flash('message',$fmessage);
             $this->registeredBinnacle($request->all(), 'update', $fmessage, $logued_user ? $logued_user->id : '', $logued_user ? $logued_user->name : '');
             return redirect()->route('arts.index');

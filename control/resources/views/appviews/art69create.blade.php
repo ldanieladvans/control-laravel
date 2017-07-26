@@ -104,7 +104,7 @@
 
                         <div class="item form-group">	                    
                             <div class="col-md-9 col-sm-9 col-xs-12">
-                                <input id="fecha_sat" class="form-control has-feedback-left" name="fecha_sat" placeholder="Fecha SAT*" title="Fecha SAT" required="required" type="datetime-local" >
+                                <input id="fecha_sat" class="form-control has-feedback-left" name="fecha_sat" placeholder="Fecha SAT*" title="Fecha SAT" required="required" type="date" >
                                 <span class="fa fa-calendar form-control-feedback left" aria-hidden="true"></span>
                                 @if ($errors->has('fecha_sat'))
                                     <span class="help-block">
@@ -116,7 +116,7 @@
 
                         <div class="item form-group">	                    
                             <div class="col-md-9 col-sm-9 col-xs-12">
-                                <input id="fecha_dof" class="form-control has-feedback-left" name="fecha_dof" placeholder="Fecha DOF*" title="Fecha DOF" required="required" type="datetime-local" >
+                                <input id="fecha_dof" class="form-control has-feedback-left" name="fecha_dof" placeholder="Fecha DOF*" title="Fecha DOF" required="required" type="date" >
                                 <span class="fa fa-calendar form-control-feedback left" aria-hidden="true"></span>
                                 @if ($errors->has('fecha_dof'))
                                     <span class="help-block">

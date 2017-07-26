@@ -46,6 +46,8 @@ Route::group(['prefix' => 'exts'], function () {
     Route::resource('arts', 'Art69Controller');
 });
 
+Route::post('/importart', 'Controller@importart');
+
 //Ajax routes
 Route::post('/security/user/assignroles', 'UserController@assignroles');
 Route::post('/security/user/assignperms', 'UserController@assignperms');
@@ -70,6 +72,7 @@ Route::post('/quittl', 'AccountController@quitTl');
 Route::post('/addapp', 'AccountController@addApp');
 Route::post('/getart', 'Controller@getArt');
 Route::post('/destroyajax', 'Art69Controller@destroyAjax');
+
 
 
 

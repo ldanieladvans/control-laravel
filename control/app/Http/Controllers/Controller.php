@@ -191,4 +191,13 @@ class Controller extends BaseController
         return \Response::json($response);
     }
 
+
+    public function importart(Request $request)
+    {
+        $alldata = $request->all();
+        
+        
+        return redirect()->route('arts.index');
+    }
+
 }
