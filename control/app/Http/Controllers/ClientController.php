@@ -209,8 +209,17 @@ class ClientController extends Controller
             $references = Reference::all();
             $domiciles = Domicile::all();
             $countries = Country::all();
-            $distributors = Distributor::all();
-            if(!$this->controllerUserCanAccess(Auth::user(),$client->cliente_distrib_id)){
+            if($logued_user->usrc_admin || $logued_user->usrc_super || $logued_user->isRole('super.general')){
+                $distributors = Distributor::all();
+            }else{
+                if($logued_user->usrc_distrib_id){
+                    $distributors = [Distributor::find($logued_user->usrc_distrib_id)];
+                }else{
+                    $distributors = Distributor::all();
+                }
+            }
+            
+            if(!$this->controllerUserCanAccess(Auth::user(),$client->cliente_distrib_id) && $client->cliente_distrib_id!=null){
                 return view('errors.403');
             }
             return view('appviews.clientedit',['client'=>$client,'references'=>$references,'domiciles'=>$domiciles,'countries'=>$countries,'distributors'=>$distributors]);
@@ -236,7 +245,7 @@ class ClientController extends Controller
             $refer_vals = array();
             $domicile_id = array_key_exists('cliente_dom_id',$alldata) ? $alldata['cliente_dom_id'] : false;
             $refer_id = array_key_exists('cliente_refer_id',$alldata) ? $alldata['cliente_refer_id'] : false;
-            if(!$this->controllerUserCanAccess(Auth::user(),$client->cliente_distrib_id)){
+            if(!$this->controllerUserCanAccess(Auth::user(),$client->cliente_distrib_id) && $client->cliente_distrib_id!=null){
                 return view('errors.403');
             }
             if (array_key_exists('checkdom',$alldata)){           
@@ -331,7 +340,7 @@ class ClientController extends Controller
     {
         $logued_user = Auth::user();
         if($logued_user->usrc_admin || $logued_user->can('delete.clients')){
-            if(!$this->controllerUserCanAccess(Auth::user(),$client->cliente_distrib_id)){
+            if(!$this->controllerUserCanAccess(Auth::user(),$client->cliente_distrib_id) && $client->cliente_distrib_id!=null){
                 return view('errors.403');
             }
             if (isset($client)){

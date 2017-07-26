@@ -272,6 +272,7 @@
 			    data: {_token: CSRF_TOKEN,selected:selected},
 			    dataType: 'JSON',
 			    success: function (data){
+			    	console.log(data);
 			    	var roles = [];
 			    	var perms = document.getElementById('permisos').options;
 			    	data['roles'].forEach(function(entry){
@@ -281,6 +282,10 @@
 				    			perms[i].selected=true;
 					    	}
 					    }
+					    $("#permisos").select2({
+				            placeholder: "Selecciona los permisos",
+				            allowClear: true
+				        });
 					});
 			    	$('#permisos').trigger("chosen:updated");
 			    }

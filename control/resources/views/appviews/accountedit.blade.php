@@ -580,9 +580,10 @@
 
         function edittl(tlid){
             var tr = document.getElementById("tbrow"+tlid);
-            console.log(tlid);
+            
             
             if(tr.hasAttribute("selected")){
+                
                 tr.removeAttribute("selected");
                 tr.style.backgroundColor='#f9f9f9';
                 document.getElementById('acctl_f_ini').value = "";
@@ -594,6 +595,12 @@
                 document.getElementById('acctl_f_corte').min = val_date_corte;
                 trselected = false;
             }else{
+                var table = document.getElementById('tabletl1');
+                var rowLength = table.rows.length;
+                for(var i=1; i<rowLength; i+=1){
+                  table.rows[i].removeAttribute("selected");
+                  table.rows[i].style.backgroundColor='#f9f9f9';
+                }
                 tr.setAttribute("selected", "1");
                 tr.style.backgroundColor='#c9f2cc';
                 document.getElementById('acctl_f_ini').value = document.getElementById("tdrow"+tlid+"1").innerText;

@@ -164,14 +164,14 @@ class UserController extends Controller
                         $user->attachPermission($permobj);
                     }
                 }
-                $permobj = Permission::where('slug','app')->get();
-                if($permobj){
-                    $user->attachPermission($permobj[0]->id);
+                $role = Role::where('slug','app')->get();
+                if($role){
+                    $user->attachRole($role[0]);
                 }
             }else{
-                $permobj = Permission::where('slug','api')->get();
-                if($permobj){
-                    $user->attachPermission($permobj[0]->id);
+                $role = Role::where('slug','api')->get();
+                if($role){
+                    $user->attachRole($role[0]);
                 }
             }
                     
@@ -281,6 +281,15 @@ class UserController extends Controller
                     $user->attachRole($rolobj);
                 }
             }
+            /*if(array_key_exists('usrc_type',$alldata) && isset($alldata['usrc_type'])){
+                    $user->usrc_super = $alldata['usrc_super'];       
+            }*/
+            if($user->usrc_type=='app'){
+                $role = Role::where('slug','app')->get();
+            }else{
+                $role = Role::where('slug','api')->get();
+            }
+            $user->attachRole($role[0]);
             $user->detachAllPermissions();
             if(array_key_exists('permisos',$alldata)){
                 
@@ -338,7 +347,7 @@ class UserController extends Controller
         if(array_key_exists('selected',$alldata) && isset($alldata['selected'])){
             foreach ($alldata['selected'] as $select) {
                 $role = Role::find((int)$select);
-                $rolestr = $rolestr + $role->name + ',';
+                //$rolestr = $rolestr + $role->name + ',';
                 $tests = false;
                 if (isset($role)){
                     $tests = $role->permissions()->get();
@@ -349,13 +358,12 @@ class UserController extends Controller
                 }
             }
         }
-        $fmessage = 'Se han asignado los permisos: '.$permstr.' a los roles: '.$rolestr;
-        //\Session::flash('message',$fmessage);
-        $this->registeredBinnacle($request,'permsbyroles',$fmessage);
+
         $response = array(
             'status' => 'success',
             'msg' => 'Setting created successfully',
             'roles' => $return_array,
+            'alldata' => $alldata
         );
         return \Response::json($response);
     }
