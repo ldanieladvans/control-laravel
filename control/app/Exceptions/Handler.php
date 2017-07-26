@@ -5,6 +5,7 @@ namespace App\Exceptions;
 use Exception;
 use Illuminate\Auth\AuthenticationException;
 use Illuminate\Foundation\Exceptions\Handler as ExceptionHandler;
+use Illuminate\Support\Facades\Log;
 
 class Handler extends ExceptionHandler
 {
@@ -44,6 +45,23 @@ class Handler extends ExceptionHandler
      */
     public function render($request, Exception $exception)
     {
+        if ($exception instanceof \Bican\Roles\Exceptions\RoleDeniedException || $exception instanceof \Bican\Roles\Exceptions\PermissionDeniedException)
+        {
+            return view('errors.403');
+        }
+        elseif ($exception instanceof \GuzzleHttp\Exception\RoleDeniedException)
+        {
+            return view('errors.403');
+        }
+        elseif ($exception instanceof \Symfony\Component\HttpKernel\Exception\NotFoundHttpException)
+        {
+             return view('errors.404');
+        }
+        elseif ($exception instanceof \Illuminate\Session\TokenMismatchException)
+        {
+            return view('errors.expsess');
+        }
+        
         return parent::render($request, $exception);
     }
 

@@ -131,13 +131,21 @@
 						</div>
 
 		                <div class="item form-group">
-		                	<label class="control-label col-md-4 col-sm-4 col-xs-12">Supervisor: </label>
+		                	<label class="control-label col-md-1 col-sm-1 col-xs-12">Supervisor: </label>
 	                        <div class="col-md-1 col-sm-1 col-xs-12">
 		                    	<p></p>
 		                        Si:
 		                        <input type="radio" class="flat" name="usrc_super" id="usrc_super1" value="1" {{$user->usrc_super == '1' ? 'checked':''}} /> No:
 		                        <input type="radio" class="flat" name="usrc_super" id="usrc_super0" value="0" {{$user->usrc_super == '0' ? 'checked':''}}/>
 		                    </div>
+
+		                    <label class="control-label col-md-1 col-sm-1 col-xs-12">Tipo de Usuario: </label>
+		                    <div class="col-md-2 col-sm-2 col-xs-12">
+		                        <select class="js-example-basic-single js-states form-control" name="usrc_type" id="usrc_type" disabled>
+			                        <option value="app" {{$user->usrc_type=='app' ? 'selected' : ''}}>Aplicación</option>
+			                        <option value="api" {{$user->usrc_type=='api' ? 'selected' : ''}}>Servicio</option>
+		                        </select>
+		                  	</div>
 
 			                <label class="control-label col-md-2 col-sm-2 col-xs-12">Distribuidor Asociado: </label>
 		                    <div class="col-md-2 col-sm-2 col-xs-12">
@@ -150,38 +158,45 @@
 			                </div>
 			            </div>
 
-                  	    <div class="x_content">
-                        	<div class="" role="tabpanel" data-example-id="togglable-tabs">
-			                    <ul id="myTab" class="nav nav-tabs bar_tabs" role="tablist">
-			                        <li role="presentation" class="active"><a href="#tab_content1" id="home-tab" role="tab" data-toggle="tab" aria-expanded="true">Roles y Permisos</a>
-			                        </li>
-			                    </ul>
+                  	    @if(Auth::user()->usrc_admin || Auth::user()->can('assign.roles.users') || Auth::user()->can('assign.perms.users'))
+	                  	    <div class="x_content">
+	                        	<div class="" role="tabpanel" data-example-id="togglable-tabs">
+				                    <ul id="myTab" class="nav nav-tabs bar_tabs" role="tablist">
+				                        <li role="presentation" class="active"><a href="#tab_content1" id="home-tab" role="tab" data-toggle="tab" aria-expanded="true">Roles y Permisos</a>
+				                        </li>
+				                    </ul>
 
-	                      		<div id="myTabContent" class="tab-content">
-									<div role="tabpanel" class="tab-pane fade active in" id="tab_content1" aria-labelledby="home-tab">
-										<div class="item form-group">
-							                <div class="col-md-10 col-sm-10 col-xs-12">
-							                    <select id="roles" name="roles[]" tabindex="1" data-placeholder="Seleccione los roles ..." name="rolesapp" class="js-example-basic-multiple" onchange="onSelectUserCreate(this)" multiple="multiple" style="width: 100%; display: none;">
-							                        @foreach($roles as $role)
-														<option value="{{ $role->id }}" {{$user->hasRole($role->id) ? 'selected':''}} >{{ $role->name }}</option>
-													@endforeach
-							                    </select>
-							                </div>
-							            </div>
+		                      		<div id="myTabContent" class="tab-content">
+										<div role="tabpanel" class="tab-pane fade active in" id="tab_content1" aria-labelledby="home-tab">
+											
+											@if(Auth::user()->usrc_admin || Auth::user()->can('assign.roles.users'))
+												<div class="item form-group">
+									                <div class="col-md-10 col-sm-10 col-xs-12">
+									                    <select id="roles" name="roles[]" tabindex="1" data-placeholder="Seleccione los roles ..." name="rolesapp" class="js-example-basic-multiple" onchange="onSelectUserCreate(this)" multiple="multiple" style="width: 100%; display: none;">
+									                        @foreach($roles as $role)
+																<option value="{{ $role->id }}" {{$user->hasRole($role->id) ? 'selected':''}} >{{ $role->name }}</option>
+															@endforeach
+									                    </select>
+									                </div>
+									            </div>
+								            @endif
 
-							            <div class="item form-group">
-							                <div class="col-md-10 col-sm-10 col-xs-12">
-							                    <select id="permisos" name="permisos[]" tabindex="2" data-placeholder="Seleccione los permisos ..." class="js-example-basic-multiple" multiple="multiple" style="width: 100%; display: none;">
-													@foreach($permissions as $permission)
-						                            	<option value="{{ $permission->id }}" {{$user->customGetUserPerms($permission->id,true) ? 'selected':''}} >{{ $permission->name }}</option>
-						                            @endforeach
-							                    </select>
-							                </div>
-							            </div>
-	                        		</div>
-	                      		</div>
-	                    	</div>
-            			</div>
+								            @if(Auth::user()->usrc_admin || Auth::user()->can('assign.perms.users'))
+									            <div class="item form-group">
+									                <div class="col-md-10 col-sm-10 col-xs-12">
+									                    <select id="permisos" name="permisos[]" tabindex="2" data-placeholder="Seleccione los permisos ..." class="js-example-basic-multiple" multiple="multiple" style="width: 100%; display: none;">
+															@foreach($permissions as $permission)
+								                            	<option value="{{ $permission->id }}" {{$user->customGetUserPerms($permission->id,true) ? 'selected':''}} >{{ $permission->name }}</option>
+								                            @endforeach
+									                    </select>
+									                </div>
+									            </div>
+								            @endif
+		                        		</div>
+		                      		</div>
+		                    	</div>
+	            			</div>
+            			@endif
 
                       	<div class="ln_solid"></div>
                      	<div class="form-group">
@@ -257,6 +272,7 @@
 			    data: {_token: CSRF_TOKEN,selected:selected},
 			    dataType: 'JSON',
 			    success: function (data){
+			    	console.log(data);
 			    	var roles = [];
 			    	var perms = document.getElementById('permisos').options;
 			    	data['roles'].forEach(function(entry){
@@ -266,6 +282,10 @@
 				    			perms[i].selected=true;
 					    	}
 					    }
+					    $("#permisos").select2({
+				            placeholder: "Selecciona los permisos",
+				            allowClear: true
+				        });
 					});
 			    	$('#permisos').trigger("chosen:updated");
 			    }

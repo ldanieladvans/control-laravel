@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use Illuminate\Http\Request;
 use Bican\Roles\Models\Role;
 use Bican\Roles\Models\Permission;
+use Illuminate\Support\Facades\Auth;
 
 class PermissionController extends Controller
 {
@@ -26,8 +27,13 @@ class PermissionController extends Controller
      */
     public function index()
     {
-        $permissions = Permission::all();
-        return view('appviews.permissionshow',['permissions'=>$permissions]);
+        $logued_user = Auth::user();
+        if($logued_user->usrc_admin || $logued_user->can('see.perms')){
+            $permissions = Permission::all();
+            return view('appviews.permissionshow',['permissions'=>$permissions]);
+        }else{
+            return view('errors.403');
+        }
     }
 
     /**
@@ -70,8 +76,13 @@ class PermissionController extends Controller
      */
     public function edit($id)
     {
-        $permission = Permission::findOrFail($id);
-        return view('appviews.permedit',['permission'=>$permission]);
+        $logued_user = Auth::user();
+        if($logued_user->usrc_admin || $logued_user->can('edit.perms')){
+            $permission = Permission::findOrFail($id);
+            return view('appviews.permedit',['permission'=>$permission]);
+        }else{
+            return view('errors.403');
+        }
     }
 
     /**
@@ -83,15 +94,20 @@ class PermissionController extends Controller
      */
     public function update(Request $request, $id)
     {
-        $alldata = $request->all();
-        $permission = Permission::findOrFail($id);
-        $permission->name = $alldata['name'];
-        $permission->description = $alldata['description'];
-        $permission->save();
-        $fmessage = 'Se ha modificado el permiso: '.$alldata['name'];
-        \Session::flash('message',$fmessage);
-        $this->registeredBinnacle($request,'update',$fmessage);
-        return redirect()->route('permission.index');
+        $logued_user = Auth::user();
+        if($logued_user->usrc_admin || $logued_user->can('edit.perms')){
+            $alldata = $request->all();
+            $permission = Permission::findOrFail($id);
+            $permission->name = $alldata['name'];
+            $permission->description = $alldata['description'];
+            $permission->save();
+            $fmessage = 'Se ha modificado el permiso: '.$alldata['name'];
+            \Session::flash('message',$fmessage);
+            $this->registeredBinnacle($request->all(), 'update', $fmessage, $logued_user ? $logued_user->id : '', $logued_user ? $logued_user->name : '');
+            return redirect()->route('permission.index');
+        }else{
+            return view('errors.403');
+        }
     }
 
     /**

@@ -98,7 +98,7 @@
                             </div>
                             <label class="control-label col-md-1 col-sm-1 col-xs-12">Periodicidad: </label>
                             <div class="col-md-2 col-sm-2 col-xs-12">
-                                <select class="js-example-basic-single js-states form-control" name="cta_periodicity" id="cta_periodicity">
+                                <select class="js-example-basic-single js-states form-control" name="cta_periodicity" id="cta_periodicity" {{ (Auth::user()->can('change.period.accounts') || Auth::user()->usrc_admin) ? '' : 'disabled'}}>
                                     <option value="3" selected>Trimestral</option>
                                     <option value="6" >Semestral</option>
                                     <option value="12" >Anual</option>
@@ -106,158 +106,164 @@
                             </div>
                             <label class="control-label col-md-1 col-sm-1 col-xs-12">Recursivo: </label>
                             <div class="col-md-1 col-sm-1 col-xs-12">
-                                <select class="js-example-basic-single js-states form-control" name="cta_recursive" id="cta_recursive">
+                                <select class="js-example-basic-single js-states form-control" name="cta_recursive" id="cta_recursive" {{ (Auth::user()->can('change.rec.accounts') || Auth::user()->usrc_admin) ? '' : 'disabled'}}>
                                     <option value="1" {{$account->cta_recursive==1 ? 'selected':''}}>Si</option>
                                     <option value="0" {{$account->cta_recursive!=1 ? 'selected':''}}>No</option>
                                 </select>
                             </div>
                         </div>
 
-                        <div class="x_content" id="tabaccedit">
-                            <div class="" role="tabpanel" data-example-id="togglable-tabs">
-                                <ul id="myTab" class="nav nav-tabs bar_tabs" role="tablist">
-                                    <li role="presentation" class="active"><a href="#tab_content1" id="home-tab" role="tab" data-toggle="tab" aria-expanded="true">Detalles</a>
-                                    </li>
-                                    <li role="presentation"><a href="#tab_content2" id="home-tab" role="tab" data-toggle="tab" aria-expanded="true">Historial Fechas-Contratos</a>
-                                    </li>
-                                </ul>
+                        @if(Auth::user()->usrc_admin || Auth::user()->can('manage.details.accounts') || Auth::user()->can('manage.tls.accounts'))
+                            <div class="x_content" id="tabaccedit">
+                                <div class="" role="tabpanel" data-example-id="togglable-tabs">
+                                    <ul id="myTab" class="nav nav-tabs bar_tabs" role="tablist">
+                                        <li role="presentation" class="active"><a href="#tab_content1" id="home-tab" role="tab" data-toggle="tab" aria-expanded="true">Detalles</a>
+                                        </li>
+                                        <li role="presentation"><a href="#tab_content2" id="home-tab" role="tab" data-toggle="tab" aria-expanded="true">Historial Fechas-Contratos</a>
+                                        </li>
+                                    </ul>
 
-                                <div id="myTabContent" class="tab-content">
-                                    <div role="tabpanel" class="tab-pane fade active in" id="tab_content1" aria-labelledby="home-tab"> 
-                                        <div class="item form-group">                       
-                                            <div class="col-md-12 col-sm-12 col-xs-12">
-                                                <table id="editable-dt1" class="table table-striped table-bordered" width="100%">
-                                                    <thead>
-                                                        <tr>
-                                                            <th align="left">#</th>
-                                                            <th align="left">Aplicación</th>
-                                                            <th align="left">Cantidad Instancias</th>
-                                                            <th align="left">Cantidad Gigas</th>
-                                                            <th align="left">Ambiente</th>
-                                                            <th align="left">Fecha Activación</th>
-                                                            <th align="left">Estado</th>
-                                                        </tr>
-                                                    </thead>
-                                                    <tbody>
-                                                        @foreach($account->packages as $appcta)
-                                                            <tr data-id="{{$appcta->id}}">
-                                                                <td class="tabledit-data">{{$appcta->id}}</td>
-                                                                <td class="tabledit-data">
-                                                                    @foreach($appsne as $appne)
-                                                                        @if ($appcta->hasApp($appne->code,true))
-                                                                            {{$appne->name}}
-                                                                        @endif
-                                                                    @endforeach
-                                                                </td>
-                                                                <td class="tabledit-data">{{$appcta->appcta_rfc}}</td>
-                                                                <td class="tabledit-data">{{$appcta->appcta_gig}}</td>
-                                                                <td class="tabledit-data">{{$appcta->sale_estado}}</td>
-                                                                <td class="tabledit-data">{{$appcta->appcta_f_act}}</td>
-                                                                <td class="tabledit-data">{{$appcta->appcta_estado}}</td>
-                                                            </tr>
-                                                        @endforeach
-                                                    </tbody>
-                                                    <button id="testbtn" type="button" onclick="addLine()" >Agregar [+]</button>
-                                                    <div class="modal fade" id="addappmodal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
-                                                        <div class="modal-dialog" role="document">
-                                                            <div class="modal-content">
-                                                                <div class="modal-header">
-                                                                    <h5 class="modal-title" id="exampleModalLabel">Añadir Aplicación:</h5>
-                                                                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                                                                        <span aria-hidden="true">&times;</span>
-                                                                    </button>
-                                                                </div>
-                                                                <div class="modal-body">
-                                                                    <form>
-                                                                        <div class="item form-group">
-                                                                            <div class="col-md-12 col-sm-12 col-xs-12">
-                                                                                <select class="js-example-basic-single js-states form-control" name="addapps" id="addapps" style="width: 100%; display: none;">
-                                                                                    @foreach($appsne as $appne)
-                                                                                        @if ($account->hasApp($appne->code,true)==0)
-                                                                                            <option value="{{$appne->code}}" >{{$appne->name}}</option>
-                                                                                        @endif
-                                                                                    @endforeach
-                                                                                </select>
-                                                                            </div>
+                                    <div id="myTabContent" class="tab-content">
+                                        @if(Auth::user()->usrc_admin || Auth::user()->can('manage.details.accounts'))
+                                            <div role="tabpanel" class="tab-pane fade active in" id="tab_content1" aria-labelledby="home-tab"> 
+                                                <div class="item form-group">                       
+                                                    <div class="col-md-12 col-sm-12 col-xs-12">
+                                                        <table id="editable-dt1" class="table table-striped table-bordered" width="100%">
+                                                            <thead>
+                                                                <tr>
+                                                                    <th align="left">#</th>
+                                                                    <th align="left">Aplicación</th>
+                                                                    <th align="left">Cantidad Instancias</th>
+                                                                    <th align="left">Cantidad Gigas</th>
+                                                                    <th align="left">Ambiente</th>
+                                                                    <th align="left">Fecha Activación</th>
+                                                                    <th align="left">Estado</th>
+                                                                </tr>
+                                                            </thead>
+                                                            <tbody>
+                                                                @foreach($account->packages as $appcta)
+                                                                    <tr data-id="{{$appcta->id}}">
+                                                                        <td class="tabledit-data">{{$appcta->id}}</td>
+                                                                        <td class="tabledit-data">
+                                                                            @foreach($appsne as $appne)
+                                                                                @if ($appcta->hasApp($appne->code,true))
+                                                                                    {{$appne->name}}
+                                                                                @endif
+                                                                            @endforeach
+                                                                        </td>
+                                                                        <td class="tabledit-data">{{$appcta->appcta_rfc}}</td>
+                                                                        <td class="tabledit-data">{{$appcta->appcta_gig}}</td>
+                                                                        <td class="tabledit-data">{{$appcta->sale_estado}}</td>
+                                                                        <td class="tabledit-data">{{$appcta->appcta_f_act}}</td>
+                                                                        <td class="tabledit-data">{{$appcta->appcta_estado}}</td>
+                                                                    </tr>
+                                                                @endforeach
+                                                            </tbody>
+                                                            <button id="testbtn" type="button" onclick="addLine()" >Agregar [+]</button>
+                                                            <div class="modal fade" id="addappmodal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+                                                                <div class="modal-dialog" role="document">
+                                                                    <div class="modal-content">
+                                                                        <div class="modal-header">
+                                                                            <h5 class="modal-title" id="exampleModalLabel">Añadir Aplicación:</h5>
+                                                                            <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                                                                                <span aria-hidden="true">&times;</span>
+                                                                            </button>
                                                                         </div>
+                                                                        <div class="modal-body">
+                                                                            <form>
+                                                                                <div class="item form-group">
+                                                                                    <div class="col-md-12 col-sm-12 col-xs-12">
+                                                                                        <select class="js-example-basic-single js-states form-control" name="addapps" id="addapps" style="width: 100%; display: none;">
+                                                                                            @foreach($appsne as $appne)
+                                                                                                @if ($account->hasApp($appne->code,true)==0)
+                                                                                                    <option value="{{$appne->code}}" >{{$appne->name}}</option>
+                                                                                                @endif
+                                                                                            @endforeach
+                                                                                        </select>
+                                                                                    </div>
+                                                                                </div>
 
-                                                                        <div class="item form-group">
-                                                                            <div class="col-md-6 col-sm-6 col-xs-12">
-                                                                                <input id="appcta_rfc" class="form-control has-feedback-left" name="appcta_rfc" title="Cantidad de Instancias" placeholder="Cantidad Instancias *" type="numberint" value="0">
-                                                                                <span class="fa fa-bank form-control-feedback left" aria-hidden="true"></span>
-                                                                            </div>
-                                                                            <div class="col-md-6 col-sm-6 col-xs-12">
-                                                                                <input id="appcta_gig" class="form-control has-feedback-left" name="appcta_gig" placeholder="Cantidad Gigas *" value="0" type="number" title="Almacenamiento en Gigas">
-                                                                                <span class="fa fa-archive form-control-feedback left" aria-hidden="true"></span>
-                                                                            </div>
+                                                                                <div class="item form-group">
+                                                                                    <div class="col-md-6 col-sm-6 col-xs-12">
+                                                                                        <input id="appcta_rfc" class="form-control has-feedback-left" name="appcta_rfc" title="Cantidad de Instancias" placeholder="Cantidad Instancias *" type="numberint" value="0">
+                                                                                        <span class="fa fa-bank form-control-feedback left" aria-hidden="true"></span>
+                                                                                    </div>
+                                                                                    <div class="col-md-6 col-sm-6 col-xs-12">
+                                                                                        <input id="appcta_gig" class="form-control has-feedback-left" name="appcta_gig" placeholder="Cantidad Gigas *" value="0" type="number" title="Almacenamiento en Gigas">
+                                                                                        <span class="fa fa-archive form-control-feedback left" aria-hidden="true"></span>
+                                                                                    </div>
+                                                                                </div>
+                                                                            </form>
+
                                                                         </div>
-                                                                    </form>
-
-                                                                </div>
-                                                                <div class="modal-footer">
-                                                                    <button type="button"  onclick="addApp({{$account->id}});" class="btn btn-primary">Ok</button>
+                                                                        <div class="modal-footer">
+                                                                            <button type="button"  onclick="addApp({{$account->id}});" class="btn btn-primary">Ok</button>
+                                                                        </div>
+                                                                    </div>
                                                                 </div>
                                                             </div>
-                                                        </div>
+                                                        </table>
                                                     </div>
-                                                </table>
+                                                </div>
                                             </div>
-                                        </div>
+                                        @endif
+                                        @if(Auth::user()->usrc_admin || Auth::user()->can('manage.tls.accounts'))
+                                            <div role="tabpanel" class="tab-pane fade" id="tab_content2" aria-labelledby="home-tab"> 
+                                                <div class="item form-group" id="dates_div" >
+                                                    <div class="col-md-3 col-sm-3 col-xs-12">
+                                                        <input id="acctl_f_ini" title="Fecha Inicio" class="form-control has-feedback-left" name="acctl_f_ini" placeholder="Fecha Inicio" type="date">
+                                                        <span class="fa fa-calendar form-control-feedback left" aria-hidden="true"></span>
+                                                    </div>
+
+                                                    <div class="col-md-3 col-sm-3 col-xs-12">
+                                                        <input id="acctl_f_fin" title="Fecha Fin" class="form-control has-feedback-left" name="acctl_f_fin" placeholder="Fecha Fin" type="date">
+                                                        <span class="fa fa-calendar form-control-feedback left" aria-hidden="true"></span>
+                                                    </div>
+                                                    
+                                                    <div class="col-md-3 col-sm-3 col-xs-12">
+                                                        <input id="acctl_f_corte" title="Fecha Corte" class="form-control has-feedback-left" name="acctl_f_corte" placeholder="Fecha Corte" type="date">
+                                                        <span class="fa fa-calendar form-control-feedback left" aria-hidden="true"></span>
+                                                    </div>
+
+                                                    <div class="col-md-3 col-sm-3 col-xs-12">
+                                                        <button id="addlinedate" type="button" onclick="addtl({{$account->id}})" class="btn btn-success">Agregar</button>
+                                                    </div>
+                                                </div>
+                                                <div class="item form-group" >
+                                                    <table id="tabletl1" class="table table-striped table-bordered" width="100%">
+                                                        <thead>
+                                                            <tr>
+                                                                <th>Fecha Inicio</th>
+                                                                <th>Fecha Fin</th>
+                                                                <th>Fecha Corte</th>
+                                                                <th>Estado</th>
+                                                                <th>Fecha de Pago</th>
+                                                                <th>Acciones</th>
+                                                            </tr>
+                                                        </thead>
+                                                        <tbody>
+                                                            @foreach($account->timelines as $tl)
+                                                                <tr id="tbrow{{$tl->id}}">
+                                                                    <td id="tdrow{{$tl->id}}1">{{$tl->acctl_f_ini}}</td>
+                                                                    <td id="tdrow{{$tl->id}}2">{{$tl->acctl_f_fin}}</td>
+                                                                    <td id="tdrow{{$tl->id}}3">{{$tl->acctl_f_corte}}</td>
+                                                                    <td id="tdrow{{$tl->id}}4">{{$tl->acctl_estado}}</td>
+                                                                    <td id="tdrow{{$tl->id}}5">{{$tl->acctl_f_pago}}</td>
+                                                                    <td>
+                                                                        <div class='btn-group'><div class='btn-group'><a id='{{$tl->id}}' onclick='quittl("{{$tl->id}}","{{$account->id}}")' class='btn btn-xs' data-placement='left' title='Borrar' ><i class='fa fa-trash fa-3x'></i></a></div>
+                                                                        <div class='btn-group'><div class='btn-group'><a id='{{$tl->id}}' onclick='edittl({{$tl->id}})' class='btn btn-xs' data-placement='left' title='Editar' ><i class='fa fa-edit fa-3x'></i></a></div>
+                                                                    </td>
+                                                                </tr>
+                                                            @endforeach
+                                                        </tbody>
+                                                    </table>
+                                                </div>
+                                            </div>
+                                        @endif 
                                     </div>
-                                    <div role="tabpanel" class="tab-pane fade" id="tab_content2" aria-labelledby="home-tab"> 
-                                        <div class="item form-group" id="dates_div" >
-                                            <div class="col-md-3 col-sm-3 col-xs-12">
-                                                <input id="acctl_f_ini" title="Fecha Inicio" class="form-control has-feedback-left" name="acctl_f_ini" placeholder="Fecha Inicio" type="date">
-                                                <span class="fa fa-calendar form-control-feedback left" aria-hidden="true"></span>
-                                            </div>
-
-                                            <div class="col-md-3 col-sm-3 col-xs-12">
-                                                <input id="acctl_f_fin" title="Fecha Fin" class="form-control has-feedback-left" name="acctl_f_fin" placeholder="Fecha Fin" type="date">
-                                                <span class="fa fa-calendar form-control-feedback left" aria-hidden="true"></span>
-                                            </div>
-                                            
-                                            <div class="col-md-3 col-sm-3 col-xs-12">
-                                                <input id="acctl_f_corte" title="Fecha Corte" class="form-control has-feedback-left" name="acctl_f_corte" placeholder="Fecha Corte" type="date">
-                                                <span class="fa fa-calendar form-control-feedback left" aria-hidden="true"></span>
-                                            </div>
-
-                                            <div class="col-md-3 col-sm-3 col-xs-12">
-                                                <button id="addlinedate" type="button" onclick="addtl({{$account->id}})" class="btn btn-success">Agregar</button>
-                                            </div>
-                                        </div>
-                                        <div class="item form-group" >
-                                            <table id="tabletl1" class="table table-striped table-bordered" width="100%">
-                                                <thead>
-                                                    <tr>
-                                                        <th>Fecha Inicio</th>
-                                                        <th>Fecha Fin</th>
-                                                        <th>Fecha Corte</th>
-                                                        <th>Estado</th>
-                                                        <th>Fecha de Pago</th>
-                                                        <th>Acciones</th>
-                                                    </tr>
-                                                </thead>
-                                                <tbody>
-                                                    @foreach($account->timelines as $tl)
-                                                        <tr id="tbrow{{$tl->id}}">
-                                                            <td id="tdrow{{$tl->id}}1">{{$tl->acctl_f_ini}}</td>
-                                                            <td id="tdrow{{$tl->id}}2">{{$tl->acctl_f_fin}}</td>
-                                                            <td id="tdrow{{$tl->id}}3">{{$tl->acctl_f_corte}}</td>
-                                                            <td id="tdrow{{$tl->id}}4">{{$tl->acctl_estado}}</td>
-                                                            <td id="tdrow{{$tl->id}}5">{{$tl->acctl_f_pago}}</td>
-                                                            <td>
-                                                                <div class='btn-group'><div class='btn-group'><a id='{{$tl->id}}' onclick='quittl("{{$tl->id}}","{{$account->id}}")' class='btn btn-xs' data-placement='left' title='Borrar' ><i class='fa fa-trash fa-3x'></i></a></div>
-                                                                <div class='btn-group'><div class='btn-group'><a id='{{$tl->id}}' onclick='edittl({{$tl->id}})' class='btn btn-xs' data-placement='left' title='Editar' ><i class='fa fa-edit fa-3x'></i></a></div>
-                                                            </td>
-                                                        </tr>
-                                                    @endforeach
-                                                </tbody>
-                                            </table>
-                                        </div>
-                                    </div> 
                                 </div>
                             </div>
-                        </div>
+                        @endif
 
                         <div class="ln_solid"></div>
                         <div class="form-group">
@@ -294,6 +300,15 @@
     <!-- Switchery -->
     <script src="{{ asset('controlassets/vendors/switchery/dist/switchery.min.js') }}"></script>
     <script type="text/javascript">
+
+        var cta_periodicity = document.getElementById('cta_periodicity').value;
+
+        
+
+
+        $('#cta_periodicity').change(function() {
+            cta_periodicity = this.value;
+        });
 
         $( function() {
             $('#alertmsgcta').click(function() {
@@ -345,22 +360,15 @@
           return dat;
         }
 
+        Date.prototype.addMonths = function (value) {
+            var n = this.getDate();
+            this.setDate(1);
+            this.setMonth(this.getMonth() + value);
+            this.setDate(Math.min(n, this.getDaysInMonth()));
+            return this;
+        };
+
         if(rowCount >= 2){
-
-            var inidate = new Date(($('#tabletl1 tbody tr:last td:nth-child(1)').text()).replace('-','/'));
-            inidate = inidate.addDays(1);
-
-            var month = inidate.getMonth() + 1;
-            if(month<10){
-                month = '0'+month;
-            }
-            var day = inidate.getDate();
-            if(day<10){
-                day = '0'+day;
-            }
-            var year = inidate.getFullYear();
-
-            val_date_ini = [year, month, day].join('-');
 
             var inidate = new Date(($('#tabletl1 tbody tr:last td:nth-child(2)').text()).replace('-','/'));
             inidate = inidate.addDays(1);
@@ -375,24 +383,43 @@
             }
             var year = inidate.getFullYear();
 
-            val_date_fin = [year, month, day].join('-');
+            val_date_ini = [year, month, day].join('-');
 
-            var inidate = new Date(($('#tabletl1 tbody tr:last td:nth-child(3)').text()).replace('-','/'));
-            inidate = inidate.addDays(1);
+            var enddate = new Date(($('#tabletl1 tbody tr:last td:nth-child(2)').text()).replace('-','/'));
+            //enddate = enddate.addDays(1);
+            enddate.setDate(enddate.getDate()-1);
+            enddate.setMonth(enddate.getMonth() + parseInt(cta_periodicity));
 
-            var month = inidate.getMonth() + 1;
+            var month = enddate.getMonth() + 1;
             if(month<10){
                 month = '0'+month;
             }
-            var day = inidate.getDate();
+            var day = enddate.getDate();
             if(day<10){
                 day = '0'+day;
             }
-            var year = inidate.getFullYear();
+            var year = enddate.getFullYear();
+
+            val_date_fin = [year, month, day].join('-');
+
+            var courtdate = new Date(($('#tabletl1 tbody tr:last td:nth-child(3)').text()).replace('-','/'));
+            //courtdate = courtdate.addDays(1);
+            courtdate.setDate(courtdate.getDate()-1);
+            courtdate.setMonth(courtdate.getMonth() + parseInt(cta_periodicity));
+
+            var month = courtdate.getMonth() + 1;
+            if(month<10){
+                month = '0'+month;
+            }
+            var day = courtdate.getDate();
+            if(day<10){
+                day = '0'+day;
+            }
+            var year = courtdate.getFullYear();
 
             val_date_corte = [year, month, day].join('-');
 
-            document.getElementById('acctl_f_ini').min = val_date_fin;
+            document.getElementById('acctl_f_ini').min = val_date_ini;
             document.getElementById('acctl_f_fin').min = val_date_fin;
             document.getElementById('acctl_f_corte').min = val_date_corte;
 
@@ -518,7 +545,7 @@
                             
                     }else{
                         $('#tabletl1').find('tbody').append("<tr id='tbrow"+data['id']+"'><td id='tdrow"+data['id']+"1'>"+data['acctl_f_ini']+"</td><td id='tdrow"+data['id']+"2'>"+data['acctl_f_fin']+"</td><td id='tdrow"+data['id']+"3'>"+data['acctl_f_corte']+"</td><td id='tdrow"+data['id']+"4'>"+data['acctl_estado']+"</td><td id='tdrow"+data['id']+"5'>"+data['acctl_f_pago']+"</td><td><div class='btn-group'><div class='btn-group'><a id='"+data['id']+"' onclick='quittl("+data['id']+","+data['accid']+")' class='btn btn-xs' data-placement='left' title='Borrar' ><i class='fa fa-trash fa-3x'></i> </a></div><div class='btn-group'><div class='btn-group'><a id='"+data['id']+"' onclick='edittl("+data['id']+")' class='btn btn-xs' data-placement='left' title='Editar' ><i class='fa fa-edit fa-3x'></i></a></div></td></tr>");
-                        document.getElementById('acctl_f_ini').min = data['acctl_f_fin_next'];
+                        document.getElementById('acctl_f_ini').min = data['acctl_f_ini_next'];
                         document.getElementById('acctl_f_fin').min = data['acctl_f_fin_next'];
                         document.getElementById('acctl_f_corte').min = data['acctl_f_corte_next'];
                     }
@@ -553,9 +580,10 @@
 
         function edittl(tlid){
             var tr = document.getElementById("tbrow"+tlid);
-            console.log(tlid);
+            
             
             if(tr.hasAttribute("selected")){
+                
                 tr.removeAttribute("selected");
                 tr.style.backgroundColor='#f9f9f9';
                 document.getElementById('acctl_f_ini').value = "";
@@ -567,15 +595,21 @@
                 document.getElementById('acctl_f_corte').min = val_date_corte;
                 trselected = false;
             }else{
+                var table = document.getElementById('tabletl1');
+                var rowLength = table.rows.length;
+                for(var i=1; i<rowLength; i+=1){
+                  table.rows[i].removeAttribute("selected");
+                  table.rows[i].style.backgroundColor='#f9f9f9';
+                }
                 tr.setAttribute("selected", "1");
                 tr.style.backgroundColor='#c9f2cc';
                 document.getElementById('acctl_f_ini').value = document.getElementById("tdrow"+tlid+"1").innerText;
                 document.getElementById('acctl_f_fin').value = document.getElementById("tdrow"+tlid+"2").innerText;
                 document.getElementById('acctl_f_corte').value = document.getElementById("tdrow"+tlid+"3").innerText;
                 document.getElementById("addlinedate").innerText="Modificar";
-                document.getElementById('acctl_f_ini').min = '0001/01/01';
-                document.getElementById('acctl_f_fin').min = '0001/01/01';
-                document.getElementById('acctl_f_corte').min = '0001/01/01';
+                document.getElementById('acctl_f_ini').min = document.getElementById('acctl_f_ini').value;
+                document.getElementById('acctl_f_fin').min = document.getElementById('acctl_f_fin').value;
+                document.getElementById('acctl_f_corte').min = document.getElementById('acctl_f_corte').value;
                 trselected = tlid;
             }
 

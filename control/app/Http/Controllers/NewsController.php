@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
 use App\News;
+use Illuminate\Support\Facades\Auth;
 
 class NewsController extends Controller
 {
@@ -27,8 +28,13 @@ class NewsController extends Controller
      */
     public function index()
     {
-        $news = News::all();
-        return view('appviews.newshow',['news'=>$news]);
+        $logued_user = Auth::user();
+        if($logued_user->usrc_admin || $logued_user->can('see.news')){
+            $news = News::all();
+            return view('appviews.newshow',['news'=>$news]);
+        }else{
+            return view('errors.403');
+        }
     }
 
     /**
@@ -38,7 +44,12 @@ class NewsController extends Controller
      */
     public function create()
     {
-        return view('appviews.newscreate');
+        $logued_user = Auth::user();
+        if($logued_user->usrc_admin || $logued_user->can('create.news')){
+            return view('appviews.newscreate');
+        }else{
+            return view('errors.403');
+        }
     }
 
     /**
@@ -49,13 +60,18 @@ class NewsController extends Controller
      */
     public function store(Request $request)
     {
-        $alldata = $request->all();
-        $news = new News($alldata);
-        $news->save();
-        $fmessage = 'Se ha creado la noticia: '.$alldata['tittle'];
-        \Session::flash('message',$fmessage);
-        $this->registeredBinnacle($request,'store',$fmessage);
-        return redirect()->route('news.index');
+        $logued_user = Auth::user();
+        if($logued_user->usrc_admin || $logued_user->can('create.news')){
+            $alldata = $request->all();
+            $news = new News($alldata);
+            $news->save();
+            $fmessage = 'Se ha creado la noticia: '.$alldata['tittle'];
+            \Session::flash('message',$fmessage);
+            $this->registeredBinnacle($request->all(), 'store', $fmessage, $logued_user ? $logued_user->id : '', $logued_user ? $logued_user->name : '');
+            return redirect()->route('news.index');
+        }else{
+            return view('errors.403');
+        }
     }
 
     /**
@@ -77,8 +93,13 @@ class NewsController extends Controller
      */
     public function edit($id)
     {
-        $news = News::findOrFail($id);
-        return view('appviews.newsedit',['news'=>$news]);
+        $logued_user = Auth::user();
+        if($logued_user->usrc_admin || $logued_user->can('edit.news')){
+            $news = News::findOrFail($id);
+            return view('appviews.newsedit',['news'=>$news]);
+        }else{
+            return view('errors.403');
+        }
     }
 
     /**
@@ -90,17 +111,22 @@ class NewsController extends Controller
      */
     public function update(Request $request, $id)
     {
-        $alldata = $request->all();
-        $news = News::findOrFail($id);
-        $news->tittle = $alldata['tittle'];
-        $news->pdate = $alldata['pdate'];
-        $news->description = $alldata['description'];
-        $news->nactivo = $alldata['nactivo'];
-        $news->save();
-        $fmessage = 'Se ha actualizado la noticia: '.$alldata['tittle'];
-        \Session::flash('message',$fmessage);
-        $this->registeredBinnacle($request,'update',$fmessage);
-        return redirect()->route('news.index');
+        $logued_user = Auth::user();
+        if($logued_user->usrc_admin || $logued_user->can('edit.news')){
+            $alldata = $request->all();
+            $news = News::findOrFail($id);
+            $news->tittle = $alldata['tittle'];
+            $news->pdate = $alldata['pdate'];
+            $news->description = $alldata['description'];
+            $news->nactivo = $alldata['nactivo'];
+            $news->save();
+            $fmessage = 'Se ha actualizado la noticia: '.$alldata['tittle'];
+            \Session::flash('message',$fmessage);
+            $this->registeredBinnacle($request->all(), 'update', $fmessage, $logued_user ? $logued_user->id : '', $logued_user ? $logued_user->name : '');
+            return redirect()->route('news.index');
+        }else{
+            return view('errors.403');
+        }
     }
 
     /**
@@ -111,14 +137,19 @@ class NewsController extends Controller
      */
     public function destroy($id,Request $request)
     {
-        if (isset($id)){
-            $news = News::findOrFail($id);
-            $fmessage = 'Se ha eliminado la noticia: '.$news->tittle;
-            \Session::flash('message',$fmessage);
-            $this->registeredBinnacle($request,'destroy',$fmessage);
-            $news->delete();
+        $logued_user = Auth::user();
+        if($logued_user->usrc_admin || $logued_user->can('delete.news')){
+            if (isset($id)){
+                $news = News::findOrFail($id);
+                $fmessage = 'Se ha eliminado la noticia: '.$news->tittle;
+                \Session::flash('message',$fmessage);
+                $this->registeredBinnacle($request->all(), 'destroy', $fmessage, $logued_user ? $logued_user->id : '', $logued_user ? $logued_user->name : '');
+                $news->delete();
 
+            }
+            return redirect()->route('news.index');
+        }else{
+            return view('errors.403');
         }
-        return redirect()->route('news.index');
     }
 }

@@ -46,9 +46,11 @@
                                     <td>{{ $permission->description }}</td>
                                     <td class=" last" width="13%">
                                         <div class="btn-group">
-                                            <div class="btn-group">
-                                                <button onclick="location.href = 'permission/{{$permission->id}}/edit';" class="btn btn-xs" data-placement="left" title="Editar" ><i class="fa fa-edit fa-2x"></i> </button>
-                                            </div>
+                                            @if(Auth::user()->usrc_admin || Auth::user()->can('edit.perms'))
+                                                <div class="btn-group">
+                                                    <button onclick="location.href = 'permission/{{$permission->id}}/edit';" class="btn btn-xs" data-placement="left" title="Editar" ><i class="fa fa-edit fa-2x"></i> </button>
+                                                </div>
+                                            @endif
                                         </div>
                                     </td>
                                 </tr>

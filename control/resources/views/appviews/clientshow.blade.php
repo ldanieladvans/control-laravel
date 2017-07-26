@@ -29,7 +29,9 @@
                 @endif
 
                 <div class="x_content">
-                    <button type="button" style=" background-color:#053666 " onclick="location.href = 'client/create';" class="btn btn-primary">Agregar</button>
+                    @if(Auth::user()->usrc_admin || Auth::user()->can('create.clients'))
+                        <button type="button" style=" background-color:#053666 " onclick="location.href = 'client/create';" class="btn btn-primary">Agregar</button>
+                    @endif
                     <table id="datatable-responsive" class="table table-striped table-bordered dt-responsive nowrap" cellspacing="0" width="100%">
                         <thead>
                             <tr>
@@ -53,13 +55,18 @@
                                 	<td>{{ $client->cliente_tipo == 'moral' ? 'Moral' : 'Física'}}</td>
                                     <td class=" last" width="13%">
                                         <div class="btn-group">
-                                            <div class="btn-group">
-                                                <button onclick="location.href = 'client/{{$client->id}}/edit';" class="btn btn-xs" data-placement="left" title="Editar" ><i class="fa fa-edit fa-2x"></i> </button>
-                                            </div>
-                                            {{ Form::open(['route' => ['client.destroy', $client], 'class'=>'pull-right']) }}
-                                                {{ Form::hidden('_method', 'DELETE') }}
-                                                <button  href="#" class="btn btn-xs" onclick="return confirm('¿Está seguro que quiere eliminar este registro?')" type="submit" data-placement="left" title="Borrar" ><i class="fa fa-trash fa-2x"></i></button>
-                                            {{ Form::close() }}
+                                            @if(Auth::user()->usrc_admin || Auth::user()->can('edit.clients'))
+                                                <div class="btn-group">
+                                                    <button onclick="location.href = 'client/{{$client->id}}/edit';" class="btn btn-xs" data-placement="left" title="Editar" ><i class="fa fa-edit fa-2x"></i> </button>
+                                                </div>
+                                            @endif
+
+                                            @if(Auth::user()->usrc_admin || Auth::user()->can('delete.clients'))
+                                                {{ Form::open(['route' => ['client.destroy', $client], 'class'=>'pull-right']) }}
+                                                    {{ Form::hidden('_method', 'DELETE') }}
+                                                    <button  href="#" class="btn btn-xs" onclick="return confirm('¿Está seguro que quiere eliminar este registro?')" type="submit" data-placement="left" title="Borrar" ><i class="fa fa-trash fa-2x"></i></button>
+                                                {{ Form::close() }}
+                                            @endif
                                         </div>
                                     </td>
                                 </tr>

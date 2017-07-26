@@ -29,6 +29,7 @@ class CreateUsersTable extends Migration
             $table->integer('usrc_distrib_id')->unsigned()->nullable();
             $table->string('usrc_pic')->nullable();
             $table->boolean('usrc_admin')->default(0);
+            $table->string('usrc_type',3)->default('app');
         });
     }
 

@@ -30,7 +30,9 @@
                 @endif
 
                 <div class="x_content">
-                    <button type="button" style=" background-color:#053666 " onclick="location.href = 'account/create';" class="btn btn-primary">Agregar</button>
+                    @if(Auth::user()->usrc_admin || Auth::user()->can('create.accounts'))
+                        <button type="button" style=" background-color:#053666 " onclick="location.href = 'account/create';" class="btn btn-primary">Agregar</button>
+                    @endif
                     <table id="datatable-responsive" class="table table-striped table-bordered dt-responsive nowrap" cellspacing="0" width="100%">
                         <thead>
                             <tr>
@@ -51,87 +53,95 @@
                                     <td>{{ $acc->distributor ? $acc->distributor->distrib_nom : '' }}</td>
                                 	<td>{{ $acc->cta_estado }}</td>
                                     <td class=" last" width="18%">               
-                                        <div class="btn-group">
+                                        @if(Auth::user()->usrc_admin || Auth::user()->can('edit.accounts'))
                                             <div class="btn-group">
-                                                <button onclick="location.href = 'account/{{$acc->id}}/edit';" class="btn btn-xs" data-placement="left" title="Editar" ><i class="fa fa-edit fa-2x"></i> </button>
-                                            </div>
-                                            @if ($acc->cta_estado == 'Inactiva')
-                                                <button onclick="changeAccountState('Activa',{{Auth::user()->id}},{{$acc->id}})" class="btn btn-xs" data-placement="left" title="Activar Cuenta" ><i class="fa fa-check fa-2x"></i> </button>
-                                            @else
-                                                <button onclick="changeAccountState('Inactiva',{{Auth::user()->id}},{{$acc->id}})" class="btn btn-xs" data-placement="left" title="Desactivar Cuenta" ><i class="fa fa-times fa-2x"></i> </button>
-                                            @endif
-
-                                            <div class="btn-group">
-                                                <button onclick="getBin('{{ $acc->cta_num }}',{{Auth::user()->id}},{{$acc->id}})" class="btn btn-xs" data-placement="left" title="Bitácora" ><i class="fa fa-eye fa-2x"></i> </button>
-                                            </div>
-
-                                            <div class="btn-group">
-                                                <button onclick="getCtaUsers('{{ $acc->cta_num }}',{{Auth::user()->id}},{{$acc->id}})" class="btn btn-xs" data-placement="left" title="Desbloquear Usuarios" ><i class="fa fa-unlock fa-2x"></i> </button>
-                                            </div>
-
-                                            <div class="modal fade" id="ctauser{{$acc->cta_num}}" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
-                                                <div class="modal-dialog" role="document">
-                                                    <div class="modal-content">
-                                                        <div class="modal-header">
-                                                            <h5 class="modal-title" id="exampleModalLabel">Usuarios de cuenta: {{$acc->cta_num}}</h5>
-                                                        </div>
-                                                        <div class="modal-body">
-                                                            <form>
-                                                                <table id="datatable-responsive{{$acc->cta_num}}" cellspacing="0" width="100%">
-                                                                    <thead>
-                                                                        <tr>
-                                                                            <th>Nombre</th>
-                                                                            <th>Correo</th>
-                                                                            <th>Bloqueado</th>
-                                                                            <th>Acciones</th>
-                                                                        </tr>
-                                                                    </thead>
-                                                                    <tbody>
-                                                                    </tbody>
-                                                                </table>
-                                                            </form>
-                                                            <div id="result_failure_rol{{$acc->cta_num}}"></div>
-                                                        </div>
-                                                        <div class="modal-footer">
-                                                            <button type="button" class="btn btn-secondary" data-dismiss="modal" onclick="cleanctausertable('{{$acc->cta_num}}')">Cerrar</button>
-                                                        </div>
-                                                    </div>
+                                                <div class="btn-group">
+                                                    <button onclick="location.href = 'account/{{$acc->id}}/edit';" class="btn btn-xs" data-placement="left" title="Editar" ><i class="fa fa-edit fa-2x"></i> </button>
                                                 </div>
-                                            </div>
+                                                @if(Auth::user()->usrc_admin || Auth::user()->can('change.state.accounts'))
+                                                    @if ($acc->cta_estado == 'Inactiva')
+                                                        <button onclick="changeAccountState('Activa',{{Auth::user()->id}},{{$acc->id}})" class="btn btn-xs" data-placement="left" title="Activar Cuenta" ><i class="fa fa-check fa-2x"></i> </button>
+                                                    @else
+                                                        <button onclick="changeAccountState('Inactiva',{{Auth::user()->id}},{{$acc->id}})" class="btn btn-xs" data-placement="left" title="Desactivar Cuenta" ><i class="fa fa-times fa-2x"></i> </button>
+                                                    @endif
+                                                @endif
 
+                                                @if(Auth::user()->usrc_admin || Auth::user()->can('see.bit.accounts'))
+                                                    <div class="btn-group">
+                                                        <button onclick="getBin('{{ $acc->cta_num }}',{{Auth::user()->id}},{{$acc->id}})" class="btn btn-xs" data-placement="left" title="Bitácora" ><i class="fa fa-eye fa-2x"></i> </button>
+                                                    </div>
+                                                @endif
 
-                                            <div class="modal fade" id="binacle{{$acc->cta_num}}" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
-                                                <div class="modal-dialog" role="document">
-                                                    <div class="modal-content">
-                                                        <div class="modal-header">
-                                                            <h5 class="modal-title" id="exampleModalLabel">Últimas 10 entradas de la bitácora de la cuenta: {{$acc->cta_num}}</h5>
-                                                        </div>
-                                                        <div class="modal-body">
-                                                            <form>
-                                                                <div class="x_content">
-                                                                    <table id="datatable-responsive-bin{{$acc->cta_num}}" cellspacing="0" width="100%">
+                                                @if(Auth::user()->usrc_admin || Auth::user()->can('unlock.users.accounts'))
+                                                    <div class="btn-group">
+                                                        <button onclick="getCtaUsers('{{ $acc->cta_num }}',{{Auth::user()->id}},{{$acc->id}})" class="btn btn-xs" data-placement="left" title="Desbloquear Usuarios" ><i class="fa fa-unlock fa-2x"></i> </button>
+                                                    </div>
+                                                @endif
+
+                                                <div class="modal fade" id="ctauser{{$acc->cta_num}}" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+                                                    <div class="modal-dialog" role="document">
+                                                        <div class="modal-content">
+                                                            <div class="modal-header">
+                                                                <h5 class="modal-title" id="exampleModalLabel">Usuarios de cuenta: {{$acc->cta_num}}</h5>
+                                                            </div>
+                                                            <div class="modal-body">
+                                                                <form>
+                                                                    <table id="datatable-responsive{{$acc->cta_num}}" cellspacing="0" width="100%">
                                                                         <thead>
                                                                             <tr>
-                                                                                <th>Fecha</th>
-                                                                                <th>Módulo</th>
-                                                                                <th>Ip</th>
-                                                                                <th>Tipo</th>
+                                                                                <th>Nombre</th>
+                                                                                <th>Correo</th>
+                                                                                <th>Bloqueado</th>
+                                                                                <th>Acciones</th>
                                                                             </tr>
                                                                         </thead>
                                                                         <tbody>
                                                                         </tbody>
                                                                     </table>
-                                                                </div>
-                                                            </form>
-                                                          <div id="result_failure_bin{{$acc->cta_num}}"></div>
+                                                                </form>
+                                                                <div id="result_failure_rol{{$acc->cta_num}}"></div>
+                                                            </div>
+                                                            <div class="modal-footer">
+                                                                <button type="button" class="btn btn-secondary" data-dismiss="modal" onclick="cleanctausertable('{{$acc->cta_num}}')">Cerrar</button>
+                                                            </div>
                                                         </div>
-                                                        <div class="modal-footer">
-                                                          <button type="button" class="btn btn-secondary" data-dismiss="modal" onclick="cleanbintable('{{$acc->cta_num}}')">Cerrar</button>
+                                                    </div>
+                                                </div>
+
+
+                                                <div class="modal fade" id="binacle{{$acc->cta_num}}" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+                                                    <div class="modal-dialog" role="document">
+                                                        <div class="modal-content">
+                                                            <div class="modal-header">
+                                                                <h5 class="modal-title" id="exampleModalLabel">Últimas 10 entradas de la bitácora de la cuenta: {{$acc->cta_num}}</h5>
+                                                            </div>
+                                                            <div class="modal-body">
+                                                                <form>
+                                                                    <div class="x_content">
+                                                                        <table id="datatable-responsive-bin{{$acc->cta_num}}" cellspacing="0" width="100%">
+                                                                            <thead>
+                                                                                <tr>
+                                                                                    <th>Fecha</th>
+                                                                                    <th>Módulo</th>
+                                                                                    <th>Ip</th>
+                                                                                    <th>Tipo</th>
+                                                                                </tr>
+                                                                            </thead>
+                                                                            <tbody>
+                                                                            </tbody>
+                                                                        </table>
+                                                                    </div>
+                                                                </form>
+                                                              <div id="result_failure_bin{{$acc->cta_num}}"></div>
+                                                            </div>
+                                                            <div class="modal-footer">
+                                                              <button type="button" class="btn btn-secondary" data-dismiss="modal" onclick="cleanbintable('{{$acc->cta_num}}')">Cerrar</button>
+                                                            </div>
                                                         </div>
                                                     </div>
                                                 </div>
                                             </div>
-                                        </div>
+                                        @endif
                                     </td>
                                 </tr>
                             @endforeach
