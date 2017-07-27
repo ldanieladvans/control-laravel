@@ -241,7 +241,11 @@ class UserController extends Controller
                 'public', $user->id.'.'.$file->getClientOriginalName()
             );
             }else{
-                $user->usrc_pic = null;
+                if(array_key_exists('checkpic',$alldata)){
+                    if($alldata['checkpic']==0 || $alldata['checkpic']=='0'){
+                        $user->usrc_pic = null;
+                    }
+                }
             }
             if($file!=false){
                 $user->usrc_pic = $user->id.'.'.$file->getClientOriginalName();
