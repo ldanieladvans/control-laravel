@@ -67,6 +67,7 @@
 					                		<div id="imgcontainer" class="file-preview-frame">
 						                		<img id='imageiddef' src="{{asset('default_avatar_male.jpg')}}" hidden>
 						                		<img id="blah" alt="your image" width="150" height="150" src="{{$user->usrc_pic ? asset('storage/'.$user->usrc_pic) : asset('default_avatar_male.jpg')}}" />
+						                		<input type="hidden" name="checkpic" id="checkpic" value="{{$user->usrc_pic ? 1 : 0}}">
 						                		<button id="cleanpic" type="button" onclick="cleanFunc();"  class="close" data-dismiss="alert" aria-label="Close"><span aria-hidden="true">×</span></button>
 						                	</div>
 						                	
@@ -240,6 +241,7 @@
     	function cleanFunc(){
 			$("#blah").attr("src", document.getElementById('imageiddef').src);
 			$("#usrc_pic").val('');
+			document.getElementById('checkpic').value = 0;
     	}
 
 
@@ -260,6 +262,7 @@
 		                     $("#blah").attr("src", e.target.result);
 		                 }
 		                 reader.readAsDataURL($(this)[0].files[i]);
+		                 document.getElementById('checkpic').value = 1;
 		             }
 
 		         } else {
