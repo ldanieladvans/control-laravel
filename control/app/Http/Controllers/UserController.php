@@ -228,6 +228,7 @@ class UserController extends Controller
     public function update(Request $request, User $user)
     {
         $logued_user = Auth::user();
+
         if($logued_user->usrc_admin || $logued_user->can('edit.users')){
             $alldata = $request->all();
             $file     = false;
@@ -240,11 +241,7 @@ class UserController extends Controller
                 'public', $user->id.'.'.$file->getClientOriginalName()
             );
             }else{
-                if(array_key_exists('deleted_pic',$alldata)){
-                    if($alldata['deleted_pic']=='1'){
-                        $user->usrc_pic = 'default_avatar_male.jpg';
-                    }
-                }
+                $user->usrc_pic = null;
             }
             if($file!=false){
                 $user->usrc_pic = $user->id.'.'.$file->getClientOriginalName();
