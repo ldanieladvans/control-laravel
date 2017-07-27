@@ -29,6 +29,7 @@
 	    font-family: monospace;
 	    font-weight: normal;
 	}
+
 	</style>
 @endsection
 
@@ -57,25 +58,19 @@
                 	{{ Form::open(['route' => ['user.update', $user], 'enctype'=>'multipart/form-data', 'class'=>'form-horizontal form-label-left']) }}
                 		{{ Form::hidden('_method', 'PUT') }}
 
-	                	<div id="invimg">
-	                		<img id='imageiddef' src="{{asset('default_avatar_male.jpg')}}">
-	                		@if (count($user->usrc_pic) >= 1)
-							    <img id='imageid' src="{{asset('storage/'.$user->usrc_pic)}}">
-							@else
-							    <img id='imageid' src="{{asset('default_avatar_male.jpg')}}">
-							@endif
-							<input id="deleted_pic" name="deleted_pic" type="text" value="0">
-	                	</div>
 
                 		<table border="0" class="col-md-12 col-sm-12 col-xs-12">
 							<tr>
-								<td width="25%">
+								<td width="20%">
 									<div class="row">
-								        <div class="col-md-3 col-sm-3 col-xs-12">
-								            <div class="kv-avatar center-block text-center" style="width:200px">
-								                <input id="avatar-2" name="usrc_pic" type="file" class="file-loading">
-								            </div>
-								        </div>
+								        <div class="col-md-2 col-sm-2 col-xs-2">
+					                		<div id="imgcontainer" class="file-preview-frame">
+						                		<img id='imageiddef' src="{{asset('default_avatar_male.jpg')}}" hidden>
+						                		<img id="blah" alt="your image" width="150" height="150" src="{{$user->usrc_pic ? asset('storage/'.$user->usrc_pic) : asset('default_avatar_male.jpg')}}" />
+						                		<button id="cleanpic" type="button" onclick="cleanFunc();"  class="close" data-dismiss="alert" aria-label="Close"><span aria-hidden="true">×</span></button>
+						                	</div>
+						                	
+					                	</div>
 				            		</div>
 								</td>
 								<td>
@@ -122,6 +117,14 @@
 					                    </div>
 			                        </div>
 					    		</td>
+							</tr>
+							<tr>
+								<td>
+									<div id="fileinputcontainer" class="col-md-6 col-sm-6 col-xs-6">
+			                			<input id="usrc_pic" name="usrc_pic" style='position:absolute;z-index:2;top:0;' type="file"/>
+			                		</div>
+								</td>
+								<td></td>
 							</tr>
 						</table>
 
@@ -222,8 +225,6 @@
 	<script type="text/javascript" src="{{ asset('controlassets/vendors/datetime/js/locales/bootstrap-datetimepicker.es.js') }}" charset="UTF-8"></script>
 	<!-- Switchery -->
     <script src="{{ asset('controlassets/vendors/switchery/dist/switchery.min.js') }}"></script>
-    <!-- File Input -->
-    <script src="{{ asset('controlassets/vendors/bootstrap-fileinput-master/js/fileinput.js') }}" type="text/javascript"></script>
 	<!-- Custom Theme Scripts -->
     <script src="{{ asset('controlassets/build/js/custom.js') }}"></script>
     <!-- Chosen -->
@@ -233,6 +234,41 @@
 	<!-- Select 2 -->
     <script src="{{ asset('controlassets/vendors/select2/dist/js/select2.min.js') }}"></script>
     <script type="text/javascript">
+
+
+
+    	function cleanFunc(){
+			$("#blah").attr("src", document.getElementById('imageiddef').src);
+			$("#usrc_pic").val('');
+    	}
+
+
+    	$("#usrc_pic").on('change', function () {
+
+		     var countFiles = $(this)[0].files.length;
+		     console.log();
+		     var imgPath = $(this)[0].value;
+		     var extn = imgPath.substring(imgPath.lastIndexOf('.') + 1).toLowerCase();
+
+
+		     if (extn == "gif" || extn == "png" || extn == "jpg" || extn == "jpeg") {
+		         if (typeof (FileReader) != "undefined") {
+		             for (var i = 0; i < countFiles; i++) {
+
+		                 var reader = new FileReader();
+		                 reader.onload = function (e) {
+		                     $("#blah").attr("src", e.target.result);
+		                 }
+		                 reader.readAsDataURL($(this)[0].files[i]);
+		             }
+
+		         } else {
+		             alert("This browser does not support FileReader.");
+		         }
+		     } else {
+		         alert("Pls select only images");
+		     }
+		 });
 
     	$("#usrc_distrib_id").select2({
 		  	placeholder: "Selecciona el dictribuidor asociado",
@@ -292,27 +328,6 @@
 			});
 		}
 
-		var imgdiv = document.getElementById("invimg");
-		imgdiv.style.display='none';
-
-		$("#avatar-2").fileinput({
-		    overwriteInitial: true,
-		    maxFileSize: 1500,
-		    showClose: true,
-		    showCaption: false,
-		    showUpload: false,
-		    showBrowse: true,
-		    browseOnZoneClick: true,
-		    removeLabel: '',
-		    removeIcon: '<i class="glyphicon glyphicon-remove"></i>',
-		    removeTitle: 'Cancel or reset changes',
-		    elErrorContainer: '#kv-avatar-errors-2',
-		    msgErrorClass: 'alert alert-block alert-danger',
-		    defaultPreviewContent: "<img src={{asset('default_avatar_male.jpg')}} alt='Your Avatar' style='width:160px'><h6 class='text-muted'>Click to select</h6>",
-		    layoutTemplates: {main2: '{preview} {remove} {browse}'},
-		    browseLabel: 'Foto Usuario',
-		    allowedFileExtensions: ["jpg", "png", "gif"]
-		});
 	</script>
 @endsection
 
