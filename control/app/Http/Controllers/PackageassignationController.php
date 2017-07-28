@@ -115,13 +115,15 @@ class PackageassignationController extends Controller
             }
             $self_rfc = $asigpaq->asigpaq_rfc ? $asigpaq->asigpaq_rfc : 0;
             $self_gig = $asigpaq->asigpaq_gig ? $asigpaq->asigpaq_gig : 0;
-            if(isset($asigpaq->asigpaq_paq_id)){
+            /*if(isset($asigpaq->asigpaq_paq_id)){
                 $result = $this->auxGigRfcCalc($asigpaq->asigpaq_paq_id);
                 $compute_rfc = $result['rfc'];
                 $compute_gig = $result['gig'];
             }
             $return_rfc = $compute_rfc > $self_rfc ? $compute_rfc : $self_rfc;
-            $return_gig = $compute_gig > $self_gig ? $compute_gig : $self_gig;      
+            $return_gig = $compute_gig > $self_gig ? $compute_gig : $self_gig;*/
+            $return_rfc = $self_rfc;
+            $return_gig = $self_gig;       
             return view('appviews.packassigedit',['packages'=>$packages,'distributors'=>$distributors,'asigpaq'=>$asigpaq,'rfc'=>$return_rfc,'gig'=>$return_gig]);
         }else{
             return view('errors.403');
@@ -147,7 +149,7 @@ class PackageassignationController extends Controller
             $asigpaq->asigpaq_rfc = $alldata['asigpaq_rfc'];
             $asigpaq->asigpaq_gig = $alldata['asigpaq_gig'];
             $asigpaq->asigpaq_f_fin = $alldata['asigpaq_f_fin'];
-            $asigpaq->asigpaq_f_caduc = $alldata['asigpaq_f_caduc'];
+            //$asigpaq->asigpaq_f_caduc = $alldata['asigpaq_f_caduc'];
             if(array_key_exists('asigpaq_distrib_id',$alldata) && isset($alldata['asigpaq_distrib_id'])){
                 if($alldata['asigpaq_distrib_id']!=''){
                     $asigpaq->asigpaq_distrib_id = $alldata['asigpaq_distrib_id'];
