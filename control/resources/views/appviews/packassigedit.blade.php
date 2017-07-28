@@ -43,7 +43,7 @@
                         <div class="item form-group">
                             <label class="control-label col-md-1 col-sm-1 col-xs-12">Distribuidor*</label>
                             <div class="col-md-8 col-sm-8 col-xs-12">
-                                <select class="js-example-basic-single js-states form-control" id="asigpaq_distrib_id" name="asigpaq_distrib_id" required>
+                                <select class="js-example-basic-single js-states form-control" id="asigpaq_distrib_id" name="asigpaq_distrib_id" disabled>
                                     <option value="">Seleccione una opción ...</option>
                                     @foreach($distributors as $distributor)
                                         <option value="{{ $distributor->id }}" {{$asigpaq->asigpaq_distrib_id == $distributor->id ? 'selected':''}}>{{ $distributor->distrib_nom }}</option>
@@ -81,9 +81,16 @@
                                             </div>
                                         </div>
 
-                                        <div class="item form-group">                     
+                                        <div class="item form-group" hidden>                     
                                             <div class="col-md-9 col-sm-9 col-xs-12">
                                                 <input id="asigpaq_f_act" title="Fecha de Actualización" class="form-control has-feedback-left" name="asigpaq_f_act" placeholder="Fecha Actualización" disabled type="date" value="{{$asigpaq->asigpaq_f_act}}">
+                                                <span class="fa fa-calendar form-control-feedback left" aria-hidden="true"></span>
+                                            </div>
+                                        </div>
+
+                                        <div class="item form-group">                     
+                                            <div class="col-md-9 col-sm-9 col-xs-12">
+                                                <input id="asigpaq_f_fin" title="Fecha de Fin" class="form-control has-feedback-left" name="asigpaq_f_fin" placeholder="Fecha Fin" type="date" value="{{$asigpaq->asigpaq_f_fin}}">
                                                 <span class="fa fa-calendar form-control-feedback left" aria-hidden="true"></span>
                                             </div>
                                         </div>
@@ -121,7 +128,35 @@
     <!-- Select 2 -->
     <script src="{{ asset('controlassets/vendors/select2/dist/js/select2.min.js') }}"></script>
     <script type="text/javascript">
-	    $( "#packassigform" ).submit(function( event ) {
+	    
+        console.log(document.getElementById('asigpaq_f_vent').value);
+
+        Date.prototype.addDays = function(days) {
+          var dat = new Date(this.valueOf());
+          dat.setDate(dat.getDate() + days);
+          return dat;
+        }
+
+        var inidate = new Date((document.getElementById('asigpaq_f_vent').value).replace('-','/'));
+        inidate = inidate.addDays(1);
+
+        var month = inidate.getMonth() + 1;
+        if(month<10){
+            month = '0'+month;
+        }
+        var day = inidate.getDate();
+        if(day<10){
+            day = '0'+day;
+        }
+        var year = inidate.getFullYear();
+
+        val_date_ini = [year, month, day].join('-');
+
+        console.log(val_date_ini);
+
+        document.getElementById('asigpaq_f_fin').min = val_date_ini;
+
+        $( "#packassigform" ).submit(function( event ) {
 	        event.preventDefault();
 	    });
 

@@ -10,6 +10,7 @@ use App\Appaccount;
 use App\Appcontrol;
 use App\Apps;
 use App\AccountTl;
+use App\Packageassignation;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Log;
 use App\Mail\ClientCreate;
@@ -43,8 +44,7 @@ class AccountController extends Controller
                 $accounts = Account::all();
             }else{
                 $accounts = Account::where('cta_distrib_id',$logued_user->usrc_distrib_id)->get();
-            }
-            
+            }            
             $packages = Package::all();
             return view('appviews.accountshow',['accounts'=>$accounts,'packages'=>$packages]);
         }else{
@@ -700,6 +700,59 @@ class AccountController extends Controller
         return \Response::json($response);
     }
 
+    public function checkAddApp($cta_obj,$appcta_rfc,$appcta_gig){
+        $distrib_obj = $cta_obj->distributor ? $cta_obj->distributor : false;
+        $client_obj = $cta_obj->client ? $cta_obj->client : false;
+        $gig_asigned = 0;
+        $rfc_asigned = 0;
+        $gig_permited = 0;
+        $rfc_permited = 0;
+        $fmessage = false;
+        if($distrib_obj){
+            if(!$distrib_obj->distrib_sup)){
+                $details = Appaccount::where('appcta_cuenta_id',$cta_obj->id)->get();
+                foreach ($details as $det) {
+                    $gig_asigned = $gig_asigned + $det->appcta_gig;
+                    $rfc_asigned = $rfc_asigned + $det->appcta_rfc;
+                }
+
+                $dist_asigs = Packageassignation::where('asigpaq_distrib_id',$distrib_obj->id)->where('asigpaq_f_fin','>=',date('Y-m-d'))->get();
+                
+                foreach ($dist_asigs as $dist_asig) {
+                    $gig_permited = $gig_permited + $dist_asig->asigpaq_gig;
+                    $rfc_permited = $rfc_permited + $dist_asig->asigpaq_rfc;
+                }
+
+                if($distrib_obj->distrib_limitgig){
+                    $gig_permited = $gig_permited + $distrib_obj->distrib_limitgig;
+                }
+                
+                if($distrib_obj->distrib_limitrfc){
+                    $rfc_permited = $rfc_permited + $distrib_obj->distrib_limitrfc;
+                }
+
+                if(($gig_asigned + $appcta_gig) > $gig_permited){
+                    $fmessage = 'Puede asignar '.$gig_permited - $gig_asigned . 'gigas y está tratando de asignar '.$appcta_gig.'. ';
+                }
+
+                if(($rfc_asigned + $appcta_rfc) > $rfc_permited){
+                    $fmessageaux = 'Puede asignar '.$rfc_permited - $rfc_asigned . 'instancias y está tratando de asignar '.$appcta_rfc.'. ';
+                    if($fmessage==false){
+                        $fmessage = $fmessageaux;
+                    }else{
+                        $fmessage = $fmessage . $fmessageaux;
+                    }
+                }
+
+                if($fmessage!=false){
+                    \Session::flash('message',$service_response['msg']);
+                    return false;
+                }
+            }
+        }
+        return true;
+    }
+
     public function addApp(Request $request)
     {
         $logued_user = Auth::user();
@@ -710,46 +763,53 @@ class AccountController extends Controller
             );
             if(array_key_exists('accid',$alldata)){
                 $cta_obj = Account::find($alldata['accid']);
-                $app_cta = new Appaccount();
-                $app_cta->appcta_rfc = $alldata['appcta_rfc'] ? $alldata['appcta_rfc'] : 0;
-                $app_cta->appcta_gig = $alldata['appcta_gig'] ? $alldata['appcta_gig'] : 0;
-                $app_cta->appcta_f_vent = date('Y-m-d');
-                $app_cta->appcta_distrib_id = $cta_obj->cta_distrib_id;
-                $fecha = date_create(date('Y-m-d'));
-                $aux_months = $cta_obj ? $cta_obj->cta_periodicity : '1';
-                date_add($fecha, date_interval_create_from_date_string($aux_months.' months'));
-                $app_cta->appcta_f_fin = date_format($fecha, 'Y-m-d');
-                $app_cta->appcta_cuenta_id = $cta_obj ? $cta_obj->id : false;
-                $app_cta->appcta_app = $cta_obj ? $cta_obj->cta_num : 'false';
-                $app_cta->sale_estado = 'Prueba';
-                $app_cta->appcta_estado = 'Activa';
-                $app_cta->appcta_f_act = date('Y-m-d');
-                $appc = new Appcontrol();
-                $app_aux = Apps::where('code', $alldata['app'])
-                               ->orderBy('id', 'desc')
-                               ->take(1)
-                               ->get();
-                $appc->app_nom = $app_aux[0]->name;
-                $appc->app_code = $alldata['app'];
-                $app_cta->save();
-                $appc->app_appcta_id = $app_cta->id;
-                $appc->app_cta_id = $alldata['accid'];
-                $appc->save();
+                if($this->checkAddApp($cta_obj,$alldata['appcta_rfc'],$alldata['appcta_gig'])){
+                    $app_cta = new Appaccount();
+                    $app_cta->appcta_rfc = $alldata['appcta_rfc'] ? $alldata['appcta_rfc'] : 0;
+                    $app_cta->appcta_gig = $alldata['appcta_gig'] ? $alldata['appcta_gig'] : 0;
+                    $app_cta->appcta_f_vent = date('Y-m-d');
+                    $app_cta->appcta_distrib_id = $cta_obj->cta_distrib_id;
+                    $fecha = date_create(date('Y-m-d'));
+                    $aux_months = $cta_obj ? $cta_obj->cta_periodicity : '1';
+                    date_add($fecha, date_interval_create_from_date_string($aux_months.' months'));
+                    $app_cta->appcta_f_fin = date_format($fecha, 'Y-m-d');
+                    $app_cta->appcta_cuenta_id = $cta_obj ? $cta_obj->id : false;
+                    $app_cta->appcta_app = $cta_obj ? $cta_obj->cta_num : 'false';
+                    $app_cta->sale_estado = 'Prueba';
+                    $app_cta->appcta_estado = 'Activa';
+                    $app_cta->appcta_f_act = date('Y-m-d');
+                    $appc = new Appcontrol();
+                    $app_aux = Apps::where('code', $alldata['app'])
+                                   ->orderBy('id', 'desc')
+                                   ->take(1)
+                                   ->get();
+                    $appc->app_nom = $app_aux[0]->name;
+                    $appc->app_code = $alldata['app'];
+                    $app_cta->save();
+                    $appc->app_appcta_id = $app_cta->id;
+                    $appc->app_cta_id = $alldata['accid'];
+                    $appc->save();
 
-                $arrayparams['rfc_nombrebd'] = $cta_obj->cta_num;
-                $arrayparams['account_id'] = $app_cta->id;
-                $arrayparams['apps_cta'] = json_encode([['app_cod'=>$appc->app_code,'app_nom'=>$appc->app_nom,'app_insts'=>$app_cta->appcta_rfc,'app_megs'=>$app_cta->appcta_gig,'app_estado'=>'Prueba']]);
-                if($cta_obj->cta_fecha){
-                    $acces_vars = $this->getAccessToken();
-                    $service_response = $this->getAppService($acces_vars['access_token'],'addapp',$arrayparams,'ctac');
-                    $this->registeredBinnacle($arrayparams, 'service', 'Se ha añadido la aplicación '.$appc->app_nom.' a la cuenta '.$arrayparams['rfc_nombrebd'], $logued_user ? $logued_user->id : '', $logued_user ? $logued_user->name : '');
+                    $arrayparams['rfc_nombrebd'] = $cta_obj->cta_num;
+                    $arrayparams['account_id'] = $app_cta->id;
+                    $arrayparams['apps_cta'] = json_encode([['app_cod'=>$appc->app_code,'app_nom'=>$appc->app_nom,'app_insts'=>$app_cta->appcta_rfc,'app_megs'=>$app_cta->appcta_gig,'app_estado'=>'Prueba']]);
+                    if($cta_obj->cta_fecha){
+                        $acces_vars = $this->getAccessToken();
+                        $service_response = $this->getAppService($acces_vars['access_token'],'addapp',$arrayparams,'ctac');
+                        $this->registeredBinnacle($arrayparams, 'service', 'Se ha añadido la aplicación '.$appc->app_nom.' a la cuenta '.$arrayparams['rfc_nombrebd'], $logued_user ? $logued_user->id : '', $logued_user ? $logued_user->name : '');
+                    }
+                    $response = array(
+                        'status' => 'success',
+                        'msg' => 'Ok',
+                        //'service_response' => $service_response
+                    );
+                    $this->registeredBinnacle($request->all(), 'update', 'Se ha modificado la cuenta '.$cta_obj->cta_num, $logued_user ? $logued_user->id : '', $logued_user ? $logued_user->name : '');
+                }else{
+                    $response = array(
+                        'status' => 'success',
+                        'msg' => 'No puede añadir apps con esos parámetros',
+                    );
                 }
-                $response = array(
-                    'status' => 'success',
-                    'msg' => 'Ok',
-                    //'service_response' => $service_response
-                );
-                $this->registeredBinnacle($request->all(), 'update', 'Se ha modificado la cuenta '.$cta_obj->cta_num, $logued_user ? $logued_user->id : '', $logued_user ? $logued_user->name : '');
             }
         }else{
             $response = array(

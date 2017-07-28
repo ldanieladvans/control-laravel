@@ -81,9 +81,16 @@
                                             </div>
                                         </div>
 
-                                        <div class="item form-group">                     
+                                        <div class="item form-group" hidden>                     
                                             <div class="col-md-9 col-sm-9 col-xs-12">
                                                 <input id="asigpaq_f_act" title="Fecha de Activación" class="form-control has-feedback-left" name="asigpaq_f_act" placeholder="Fecha Activación" disabled type="date">
+                                                <span class="fa fa-calendar form-control-feedback left" aria-hidden="true"></span>
+                                            </div>
+                                        </div>
+
+                                        <div class="item form-group">                     
+                                            <div class="col-md-9 col-sm-9 col-xs-12">
+                                                <input id="asigpaq_f_fin" title="Fecha de Fin" class="form-control has-feedback-left" name="asigpaq_f_fin" placeholder="Fecha Fin" type="date">
                                                 <span class="fa fa-calendar form-control-feedback left" aria-hidden="true"></span>
                                             </div>
                                         </div>
@@ -122,7 +129,33 @@
     <!-- Select 2 -->
     <script src="{{ asset('controlassets/vendors/select2/dist/js/select2.min.js') }}"></script>
     <script type="text/javascript">
-	    $( "#packassigform" ).submit(function( event ) {
+	    
+        Date.prototype.addDays = function(days) {
+          var dat = new Date(this.valueOf());
+          dat.setDate(dat.getDate() + days);
+          return dat;
+        }
+
+        var inidate = new Date();
+        inidate = inidate.addDays(1);
+
+        var month = inidate.getMonth() + 1;
+        if(month<10){
+            month = '0'+month;
+        }
+        var day = inidate.getDate();
+        if(day<10){
+            day = '0'+day;
+        }
+        var year = inidate.getFullYear();
+
+        val_date_ini = [year, month, day].join('-');
+
+        console.log(val_date_ini);
+
+        document.getElementById('asigpaq_f_fin').min = val_date_ini;
+
+        $( "#packassigform" ).submit(function( event ) {
             event.preventDefault();
 	    });
 

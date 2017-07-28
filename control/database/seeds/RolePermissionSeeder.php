@@ -4,6 +4,8 @@ use Illuminate\Database\Seeder;
 use Bican\Roles\Models\Role;
 use Bican\Roles\Models\Permission;
 use App\User;
+use App\Distributor;
+use App\Domicile;
 use Illuminate\Support\Facades\DB;
 
 class RolePermissionSeeder extends Seeder
@@ -512,14 +514,23 @@ class RolePermissionSeeder extends Seeder
 		$roles['aistSopTecRole']->attachPermission($perms['permsReadPermission']);
 	}
 
-	public function createsuperuser($app_role_id,$gen_role_id){
-		//TODO here goes the app roles
+	public function createsuperuser($app_role_id,$api_role_id,$gen_role_id){
+
 		$adminUser = User::create([
 		    'name' => 'Admin',
 		    'usrc_nick' => 'admin',
 		    'email' => 'control.admin@advans.mx', 
 		    'password' => bcrypt('Admin123*'),
 		    'usrc_admin' => 1, 
+		    'usrc_type' => 'app'
+		]);
+
+		$apiUser = User::create([
+		    'name' => 'Api Cuenta',
+		    'usrc_nick' => 'api.cuenta',
+		    'email' => 'api.cuenta@gmail.com', 
+		    'password' => bcrypt('Api.cuenta123*'),
+		    'usrc_type' => 'api'
 		]);
 
 		DB::table('role_user')->insert([
@@ -529,6 +540,35 @@ class RolePermissionSeeder extends Seeder
         DB::table('role_user')->insert([
             ['role_id' => $gen_role_id, 'user_id' => $adminUser->id, 'created_at'=>date("Y-m-d H:i:s"),'updated_at'=>date("Y-m-d H:i:s")]
         ]);
+
+        DB::table('role_user')->insert([
+            ['role_id' => $api_role_id, 'user_id' => $apiUser->id, 'created_at'=>date("Y-m-d H:i:s"),'updated_at'=>date("Y-m-d H:i:s")]
+        ]);
+	}
+
+	public function createAdvansDistrib(){
+		$advansDistDom = Domicile::create([
+		    'dom_calle' => '1-A x 42 y 44',
+		    'dom_numext' => '334',
+		    'dom_col' => 'Campestre',
+		    'dom_ciudad' => 'Mérida',
+		    'dom_munic' => '050',
+		    'dom_estado' => 'Yucatán',
+		    'dom_pais' => 'México',
+		    'dom_cp' => '97120',
+		]);
+
+		$advansDist = Distributor::create([
+		    'distrib_nom' => 'Advans',
+		    'distrib_rfc' => 'SAD110722MQA',
+		    'distrib_limitgig' => 999999,
+		    'distrib_limitrfc' => 999999,
+		    'distrib_tel' => '01 800 841-6655',
+		    'distrib_correo' => 'info@advans.mx',
+		    'distrib_nac' => 'Mexicana',
+		    'distrib_sup' => 1,
+		    'distrib_dom_id' => $advansDistDom->id,
+		]);
 	}
 
     /**
@@ -541,6 +581,7 @@ class RolePermissionSeeder extends Seeder
         $roles = $this->createroles();
         $perms = $this->createpermissions();
         $this->assignrolesperms($roles,$perms);
-        $this->createsuperuser($roles['appRole']->id,$roles['superGeneralRole']->id);
+        $this->createsuperuser($roles['appRole']->id,$roles['apiRole']->id,$roles['superGeneralRole']->id);
+        $this->createAdvansDistrib();
     }
 }
