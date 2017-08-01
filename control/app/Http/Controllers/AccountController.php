@@ -163,7 +163,7 @@ class AccountController extends Controller
                 return view('errors.403');
             }
             $account->cta_periodicity = $request->cta_periodicity;
-            $account->cta_recursive = $request->cta_periodicity;
+            $account->cta_recursive = $request->cta_recursive;
             $account->save();
             $fmessage = 'Se ha actualizado la cuenta: '.$request->cta_num;
             \Session::flash('message',$fmessage);
@@ -231,29 +231,6 @@ class AccountController extends Controller
 
                     $arrayparams['password'] = $password;
                     Log::info($password);
-                    /*$app_cta = new Appaccount();
-                    $app_cta->appcta_rfc = 0;
-                    $app_cta->appcta_gig = 0;
-                    $app_cta->appcta_f_vent = date('Y-m-d');
-                    $fecha = date_create(date('Y-m-d'));
-                    $aux_months = $account ? $account->cta_periodicity : '1';
-                    date_add($fecha, date_interval_create_from_date_string($aux_months.' months'));
-                    $app_cta->appcta_f_fin = date_format($fecha, 'Y-m-d');
-                    $app_cta->appcta_cuenta_id = $account ? $account->id : false;
-                    $app_cta->appcta_app = $account ? $account->cta_num : 'false';
-                    $app_cta->appcta_estado = 'Activa';
-                    $app_cta->save();*/
-
-                    /*$acctl = new AccountTl();
-                    $acctl->acctl_f_ini = date('Y-m-d');
-                    $fecha = date_create(date('Y-m-d'));
-                    $aux_months = $account ? $account->cta_periodicity : '1';
-                    date_add($fecha, date_interval_create_from_date_string($aux_months.' months'));
-                    $acctl->acctl_f_fin = date_format($fecha, 'Y-m-d');
-                    $acctl->acctl_f_corte = date_format($fecha, 'Y-m-d');
-                    $acctl->cta_id = $account->id;
-                    $acctl->acctl_estado = 'Pendiente';
-                    $acctl->save();*/
 
                     $cliente_correo = $account->client ? $account->client->cliente_correo : false;
                     if ($cliente_correo){
@@ -463,14 +440,6 @@ class AccountController extends Controller
                 $sale_estado = 'Prueba';
                 if($input['sale_estado']=='prod'){
                     $sale_estado = 'Producción';
-                    /*$app_cta->appcta_f_act = date('Y-m-d');
-                    $app_cta->appcta_estado = 'Activa';
-                    $aux_state = 'Activa';
-                    $arrayparams['rfc_nombrebd'] = $cta_obj->cta_num;
-                    $arrayparams['account_id'] = $cta_obj->id;
-                    $arrayparams['apps_cta'] = json_encode([['app_cod'=>$app_cta->apps[0]->app_code,'app_nom'=>$app_cta->apps[0]->app_nom]]);
-                    $acces_vars = $this->getAccessToken();
-                    $service_response = $this->getAppService($acces_vars['access_token'],'addapp',$arrayparams,'ctac');*/ 
                 }
                 $app_cta->sale_estado = $sale_estado;
                 $app_cta->save();
@@ -483,9 +452,7 @@ class AccountController extends Controller
                     $service_response = $this->getAppService($acces_vars['access_token'],'modapp',$arrayparams,'ctac');
                     $this->registeredBinnacle($arrayparams, 'service', $fmessage, $logued_user ? $logued_user->id : '', $logued_user ? $logued_user->name : '');
                 }
-                //\Session::flash('message',$fmessage);
-                
-                
+
             } else if ($input['action'] == 'delete') {
                 
                 $arrayparams['rfc_nombrebd'] = $cta_obj->cta_num;
@@ -507,22 +474,6 @@ class AccountController extends Controller
                 }else{
                     $app_cta->delete();
                 }
-                
-                /*$app_cta = Appaccount::where('appcta_cuenta_id', $cta_obj->id)->get();
-                if(count($app_cta)==0){
-                    $app_cta = new Appaccount();
-                    $app_cta->appcta_rfc = 0;
-                    $app_cta->appcta_gig = 0;
-                    $app_cta->appcta_f_vent = date('Y-m-d');
-                    $fecha = date_create(date('Y-m-d'));
-                    $aux_months = $cta_obj ? $cta_obj->cta_periodicity : '1';
-                    date_add($fecha, date_interval_create_from_date_string($aux_months.' months'));
-                    $app_cta->appcta_f_fin = date_format($fecha, 'Y-m-d');
-                    $app_cta->appcta_cuenta_id = $cta_obj ? $cta_obj->id : false;
-                    $app_cta->appcta_app = $cta_obj ? $cta_obj->cta_num : 'false';
-                    $app_cta->appcta_estado = 'Activa';
-                    $app_cta->save();
-                }*/
                 
             }else{
                           
@@ -709,7 +660,7 @@ class AccountController extends Controller
         $rfc_permited = 0;
         $fmessage = false;
         if($distrib_obj){
-            if(!$distrib_obj->distrib_sup)){
+            if(!$distrib_obj->distrib_sup){
                 $details = Appaccount::where('appcta_cuenta_id',$cta_obj->id)->get();
                 foreach ($details as $det) {
                     $gig_asigned = $gig_asigned + $det->appcta_gig;
