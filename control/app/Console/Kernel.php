@@ -48,7 +48,7 @@ class Kernel extends ConsoleKernel
                 $acctl->save();
             }
             Log::info('************************************* End Cron *****************************************');
-        })->everyMinute();
+        })->daily();
     }
 
     /**
