@@ -27,6 +27,7 @@ class Kernel extends ConsoleKernel
     {
         // $schedule->command('inspire')
         //          ->hourly();
+        Log::info('************************************* Cron Scheduler *****************************************');
         $schedule->call(function () {
             Log::info('************************************* Init Cron *****************************************');
             $rec_ctas_id_arr = array();
@@ -34,7 +35,9 @@ class Kernel extends ConsoleKernel
             foreach ($rec_ctas as $rec) {
                 array_push($rec_ctas_id_arr, $rec->id);
             }
+            Log::info($rec_ctas_id_arr);
             $rec_ctas_dets = \DB::table('accounttl')->whereIn('cta_id',$rec_ctas_id_arr)->where('acctl_f_fin',date('Y-m-d'))->get();
+            Log::info($rec_ctas_dets);
             foreach ($rec_ctas_dets as $dets) {
                 $acctl = new AccountTl();
                 $acctl->acctl_estado = 'Pendiente';
