@@ -32,7 +32,7 @@ class Kernel extends ConsoleKernel
             $rec_ctas_id_arr = array();
             $rec_ctas = \DB::table('cta')->where('cta_estado','Activa')->where('cta_recursive',1)->get();
             foreach ($rec_ctas as $rec) {
-                array_push($rec_ctas_id_arr, $rec->id)
+                array_push($rec_ctas_id_arr, $rec->id);
             }
             $rec_ctas_dets = \DB::table('accounttl')->whereIn('cta_id',$rec_ctas_id_arr)->where('acctl_f_fin',date('Y-m-d'))->get();
             foreach ($rec_ctas_dets as $dets) {
