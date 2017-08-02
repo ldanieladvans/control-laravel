@@ -27,9 +27,8 @@ class Kernel extends ConsoleKernel
     {
         // $schedule->command('inspire')
         //          ->hourly();
-        Log::info('************************************* Cron Scheduler *****************************************');
         $schedule->call(function () {
-            Log::info('************************************* Init Cron *****************************************');
+            Log::info('************************************* Init AccountTl Recursive Cron *****************************************');
             $rec_ctas_id_arr = array();
             $rec_ctas = \DB::table('cta')->where('cta_estado','Activa')->where('cta_recursive',1)->get();
             foreach ($rec_ctas as $rec) {
