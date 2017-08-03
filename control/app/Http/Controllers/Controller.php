@@ -195,8 +195,6 @@ class Controller extends BaseController
     public function importart(Request $request)
     {
         $alldata = $request->all();
-        
-        
         return redirect()->route('arts.index');
     }
 
