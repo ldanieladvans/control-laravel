@@ -97,7 +97,7 @@ class HomeController extends Controller
             }
           }
           foreach ($data_dic as $key => $value) {
-            array_push($data_pot, [$key*1000,$value]);
+            array_push($data_pot, [$key*1000,(int)$value]);
           }
 
           array_push($chart_series_data, ['name'=>$app_nom,'data'=>$data_pot]);
