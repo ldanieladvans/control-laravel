@@ -139,8 +139,10 @@
     <!-- Custom Theme Scripts -->
     <script src="{{ asset('controlassets/build/js/custom.js') }}"></script>
     <!-- Highcharts -->
-    <script src="https://code.highcharts.com/highcharts.js"></script>
-    <script src="https://code.highcharts.com/modules/exporting.js"></script>
+    <!--<script src="https://code.highcharts.com/highcharts.js"></script>
+    <script src="https://code.highcharts.com/modules/exporting.js"></script>-->
+    <script src="{{ asset('controlassets/code/highcharts.js') }}"></script>
+    <script src="{{ asset('controlassets/code/modules/exporting.js') }}"></script>
     <script type="text/javascript">
 
      //console.log(new Date('2017-07-17').getTime());
