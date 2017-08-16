@@ -11,6 +11,6 @@ class Art69Seeder extends Seeder
      */
     public function run()
     {
-        exec("mysql -u ".env('DB_USERNAME', 'control')." -p".env('DB_PASSWORD', 'control')." -h ".env('DB_HOST', '127.0.0.1')." ".env('DB_DATABASE', 'control')." < anexo_69.sql");
+        exec("mysql -u ".env('DB_USERNAME', 'app-advans')." -p".env('DB_PASSWORD', 'XL.WE2maYF58u.N')." -h ".env('DB_HOST', '10.224.118.195')." ".env('DB_DATABASE', 'control')." < anexo_69.sql");
     }
 }
