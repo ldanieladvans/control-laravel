@@ -392,12 +392,12 @@
 		});
 
 		$("#cliente_tipo").select2({
-		  	placeholder: "Selecciona el domicilio",
+		  	placeholder: "Selecciona el tipo",
 		  	allowClear: true
 		});
 
 		$("#cliente_distrib_id").select2({
-		  	placeholder: "Selecciona el domicilio",
+		  	placeholder: "Selecciona el distribuidor",
 		  	allowClear: true
 		});
 
