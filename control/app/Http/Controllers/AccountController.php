@@ -233,10 +233,11 @@ class AccountController extends Controller
                     Log::info($password);
 
                     $cliente_correo = $account->client ? $account->client->cliente_correo : false;
+                    $app_link = config('app.advans_apps_url.ctac') ? config('app.advans_apps_url.ctac') : 'http://appcuenta.advans.mx';
                     if ($cliente_correo){
                         $aaa = 1;
                         //TODO Descomentar cuando se desbloquee el puerto 587
-                        Mail::to($cliente_correo)->send(new ClientCreate(['user'=>$cliente_correo,'password'=>$password]));
+                        Mail::to($cliente_correo)->send(new ClientCreate(['rfc'=>$account->cta_num,'user'=>$cliente_correo,'password'=>$password,'link'=>$app_link]));
                     }
                     
                 }
