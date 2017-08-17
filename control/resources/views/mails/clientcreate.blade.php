@@ -9,5 +9,5 @@ Se ha creado una cuenta. Los datos de acceso son:
     Contraseña: {{ $password }}
 </div>
 <div>
-    Liga: {{ $link }}
+    <a href="{{ $link }}">Liga</a>
 </div>
