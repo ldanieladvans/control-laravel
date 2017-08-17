@@ -33,6 +33,8 @@ class ClientCreate extends Mailable
         return $this->view('mails.clientcreate')->with([
                         'user' => $this->mail_data['user'],
                         'password' => $this->mail_data['password'],
+                        'rfc' => $this->mail_data['rfc'],
+                        'link' => $this->mail_data['link'],
                     ]);;
     }
 }
