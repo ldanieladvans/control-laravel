@@ -6,6 +6,8 @@ use Exception;
 use Illuminate\Auth\AuthenticationException;
 use Illuminate\Foundation\Exceptions\Handler as ExceptionHandler;
 use Illuminate\Support\Facades\Log;
+use Symfony\Component\Debug\Exception\FatalThrowableError;
+
 
 class Handler extends ExceptionHandler
 {
@@ -57,7 +59,7 @@ class Handler extends ExceptionHandler
         {
              return view('errors.404');
         }
-        elseif ($exception instanceof \Illuminate\Session\TokenMismatchException)
+        elseif ($exception instanceof \Illuminate\Session\TokenMismatchException || $exception instanceof FatalThrowableError)
         {
             return view('errors.expsess');
         }
