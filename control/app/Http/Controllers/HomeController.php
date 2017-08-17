@@ -14,7 +14,7 @@ use App\Http\Middleware\ChangeCon;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Session;
-use Illuminate\Support\Facades\Log;
+
 use App\Mail\ClientCreate;
 use Illuminate\Support\Facades\Mail;
 use ReverseRegex\Lexer;
@@ -91,13 +91,9 @@ class HomeController extends Controller
 
 
             if(array_key_exists($act_date,$data_dic)){
-              Log::info('----------------------entro a if-------------------');
-              Log::info($data_dic[$act_date]);
-              $data_dic[$act_date] = $data_dic[$act_date] + ($entry->appcta ? ($entry->appcta->appcta_rfc ? $entry->appcta->appcta_rfc : 0) : 0);
+              $data_dic[$act_date] = $data_dic[$act_date] + $entry->appcta ? ($entry->appcta->appcta_rfc ? $entry->appcta->appcta_rfc : 0) : 0;
             }else{
-              Log::info('----------------------entro a else-------------------');
               $data_dic[$act_date] = $entry->appcta ? ($entry->appcta->appcta_rfc ? $entry->appcta->appcta_rfc : 0) : 0;
-              Log::info($data_dic[$act_date]);
             }
           }
           foreach ($data_dic as $key => $value) {
