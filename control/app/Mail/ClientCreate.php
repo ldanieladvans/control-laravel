@@ -30,7 +30,9 @@ class ClientCreate extends Mailable
      */
     public function build()
     {
-        return $this->view('mails.clientcreate')->with([
+        return $this->subject('Creación de cuenta Advans')
+                    ->view('mails.clientcreate')
+                    ->with([
                         'user' => $this->mail_data['user'],
                         'password' => $this->mail_data['password'],
                         'rfc' => $this->mail_data['rfc'],
