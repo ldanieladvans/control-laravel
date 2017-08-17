@@ -55,9 +55,10 @@ class Controller extends BaseController
     public function getAppService($access_token,$app_service,$arrayparams,$control_app='ctac'){
         $http = new \GuzzleHttp\Client();
 
-        /*$query = http_build_query([
-            'rfc_nombrebd' => 'nuevaint1',
-        ]);*/
+        $logued_user = Auth::user();
+        if($logued_user){
+            $arrayparams['user_name'] = $logued_user->name;
+        }
         $query = http_build_query($arrayparams);
 
         $url_aux = config('app.advans_apps_url.'.$control_app);
