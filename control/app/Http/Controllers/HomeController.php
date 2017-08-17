@@ -91,7 +91,7 @@ class HomeController extends Controller
 
 
             if(array_key_exists($act_date,$data_dic)){
-              $data_dic[$act_date] = $data_dic[$act_date] + $entry->appcta ? ($entry->appcta->appcta_rfc ? $entry->appcta->appcta_rfc : 0) : 0;
+              $data_dic[$act_date] = $data_dic[$act_date] + ($entry->appcta ? ($entry->appcta->appcta_rfc ? $entry->appcta->appcta_rfc : 0) : 0);
             }else{
               $data_dic[$act_date] = $entry->appcta ? ($entry->appcta->appcta_rfc ? $entry->appcta->appcta_rfc : 0) : 0;
             }
