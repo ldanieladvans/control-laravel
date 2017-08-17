@@ -96,8 +96,8 @@ class HomeController extends Controller
               $data_dic[$act_date] = $data_dic[$act_date] + $entry->appcta ? ($entry->appcta->appcta_rfc ? $entry->appcta->appcta_rfc : 0) : 0;
             }else{
               Log::info('----------------------entro a else-------------------');
-              Log::info($data_dic[$act_date]);
               $data_dic[$act_date] = $entry->appcta ? ($entry->appcta->appcta_rfc ? $entry->appcta->appcta_rfc : 0) : 0;
+              Log::info($data_dic[$act_date]);
             }
           }
           foreach ($data_dic as $key => $value) {
