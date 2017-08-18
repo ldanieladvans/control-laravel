@@ -13,12 +13,12 @@ class AppsTableSeeder extends Seeder
 		]);
 
 		Apps::create([
-		    'name' => 'Bóveda',
+		    'name' => 'Boveda',
 		    'code' => 'bov',
 		]);
 
 		Apps::create([
-		    'name' => 'Nómina',
+		    'name' => 'Nomina',
 		    'code' => 'nom',
 		]);
 
@@ -33,12 +33,12 @@ class AppsTableSeeder extends Seeder
 		]);
 
 		Apps::create([
-		    'name' => 'Notaría',
+		    'name' => 'Notaria',
 		    'code' => 'not',
 		]);
 
 		Apps::create([
-		    'name' => 'Facturación Electrónica',
+		    'name' => 'Facturacion Electronica',
 		    'code' => 'fact',
 		]);
 	}
