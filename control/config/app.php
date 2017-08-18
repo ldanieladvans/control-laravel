@@ -4,7 +4,7 @@ return [
 
 
     //Advans Apps
-    'advans_apps' => ['cont'=>'Contabilidad','bov'=>'Bóveda','nom'=>'Nómina','pld'=>'PLD','cc'=>'Control de Calidad','not'=>'Notaría','fact'=>'Facturación Electrónica'],
+    'advans_apps' => ['cont'=>'Contabilidad','bov'=>'Boveda','nom'=>'Nomina','pld'=>'PLD','cc'=>'Control de Calidad','not'=>'Notaria','fact'=>'Facturacion Electronica'],
 
     'advans_apps_url' => ['ctac'=>'http://devcta.advans.mx','cont'=>'http://devcta.advans.mx','bov'=>'Bóveda','nom'=>'Nómina','pld'=>'PLD','cc'=>'Control de Calidad','not'=>'Notaría'],
 
