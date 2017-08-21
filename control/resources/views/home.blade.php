@@ -196,13 +196,13 @@
     },
     yAxis: {
         title: {
-            text: 'Cantidad de Instancias'
+            text: 'Cantidad de Soluciones'
         },
         min: 0
     },
     tooltip: {
         headerFormat: '<b>{series.name}</b><br>',
-        pointFormat: '{point.x:%e. %b}: {point.y:.2f} instancias'
+        pointFormat: '{point.x:%e. %b}: {point.y:.2f} soluciones'
     },
 
     plotOptions: {
