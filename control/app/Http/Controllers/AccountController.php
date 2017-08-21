@@ -291,7 +291,7 @@ class AccountController extends Controller
                     $arrayparams['client_nick'] = count(explode('@',$arrayparams['client_email'])) > 1 ? explode('@',$arrayparams['client_email'])[0] : '';
                     $arrayparams['account_id'] = $account->id;
 
-                    if($account->cta_num=='single'){
+                    if($account->cta_type=='single'){
                         $arrayparams['gen_sol'] = true;
                     }
 
