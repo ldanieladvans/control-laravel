@@ -38,7 +38,7 @@
                                 <th>Cliente</th>
                                 <th>Cuenta</th>
                                 <th>Megas</th>
-                                <th>Cantidad Instancias</th>
+                                <th>Cantidad Soluciones</th>
                                 <th>Aplicacion</th>
                                 <th>Acciones</th>
                             </tr>

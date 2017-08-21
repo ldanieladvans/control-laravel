@@ -36,7 +36,7 @@
                         <thead>
                             <tr>
                                 <th>Distribuidor</th>
-                                <th>Instancias</th>
+                                <th>Soluciones</th>
                                 <th>Megas</th>
                                 <th>Fecha Venta</th>
                                 <th>Fecha Act.</th>
