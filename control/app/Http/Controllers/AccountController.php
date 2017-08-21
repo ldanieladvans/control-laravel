@@ -684,7 +684,7 @@ class AccountController extends Controller
                 }
 
                 if(($gig_asigned + $appcta_gig) > $gig_permited){
-                    $fmessage = 'Puede asignar '.$gig_permited - $gig_asigned . 'gigas y está tratando de asignar '.$appcta_gig.'. ';
+                    $fmessage = 'Puede asignar '.$gig_permited - $gig_asigned . 'megas y está tratando de asignar '.$appcta_gig.'. ';
                 }
 
                 if(($rfc_asigned + $appcta_rfc) > $rfc_permited){

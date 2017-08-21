@@ -34,7 +34,7 @@
                         <thead>
                             <tr>
                                 <th>Nombre</th>
-                                <th>Gigas</th>
+                                <th>Megas</th>
                                 <th>RFCs</th>
                                 <th>Acciones</th>
                             </tr>

@@ -69,7 +69,7 @@
 
                                         <div class="item form-group">                     
                                             <div class="col-md-9 col-sm-9 col-xs-12">
-                                                <input id="asigpaq_gig" class="form-control has-feedback-left" name="asigpaq_gig" placeholder="Cantidad Gigas *" data-validate-minmax="1,999999" required="required" type="number" title="Almacenamiento en Gigas" value="{{$asigpaq->asigpaq_gig}}" >
+                                                <input id="asigpaq_gig" class="form-control has-feedback-left" name="asigpaq_gig" placeholder="Cantidad Megas *" data-validate-minmax="1,999999" required="required" type="number" title="Almacenamiento en Megas" value="{{$asigpaq->asigpaq_gig}}" >
                                                 <span class="fa fa-archive form-control-feedback left" aria-hidden="true"></span>
                                             </div>
                                         </div>

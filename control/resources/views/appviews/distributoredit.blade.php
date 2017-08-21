@@ -61,7 +61,7 @@
 
 	                  	    <div class="item form-group">
 			                    <div class="col-md-9 col-sm-9 col-xs-12">
-				                    <input type="number" id="distrib_limitgig" name="distrib_limitgig" placeholder="Límite Gigas * (999999)" data-validate-minmax="1,999999" class="form-control has-feedback-left" value="{{ $distributor->distrib_limitgig }}" title="Límite Gigas (999999)" required>
+				                    <input type="number" id="distrib_limitgig" name="distrib_limitgig" placeholder="Límite Megas * (999999)" data-validate-minmax="1,999999" class="form-control has-feedback-left" value="{{ $distributor->distrib_limitgig }}" title="Límite Megas (999999)" required>
 				                    <span class="fa fa-bar-chart form-control-feedback left" aria-hidden="true"></span>
 			                    </div>
 		                    </div>

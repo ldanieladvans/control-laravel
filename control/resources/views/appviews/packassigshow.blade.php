@@ -37,7 +37,7 @@
                             <tr>
                                 <th>Distribuidor</th>
                                 <th>Instancias</th>
-                                <th>Gigas</th>
+                                <th>Megas</th>
                                 <th>Fecha Venta</th>
                                 <th>Fecha Act.</th>
                                 <th>Acciones</th>
