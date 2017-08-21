@@ -100,8 +100,8 @@
                             <div class="col-md-2 col-sm-2 col-xs-12">
                                 <select class="js-example-basic-single js-states form-control" name="cta_periodicity" id="cta_periodicity" {{ (Auth::user()->can('change.period.accounts') || Auth::user()->usrc_admin) ? '' : 'disabled'}}>
                                     <option value="3" {{ $account->cta_periodicity == '3' ? 'selected' : ''}}>Trimestral</option>
-                                    <option value="6" {{ $account->cta_periodicity == '3' ? 'selected' : ''}}>Semestral</option>
-                                    <option value="12" {{ $account->cta_periodicity == '3' ? 'selected' : ''}}>Anual</option>
+                                    <option value="6" {{ $account->cta_periodicity == '6' ? 'selected' : ''}}>Semestral</option>
+                                    <option value="12" {{ $account->cta_periodicity == '12' ? 'selected' : ''}}>Anual</option>
                                 </select>
                             </div>
                             <label class="control-label col-md-1 col-sm-1 col-xs-12">Recursivo: </label>
@@ -302,6 +302,44 @@
     <script type="text/javascript">
 
         var cta_periodicity = document.getElementById('cta_periodicity').value;
+        var today = new Date();
+
+        var account_id = document.getElementById('obj_id').value;
+
+        var rowCount = document.getElementById('tabletl1').rows.length;
+
+        Date.prototype.addDays = function(days) {
+          var dat = new Date(this.valueOf());
+          dat.setDate(dat.getDate() + days);
+          return dat;
+        }
+
+        Date.isLeapYear = function (year) { 
+            return (((year % 4 === 0) && (year % 100 !== 0)) || (year % 400 === 0)); 
+        };
+
+        Date.getDaysInMonth = function (year, month) {
+            return [31, (Date.isLeapYear(year) ? 29 : 28), 31, 30, 31, 30, 31, 31, 30, 31, 30, 31][month];
+        };
+
+        Date.prototype.isLeapYear = function () { 
+            return Date.isLeapYear(this.getFullYear()); 
+        };
+
+        Date.prototype.getDaysInMonth = function () { 
+            return Date.getDaysInMonth(this.getFullYear(), this.getMonth());
+        };
+
+        Date.prototype.addMonths = function (value) {
+            var n = this.getDate();
+            this.setDate(1);
+            this.setMonth(this.getMonth() + value);
+            this.setDate(Math.min(n, this.getDaysInMonth()));
+            return this;
+        };
+
+        var today_day = today.getDate();
+        
 
         
 
@@ -340,6 +378,42 @@
             });
         }
 
+        function addtl(accid){
+            $('#loadingmodal').modal('show');
+            $.ajax({
+                url: '/addtl',
+                type: 'POST',
+                data: {_token: CSRF_TOKEN,accid:accid,f_ini:document.getElementById('acctl_f_ini').value,'f_fin':document.getElementById('acctl_f_fin').value,'f_corte':document.getElementById('acctl_f_corte').value,tlid:trselected},
+                dataType: 'JSON',
+                success: function (data) {
+                    var str = document.getElementById("tbrow"+data['tlid']);
+                    console.log(data);
+                    if(data['tlid']!='false'){
+                        document.getElementById("tbrow"+data['tlid']).innerHTML = "<tr id='tbrow"+data['id']+"'><td id='tdrow"+data['id']+"1'>"+data['acctl_f_ini']+"</td><td id='tdrow"+data['id']+"2'>"+data['acctl_f_fin']+"</td><td id='tdrow"+data['id']+"3'>"+data['acctl_f_corte']+"</td><td id='tdrow"+data['id']+"4'>"+data['acctl_estado']+"</td><td id='tdrow"+data['id']+"5'>"+data['acctl_f_pago']+"</td><td><div class='btn-group'><div class='btn-group'><a id='"+data['id']+"' onclick='quittl("+data['id']+","+data['accid']+")' class='btn btn-xs' data-placement='left' title='Borrar' ><i class='fa fa-trash fa-3x'></i> </a></div><div class='btn-group'><div class='btn-group'><a id='"+data['id']+"' onclick='edittl("+data['id']+")' class='btn btn-xs' data-placement='left' title='Editar' ><i class='fa fa-edit fa-3x'></i></a></div></td></tr>";
+                        str.removeAttribute("selected");
+                        str.style.backgroundColor='#f9f9f9';
+                        document.getElementById('acctl_f_ini').min = val_date_fin;
+                        document.getElementById('acctl_f_fin').min = val_date_fin;
+                        document.getElementById('acctl_f_corte').min = val_date_corte;
+                            
+                    }else{
+                        $('#tabletl1').find('tbody').append("<tr id='tbrow"+data['id']+"'><td id='tdrow"+data['id']+"1'>"+data['acctl_f_ini']+"</td><td id='tdrow"+data['id']+"2'>"+data['acctl_f_fin']+"</td><td id='tdrow"+data['id']+"3'>"+data['acctl_f_corte']+"</td><td id='tdrow"+data['id']+"4'>"+data['acctl_estado']+"</td><td id='tdrow"+data['id']+"5'>"+data['acctl_f_pago']+"</td><td><div class='btn-group'><div class='btn-group'><a id='"+data['id']+"' onclick='quittl("+data['id']+","+data['accid']+")' class='btn btn-xs' data-placement='left' title='Borrar' ><i class='fa fa-trash fa-3x'></i> </a></div><div class='btn-group'><div class='btn-group'><a id='"+data['id']+"' onclick='edittl("+data['id']+")' class='btn btn-xs' data-placement='left' title='Editar' ><i class='fa fa-edit fa-3x'></i></a></div></td></tr>");
+                        document.getElementById('acctl_f_ini').min = data['acctl_f_ini_next'];
+                        document.getElementById('acctl_f_fin').min = data['acctl_f_fin_next'];
+                        document.getElementById('acctl_f_corte').min = data['acctl_f_corte_next'];
+                    }
+
+                    $('#loadingmodal').modal('hide');
+                    document.getElementById('acctl_f_ini').value = "";
+                    document.getElementById('acctl_f_fin').value = "";
+                    document.getElementById('acctl_f_corte').value = "";
+                    document.getElementById("addlinedate").innerText="Agregar";
+                    trselected = false;
+                    
+                }
+            });
+        }
+
         function addLine(){
             $("#addappmodal").modal('show');
             /*var tableditTableName = '#editable-dt1'; 
@@ -352,21 +426,7 @@
             $(tableditTableName + " tr:last td .tabledit-span.tabledit-identifier").text(newID); $(tableditTableName + " tr:last td .tabledit-input.tabledit-identifier").val(newID);*/
         }
 
-        var rowCount = document.getElementById('tabletl1').rows.length;
-
-        Date.prototype.addDays = function(days) {
-          var dat = new Date(this.valueOf());
-          dat.setDate(dat.getDate() + days);
-          return dat;
-        }
-
-        Date.prototype.addMonths = function (value) {
-            var n = this.getDate();
-            this.setDate(1);
-            this.setMonth(this.getMonth() + value);
-            this.setDate(Math.min(n, this.getDaysInMonth()));
-            return this;
-        };
+        
 
         if(rowCount >= 2){
 
@@ -422,6 +482,38 @@
             document.getElementById('acctl_f_ini').min = val_date_ini;
             document.getElementById('acctl_f_fin').min = val_date_fin;
             document.getElementById('acctl_f_corte').min = val_date_corte;
+
+        }else{
+
+            if(today_day<10){
+                today_day = '0'+today_day;
+            }
+            var today_month = today.getMonth()
+            if(today_month<10){
+                today_month = '0'+today_month;
+            }
+            var today_year = today.getFullYear();
+            console.log(today);
+            document.getElementById('acctl_f_ini').value = [today_year, today_month, today_day].join('-');
+
+
+            var today_end = today.addMonths(parseInt(cta_periodicity));
+            var today_end_day = today_end.getDate();
+            if(today_end_day<10){
+                today_end_day = '0'+today_end_day;
+            }
+            var today_end_month = today_end.getMonth();
+            if(today_end_month<10){
+                today_end_month = '0'+today_end_month;
+            }
+            var today_end_year = today_end.getFullYear();
+
+            document.getElementById('acctl_f_fin').value = [today_end_year, today_end_month, today_end_day].join('-');
+            document.getElementById('acctl_f_corte').value = [today_end_year, today_end_month, today_end_day].join('-');
+
+            /*if(account_id){
+                addtl(account_id);
+            }*/
 
         }
 
@@ -525,41 +617,7 @@
             }
         });
 
-        function addtl(accid){
-            $('#loadingmodal').modal('show');
-            $.ajax({
-                url: '/addtl',
-                type: 'POST',
-                data: {_token: CSRF_TOKEN,accid:accid,f_ini:document.getElementById('acctl_f_ini').value,'f_fin':document.getElementById('acctl_f_fin').value,'f_corte':document.getElementById('acctl_f_corte').value,tlid:trselected},
-                dataType: 'JSON',
-                success: function (data) {
-                    var str = document.getElementById("tbrow"+data['tlid']);
-                    console.log(data);
-                    if(data['tlid']!='false'){
-                        document.getElementById("tbrow"+data['tlid']).innerHTML = "<tr id='tbrow"+data['id']+"'><td id='tdrow"+data['id']+"1'>"+data['acctl_f_ini']+"</td><td id='tdrow"+data['id']+"2'>"+data['acctl_f_fin']+"</td><td id='tdrow"+data['id']+"3'>"+data['acctl_f_corte']+"</td><td id='tdrow"+data['id']+"4'>"+data['acctl_estado']+"</td><td id='tdrow"+data['id']+"5'>"+data['acctl_f_pago']+"</td><td><div class='btn-group'><div class='btn-group'><a id='"+data['id']+"' onclick='quittl("+data['id']+","+data['accid']+")' class='btn btn-xs' data-placement='left' title='Borrar' ><i class='fa fa-trash fa-3x'></i> </a></div><div class='btn-group'><div class='btn-group'><a id='"+data['id']+"' onclick='edittl("+data['id']+")' class='btn btn-xs' data-placement='left' title='Editar' ><i class='fa fa-edit fa-3x'></i></a></div></td></tr>";
-                        str.removeAttribute("selected");
-                        str.style.backgroundColor='#f9f9f9';
-                        document.getElementById('acctl_f_ini').min = val_date_fin;
-                        document.getElementById('acctl_f_fin').min = val_date_fin;
-                        document.getElementById('acctl_f_corte').min = val_date_corte;
-                            
-                    }else{
-                        $('#tabletl1').find('tbody').append("<tr id='tbrow"+data['id']+"'><td id='tdrow"+data['id']+"1'>"+data['acctl_f_ini']+"</td><td id='tdrow"+data['id']+"2'>"+data['acctl_f_fin']+"</td><td id='tdrow"+data['id']+"3'>"+data['acctl_f_corte']+"</td><td id='tdrow"+data['id']+"4'>"+data['acctl_estado']+"</td><td id='tdrow"+data['id']+"5'>"+data['acctl_f_pago']+"</td><td><div class='btn-group'><div class='btn-group'><a id='"+data['id']+"' onclick='quittl("+data['id']+","+data['accid']+")' class='btn btn-xs' data-placement='left' title='Borrar' ><i class='fa fa-trash fa-3x'></i> </a></div><div class='btn-group'><div class='btn-group'><a id='"+data['id']+"' onclick='edittl("+data['id']+")' class='btn btn-xs' data-placement='left' title='Editar' ><i class='fa fa-edit fa-3x'></i></a></div></td></tr>");
-                        document.getElementById('acctl_f_ini').min = data['acctl_f_ini_next'];
-                        document.getElementById('acctl_f_fin').min = data['acctl_f_fin_next'];
-                        document.getElementById('acctl_f_corte').min = data['acctl_f_corte_next'];
-                    }
-
-                    $('#loadingmodal').modal('hide');
-                    document.getElementById('acctl_f_ini').value = "";
-                    document.getElementById('acctl_f_fin').value = "";
-                    document.getElementById('acctl_f_corte').value = "";
-                    document.getElementById("addlinedate").innerText="Agregar";
-                    trselected = false;
-                    
-                }
-            });
-        }
+        
 
         function quittl(tlid,accid){
             var result = confirm("¿Está seguro que desea eliminar esta línea?");

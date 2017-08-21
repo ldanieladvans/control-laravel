@@ -203,8 +203,9 @@ class AccountController extends Controller
     public function changeAccState(Request $request)
     {
         $logued_user = Auth::user();
+        $account = false;
         if($logued_user->usrc_admin || $logued_user->can('change.state.accounts')){
-            $account = false;
+            
             $alldata = $request->all();
             $return_array = array();
             if(array_key_exists('accid',$alldata) && isset($alldata['accid'])){
@@ -215,77 +216,100 @@ class AccountController extends Controller
                     $account->cta_estado = $alldata['accstate'];
                 }
             }
-            
-            $account->save();
 
-            if($account->cta_estado == 'Activa'){
-                if(!$account->cta_fecha){
-                    $caracteres = 'abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVXWYZ0123456789!"$%&/()=?¿*/[]{}.,;:';
-                    $password = $this->rand_chars($caracteres,8);
-                    $resultm = preg_match('/^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[$@$!%*?&#.$($)$-$_])[a-zA-Z\d$@$!%*?&#.$($‌​)$-$_]{8,50}$/u', $password, $matchesm);
+            if($account){
+                $tls_obj = AccountTl::where('cta_id',$account->id)->get();
+                $ctas_obj = Appaccount::where('appcta_cuenta_id',$account->id)->get();
+            }
 
-                    while(!$resultm || count($matchesm) == 0){
+
+            if(count($tls_obj)==0){
+                \Session::flash('message','Debe crear al menos una línea de tiempo');
+                $response = array(
+                    'status' => 'failure',
+                    'msg' => 'Debe crear al menos una línea de tiempo',
+                );
+            }elseif (count($ctas_obj)==0) {
+                \Session::flash('message','Debe asignar al menos una aplicación');
+                $response = array(
+                    'status' => 'failure',
+                    'msg' => 'Debe asignar al menos una aplicación',
+                );
+            }else{
+
+                $account->save();
+
+                if($account->cta_estado == 'Activa'){
+                    if(!$account->cta_fecha){
+                        $caracteres = 'abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVXWYZ0123456789!"$%&/()=?¿*/[]{}.,;:';
                         $password = $this->rand_chars($caracteres,8);
                         $resultm = preg_match('/^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[$@$!%*?&#.$($)$-$_])[a-zA-Z\d$@$!%*?&#.$($‌​)$-$_]{8,50}$/u', $password, $matchesm);
+
+                        while(!$resultm || count($matchesm) == 0){
+                            $password = $this->rand_chars($caracteres,8);
+                            $resultm = preg_match('/^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[$@$!%*?&#.$($)$-$_])[a-zA-Z\d$@$!%*?&#.$($‌​)$-$_]{8,50}$/u', $password, $matchesm);
+                        }
+
+                        $arrayparams['password'] = $password;
+                        Log::info($password);
+
+                        $cliente_correo = $account->client ? $account->client->cliente_correo : false;
+                        $app_link = config('app.advans_apps_url.ctac') ? config('app.advans_apps_url.ctac') : 'http://appcuenta.advans.mx';
+                        if ($cliente_correo){
+                            $aaa = 1;
+                            //TODO Descomentar cuando se desbloquee el puerto 587
+                            Mail::to($cliente_correo)->send(new ClientCreate(['rfc'=>$account->cta_num,'user'=>$cliente_correo,'password'=>$password,'link'=>$app_link]));
+                        }
+                        
                     }
 
-                    $arrayparams['password'] = $password;
-                    Log::info($password);
+                    $apps = array();
+                    $apps_aux = Appcontrol::where('app_cta_id', $account->id)
+                               ->orderBy('id', 'desc')
+                               ->get();
 
-                    $cliente_correo = $account->client ? $account->client->cliente_correo : false;
-                    $app_link = config('app.advans_apps_url.ctac') ? config('app.advans_apps_url.ctac') : 'http://appcuenta.advans.mx';
-                    if ($cliente_correo){
-                        $aaa = 1;
-                        //TODO Descomentar cuando se desbloquee el puerto 587
-                        Mail::to($cliente_correo)->send(new ClientCreate(['rfc'=>$account->cta_num,'user'=>$cliente_correo,'password'=>$password,'link'=>$app_link]));
+                    foreach ($apps_aux as $app_aux) {
+                        array_push($apps,['app_cod'=>$app_aux->app_code,'app_nom'=>$app_aux->app_nom,'app_insts'=>$app_aux->appcta->appcta_rfc,'app_megs'=>$app_aux->appcta->appcta_gig,'app_estado'=>$app_aux->appcta->sale_estado]);
                     }
-                    
+
+                    $tls_array = array();
+                    $tls = AccountTl::where('cta_id', $account->id)
+                               ->orderBy('id', 'desc')
+                               ->get();
+                    foreach ($tls as $tl) {
+                        array_push($tls_array, ['paqapp_f_venta'=>$tl->acctl_f_ini,'paqapp_f_fin'=>$tl->acctl_f_fin,'paqapp_f_caduc'=>$tl->acctl_f_corte,'paqapp_control_id'=>$tl->id]);
+                    }
+
+                    $account->cta_fecha = date("Y-m-d");
+                    $account->save();
+                    $arrayparams['rfc_nombrebd'] = $account->cta_num ? $account->cta_num : '';
+                    $arrayparams['client_rfc'] = $account->client ? $account->client->cliente_rfc : '';
+                    $arrayparams['client_email'] = $account->client ? $account->client->cliente_correo : '';
+                    $arrayparams['client_name'] = $account->client ? $account->client->cliente_nom : '';
+                    $arrayparams['apps_cta'] = json_encode($apps);
+                    $arrayparams['paq_cta'] = json_encode($tls_array);
+                    $arrayparams['client_nick'] = count(explode('@',$arrayparams['client_email'])) > 1 ? explode('@',$arrayparams['client_email'])[0] : '';
+                    $arrayparams['account_id'] = $account->id;
+
+                    $acces_vars = $this->getAccessToken();
+                    $service_response = $this->getAppService($acces_vars['access_token'],'createbd',$arrayparams,'ctac');
+                    $this->registeredBinnacle($arrayparams, 'service', 'Se ha creado una nueva cuenta en la app de cuenta', $logued_user ? $logued_user->id : '', $logued_user ? $logued_user->name : '');
                 }
+                
 
-                $apps = array();
-                $apps_aux = Appcontrol::where('app_cta_id', $account->id)
-                           ->orderBy('id', 'desc')
-                           ->get();
-
-                foreach ($apps_aux as $app_aux) {
-                    array_push($apps,['app_cod'=>$app_aux->app_code,'app_nom'=>$app_aux->app_nom,'app_insts'=>$app_aux->appcta->appcta_rfc,'app_megs'=>$app_aux->appcta->appcta_gig,'app_estado'=>$app_aux->appcta->sale_estado]);
+                if($account!=false){
+                    $fmessage = 'El estado de la cuenta: '.$account->cta_num.' cambió a: '.$account->cta_estado;
+                    \Session::flash('message',$fmessage);
+                    $this->registeredBinnacle($request->all(), 'update', $fmessage, $logued_user ? $logued_user->id : '', $logued_user ? $logued_user->name : '');
                 }
+                
+                $response = array(
+                    'status' => 'success',
+                    'msg' => 'Se cambió el estado de la cuenta satisfactoriamente',
+                );
 
-                $tls_array = array();
-                $tls = AccountTl::where('cta_id', $account->id)
-                           ->orderBy('id', 'desc')
-                           ->get();
-                foreach ($tls as $tl) {
-                    array_push($tls_array, ['paqapp_f_venta'=>$tl->acctl_f_ini,'paqapp_f_fin'=>$tl->acctl_f_fin,'paqapp_f_caduc'=>$tl->acctl_f_corte,'paqapp_control_id'=>$tl->id]);
-                }
-
-                $account->cta_fecha = date("Y-m-d");
-                $account->save();
-                $arrayparams['rfc_nombrebd'] = $account->cta_num ? $account->cta_num : '';
-                $arrayparams['client_rfc'] = $account->client ? $account->client->cliente_rfc : '';
-                $arrayparams['client_email'] = $account->client ? $account->client->cliente_correo : '';
-                $arrayparams['client_name'] = $account->client ? $account->client->cliente_nom : '';
-                $arrayparams['apps_cta'] = json_encode($apps);
-                $arrayparams['paq_cta'] = json_encode($tls_array);
-                $arrayparams['client_nick'] = count(explode('@',$arrayparams['client_email'])) > 1 ? explode('@',$arrayparams['client_email'])[0] : '';
-                $arrayparams['account_id'] = $account->id;
-
-                $acces_vars = $this->getAccessToken();
-                $service_response = $this->getAppService($acces_vars['access_token'],'createbd',$arrayparams,'ctac');
-                $this->registeredBinnacle($arrayparams, 'service', 'Se ha creado una nueva cuenta en la app de cuenta', $logued_user ? $logued_user->id : '', $logued_user ? $logued_user->name : '');
             }
             
-
-            if($account!=false){
-                $fmessage = 'El estado de la cuenta: '.$account->cta_num.' cambió a: '.$account->cta_estado;
-                \Session::flash('message',$fmessage);
-                $this->registeredBinnacle($request->all(), 'update', $fmessage, $logued_user ? $logued_user->id : '', $logued_user ? $logued_user->name : '');
-            }
-            
-            $response = array(
-                'status' => 'success',
-                'msg' => 'Se cambió el estado de la cuenta satisfactoriamente',
-            );
         }else{
             $response = array(
                 'status' => 'failure',

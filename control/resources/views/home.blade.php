@@ -202,7 +202,7 @@
     },
     tooltip: {
         headerFormat: '<b>{series.name}</b><br>',
-        pointFormat: '{point.x:%e. %b}: {point.y:.2f} soluciones'
+        pointFormat: '{point.x:%e. %b}: {point.y} soluciones'
     },
 
     plotOptions: {
