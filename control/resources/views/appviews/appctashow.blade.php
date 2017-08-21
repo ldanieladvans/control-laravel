@@ -37,7 +37,7 @@
                             <tr>
                                 <th>Cliente</th>
                                 <th>Cuenta</th>
-                                <th>Gigas</th>
+                                <th>Megas</th>
                                 <th>Cantidad Instancias</th>
                                 <th>Aplicacion</th>
                                 <th>Acciones</th>

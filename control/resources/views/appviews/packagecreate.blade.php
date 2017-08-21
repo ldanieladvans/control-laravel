@@ -49,7 +49,7 @@
 
                         <div class="item form-group">                     
                             <div class="col-md-9 col-sm-9 col-xs-12">
-                                <input id="paq_gig" class="form-control has-feedback-left" name="paq_gig" placeholder="Cantidad Gigas *" required="required" type="number" title="Almacenamiento en Gigas">
+                                <input id="paq_gig" class="form-control has-feedback-left" name="paq_gig" placeholder="Cantidad Megas *" required="required" type="number" title="Almacenamiento en Megas">
                                 <span class="fa fa-archive form-control-feedback left" aria-hidden="true"></span>
                             </div>
                         </div>
