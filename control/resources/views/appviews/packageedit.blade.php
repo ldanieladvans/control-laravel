@@ -41,7 +41,7 @@
 
                         <div class="item form-group">                     
                             <div class="col-md-9 col-sm-9 col-xs-12">
-                                <input id="paq_gig" class="form-control has-feedback-left" name="paq_gig" placeholder="Cantidad Gigas *" required="required" type="number" title="Almacenamiento en Gigas" value="{{ $package->paq_gig }}">
+                                <input id="paq_gig" class="form-control has-feedback-left" name="paq_gig" placeholder="Cantidad Megas *" required="required" type="number" title="Almacenamiento en Megas" value="{{ $package->paq_gig }}">
                                 <span class="fa fa-archive form-control-feedback left" aria-hidden="true"></span>
                             </div>
                         </div>

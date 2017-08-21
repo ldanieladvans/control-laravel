@@ -134,7 +134,7 @@
                                                                     <th align="left">#</th>
                                                                     <th align="left">Aplicación</th>
                                                                     <th align="left">Cantidad Instancias</th>
-                                                                    <th align="left">Cantidad Gigas</th>
+                                                                    <th align="left">Cantidad Megas</th>
                                                                     <th align="left">Ambiente</th>
                                                                     <th align="left">Fecha Activación</th>
                                                                     <th align="left">Estado</th>
@@ -189,7 +189,7 @@
                                                                                         <span class="fa fa-bank form-control-feedback left" aria-hidden="true"></span>
                                                                                     </div>
                                                                                     <div class="col-md-6 col-sm-6 col-xs-12">
-                                                                                        <input id="appcta_gig" class="form-control has-feedback-left" name="appcta_gig" placeholder="Cantidad Gigas *" value="0" type="number" title="Almacenamiento en Gigas">
+                                                                                        <input id="appcta_gig" class="form-control has-feedback-left" name="appcta_gig" placeholder="Cantidad Megas *" value="0" type="number" title="Almacenamiento en Megas">
                                                                                         <span class="fa fa-archive form-control-feedback left" aria-hidden="true"></span>
                                                                                     </div>
                                                                                 </div>

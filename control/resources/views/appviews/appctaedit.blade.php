@@ -86,7 +86,7 @@
 
                                         <div class="item form-group">                     
                                             <div class="col-md-9 col-sm-9 col-xs-12">
-                                                <input id="appcta_gig" class="form-control has-feedback-left" name="appcta_gig" placeholder="Cantidad Gigas *" required="required" type="number" title="Almacenamiento en Gigas" value="{{$appcta->appcta_gig}}" data-validate-minmax="0,{{$gig > $appcta->appcta_gig ? $gig : $appcta->appcta_gig}}">
+                                                <input id="appcta_gig" class="form-control has-feedback-left" name="appcta_gig" placeholder="Cantidad Megas *" required="required" type="number" title="Almacenamiento en Megas" value="{{$appcta->appcta_gig}}" data-validate-minmax="0,{{$gig > $appcta->appcta_gig ? $gig : $appcta->appcta_gig}}">
                                                 <span class="fa fa-archive form-control-feedback left" aria-hidden="true"></span>
                                             </div>
                                         </div>
