@@ -78,7 +78,7 @@
 
                                         <div class="item form-group" id="group_appcta_rfc">                     
                                             <div class="col-md-9 col-sm-9 col-xs-12">
-                                                <input id="appcta_rfc" class="form-control has-feedback-left" name="appcta_rfc" title="Cantidad de Instancias" placeholder="Cantidad Instancias *" required="required" type="numberint">
+                                                <input id="appcta_rfc" class="form-control has-feedback-left" name="appcta_rfc" title="Cantidad de Soluciones" placeholder="Cantidad Soluciones *" required="required" type="numberint">
                                                 <span class="fa fa-bank form-control-feedback left" aria-hidden="true"></span>
                                             </div>
                                         </div>

@@ -38,7 +38,7 @@
                                 <th>Nombre</th>
                                 <th>RFC</th>
                                 <th>Límite Megas</th>
-                                <th>Límite Instancias</th>
+                                <th>Límite Soluciones</th>
                                 <th>Teléfono</th>
                                 <th>Correo</th>
                                 <th>Supervisor</th>

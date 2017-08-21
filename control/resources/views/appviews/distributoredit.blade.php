@@ -68,7 +68,7 @@
 
 		                    <div class="item form-group">
 			                    <div class="col-md-9 col-sm-9 col-xs-12">
-			                    	<input type="numberint" id="distrib_limitrfc" name="distrib_limitrfc" placeholder="Límite Instancias * (999999)" data-validate-minmax="1,999999" class="form-control has-feedback-left" value="{{ $distributor->distrib_limitrfc }}" title="Límite Instancias (999999)" required>
+			                    	<input type="numberint" id="distrib_limitrfc" name="distrib_limitrfc" placeholder="Límite Soluciones * (999999)" data-validate-minmax="1,999999" class="form-control has-feedback-left" value="{{ $distributor->distrib_limitrfc }}" title="Límite Soluciones (999999)" required>
 			                    	<span class="fa fa-bar-chart form-control-feedback left" aria-hidden="true"></span>
 			                    </div>
 		                    </div>

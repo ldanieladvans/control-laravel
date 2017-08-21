@@ -133,7 +133,7 @@
                                                                 <tr>
                                                                     <th align="left">#</th>
                                                                     <th align="left">Aplicación</th>
-                                                                    <th align="left">Cantidad Instancias</th>
+                                                                    <th align="left">Cantidad Soluciones</th>
                                                                     <th align="left">Cantidad Megas</th>
                                                                     <th align="left">Ambiente</th>
                                                                     <th align="left">Fecha Activación</th>
@@ -185,7 +185,7 @@
 
                                                                                 <div class="item form-group">
                                                                                     <div class="col-md-6 col-sm-6 col-xs-12">
-                                                                                        <input id="appcta_rfc" class="form-control has-feedback-left" name="appcta_rfc" title="Cantidad de Instancias" placeholder="Cantidad Instancias *" type="numberint" value="0">
+                                                                                        <input id="appcta_rfc" class="form-control has-feedback-left" name="appcta_rfc" title="Cantidad de Soluciones" placeholder="Cantidad Soluciones *" type="numberint" value="0">
                                                                                         <span class="fa fa-bank form-control-feedback left" aria-hidden="true"></span>
                                                                                     </div>
                                                                                     <div class="col-md-6 col-sm-6 col-xs-12">
