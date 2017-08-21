@@ -62,7 +62,7 @@
         	                        <div role="tabpanel" class="tab-pane fade active in" id="tab_content1" aria-labelledby="home-tab">
                                 	    <div class="item form-group">                      
                                             <div class="col-md-9 col-sm-9 col-xs-12">
-                                                <input id="asigpaq_rfc" class="form-control has-feedback-left" name="asigpaq_rfc" title="Cantidad de Instancias" placeholder="Cantidad Instancias *" data-validate-minmax="1,999999" required="required" type="numberint">
+                                                <input id="asigpaq_rfc" class="form-control has-feedback-left" name="asigpaq_rfc" title="Cantidad de Soluciones" placeholder="Cantidad Soluciones *" data-validate-minmax="1,999999" required="required" type="numberint">
                                                 <span class="fa fa-bank form-control-feedback left" aria-hidden="true"></span>
                                             </div>
                                         </div>

@@ -79,7 +79,7 @@
 
                                         <div class="item form-group">                     
                                             <div class="col-md-9 col-sm-9 col-xs-12">
-                                                <input id="appcta_rfc" class="form-control has-feedback-left" name="appcta_rfc" title="Cantidad de Instancias" placeholder="Cantidad Instancias *" required="required" type="numberint" value="{{$appcta->appcta_rfc}}" data-validate-minmax="0,{{$rfc > $appcta->appcta_rfc ? $rfc : $appcta->appcta_rfc}}">
+                                                <input id="appcta_rfc" class="form-control has-feedback-left" name="appcta_rfc" title="Cantidad de Soluciones" placeholder="Cantidad Soluciones *" required="required" type="numberint" value="{{$appcta->appcta_rfc}}" data-validate-minmax="0,{{$rfc > $appcta->appcta_rfc ? $rfc : $appcta->appcta_rfc}}">
                                                 <span class="fa fa-bank form-control-feedback left" aria-hidden="true"></span>
                                             </div>
                                         </div>
