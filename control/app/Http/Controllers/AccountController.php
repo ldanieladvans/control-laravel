@@ -291,6 +291,10 @@ class AccountController extends Controller
                     $arrayparams['client_nick'] = count(explode('@',$arrayparams['client_email'])) > 1 ? explode('@',$arrayparams['client_email'])[0] : '';
                     $arrayparams['account_id'] = $account->id;
 
+                    if($account->cta_num=='single'){
+                        $arrayparams['gen_sol'] = true;
+                    }
+
                     $acces_vars = $this->getAccessToken();
                     $service_response = $this->getAppService($acces_vars['access_token'],'createbd',$arrayparams,'ctac');
                     $this->registeredBinnacle($arrayparams, 'service', 'Se ha creado una nueva cuenta en la app de cuenta', $logued_user ? $logued_user->id : '', $logued_user ? $logued_user->name : '');

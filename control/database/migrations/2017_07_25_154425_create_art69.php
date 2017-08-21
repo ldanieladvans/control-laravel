@@ -13,7 +13,7 @@ class CreateArt69 extends Migration
      */
     public function up()
     {
-        Schema::create('69', function (Blueprint $table) {
+        /*Schema::create('69', function (Blueprint $table) {
             $table->increments('id');
             $table->timestamps();
             $table->string('rfc',13)->nullable();
@@ -24,7 +24,7 @@ class CreateArt69 extends Migration
             $table->datetime('fecha_dof')->nullable();
             $table->string('url_oficio',100)->nullable();
             $table->string('url_anexo',100)->nullable();
-        });
+        });*/
     }
 
     /**
