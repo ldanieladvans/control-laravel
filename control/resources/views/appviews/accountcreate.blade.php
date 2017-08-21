@@ -72,6 +72,17 @@
                         </div>
 
                         <div class="item form-group">
+                            <label class="control-label col-md-1 col-sm-1 col-xs-12">Tipo de Cuenta*</label>
+                            <div class="col-md-8 col-sm-8 col-xs-12">
+                                <select class="js-example-basic-single js-states form-control" name="cta_type" id="cta_type" required>
+                                    <option value="">Seleccione una opción ...</option>
+                                    <option value="single" selected>1 RFC</option>
+                                    <option value="multi">Múltiple RFCs</option>
+                                </select>
+                            </div>
+                        </div>
+
+                        <div class="item form-group">
                             <label class="control-label col-md-1 col-sm-1 col-xs-12">Estado</label>                     
                             <div class="col-md-8 col-sm-8 col-xs-12">
                                 <input id="cta_estado" title="Estado" class="form-control has-feedback-left" name="cta_estado" placeholder="Estado *" required="required" type="text" readonly="readonly" value="Inactiva">
