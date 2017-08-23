@@ -454,8 +454,16 @@ class AccountController extends Controller
                 }else{
                     $fmessage = 'Se ha creado un detalle de la cuenta: '.$app_cta->appcta_app;
                     $app_cta = new Appaccount();
-                    $app_cta->appcta_rfc = $input['appcta_rfc'] ? $input['appcta_rfc'] : 0;
-                    $app_cta->appcta_gig = $input['appcta_gig'] ? $input['appcta_gig'] : 0;
+                    $appcta_rfc = $input['appcta_rfc'] ? $input['appcta_rfc'] : 0;
+                    $appcta_gig = $input['appcta_gig'] ? $input['appcta_gig'] : 0;
+                    if($cta_obj){
+                        if($cta_obj->cta_type == 'single'){
+                            $appcta_rfc = 1;
+                            $appcta_gig = 1;
+                        }
+                    }
+                    $app_cta->appcta_rfc = $appcta_rfc;
+                    $app_cta->appcta_gig = $appcta_gig;
                     $app_cta->appcta_f_vent = date('Y-m-d');
                     $app_cta->appcta_distrib_id = $cta_obj->cta_distrib_id;
                     $fecha = date_create(date('Y-m-d'));
