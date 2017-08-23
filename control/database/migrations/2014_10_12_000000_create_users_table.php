@@ -30,6 +30,7 @@ class CreateUsersTable extends Migration
             $table->string('usrc_pic')->nullable();
             $table->boolean('usrc_admin')->default(0);
             $table->string('usrc_type',3)->default('app');
+            $table->boolean('pass_changed')->default(0);
         });
     }
 
