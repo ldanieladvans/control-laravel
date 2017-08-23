@@ -382,6 +382,7 @@ class UserController extends Controller
             if($user!=false){
                 if(array_key_exists('password',$alldata) && isset($alldata['password'])){
                     $user->password = bcrypt($alldata['password']);
+                    $user->pass_changed = true;
                 }
             }
             $user->save();
