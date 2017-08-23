@@ -54,6 +54,32 @@
 			        </div>
                 @endif
 
+                <div class="btn-group">
+                    <button onclick="showModal('passmodal-profile')" class="btn btn-info" data-placement="left" title="Cambiar contraseña">Cambiar Contraseña</button>
+
+                    <div class="modal fade" id="passmodal-profile" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+                        <div class="modal-dialog" role="document">
+                            <div class="modal-content">
+                                <div class="modal-header">
+                                    <h5 class="modal-title" id="exampleModalLabel">Cambio de contraseña: {{$user->name}}</h5>
+                                </div>
+                                <div class="modal-body">
+                                    <form>
+                                        <div class="form-group">
+                                            <input placeholder="Contraseña" required="required" type="password" class="form-control" id="password{{$user->id}}" style="width: 500px;">
+                                        </div>
+                                    </form>
+                                    <div id="result_failure{{$user->id}}"></div>
+                                </div>
+                                <div class="modal-footer">
+                                    <button type="button" onclick="cleanPass({{$user->id}});" class="btn btn-secondary" data-dismiss="modal">Cerrar</button>
+                                    <button type="button"  onclick="changePass({{$user->id}});" class="btn btn-primary">Ok</button>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
               	<div class="x_content">
                 	{{ Form::open(['route' => ['user.update', $user], 'enctype'=>'multipart/form-data', 'class'=>'form-horizontal form-label-left']) }}
                 		{{ Form::hidden('_method', 'PUT') }}
@@ -236,7 +262,65 @@
     <script src="{{ asset('controlassets/vendors/select2/dist/js/select2.min.js') }}"></script>
     <script type="text/javascript">
 
+    	function showModal(modalid) {
+            $("#"+modalid).modal('show');
+            $("#"+modalid).on('shown.bs.modal', function () {
+            $('.chosen-select', this).chosen('destroy').chosen();
+                var comparerolesmodal = modalid.search("rolesmodal");
+                var comparepermsmodal = modalid.search("permsmodal");
+                if(comparerolesmodal >= 0){
+                    selectedrol = $('.chosen-select', this).chosen().val() ;
+                }
+                if(comparepermsmodal >= 0){
+                    selectedperm = $('.chosen-select', this).chosen().val() ;
+                }
+            });
+        }
 
+        function hideModal(modalid) {
+          $("#"+modalid).modal('hide');
+        }
+
+        function changePass(user){
+            var CSRF_TOKEN = $('meta[name="csrf-token"]').attr('content');
+            var passid = "password"+user;
+            var password = document.getElementById(passid).value;
+
+            hideModal("passmodal-profile");
+            $('#loadingmodal').modal('show');
+
+            if(password){
+                $.ajax({
+                    url: '/security/user/changepass',
+                    type: 'POST',
+                    data: {_token: CSRF_TOKEN,password:password,user:user},
+                    dataType: 'JSON',
+                    success: function (data) {
+                        $('#loadingmodal').modal('hide');
+                        new PNotify({
+                            title: "Notificación",
+                            type: "info",
+                            text: "La contraseña ha sido cambiada satisfactoriamente",
+                            nonblock: {
+                                nonblock: true
+                            },
+                            addclass: 'dark',
+                            styling: 'bootstrap3'
+                        });
+                      document.getElementById('password'+data['user']).value = '';
+                    },
+                    error: function(XMLHttpRequest, textStatus, errorThrown) { 
+                        $("#result_failure"+user).html('<p><strong>Ocurrió un error: '+errorThrown+'</strong></p>');
+                    }
+                });
+            }else{
+              $("#result_failure"+user).html('<p><strong>La contraseña es obligatoria</strong></p>');
+            }        
+        }
+
+        function cleanPass(userid){
+	      document.getElementById('password'+userid).value = '';
+	    }
 
     	function cleanFunc(){
 			$("#blah").attr("src", document.getElementById('imageiddef').src);
