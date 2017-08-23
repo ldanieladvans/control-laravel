@@ -447,8 +447,16 @@ class AccountController extends Controller
                 
                 $fmessage = 'Se ha modificado un detalle de la cuenta: '.$app_cta->appcta_app;
                 if($app_cta){
-                    $app_cta->appcta_rfc = $input['appcta_rfc'] ? $input['appcta_rfc'] : 0;
-                    $app_cta->appcta_gig = $input['appcta_gig'] ? $input['appcta_gig'] : 0;
+                    $appcta_rfc = $input['appcta_rfc'] ? $input['appcta_rfc'] : 0;
+                    $appcta_gig = $input['appcta_gig'] ? $input['appcta_gig'] : 0;
+                    if($cta_obj){
+                        if($cta_obj->cta_type == 'single'){
+                            $appcta_rfc = 1;
+                            $appcta_gig = 1;
+                        }
+                    }
+                    $app_cta->appcta_rfc = $appcta_rfc;
+                    $app_cta->appcta_gig = $appcta_gig;
                     //\DB::table('app')->where('app_appcta_id', '=', $input['id'])->delete();
                     
                 }else{
