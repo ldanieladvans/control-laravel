@@ -156,6 +156,46 @@
                     </div>
                   </div>
 
+
+                  <div class="modal fade bs-example-modal-sm" tabindex="-1" role="dialog" aria-hidden="true" id="changepassmodal">
+                    <div class="modal-dialog modal-sm">
+                      <div class="modal-content">
+
+                        <div class="modal-header">
+                          <button type="button" class="close" data-dismiss="modal" aria-label="Close" id="passmodalclose"><span aria-hidden="true">×</span>
+                          </button>
+                          <h4 class="modal-title" id="myModalLabel2">Contraseña actualizada.</h4>
+                        </div>
+
+                      </div>
+                    </div>
+                  </div>
+
+                  <div class="modal fade" id="passmodal-profile-aut" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+                        <div class="modal-dialog" role="document">
+                            <div class="modal-content">
+                                <div class="modal-header">
+                                    <h5 class="modal-title" id="exampleModalLabel">Debe cambiar su contraseña: {{Auth::user()->name}}</h5>
+                                </div>
+                                <div class="modal-body">
+                                    <form>
+                                        <div class="form-group">
+                                            <input placeholder="Contraseña" required="required" type="password" class="form-control" id="password{{Auth::user()->id}}" style="width: 500px;">
+                                        </div>
+                                    </form>
+                                    <div id="result_failure{{Auth::user()->id}}"></div>
+                                </div>
+                                <div class="modal-footer">
+                                    <button type="button" onclick="cleanPassAut({{Auth::user()->id}});" class="btn btn-secondary" id="closepassmodalaut" data-dismiss="modal">Cerrar</button>
+                                    <button type="button"  onclick="changePassAut({{Auth::user()->id}});" class="btn btn-primary">Ok</button>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                  <input type="hidden" id="pass_changed" name="pass_changed" value="{{ Auth::user()->pass_changed }}">
+                  <input type="hidden" id="usrc_admin" name="usrc_admin" value="{{ Auth::user()->usrc_admin }}">
+
 				
 				@section('app_left_menu')
 		            <div class="col-md-3 left_col" style="background-color: #072542 ">
@@ -364,6 +404,63 @@
 		    <script src="{{ asset('controlassets/vendors/pnotify/dist/pnotify.nonblock.js') }}"></script>
 
 		    <script type="text/javascript">
+
+		    	var usrc_admin = document.getElementById('usrc_admin').value;
+		    	var pass_changed = document.getElementById('pass_changed').value;
+
+
+		    	function changePassAut(user){
+		            var CSRF_TOKEN = $('meta[name="csrf-token"]').attr('content');
+		            var passid = "password"+user;
+		            var password = document.getElementById(passid).value;
+
+		            $('#passmodal-profile-aut').modal('hide');
+		            $('#loadingmodal').modal('show');
+
+		            if(password){
+		                $.ajax({
+		                    url: '/security/user/changepass',
+		                    type: 'POST',
+		                    data: {_token: CSRF_TOKEN,password:password,user:user},
+		                    dataType: 'JSON',
+		                    success: function (data) {
+		                      $('#loadingmodal').modal('hide');
+		                      $('#changepassmodal').modal('show');  
+		                      setTimeout(function() {
+					            window.location.href = window.location.href;
+					          }, 4e3);
+		                    },
+		                    error: function(XMLHttpRequest, textStatus, errorThrown) { 
+		                        $("#result_failure"+user).html('<p><strong>Ocurrió un error: '+errorThrown+'</strong></p>');
+		                    }
+		                });
+		            }else{
+		              $("#result_failure"+user).html('<p><strong>La contraseña es obligatoria</strong></p>');
+		            }        
+		        }
+
+		        function cleanPassAut(userid){
+			      document.getElementById('password'+userid).value = '';
+			    }
+
+
+		    	function showChangePassNot(){
+		    		if(usrc_admin==0){
+		    			if(pass_changed==0){
+		                    $('#passmodal-profile-aut').modal('show');
+		                    setTimeout(function() {
+					            $('#closepassmodalaut').trigger('click');
+					        }, 60000);
+			    		}
+			    	}
+
+		    	}
+
+		    	
+    			showChangePassNot();
+		    		
+		    	var intevalo = setInterval('showChangePassNot()',61000);
+
 		    	var message, tests, checkField, validate, mark, unmark, field, minmax, defaults,
 			        validateWords, lengthRange, lengthLimit, pattern, alertTxt, data,
 			        email_illegalChars = /[\(\)\<\>\,\;\:\\\/\"\[\]]/,
