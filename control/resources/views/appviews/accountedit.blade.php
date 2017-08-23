@@ -196,11 +196,11 @@
 
                                                                                 <div class="item form-group">
                                                                                     <div class="col-md-6 col-sm-6 col-xs-12">
-                                                                                        <input id="appcta_rfc" class="form-control has-feedback-left" name="appcta_rfc" title="Cantidad de Soluciones" placeholder="Cantidad Soluciones *" type="numberint" value="0">
+                                                                                        <input id="appcta_rfc" class="form-control has-feedback-left" name="appcta_rfc" title="Cantidad de Soluciones" placeholder="Cantidad Soluciones *" type="numberint" value="{{$account->cta_type == 'single' ? '1' : '0'}}" {{$account->cta_type == 'single' ? 'readonly' : ''}}>
                                                                                         <span class="fa fa-bank form-control-feedback left" aria-hidden="true"></span>
                                                                                     </div>
                                                                                     <div class="col-md-6 col-sm-6 col-xs-12">
-                                                                                        <input id="appcta_gig" class="form-control has-feedback-left" name="appcta_gig" placeholder="Cantidad Megas *" value="0" type="number" title="Almacenamiento en Megas">
+                                                                                        <input id="appcta_gig" class="form-control has-feedback-left" name="appcta_gig" placeholder="Cantidad Megas *" value="{{$account->cta_type == 'single' ? '1' : '0'}}" type="number" title="Almacenamiento en Megas" {{$account->cta_type == 'single' ? 'readonly' : ''}}>
                                                                                         <span class="fa fa-archive form-control-feedback left" aria-hidden="true"></span>
                                                                                     </div>
                                                                                 </div>
