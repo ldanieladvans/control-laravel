@@ -200,7 +200,7 @@
                                                                                         <span class="fa fa-bank form-control-feedback left" aria-hidden="true"></span>
                                                                                     </div>
                                                                                     <div class="col-md-6 col-sm-6 col-xs-12">
-                                                                                        <input id="appcta_gig" class="form-control has-feedback-left" name="appcta_gig" placeholder="Cantidad Megas *" value="{{$account->cta_type == 'single' ? '1' : '0'}}" type="number" title="Almacenamiento en Megas" {{$account->cta_type == 'single' ? 'readonly' : ''}}>
+                                                                                        <input id="appcta_gig" class="form-control has-feedback-left" name="appcta_gig" placeholder="Cantidad Megas *" value="{{$account->cta_type == 'single' ? '1' : '0'}}" type="number" title="Almacenamiento en Megas">
                                                                                         <span class="fa fa-archive form-control-feedback left" aria-hidden="true"></span>
                                                                                     </div>
                                                                                 </div>
