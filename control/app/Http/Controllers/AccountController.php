@@ -224,10 +224,10 @@ class AccountController extends Controller
 
 
             if(count($tls_obj)==0){
-                \Session::flash('message','Debe crear al menos una línea de tiempo');
+                \Session::flash('message','Debe crear al menos una línea de tiempo para la cuenta '.$account->cta_num);
                 $response = array(
                     'status' => 'failure',
-                    'msg' => 'Debe crear al menos una línea de tiempo',
+                    'msg' => 'Debe crear al menos una línea de tiempo para la cuenta '.$account->cta_num,
                 );
             }elseif (count($ctas_obj)==0) {
                 \Session::flash('message','Debe asignar al menos una aplicación');
@@ -456,7 +456,7 @@ class AccountController extends Controller
                     if($cta_obj){
                         if($cta_obj->cta_type == 'single'){
                             $appcta_rfc = 1;
-                            $appcta_gig = 1;
+                            //$appcta_gig = 1;
                         }
                     }
                     $app_cta->appcta_rfc = $appcta_rfc;
@@ -471,7 +471,7 @@ class AccountController extends Controller
                     if($cta_obj){
                         if($cta_obj->cta_type == 'single'){
                             $appcta_rfc = 1;
-                            $appcta_gig = 1;
+                            //$appcta_gig = 1;
                         }
                     }
                     $app_cta->appcta_rfc = $appcta_rfc;
