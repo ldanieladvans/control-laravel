@@ -164,6 +164,7 @@ class AccountController extends Controller
             }
             $account->cta_periodicity = $request->cta_periodicity;
             $account->cta_recursive = $request->cta_recursive;
+            $account->cta_type = $request->cta_type;
             $account->save();
             $fmessage = 'Se ha actualizado la cuenta: '.$request->cta_num;
             \Session::flash('message',$fmessage);
