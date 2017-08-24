@@ -327,14 +327,18 @@ class AccountController extends Controller
     {
         $alldata = $request->all();
         $rfc = '';
+        $dist_id = 1;
         if(array_key_exists('clientid',$alldata) && isset($alldata['clientid'])){
-            $rfc = Client::findOrFail($alldata['clientid'])->cliente_rfc;
+            $client_obj = Client::findOrFail($alldata['clientid']);
+            $rfc = $client_obj->cliente_rfc;
+            $dist_id = $client_obj->cliente_distrib_id ? $client_obj->cliente_distrib_id : $dist_id;
         }
 
         $response = array(
             'status' => 'success',
             'msg' => 'Ok',
-            'rfc' => $rfc
+            'rfc' => $rfc,
+            'dist_id' => $dist_id
         );
         return \Response::json($response);
     }
