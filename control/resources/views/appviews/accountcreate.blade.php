@@ -180,6 +180,7 @@
                     dataType: 'JSON',
                     success: function (data) {
                       document.getElementById('cta_num').value=data['rfc'];
+                      $('#cta_distrib_id').val(data['dist_id']).trigger('change.select2');
                     }
                 });
             }else{
