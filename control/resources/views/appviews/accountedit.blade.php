@@ -85,7 +85,7 @@
                         <div class="item form-group">
                             <label class="control-label col-md-1 col-sm-1 col-xs-12">Tipo de Cuenta*</label>
                             <div class="col-md-8 col-sm-8 col-xs-12">
-                                <select class="js-example-basic-single js-states form-control" name="cta_type" id="cta_type" required {{$account->cta_fecha ? 'disabled' : ''}}>
+                                <select class="js-example-basic-single js-states form-control" name="cta_type" id="cta_type" required >
                                     <option value="">Seleccione una opción ...</option>
                                     <option value="single" {{ $account->cta_type == 'single' ? 'selected' : ''}}>1 RFC</option>
                                     <option value="multi" {{ $account->cta_type == 'multi' ? 'selected' : ''}}>Múltiple RFCs</option>
