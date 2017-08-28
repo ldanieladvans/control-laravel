@@ -458,6 +458,7 @@ class ComposerStaticInitab4f8949bd1040d5a84662f6d8ddae60
     );
 
     public static $classMap = array (
+        'AddCtaImapMails' => __DIR__ . '/../..' . '/database/migrations/2017_08_28_114036_add_cta_imap_mails.php',
         'App\\Account' => __DIR__ . '/../..' . '/app/Account.php',
         'App\\AccountTl' => __DIR__ . '/../..' . '/app/AccountTl.php',
         'App\\Appaccount' => __DIR__ . '/../..' . '/app/Appaccount.php',

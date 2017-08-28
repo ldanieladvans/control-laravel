@@ -6,6 +6,7 @@ $vendorDir = dirname(dirname(__FILE__));
 $baseDir = dirname($vendorDir);
 
 return array(
+    'AddCtaImapMails' => $baseDir . '/database/migrations/2017_08_28_114036_add_cta_imap_mails.php',
     'App\\Account' => $baseDir . '/app/Account.php',
     'App\\AccountTl' => $baseDir . '/app/AccountTl.php',
     'App\\Appaccount' => $baseDir . '/app/Appaccount.php',
