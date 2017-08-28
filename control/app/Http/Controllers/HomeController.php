@@ -14,13 +14,15 @@ use App\Http\Middleware\ChangeCon;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Session;
-
+use Illuminate\Support\Facades\Log;
 use App\Mail\ClientCreate;
 use Illuminate\Support\Facades\Mail;
 use ReverseRegex\Lexer;
 use ReverseRegex\Random\SimpleRandom;
 use ReverseRegex\Parser;
 use ReverseRegex\Generator\Scope;
+
+use Ddeboer\Imap\Server;
 
 class HomeController extends Controller
 {
@@ -43,6 +45,18 @@ class HomeController extends Controller
      */
     public function index(Request $request)
     {
+        /*$server = new Server(
+            'mail.advans.mx', 
+            '143',     
+            '/novalidate-cert',
+            []
+        );
+        $connection = $server->authenticate('boveda@advans.mx', 'uJ4TJ$4&QZhufaM4o3@X');
+        $mailboxes = $connection->getMailboxes();
+        foreach ($mailboxes as $mailbox) {
+            Log::info('Mailbox %s has %s messages', $mailbox->getName(), $mailbox->count());
+        }*/
+        //$mbox = imap_open ("{mail.advans.mx:143/novalidate-cert}", "boveda@advans.mx", "uJ4TJ$4&QZhufaM4o3@X");
         $logued_user = Auth::user();
         if($logued_user->usrc_admin || $logued_user->usrc_super){
           $clients = Client::all();
