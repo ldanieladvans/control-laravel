@@ -6,12 +6,12 @@ use Illuminate\Console\Scheduling\Schedule;
 use Illuminate\Foundation\Console\Kernel as ConsoleKernel;
 use Illuminate\Support\Facades\Log;
 
-use SoapClient;
+/*use SoapClient;
 use Ddeboer\Imap\Server;
 use Ddeboer\Imap\SearchExpression;
 use Ddeboer\Imap\Search\Email\To;
 use Ddeboer\Imap\Search\Text\Body;
-use Ddeboer\Imap\Search\Text\Subject;
+use Ddeboer\Imap\Search\Text\Subject;*/
 
 class Kernel extends ConsoleKernel
 {
@@ -48,13 +48,7 @@ class Kernel extends ConsoleKernel
 
     public function readImapMails(){
         Log::info('************************************* Init Read Imap Mails Cron *****************************************');
-        /*$server = new Server(
-            'mail.advans.mx', 
-            '143',     
-            '/novalidate-cert',
-            []
-        );*/
-        $server = new Server('imap.gmail.com');
+        /*$server = new Server('imap.gmail.com');
         $connection = $server->authenticate('user', 'pass');
         $mailbox = $connection->getMailbox('INBOX');
         $search = new SearchExpression();
@@ -100,7 +94,7 @@ class Kernel extends ConsoleKernel
                   die($e->getMessage());
               }
           }
-        }
+        }*/
         Log::info('************************************* End Cron *****************************************');
     }
 
