@@ -257,7 +257,7 @@ class ApiserviceController extends Controller
 
     public function mailAccount(Request $request)
     {
-        $alldata = $request->all();
+        /*$alldata = $request->all();
         $uniq_id = ''
         if(array_key_exists('rfc_account',$alldata) && array_key_exists('rfc_client',$alldata)){
             $account_mails = Cimail::where('cim_rfc_account',$alldata['rfc_account'])->where('cim_rfc_client',$alldata['rfc_client'])->get();
@@ -284,11 +284,11 @@ class ApiserviceController extends Controller
                 $account_mails->save();
             }
             
-        }
+        }*/
         $response = array(
             'status' => 'success',
             'msg' => 'Mail created',
-            'uniq_id' => $uniq_id
+            'uniq_id' => 'rrrrrr'
         );
         return \Response::json($response);
     }
