@@ -257,18 +257,14 @@ class ApiserviceController extends Controller
 
     public function mailAccount(Request $request)
     {
-
         $alldata = $request->all();
-
+        $uniq_id = ''
         if(array_key_exists('rfc_account',$alldata) && array_key_exists('rfc_client',$alldata)){
             $account_mails = Cimail::where('cim_rfc_account',$alldata['rfc_account'])->where('cim_rfc_client',$alldata['rfc_client'])->get();
             if(count($account_mails) > 0){
                 foreach ($account_mails as $am_obj) {
                     if(array_key_exists('account_prefix',$alldata)){
                         $am_obj->cim_account_prefix = $alldata['account_prefix'];
-                    }
-                    if(array_key_exists('mail',$alldata)){
-                        $am_obj->cim_mail = $alldata['mail'];
                     }
                     $am_obj->save();
                 }
@@ -279,9 +275,8 @@ class ApiserviceController extends Controller
                 if(array_key_exists('account_prefix',$alldata)){
                     $account_mails->cim_account_prefix = $alldata['account_prefix'];
                 }
-                if(array_key_exists('mail',$alldata)){
-                    $account_mails->cim_mail = $alldata['mail'];
-                }
+                $uniq_id = uniqid($alldata['rfc_account'].$alldata['rfc_client'].$alldata['account_prefix']);
+                $account_mails->cim_mail = $uniq_id;
                 $account = Account::where('cta_num',$alldata['rfc_account'])->get();
                 if(count($account) > 0){
                     $account_mails->cim_account_id = $account[0]['id'];
@@ -290,11 +285,10 @@ class ApiserviceController extends Controller
             }
             
         }
-
-
         $response = array(
             'status' => 'success',
-            'msg' => 'Mail created'
+            'msg' => 'Mail created',
+            'uniq_id' => $uniq_id
         );
         return \Response::json($response);
     }
