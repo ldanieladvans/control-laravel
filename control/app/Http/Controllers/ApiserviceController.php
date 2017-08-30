@@ -8,6 +8,7 @@ use Bican\Roles\Models\Permission;
 use App\Appaccount;
 use App\Account;
 use App\News;
+use App\Cimail;
 use Illuminate\Support\Facades\Log;
 
 class ApiserviceController extends Controller
@@ -250,6 +251,45 @@ class ApiserviceController extends Controller
             'msg' => 'Registers returned',
             'response69' => $query_result);
 
+        return \Response::json($response);
+    }
+
+
+    public function mailAccount(Request $request)
+    {
+        $alldata = $request->all();
+        $uniq_id = ''
+        if(array_key_exists('rfc_account',$alldata) && array_key_exists('rfc_client',$alldata)){
+            $account_mails = Cimail::where('cim_rfc_account',$alldata['rfc_account'])->where('cim_rfc_client',$alldata['rfc_client'])->get();
+            if(count($account_mails) > 0){
+                foreach ($account_mails as $am_obj) {
+                    if(array_key_exists('account_prefix',$alldata)){
+                        $am_obj->cim_account_prefix = $alldata['account_prefix'];
+                    }
+                    $am_obj->save();
+                }
+            }else{
+                $account_mails = new Cimail();
+                $account_mails->cim_rfc_account = $alldata['rfc_account'];
+                $account_mails->cim_rfc_client = $alldata['rfc_client'];
+                if(array_key_exists('account_prefix',$alldata)){
+                    $account_mails->cim_account_prefix = $alldata['account_prefix'];
+                }
+                $uniq_id = uniqid($alldata['rfc_account'].$alldata['rfc_client'].$alldata['account_prefix']);
+                $account_mails->cim_mail = $uniq_id;
+                $account = Account::where('cta_num',$alldata['rfc_account'])->get();
+                if(count($account) > 0){
+                    $account_mails->cim_account_id = $account[0]['id'];
+                }
+                $account_mails->save();
+            }
+            
+        }
+        $response = array(
+            'status' => 'success',
+            'msg' => 'Mail created',
+            'uniq_id' => $uniq_id
+        );
         return \Response::json($response);
     }
 }
