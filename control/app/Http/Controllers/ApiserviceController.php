@@ -299,7 +299,10 @@ class ApiserviceController extends Controller
         Log::info('********************************'.$alldata['uniq_id'].'****************************************');
         if(array_key_exists('uniq_id',$alldata)){
             $account_mails = Cimail::where('cim_mail',$alldata['uniq_id'])->get();
-            $account_mails->delete();
+            foreach ($account_mails as $account_mail) {
+                $account_mail->delete();
+            }
+            
         }
         $response = array(
             'status' => 'success',
