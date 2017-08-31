@@ -49,15 +49,15 @@ class Kernel extends ConsoleKernel
     public function readImapMails(){
         Log::info('************************************* Init Read Imap Mails Cron *****************************************');
         //$server = new Server('mail.advans.mx');
-        /*$server = new Server(
+        $server = new Server(
                       'mail.advans.mx', // required
                       '143',     // defaults to 993
                       '/novalidate-cert',    // defaults to '/imap/ssl/validate-cert'
                       []
                   );
-        $connection = $server->authenticate('boveda@advans.mx', 'uJ4TJ$4&QZhufaM4o3@X');
-        $mailbox = $connection->getMailbox('INBOX');
-        $messages = $mailbox->getMessages();
+        $connection = $server->authenticate('prueba_recepcion.advans', 'Aa12345%');
+        //$mailbox = $connection->getMailbox('INBOX');
+        //$messages = $mailbox->getMessages();
         /*$search = new SearchExpression();
         $search->addCondition(new Subject('testcdfivalidate'));
         //Produccion

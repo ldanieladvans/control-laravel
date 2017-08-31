@@ -275,7 +275,7 @@ class ApiserviceController extends Controller
                 if(array_key_exists('account_prefix',$alldata)){
                     $account_mails->cim_account_prefix = $alldata['account_prefix'];
                 }
-                $uniq_id = uniqid($alldata['rfc_account'].$alldata['rfc_client'].$alldata['account_prefix']);
+                $uniq_id = 'boveda-'.uniqid().'@advans.mx';
                 $account_mails->cim_mail = $uniq_id;
                 $account = Account::where('cta_num',$alldata['rfc_account'])->get();
                 if(count($account) > 0){
@@ -289,6 +289,24 @@ class ApiserviceController extends Controller
             'status' => 'success',
             'msg' => 'Mail created',
             'uniq_id' => $uniq_id
+        );
+        return \Response::json($response);
+    }
+
+    public function delMailAccount(Request $request)
+    {
+        $alldata = $request->all();
+        Log::info('********************************'.$alldata['uniq_id'].'****************************************');
+        if(array_key_exists('uniq_id',$alldata)){
+            $account_mails = Cimail::where('cim_mail',$alldata['uniq_id'])->get();
+            foreach ($account_mails as $account_mail) {
+                $account_mail->delete();
+            }
+            
+        }
+        $response = array(
+            'status' => 'success',
+            'msg' => 'Mail deleted'
         );
         return \Response::json($response);
     }
