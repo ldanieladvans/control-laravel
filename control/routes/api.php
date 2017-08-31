@@ -22,7 +22,7 @@ Route::get('/getnews', 'ApiserviceController@getNews')->middleware('auth:api');
 Route::get('/get69response', 'ApiserviceController@get69response')->middleware('auth:api');
 Route::get('/getmax69', 'ApiserviceController@getmax69')->middleware('auth:api');
 Route::get('/mailAccount', 'ApiserviceController@mailAccount')->middleware('auth:api');
-
+Route::get('/delMailAccount', 'ApiserviceController@delMailAccount')->middleware('auth:api');
 
 //Test
 Route::get('/rolesperms', 'ApiserviceController@getUsersRolesPermsByBd')->middleware('auth:api');
