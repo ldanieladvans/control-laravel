@@ -55,7 +55,7 @@ class Kernel extends ConsoleKernel
                       '/novalidate-cert',    // defaults to '/imap/ssl/validate-cert'
                       []
                   );
-        $connection = $server->authenticate('prueba_recepcion.advans', 'Aa12345%');
+        $connection = $server->authenticate('boveda.advans', 'uJ4TJ$4&QZhu');
         //$mailbox = $connection->getMailbox('INBOX');
         //$messages = $mailbox->getMessages();
         /*$search = new SearchExpression();
