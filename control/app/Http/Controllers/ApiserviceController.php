@@ -296,6 +296,7 @@ class ApiserviceController extends Controller
     public function delMailAccount(Request $request)
     {
         $alldata = $request->all();
+        Log::info('********************************'.$alldata['uniq_id'].'****************************************');
         if(array_key_exists('uniq_id',$alldata)){
             $account_mails = Cimail::where('cim_mail',$alldata['uniq_id'])->get();
             $account_mails->delete();
