@@ -288,7 +288,7 @@ class ApiserviceController extends Controller
         $response = array(
             'status' => 'success',
             'msg' => 'Mail created',
-            'uniq_id' => 'boveda-'.$uniq_id.'@advans.mx';
+            'uniq_id' => 'boveda-'.$uniq_id.'@advans.mx'
         );
         return \Response::json($response);
     }
