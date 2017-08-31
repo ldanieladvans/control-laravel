@@ -275,8 +275,8 @@ class ApiserviceController extends Controller
                 if(array_key_exists('account_prefix',$alldata)){
                     $account_mails->cim_account_prefix = $alldata['account_prefix'];
                 }
-                $uniq_id = uniqid();
-                $account_mails->cim_mail = 'boveda-'.$uniq_id.'@advans.mx';
+                $uniq_id = 'boveda-'.uniqid().'@advans.mx';
+                $account_mails->cim_mail = $uniq_id;
                 $account = Account::where('cta_num',$alldata['rfc_account'])->get();
                 if(count($account) > 0){
                     $account_mails->cim_account_id = $account[0]['id'];
@@ -288,7 +288,7 @@ class ApiserviceController extends Controller
         $response = array(
             'status' => 'success',
             'msg' => 'Mail created',
-            'uniq_id' => 'boveda-'.$uniq_id.'@advans.mx'
+            'uniq_id' => $uniq_id
         );
         return \Response::json($response);
     }
