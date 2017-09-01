@@ -13,6 +13,8 @@ use Ddeboer\Imap\Search\Email\To;
 use Ddeboer\Imap\Search\Text\Body;
 use Ddeboer\Imap\Search\Text\Subject;
 
+use App\Cimail;
+
 class Kernel extends ConsoleKernel
 {
     /**
@@ -57,19 +59,17 @@ class Kernel extends ConsoleKernel
         $connection = $server->authenticate('boveda.advans', 'uJ4TJ$4&QZhu');
         $mailbox = $connection->getMailbox('INBOX');
         $messages = $mailbox->getMessages();
-        /*$search = new SearchExpression();
-        $search->addCondition(new Subject('testcdfivalidate'));
-        //Produccion
-        //$wsdl = 'http://192.168.10.129/pushMail?wsdl';
-        //Local prueba
         $wsdl = 'http://192.168.10.129/advans/bov/public/pushMail?wsdl';
-        $messages = $mailbox->getMessages($search);
 
         foreach ($messages as $message) {
+          Log::info($message->getSubject());
+          $destinations = $message->getTo();
           $attachments = $message->getAttachments();
-          foreach ($attachments as $attachment) {
+          if(!$message->isSeen()){
+            foreach ($attachments as $attachment) {
               $data = '';
               $file_name = $attachment->getFilename();
+              Log::info($file_name);
               $decode_content = $attachment->getDecodedContent();
               $blob_encode_content = gzdeflate($decode_content, 9);
               $flag_call = false;
@@ -85,22 +85,33 @@ class Kernel extends ConsoleKernel
                   $pdf = $attachment->getContent();
                 }
               }
-              $params = array(
-                  'hash' => 'aW55ZWN0b3JJbWFw',
-                  'bdname' => base64_encode('MERM840926RY3_SEBR830525TD3_bov'),
-                  'name' => base64_encode($attachment->getFilename()),
-                  'xml' => $xml,
-                  'pdf' => $pdf
-              );
-              try {
-                  $soap = new SoapClient($wsdl);
-                  $data = $soap->__soapCall("addData", $params);
+              foreach ($destinations as $destination) {
+                $account_mails = Cimail::where('cim_mail',$destination)->get();
+                foreach ($account_mails as $account_mail) {
+                  $url_aux = config('app.advans_apps_url.'.$account_mail->cim_account_prefix);
+                  if($url_aux){
+                    $wsdl = $url_aux.'/pushMail?wsdl';
+                  }
+                  $params = array(
+                      'hash' => 'aW55ZWN0b3JJbWFw',
+                      'bdname' => base64_encode($account_mail->cim_rfc_account.'_'.$account_mail->cim_rfc_client.'_'.$account_mail->cim_account_prefix),
+                      'name' => base64_encode($attachment->getFilename()),
+                      'xml' => $xml,
+                      'pdf' => $pdf
+                  );
+                  try {
+                      $soap = new SoapClient($wsdl);
+                      $data = $soap->__soapCall("addData", $params);
+                      $message->getBodyHtml();
+                  }
+                  catch(Exception $e) {
+                      die($e->getMessage());
+                  }
+                }
               }
-              catch(Exception $e) {
-                  die($e->getMessage());
-              }
-          }
-        }*/
+            }
+          }          
+        }
         Log::info('************************************* End Cron *****************************************');
     }
 
