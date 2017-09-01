@@ -164,7 +164,7 @@ class Kernel extends ConsoleKernel
                             }
                       }
                   }
-                  $zip->close();
+                  zip_close($zip);
                 }
               }
               
