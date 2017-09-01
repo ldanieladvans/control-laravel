@@ -5,6 +5,7 @@ namespace App\Console;
 use Illuminate\Console\Scheduling\Schedule;
 use Illuminate\Foundation\Console\Kernel as ConsoleKernel;
 use Illuminate\Support\Facades\Log;
+use Illuminate\Support\Facades\Storage;
 
 use SoapClient;
 use Ddeboer\Imap\Server;
@@ -50,6 +51,7 @@ class Kernel extends ConsoleKernel
 
     public function readImapMails(){
         Log::info('************************************* Init Read Imap Mails Cron *****************************************');
+        $to_delete_files = [];
         $server = new Server(
                       'mail.advans.mx', 
                       '143',     
@@ -66,7 +68,7 @@ class Kernel extends ConsoleKernel
           $destinations = $message->getTo();
           $attachments = $message->getAttachments();
           if(!$message->isSeen()){
-            foreach ($attachments as $attachment) {
+            foreach ($attachments as $attachment) { 
               $data = '';
               $file_name = $attachment->getFilename();
               Log::info($file_name);
@@ -85,33 +87,91 @@ class Kernel extends ConsoleKernel
                   $pdf = $attachment->getContent();
                 }
               }
-              foreach ($destinations as $destination) {
-                $account_mails = Cimail::where('cim_mail',$destination)->get();
-                foreach ($account_mails as $account_mail) {
-                  $url_aux = config('app.advans_apps_url.'.$account_mail->cim_account_prefix);
-                  if($url_aux){
-                    $wsdl = $url_aux.'/pushMail?wsdl';
-                  }
-                  $params = array(
-                      'hash' => 'aW55ZWN0b3JJbWFw',
-                      'bdname' => base64_encode($account_mail->cim_rfc_account.'_'.$account_mail->cim_rfc_client.'_'.$account_mail->cim_account_prefix),
-                      'name' => base64_encode($attachment->getFilename()),
-                      'xml' => $xml,
-                      'pdf' => $pdf
-                  );
-                  try {
-                      $soap = new SoapClient($wsdl);
-                      $data = $soap->__soapCall("addData", $params);
-                      $message->getBodyHtml();
-                  }
-                  catch(Exception $e) {
-                      die($e->getMessage());
+              if($xml != '' || $pdf != ''){
+                foreach ($destinations as $destination) {
+                  $account_mails = Cimail::where('cim_mail',$destination)->get();
+                  foreach ($account_mails as $account_mail) {
+                    $url_aux = config('app.advans_apps_url.'.$account_mail->cim_account_prefix);
+                    if($url_aux){
+                      $wsdl = $url_aux.'/pushMail?wsdl';
+                    }
+                    $params = array(
+                        'hash' => 'aW55ZWN0b3JJbWFw',
+                        'bdname' => base64_encode($account_mail->cim_rfc_account.'_'.$account_mail->cim_rfc_client.'_'.$account_mail->cim_account_prefix),
+                        'name' => base64_encode($attachment->getFilename()),
+                        'xml' => $xml,
+                        'pdf' => $pdf
+                    );
+                    try {
+                        $soap = new SoapClient($wsdl);
+                        $data = $soap->__soapCall("addData", $params);
+                        $message->getBodyHtml();
+                    }
+                    catch(Exception $e) {
+                        die($e->getMessage());
+                    }
                   }
                 }
+              }else{
+                
+                if(strtolower($arr_file_name[count($arr_file_name)-1])=='zip'){
+                  Storage::put($attachment->getFilename(), $attachment->getDecodedContent());
+                  array_push($to_delete_files,$attachment->getFilename());
+                  $path = base_path('storage'.DIRECTORY_SEPARATOR.'app');
+                  Log::info($path);
+                  $zip = zip_open($path.DIRECTORY_SEPARATOR.$attachment->getFilename());
+                  if($zip)
+                  {
+                      while ($zip_entry = zip_read($zip))
+                      {
+                            $xml_zip = '';
+                            $pdf_zip = '';
+                            Log::info($zip_entry);
+                            $arr_file_name_zip = explode('.',zip_entry_name($zip_entry));
+                            Log::info($arr_file_name_zip);
+                            if(count($arr_file_name_zip)>1){
+                              if(strtolower($arr_file_name_zip[count($arr_file_name_zip)-1])=='xml'){
+                                $xml_zip = zip_entry_read($zip_entry);
+                              }
+                              if(strtolower($arr_file_name_zip[count($arr_file_name_zip)-1])=='pdf'){
+                                $pdf_zip = zip_entry_read($zip_entry);
+                              }
+                            }
+
+                           foreach ($destinations as $destination) {
+                              $account_mails = Cimail::where('cim_mail',$destination)->get();
+                              foreach ($account_mails as $account_mail) {
+                                $url_aux = config('app.advans_apps_url.'.$account_mail->cim_account_prefix);
+                                if($url_aux){
+                                  $wsdl = $url_aux.'/pushMail?wsdl';
+                                }
+                                $params = array(
+                                    'hash' => 'aW55ZWN0b3JJbWFw',
+                                    'bdname' => base64_encode($account_mail->cim_rfc_account.'_'.$account_mail->cim_rfc_client.'_'.$account_mail->cim_account_prefix),
+                                    'name' => base64_encode(zip_entry_name($zip_entry)),
+                                    'xml' => base64_encode($xml_zip),
+                                    'pdf' => base64_encode($pdf_zip)
+                                );
+                                try {
+                                    $soap = new SoapClient($wsdl);
+                                    $data = $soap->__soapCall("addData", $params);
+                                    $message->getBodyHtml();
+                                }
+                                catch(Exception $e) {
+                                    die($e->getMessage());
+                                }
+                              }
+                            }
+                      }
+                  }
+                  $zip->close();
+                }
               }
+              
             }
           }          
         }
+        Storage::delete($to_delete_files);
         Log::info('************************************* End Cron *****************************************');
     }
 
