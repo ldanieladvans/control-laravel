@@ -182,11 +182,14 @@
                                         <div class="form-group">
                                             <input placeholder="Contraseña" required="required" type="password" class="form-control" id="password{{Auth::user()->id}}" style="width: 500px;">
                                         </div>
+                                        <div class="form-group">
+                                            <input placeholder="Confirmar Contraseña" required="required" type="password" class="form-control" id="password-confirm{{Auth::user()->id}}" style="width: 500px;">
+                                        </div>
                                     </form>
                                     <div id="result_failure{{Auth::user()->id}}"></div>
                                 </div>
                                 <div class="modal-footer">
-                                    <button type="button" onclick="cleanPassAut({{Auth::user()->id}});" class="btn btn-secondary" id="closepassmodalaut" data-dismiss="modal">Cerrar</button>
+                                    <button type="button" class="btn btn-secondary" id="closepassmodalaut" data-dismiss="modal">Cerrar</button>
                                     <button type="button"  onclick="changePassAut({{Auth::user()->id}});" class="btn btn-primary">Ok</button>
                                 </div>
                             </div>
@@ -412,28 +415,35 @@
 		    	function changePassAut(user){
 		            var CSRF_TOKEN = $('meta[name="csrf-token"]').attr('content');
 		            var passid = "password"+user;
+		            var passconfirmid = "password-confirm"+user;
 		            var password = document.getElementById(passid).value;
+		            var password_confirm = document.getElementById(passconfirmid).value;
 
 		            $('#passmodal-profile-aut').modal('hide');
 		            $('#loadingmodal').modal('show');
 
 		            if(password){
-		                $.ajax({
-		                    url: '/security/user/changepass',
-		                    type: 'POST',
-		                    data: {_token: CSRF_TOKEN,password:password,user:user},
-		                    dataType: 'JSON',
-		                    success: function (data) {
-		                      $('#loadingmodal').modal('hide');
-		                      $('#changepassmodal').modal('show');  
-		                      setTimeout(function() {
-					            window.location.href = window.location.href;
-					          }, 4e3);
-		                    },
-		                    error: function(XMLHttpRequest, textStatus, errorThrown) { 
-		                        $("#result_failure"+user).html('<p><strong>Ocurrió un error: '+errorThrown+'</strong></p>');
-		                    }
-		                });
+		            	if(password==password_confirm){
+		            		$.ajax({
+			                    url: '/security/user/changepass',
+			                    type: 'POST',
+			                    data: {_token: CSRF_TOKEN,password:password,user:user},
+			                    dataType: 'JSON',
+			                    success: function (data) {
+			                      $('#loadingmodal').modal('hide');
+			                      $('#changepassmodal').modal('show');  
+			                      setTimeout(function() {
+						            window.location.href = window.location.href;
+						          }, 4e3);
+			                    },
+			                    error: function(XMLHttpRequest, textStatus, errorThrown) { 
+			                        $("#result_failure"+user).html('<p><strong>Ocurrió un error: '+errorThrown+'</strong></p>');
+			                    }
+			                });
+		            	}else{
+		            		$("#result_failure"+user).html('<p><strong>Las contraseñas no coinciden</strong></p>');
+		            	}
+		                
 		            }else{
 		              $("#result_failure"+user).html('<p><strong>La contraseña es obligatoria</strong></p>');
 		            }        
