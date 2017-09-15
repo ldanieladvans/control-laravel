@@ -95,13 +95,13 @@ class Kernel extends ConsoleKernel
                     if($url_aux){
                       $wsdl = $url_aux.'/pushMail?wsdl';
                     }
-                    if(!base64_decode($xml, true)){
+                    /*if(!base64_decode($xml, true)){
                       $xml = base64_encode($xml).'\n';
                       $xml = $xml.'==';
                     }
                     if(!base64_decode($pdf, true)){
                       $pdf = base64_encode($pdf);
-                    }
+                    }*/
                     Log::info($xml);
                     $params = array(
                         'hash' => 'aW55ZWN0b3JJbWFw',
