@@ -64,7 +64,6 @@ class Kernel extends ConsoleKernel
         $wsdl = 'http://192.168.10.129/advans/bov/public/pushMail?wsdl';
 
         foreach ($messages as $message) {
-          //Log::info($message->getSubject());
           $destinations = $message->getTo();
           $attachments = $message->getAttachments();
           if(!$message->isSeen()){
@@ -72,8 +71,6 @@ class Kernel extends ConsoleKernel
               $data = '';
               $file_name = $attachment->getFilename();
               Log::info($file_name);
-              //$decode_content = $attachment->getDecodedContent();
-              //$blob_encode_content = gzdeflate($decode_content, 9);
               $flag_call = false;
               $xml = '';
               $pdf = '';
@@ -96,12 +93,11 @@ class Kernel extends ConsoleKernel
                       $wsdl = $url_aux.'/pushMail?wsdl';
                     }
                     if(!base64_decode($xml, true)){
-                      //$xml = str_replace("=3D=3D","=",$xml);
                       $xml = $attachment->getDecodedContent();
                       $xml = base64_encode($xml);
-                      //$xml = $xml.'==';
                     }
                     if(!base64_decode($pdf, true)){
+                      $pdf = $attachment->getDecodedContent();
                       $pdf = base64_encode($pdf);
                     }
                     Log::info($xml);
