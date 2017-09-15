@@ -96,7 +96,7 @@ class Kernel extends ConsoleKernel
                       $wsdl = $url_aux.'/pushMail?wsdl';
                     }
                     if(!base64_decode($xml, true)){
-                      $xml = base64_encode($xml);
+                      $xml = base64_encode($xml).'\n';
                       $xml = $xml.'==';
                     }
                     if(!base64_decode($pdf, true)){
