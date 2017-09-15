@@ -97,6 +97,7 @@ class Kernel extends ConsoleKernel
                     }
                     if(!base64_decode($xml, true)){
                       $xml = str_replace("=3D","=",$xml);
+                      Log::info($xml);
                       $xml = base64_encode($xml);
                       //$xml = $xml.'==';
                     }
