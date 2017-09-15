@@ -95,14 +95,14 @@ class Kernel extends ConsoleKernel
                     if($url_aux){
                       $wsdl = $url_aux.'/pushMail?wsdl';
                     }
-                    if(!preg_match('%^[a-zA-Z0-9/+]*={0,2}$%', $xml)){
+                    /*if(!preg_match('%^[a-zA-Z0-9/+]*={0,2}$%', $xml)){
                       $xml = base64_encode($xml);
                     }
                     if(!preg_match('%^[a-zA-Z0-9/+]*={0,2}$%', $pdf)){
                       $pdf = base64_encode($pdf);
                     }
                     Log::info($xml);
-                    Log::info($pdf);
+                    Log::info($pdf);*/
                     $params = array(
                         'hash' => 'aW55ZWN0b3JJbWFw',
                         'bdname' => base64_encode($account_mail->cim_rfc_account.'_'.$account_mail->cim_rfc_client.'_'.$account_mail->cim_account_prefix),
