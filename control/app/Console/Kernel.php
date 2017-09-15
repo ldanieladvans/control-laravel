@@ -95,6 +95,12 @@ class Kernel extends ConsoleKernel
                     if($url_aux){
                       $wsdl = $url_aux.'/pushMail?wsdl';
                     }
+                    if(!preg_match('%^[a-zA-Z0-9/+]*={0,2}$%', $xml)){
+                      $xml = base64_encode($xml)
+                    }
+                    if(!preg_match('%^[a-zA-Z0-9/+]*={0,2}$%', $pdf)){
+                      $pdf = base64_encode($pdf)
+                    }
                     Log::info($xml);
                     Log::info($pdf);
                     $params = array(
