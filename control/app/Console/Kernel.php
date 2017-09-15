@@ -96,14 +96,11 @@ class Kernel extends ConsoleKernel
                       $wsdl = $url_aux.'/pushMail?wsdl';
                     }
                     if(!base64_decode($xml, true)){
-                      Log::info('sssssssssssssssssssssssssssss');
                       $xml = base64_encode($xml);
                     }
                     if(!base64_decode($pdf, true)){
                       $pdf = base64_encode($pdf);
                     }
-                    Log::info($xml);
-                    Log::info($pdf);
                     $params = array(
                         'hash' => 'aW55ZWN0b3JJbWFw',
                         'bdname' => base64_encode($account_mail->cim_rfc_account.'_'.$account_mail->cim_rfc_client.'_'.$account_mail->cim_account_prefix),
