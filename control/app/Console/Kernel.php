@@ -97,7 +97,7 @@ class Kernel extends ConsoleKernel
                     }
                     if(!base64_decode($xml, true)){
                       $xml = base64_encode($xml);
-                      $xml = $xml.'=='
+                      $xml = $xml.'==';
                     }
                     if(!base64_decode($pdf, true)){
                       $pdf = base64_encode($pdf);
