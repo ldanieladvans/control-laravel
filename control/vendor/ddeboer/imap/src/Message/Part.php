@@ -5,6 +5,8 @@ namespace Ddeboer\Imap\Message;
 use Ddeboer\Imap\Parameters;
 use Ddeboer\Transcoder\Transcoder;
 
+use Illuminate\Support\Facades\Log;
+
 /**
  * A message part
  */
@@ -161,6 +163,7 @@ class Part implements \RecursiveIterator
     public function getDecodedContent($keepUnseen = false)
     {
         if (null === $this->decodedContent) {
+            Log::info($this->getEncoding());
             switch ($this->getEncoding()) {
                 case self::ENCODING_BASE64:
                     $this->decodedContent = base64_decode($this->getContent($keepUnseen));
