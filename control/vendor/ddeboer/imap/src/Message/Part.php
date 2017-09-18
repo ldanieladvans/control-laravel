@@ -181,7 +181,7 @@ class Part implements \RecursiveIterator
 
             // If this part is a text part, try to convert its encoding to UTF-8.
             // We don't want to convert an attachment's encoding.
-            if ($this->getType() === self::TYPE_TEXT
+            /*if ($this->getType() === self::TYPE_TEXT
                 && strtolower($this->getCharset()) != 'utf-8'
             ) {
                 Log::info('--------------'.$this->getCharset().'------------------------');
@@ -189,7 +189,7 @@ class Part implements \RecursiveIterator
                     iconv('ASCII', 'UTF-8//IGNORE', $this->decodedContent),
                     $this->getCharset()
                 );
-            }
+            }*/
         }
 
         return $this->decodedContent;
