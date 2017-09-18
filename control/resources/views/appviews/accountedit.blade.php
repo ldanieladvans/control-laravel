@@ -352,11 +352,97 @@
         var today_day = today.getDate();
         
 
-        
+        function calculateDateTl(today_day, cta_periodicity, rowCount){
+            if(rowCount >= 2){
+
+                var inidate = new Date(($('#tabletl1 tbody tr:last td:nth-child(2)').text()).replace('-','/'));
+                inidate = inidate.addDays(1);
+
+                var month = inidate.getMonth() + 1;
+                if(month<10){
+                    month = '0'+month;
+                }
+                var day = inidate.getDate();
+                if(day<10){
+                    day = '0'+day;
+                }
+                var year = inidate.getFullYear();
+
+                val_date_ini = [year, month, day].join('-');
+
+                var enddate = new Date(($('#tabletl1 tbody tr:last td:nth-child(2)').text()).replace('-','/'));
+                //enddate = enddate.addDays(1);
+                enddate.setDate(enddate.getDate()-1);
+                enddate.setMonth(enddate.getMonth() + parseInt(cta_periodicity));
+
+                var month = enddate.getMonth() + 1;
+                if(month<10){
+                    month = '0'+month;
+                }
+                var day = enddate.getDate();
+                if(day<10){
+                    day = '0'+day;
+                }
+                var year = enddate.getFullYear();
+
+                val_date_fin = [year, month, day].join('-');
+
+                var courtdate = new Date(($('#tabletl1 tbody tr:last td:nth-child(3)').text()).replace('-','/'));
+                //courtdate = courtdate.addDays(1);
+                courtdate.setDate(courtdate.getDate()-1);
+                courtdate.setMonth(courtdate.getMonth() + parseInt(cta_periodicity));
+
+                var month = courtdate.getMonth() + 1;
+                if(month<10){
+                    month = '0'+month;
+                }
+                var day = courtdate.getDate();
+                if(day<10){
+                    day = '0'+day;
+                }
+                var year = courtdate.getFullYear();
+
+                val_date_corte = [year, month, day].join('-');
+
+                document.getElementById('acctl_f_ini').min = val_date_ini;
+                document.getElementById('acctl_f_fin').min = val_date_fin;
+                document.getElementById('acctl_f_corte').min = val_date_corte;
+
+            }else{
+
+                if(today_day<10){
+                    today_day = '0'+today_day;
+                }
+                var today_month = today.getMonth()
+                if(today_month<10){
+                    today_month = '0'+today_month;
+                }
+                var today_year = today.getFullYear();
+                console.log(today);
+                document.getElementById('acctl_f_ini').value = [today_year, today_month, today_day].join('-');
+
+
+                var today_end = today.addMonths(parseInt(cta_periodicity));
+                var today_end_day = today_end.getDate();
+                if(today_end_day<10){
+                    today_end_day = '0'+today_end_day;
+                }
+                var today_end_month = today_end.getMonth();
+                if(today_end_month<10){
+                    today_end_month = '0'+today_end_month;
+                }
+                var today_end_year = today_end.getFullYear();
+
+                document.getElementById('acctl_f_fin').value = [today_end_year, today_end_month, today_end_day].join('-');
+                document.getElementById('acctl_f_corte').value = [today_end_year, today_end_month, today_end_day].join('-');
+            }
+        }
 
 
         $('#cta_periodicity').change(function() {
             cta_periodicity = this.value;
+            var aux_today = new Date();
+            calculateDateTl(aux_today.getDate(), cta_periodicity, document.getElementById('tabletl1').rows.length);
         });
 
         $( function() {
@@ -438,8 +524,8 @@
         }
 
         
-
-        if(rowCount >= 2){
+        calculateDateTl(today_day, cta_periodicity, rowCount);
+        /*if(rowCount >= 2){
 
             var inidate = new Date(($('#tabletl1 tbody tr:last td:nth-child(2)').text()).replace('-','/'));
             inidate = inidate.addDays(1);
@@ -521,12 +607,7 @@
 
             document.getElementById('acctl_f_fin').value = [today_end_year, today_end_month, today_end_day].join('-');
             document.getElementById('acctl_f_corte').value = [today_end_year, today_end_month, today_end_day].join('-');
-
-            /*if(account_id){
-                addtl(account_id);
-            }*/
-
-        }
+        }*/
 
         $('#editable-dt1').Tabledit({
             url: '/crudtabledit',
