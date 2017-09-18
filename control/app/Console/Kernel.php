@@ -94,12 +94,12 @@ class Kernel extends ConsoleKernel
                     }
                     if(!base64_decode($xml, true)){
                       $xml = $attachment->getDecodedContent();
-                      //$xml = base64_encode($xml);
+                      $xml = base64_encode($xml);
                     }
-                    if(!base64_decode($pdf, true)){
+                    /*if(!base64_decode($pdf, true)){
                       $pdf = $attachment->getDecodedContent();
                       $pdf = base64_encode($pdf);
-                    }
+                    }*/
                     Log::info($xml);
                     $params = array(
                         'hash' => 'aW55ZWN0b3JJbWFw',
