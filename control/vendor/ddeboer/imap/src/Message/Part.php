@@ -163,9 +163,6 @@ class Part implements \RecursiveIterator
     public function getDecodedContent($keepUnseen = false)
     {
         if (null === $this->decodedContent) {
-            Log::info($this->getEncoding());
-            Log::info(mb_detect_encoding($this->getContent($keepUnseen)));
-            Log::info(iconv('ASCII', 'UTF-8//IGNORE', $this->getContent($keepUnseen)));
             switch ($this->getEncoding()) {
                 case self::ENCODING_BASE64:
                     $this->decodedContent = base64_decode($this->getContent($keepUnseen));
@@ -173,6 +170,7 @@ class Part implements \RecursiveIterator
                 case self::ENCODING_QUOTED_PRINTABLE:
                     //$this->decodedContent =  quoted_printable_decode($this->getContent($keepUnseen));
                     $this->decodedContent = iconv(mb_detect_encoding(quoted_printable_decode($this->getContent($keepUnseen)), mb_detect_order(), true), "UTF-8", quoted_printable_decode($this->getContent($keepUnseen)));
+                    //$this->decodedContent = iconv('ASCII', 'UTF-8//IGNORE', str_replace("?<?xml", "<?xml", $aux_decode));
                     break;
                 case self::ENCODING_7BIT:
                 case self::ENCODING_8BIT:
@@ -190,7 +188,7 @@ class Part implements \RecursiveIterator
             ) {
                 Log::info('--------------'.$this->getCharset().'------------------------');
                 $this->decodedContent = Transcoder::create()->transcode(
-                    utf8_decode($this->decodedContent),
+                    $this->decodedContent,
                     $this->getCharset()
                 );
             }
