@@ -164,6 +164,7 @@ class Part implements \RecursiveIterator
     {
         if (null === $this->decodedContent) {
             Log::info($this->getEncoding());
+            Log::info(mb_detect_encoding($this->getContent($keepUnseen)));
             switch ($this->getEncoding()) {
                 case self::ENCODING_BASE64:
                     $this->decodedContent = base64_decode($this->getContent($keepUnseen));
