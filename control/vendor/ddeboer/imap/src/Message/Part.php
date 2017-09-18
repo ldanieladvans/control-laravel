@@ -187,7 +187,7 @@ class Part implements \RecursiveIterator
             ) {
                 Log::info('--------------'.$this->getCharset().'------------------------');
                 $this->decodedContent = Transcoder::create()->transcode(
-                    utf8_encode($this->decodedContent),
+                    utf8_decode($this->decodedContent),
                     $this->getCharset()
                 );
             }
