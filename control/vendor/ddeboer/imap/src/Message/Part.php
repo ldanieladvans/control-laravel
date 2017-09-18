@@ -169,8 +169,7 @@ class Part implements \RecursiveIterator
                     $this->decodedContent = base64_decode($this->getContent($keepUnseen));
                     break;
                 case self::ENCODING_QUOTED_PRINTABLE:
-                    //$this->decodedContent =  quoted_printable_decode($this->getContent($keepUnseen));
-                    $this->decodedContent =  $this->getContent($keepUnseen);
+                    $this->decodedContent =  iconv('ISO-8859-2', 'UTF-8', quoted_printable_decode($this->getContent($keepUnseen)));
                     break;
                 case self::ENCODING_7BIT:
                 case self::ENCODING_8BIT:
