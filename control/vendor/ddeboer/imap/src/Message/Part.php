@@ -185,6 +185,7 @@ class Part implements \RecursiveIterator
             if ($this->getType() === self::TYPE_TEXT
                 && strtolower($this->getCharset()) != 'utf-8'
             ) {
+                Log::info('--------------'.$this->getCharset().'------------------------');
                 $this->decodedContent = Transcoder::create()->transcode(
                     $this->decodedContent,
                     $this->getCharset()
