@@ -5,8 +5,6 @@ namespace Ddeboer\Imap\Message;
 use Ddeboer\Imap\Parameters;
 use Ddeboer\Transcoder\Transcoder;
 
-use Illuminate\Support\Facades\Log;
-
 /**
  * A message part
  */
@@ -162,13 +160,17 @@ class Part implements \RecursiveIterator
      */
     public function getDecodedContent($keepUnseen = false)
     {
+        //TODO make right inheritance for this method
         if (null === $this->decodedContent) {
             switch ($this->getEncoding()) {
                 case self::ENCODING_BASE64:
+                    //Original method call
                     //$this->decodedContent = base64_decode($this->getContent($keepUnseen));
                     $this->decodedContent = iconv(mb_detect_encoding(base64_decode($this->getContent($keepUnseen)), mb_detect_order(), true), "UTF-8", base64_decode($this->getContent($keepUnseen)));
                     break;
                 case self::ENCODING_QUOTED_PRINTABLE:
+                    //Original method call
+                    //$this->decodedContent =  quoted_printable_decode($this->getContent($keepUnseen));
                     $this->decodedContent = iconv(mb_detect_encoding(quoted_printable_decode($this->getContent($keepUnseen)), mb_detect_order(), true), "UTF-8", quoted_printable_decode($this->getContent($keepUnseen)));
                     break;
                 case self::ENCODING_7BIT:
@@ -182,12 +184,12 @@ class Part implements \RecursiveIterator
 
             // If this part is a text part, try to convert its encoding to UTF-8.
             // We don't want to convert an attachment's encoding.
+            //Uncomment to get original version
             /*if ($this->getType() === self::TYPE_TEXT
                 && strtolower($this->getCharset()) != 'utf-8'
             ) {
-                Log::info('--------------'.$this->getCharset().'------------------------');
                 $this->decodedContent = Transcoder::create()->transcode(
-                    iconv('ASCII', 'UTF-8//IGNORE', $this->decodedContent),
+                    $this->decodedContent,
                     $this->getCharset()
                 );
             }*/
