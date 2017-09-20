@@ -255,6 +255,18 @@ class ApiserviceController extends Controller
     }
 
 
+    public function generateRandStr_md5($length) {
+        $randStr = strtoupper(md5(rand(0, 1000000))); 
+        $rand_start = rand(5,strlen($randStr)); 
+        if($rand_start+$length > strlen($randStr)) {
+               $rand_start -= $length; 
+        } if($rand_start == strlen($randStr)) {
+               $rand_start = 1; 
+        }
+        $randStr = strtoupper(substr(md5($randStr), $rand_start, $length));
+        return $randStr; 
+    }
+
     public function mailAccount(Request $request)
     {
         $alldata = $request->all();
@@ -275,7 +287,8 @@ class ApiserviceController extends Controller
                 if(array_key_exists('account_prefix',$alldata)){
                     $account_mails->cim_account_prefix = $alldata['account_prefix'];
                 }
-                $uniq_id = 'boveda-'.uniqid().'@advans.mx';
+                //$uniq_id = 'boveda-'.uniqid().'@advans.mx';
+                $uniq_id = 'boveda-'.$this->generateRandStr_md5(8).'@advans.mx';
                 $account_mails->cim_mail = $uniq_id;
                 $account = Account::where('cta_num',$alldata['rfc_account'])->get();
                 if(count($account) > 0){
