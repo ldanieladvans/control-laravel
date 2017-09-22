@@ -94,10 +94,11 @@ class Kernel extends ConsoleKernel
                     $data_content = $attachment->getContent();
                     Log::info($data_content);
                     if(!base64_decode($data_content, true)){
+                        Log::info('!!!!!!!!!!! Entro a If base64_decode !!!!!!!!');
                         $data_content = $attachment->getDecodedContent();
                         $data_content = base64_encode($data_content);
                       }
-                    Log::info($data_content);
+                    Log::info(base64_decode($data_content));
                     if(array_key_exists($file_name,$pair_xml_pdf_list)){
                       $pair_xml_pdf_list[$file_name]['xml'] = $data_content;
                     }else{
