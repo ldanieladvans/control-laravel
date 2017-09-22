@@ -65,6 +65,9 @@ class Kernel extends ConsoleKernel
         $pair_xml_pdf_list = array();
         $to_delete_files = array();
         $account_mail = false;
+        $cim_rfc_account = '';
+        $cim_rfc_client = '';
+        $cim_account_prefix = '';
         foreach ($messages as $message) {
           if(!$message->isSeen()){
             $destinations = $message->getTo();
@@ -73,6 +76,9 @@ class Kernel extends ConsoleKernel
               $account_mail = Cimail::where('cim_mail',$destination)->get();
               if(count($account_mail) > 0){
                 $account_mail = $account_mail[0];
+                $cim_rfc_account = $account_mail->cim_rfc_account;
+                $cim_rfc_client = $account_mail->cim_rfc_client;
+                $cim_account_prefix = $account_mail->cim_account_prefix;
                 foreach ($attachments as $attachment){
                   $file_type = '';
                   $complete_file_name = strtolower($attachment->getFilename());
@@ -145,15 +151,15 @@ class Kernel extends ConsoleKernel
             }
           }          
         }
-        if($account_mail){
-          $url_aux = config('app.advans_apps_url.'.$account_mail->cim_account_prefix);
+        if($account_mail!=false){
+          $url_aux = config('app.advans_apps_url.'.$cim_account_prefix);
           if($url_aux){
             $wsdl = $url_aux.'/pushMail?wsdl';
           }
           foreach ($pair_xml_pdf_list as $key => $value) {
             $params = array(
                 'hash' => 'aW55ZWN0b3JJbWFw',
-                'bdname' => base64_encode($account_mail->cim_rfc_account.'_'.$account_mail->cim_rfc_client.'_'.$account_mail->cim_account_prefix),
+                'bdname' => base64_encode($cim_rfc_account.'_'.$cim_rfc_client.'_'.$cim_account_prefix),
                 'name' => base64_encode($key),
                 'xml' => base64_encode($value['xml']),
                 'pdf' => base64_encode($value['pdf'])
