@@ -170,8 +170,8 @@ class Kernel extends ConsoleKernel
                 'hash' => 'aW55ZWN0b3JJbWFw',
                 'bdname' => base64_encode($cim_rfc_account.'_'.$cim_rfc_client.'_'.$cim_account_prefix),
                 'name' => base64_encode($key),
-                'xml' => base64_encode($value['xml']),
-                'pdf' => base64_encode($value['pdf'])
+                'xml' => $value['xml'],
+                'pdf' => $value['pdf']
             );
             try {
                 $context = stream_context_create(array(
