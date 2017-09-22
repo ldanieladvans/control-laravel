@@ -73,14 +73,20 @@ class Kernel extends ConsoleKernel
               Log::info($file_name);
               $flag_call = false;
               $xml = '';
+              $xml_bool = false;
               $pdf = '';
+              $pdf_bool = false;
               $arr_file_name = explode('.',$file_name);
               if(count($arr_file_name)>1){
                 $flag_call = true;
                 if(strtolower($arr_file_name[count($arr_file_name)-1])=='xml'){
+                  Log::info('entro a if xml');
+                  $xml_bool = true;
                   $xml = $attachment->getContent();
                 }
                 if(strtolower($arr_file_name[count($arr_file_name)-1])=='pdf'){
+                  Log::info('entro a if pdf');
+                  $pdf_bool = true;
                   $pdf = $attachment->getContent();
                 }
               }
@@ -92,24 +98,36 @@ class Kernel extends ConsoleKernel
                     if($url_aux){
                       $wsdl = $url_aux.'/pushMail?wsdl';
                     }
-                    if(!base64_decode($xml, true)){
-                      $xml = $attachment->getDecodedContent();
-                      $xml = base64_encode($xml);
+                    if($xml_bool){
+                        if(!base64_decode($xml, true)){
+                          $xml = $attachment->getDecodedContent();
+                          $xml = base64_encode($xml);
+                        }
                     }
-                    /*if(!base64_decode($pdf, true)){
-                      $pdf = $attachment->getDecodedContent();
-                      $pdf = base64_encode($pdf);
-                    }*/
+                    if($pdf_bool){
+                        if(!base64_decode($pdf, true)){
+                          $pdf = $attachment->getDecodedContent();
+                          $pdf = base64_encode($pdf);
+                        }
+                    }
                     Log::info($xml);
+                    Log::info($pdf);
                     $params = array(
                         'hash' => 'aW55ZWN0b3JJbWFw',
                         'bdname' => base64_encode($account_mail->cim_rfc_account.'_'.$account_mail->cim_rfc_client.'_'.$account_mail->cim_account_prefix),
                         'name' => base64_encode($attachment->getFilename()),
                         'xml' => $xml,
-                        'pdf' => $pdf
+                        'pdf' => $xml
                     );
                     try {
-                        $soap = new SoapClient($wsdl);
+                        $context = stream_context_create(array(
+                        'ssl' => array(
+                        'verify_peer' => false,
+                        'verify_peer_name' => false,
+                        'allow_self_signed' => true
+                        )
+                        ));
+                        $soap = new SoapClient($wsdl,array('stream_context' => $context));
                         $data = $soap->__soapCall("addData", $params);
                         $message->getBodyHtml();
                     }

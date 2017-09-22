@@ -42,7 +42,8 @@ class Controller extends BaseController
 
     public function getAccessToken($control_app='ctac'){
         $url_aux = config('app.advans_apps_url.'.$control_app);
-        $http = new \GuzzleHttp\Client();
+        //TODO Fix this. Put right cert
+        $http = new \GuzzleHttp\Client(['verify' => false]);
         $response = $http->post($url_aux.'/oauth/token', [
             'form_params' => config('app.advans_apps_security.'.$control_app),
         ]);
@@ -53,7 +54,8 @@ class Controller extends BaseController
 
 
     public function getAppService($access_token,$app_service,$arrayparams,$control_app='ctac'){
-        $http = new \GuzzleHttp\Client();
+        //TODO Fix this. Put right cert
+        $http = new \GuzzleHttp\Client(['verify' => false]);
 
         $logued_user = Auth::user();
         if($logued_user){

@@ -6,12 +6,12 @@ return [
     //Advans Apps
     'advans_apps' => ['cont'=>'Contabilidad','bov'=>'Boveda','nom'=>'Nomina','pld'=>'PLD','cc'=>'Control de Calidad','not'=>'Notaria','fact'=>'Facturacion Electronica'],
 
-    'advans_apps_url' => ['ctac'=>'http://advans.cuenta.mx','cont'=>'http://advans.cuenta.mx','bov'=>'http://appbov.advans.mx','nom'=>'Nómina','pld'=>'PLD','cc'=>'Control de Calidad','not'=>'Notaría'],
+    'advans_apps_url' => ['ctac'=>'https://appcuenta.advans.mx','cont'=>'https://appcont.advans.mx','bov'=>'https://appbov.advans.mx','nom'=>'Nómina','pld'=>'PLD','cc'=>'Control de Calidad','not'=>'Notaría'],
 
     'advans_apps_security' => ['ctac'=> [
                                     'grant_type' => 'password',
-                                    'client_id' => '1',
-                                    'client_secret' => 'ndjP8stWAebFWRVIwZAjZKACT2S3ukfEDMW5LueA',
+                                    'client_id' => '5',
+                                    'client_secret' => 'V5AirBuXx0YhdE7NnRsXT3ssSAScN2H7RIt1VW55',
                                     'username' => 'usuario.api@advans.mx',
                                     'password' => 'Usuarioapi123*',
                                     'scope' => '*',
