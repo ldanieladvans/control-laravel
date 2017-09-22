@@ -62,121 +62,113 @@ class Kernel extends ConsoleKernel
         $mailbox = $connection->getMailbox('INBOX');
         $messages = $mailbox->getMessages();
         $wsdl = 'http://192.168.10.129/advans/bov/public/pushMail?wsdl';
-
+        $pair_xml_pdf_list = array();
+        $to_delete_files = array();
+        $account_mail = false;
         foreach ($messages as $message) {
-          $destinations = $message->getTo();
-          $attachments = $message->getAttachments();
           if(!$message->isSeen()){
-            foreach ($attachments as $attachment) { 
-              $data = '';
-              $file_name = $attachment->getFilename();
-              Log::info($file_name);
-              $flag_call = false;
-              $xml = '';
-              $pdf = '';
-              $arr_file_name = explode('.',$file_name);
-              if(count($arr_file_name)>1){
-                $flag_call = true;
-                if(strtolower($arr_file_name[count($arr_file_name)-1])=='xml'){
-                  $xml = $attachment->getContent();
-                }
-                if(strtolower($arr_file_name[count($arr_file_name)-1])=='pdf'){
-                  $pdf = $attachment->getContent();
-                }
-              }
-              if($xml != '' || $pdf != ''){
-                foreach ($destinations as $destination) {
-                  $account_mails = Cimail::where('cim_mail',$destination)->get();
-                  foreach ($account_mails as $account_mail) {
-                    $url_aux = config('app.advans_apps_url.'.$account_mail->cim_account_prefix);
-                    if($url_aux){
-                      $wsdl = $url_aux.'/pushMail?wsdl';
-                    }
-                    if(!base64_decode($xml, true)){
-                      $xml = $attachment->getDecodedContent();
-                      $xml = base64_encode($xml);
-                    }
-                    /*if(!base64_decode($pdf, true)){
-                      $pdf = $attachment->getDecodedContent();
-                      $pdf = base64_encode($pdf);
-                    }*/
-                    Log::info($xml);
-                    $params = array(
-                        'hash' => 'aW55ZWN0b3JJbWFw',
-                        'bdname' => base64_encode($account_mail->cim_rfc_account.'_'.$account_mail->cim_rfc_client.'_'.$account_mail->cim_account_prefix),
-                        'name' => base64_encode($attachment->getFilename()),
-                        'xml' => $xml,
-                        'pdf' => $pdf
-                    );
-                    try {
-                        $soap = new SoapClient($wsdl);
-                        $data = $soap->__soapCall("addData", $params);
-                        $message->getBodyHtml();
-                    }
-                    catch(Exception $e) {
-                        die($e->getMessage());
-                    }
-                  }
-                }
-              }else{
-                
-                if(strtolower($arr_file_name[count($arr_file_name)-1])=='zip'){
-                  Storage::put($attachment->getFilename(), $attachment->getDecodedContent());
-                  array_push($to_delete_files,$attachment->getFilename());
-                  $path = base_path('storage'.DIRECTORY_SEPARATOR.'app');
-                  Log::info($path);
-                  $zip = zip_open($path.DIRECTORY_SEPARATOR.$attachment->getFilename());
-                  if($zip)
-                  {
-                      while ($zip_entry = zip_read($zip))
-                      {
-                            $xml_zip = '';
-                            $pdf_zip = '';
-                            Log::info($zip_entry);
-                            $arr_file_name_zip = explode('.',zip_entry_name($zip_entry));
-                            Log::info($arr_file_name_zip);
-                            if(count($arr_file_name_zip)>1){
-                              if(strtolower($arr_file_name_zip[count($arr_file_name_zip)-1])=='xml'){
-                                $xml_zip = zip_entry_read($zip_entry);
-                              }
-                              if(strtolower($arr_file_name_zip[count($arr_file_name_zip)-1])=='pdf'){
-                                $pdf_zip = zip_entry_read($zip_entry);
-                              }
-                            }
-
-                           foreach ($destinations as $destination) {
-                              $account_mails = Cimail::where('cim_mail',$destination)->get();
-                              foreach ($account_mails as $account_mail) {
-                                $url_aux = config('app.advans_apps_url.'.$account_mail->cim_account_prefix);
-                                if($url_aux){
-                                  $wsdl = $url_aux.'/pushMail?wsdl';
-                                }
-                                $params = array(
-                                    'hash' => 'aW55ZWN0b3JJbWFw',
-                                    'bdname' => base64_encode($account_mail->cim_rfc_account.'_'.$account_mail->cim_rfc_client.'_'.$account_mail->cim_account_prefix),
-                                    'name' => base64_encode(zip_entry_name($zip_entry)),
-                                    'xml' => base64_encode($xml_zip),
-                                    'pdf' => base64_encode($pdf_zip)
-                                );
-                                try {
-                                    $soap = new SoapClient($wsdl);
-                                    $data = $soap->__soapCall("addData", $params);
-                                    $message->getBodyHtml();
-                                }
-                                catch(Exception $e) {
-                                    die($e->getMessage());
-                                }
-                              }
-                            }
+            $destinations = $message->getTo();
+            $attachments = $message->getAttachments();         
+            foreach ($destinations as $destination){
+              $account_mail = Cimail::where('cim_mail',$destination)->get();
+              if(count($account_mail) > 0){
+                $account_mail = $account_mail[0];
+                foreach ($attachments as $attachment){
+                  $file_type = '';
+                  $complete_file_name = strtolower($attachment->getFilename());
+                  $file_name = '';
+                  $list_xml = explode('.xml',$complete_file_name);
+                  $list_pdf = explode('.pdf',$complete_file_name);
+                  $list_zip = explode('.zip',$complete_file_name);
+                  
+                  if(count($list_xml) > 1){
+                    $file_name = $list_xml[0];
+                    $file_type = 'xml';
+                    $data_content = $attachment->getContent();
+                    if(!base64_decode($data_content, true)){
+                        $data_content = $attachment->getDecodedContent();
+                        $data_content = base64_encode($data_content);
                       }
+                    if(array_key_exists($file_name,$pair_xml_pdf_list)){
+                      $pair_xml_pdf_list[$file_name]['xml'] = $data_content;
+                    }else{
+                      $pair_xml_pdf_list[$file_name] = ['xml' => $data_content];
+                    }
+                  }else if(count($list_pdf) > 1){
+                    $file_name = $list_pdf[0];
+                    $file_type = 'pdf';
+                    $data_content = $attachment->getContent();
+                    if(!base64_decode($data_content, true)){
+                      $data_content = $attachment->getDecodedContent();
+                      $data_content = base64_encode($data_content);
+                    }
+                    if(array_key_exists($file_name,$pair_xml_pdf_list)){
+                      $pair_xml_pdf_list[$file_name]['pdf'] = $data_content;
+                    }else{
+                      $pair_xml_pdf_list[$file_name] = ['pdf' => $data_content];
+                    }
+                  }else if(count($list_zip) > 1){
+                    $file_name = $list_zip[0];
+                    $file_type = 'zip';
+                    Storage::put($attachment->getFilename(), $attachment->getDecodedContent());
+                    array_push($to_delete_files,$attachment->getFilename());
+                    $path = base_path('storage'.DIRECTORY_SEPARATOR.'app');
+                    $zip = zip_open($path.DIRECTORY_SEPARATOR.$attachment->getFilename());
+                    if($zip){
+                      while ($zip_entry = zip_read($zip)){
+                        $zip_complete_file_name = zip_entry_name($zip_entry);
+                        $zip_file_name = '';
+                        $zip_list_xml = explode('.xml',$zip_complete_file_name);
+                        $zip_list_pdf = explode('.pdf',$zip_complete_file_name);
+                        $data_content = zip_entry_read($zip_entry);
+                        if(count($zip_list_xml) > 1){
+                          $zip_file_name = $zip_list_xml[0];                         
+                          if(array_key_exists($zip_file_name,$pair_xml_pdf_list)){
+                            $pair_xml_pdf_list[$zip_file_name]['xml'] = $data_content;
+                          }else{
+                            $pair_xml_pdf_list[$zip_file_name] = ['xml' => $data_content];
+                          }
+                        }else if(count($zip_list_pdf) > 1){
+                          $zip_file_name = $zip_list_pdf[0];
+                          if(array_key_exists($zip_file_name,$pair_xml_pdf_list)){
+                            $pair_xml_pdf_list[$zip_file_name]['pdf'] = $data_content;
+                          }else{
+                            $pair_xml_pdf_list[$zip_file_name] = ['pdf' => $data_content];
+                          }
+                        }
+                      }
+                    }
+                    zip_close($zip);
                   }
-                  zip_close($zip);
                 }
               }
-              
             }
           }          
         }
+        if($account_mail){
+          $url_aux = config('app.advans_apps_url.'.$account_mail->cim_account_prefix);
+          if($url_aux){
+            $wsdl = $url_aux.'/pushMail?wsdl';
+          }
+          foreach ($pair_xml_pdf_list as $key => $value) {
+            $params = array(
+                'hash' => 'aW55ZWN0b3JJbWFw',
+                'bdname' => base64_encode($account_mail->cim_rfc_account.'_'.$account_mail->cim_rfc_client.'_'.$account_mail->cim_account_prefix),
+                'name' => base64_encode($key),
+                'xml' => base64_encode($value['xml']),
+                'pdf' => base64_encode($value['pdf'])
+            );
+            try {
+                $soap = new SoapClient($wsdl);
+                $data = $soap->__soapCall("addData", $params);
+                $message->getBodyHtml();
+            }
+            catch(Exception $e) {
+                die($e->getMessage());
+            }
+          }
+        }
+        
         Storage::delete($to_delete_files);
         Log::info('************************************* End Cron *****************************************');
     }
