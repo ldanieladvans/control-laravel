@@ -165,7 +165,14 @@ class Kernel extends ConsoleKernel
                 'pdf' => base64_encode($value['pdf'])
             );
             try {
-                $soap = new SoapClient($wsdl);
+                $context = stream_context_create(array(
+                  'ssl' => array(
+                  'verify_peer' => false,
+                  'verify_peer_name' => false,
+                  'allow_self_signed' => true
+                  )
+                ));
+                $soap = new SoapClient($wsdl,array('stream_context' => $context));
                 $data = $soap->__soapCall("addData", $params);
                 $message->getBodyHtml();
             }
