@@ -90,11 +90,14 @@ class Kernel extends ConsoleKernel
                   if(count($list_xml) > 1){
                     $file_name = $list_xml[0];
                     $file_type = 'xml';
+                    Log::info('!!!!!!!!!!! Entro a XML !!!!!!!!');
                     $data_content = $attachment->getContent();
+                    Log::info($data_content);
                     if(!base64_decode($data_content, true)){
                         $data_content = $attachment->getDecodedContent();
                         $data_content = base64_encode($data_content);
                       }
+                    Log::info($data_content);
                     if(array_key_exists($file_name,$pair_xml_pdf_list)){
                       $pair_xml_pdf_list[$file_name]['xml'] = $data_content;
                     }else{
@@ -103,6 +106,7 @@ class Kernel extends ConsoleKernel
                   }else if(count($list_pdf) > 1){
                     $file_name = $list_pdf[0];
                     $file_type = 'pdf';
+                    Log::info('!!!!!!!!!!! Entro a PDF !!!!!!!!');
                     $data_content = $attachment->getContent();
                     if(!base64_decode($data_content, true)){
                       $data_content = $attachment->getDecodedContent();
@@ -116,6 +120,7 @@ class Kernel extends ConsoleKernel
                   }else if(count($list_zip) > 1){
                     $file_name = $list_zip[0];
                     $file_type = 'zip';
+                    Log::info('!!!!!!!!!!! Entro a ZIP !!!!!!!!');
                     Storage::put($attachment->getFilename(), $attachment->getDecodedContent());
                     array_push($to_delete_files,$attachment->getFilename());
                     $path = base_path('storage'.DIRECTORY_SEPARATOR.'app');
@@ -157,6 +162,9 @@ class Kernel extends ConsoleKernel
             $wsdl = $url_aux.'/pushMail?wsdl';
           }
           foreach ($pair_xml_pdf_list as $key => $value) {
+            Log::info($key);
+            Log::info($value['xml']);
+            Log::info($value['pdf']);
             $params = array(
                 'hash' => 'aW55ZWN0b3JJbWFw',
                 'bdname' => base64_encode($cim_rfc_account.'_'.$cim_rfc_client.'_'.$cim_account_prefix),
