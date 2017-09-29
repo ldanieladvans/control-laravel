@@ -794,6 +794,9 @@ class AccountController extends Controller
                     $arrayparams['rfc_nombrebd'] = $cta_obj->cta_num;
                     $arrayparams['account_id'] = $app_cta->id;
                     $arrayparams['apps_cta'] = json_encode([['app_cod'=>$appc->app_code,'app_nom'=>$appc->app_nom,'app_insts'=>$app_cta->appcta_rfc,'app_megs'=>$app_cta->appcta_gig,'app_estado'=>'Prueba']]);
+                    if($cta_obj->cta_type=='single'){
+                        $arrayparams['gen_sol'] = true;
+                    }
                     if($cta_obj->cta_fecha){
                         $acces_vars = $this->getAccessToken();
                         $service_response = $this->getAppService($acces_vars['access_token'],'addapp',$arrayparams,'ctac');
