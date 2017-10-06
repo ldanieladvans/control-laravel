@@ -130,7 +130,7 @@ class Kernel extends ConsoleKernel
                     Log::info($path);
                     Log::info($zip);
                     Log::info($attachment->getFilename());
-                    Log::info($attachment->getDecodedContent());
+                    Log::info($attachment->getContent());
                     if($zip){
                       while ($zip_entry = zip_read($zip)){
                         Log::info($zip_entry);
