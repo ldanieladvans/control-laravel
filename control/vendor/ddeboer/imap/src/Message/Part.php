@@ -168,7 +168,7 @@ class Part implements \RecursiveIterator
                     $aux_file_name = $this->getFilename();
                     $aux_list_zip = explode('.zip',$aux_file_name);
                     Log::info($aux_list_zip);
-                    if(count($list_zip) > 1){
+                    if(count($aux_list_zip) > 1){
                         //Original method call
                         Log::info(1);
                         $this->decodedContent = base64_decode($this->getContent($keepUnseen));
