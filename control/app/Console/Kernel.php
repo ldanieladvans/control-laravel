@@ -122,7 +122,8 @@ class Kernel extends ConsoleKernel
                     $file_name = $list_zip[0];
                     $file_type = 'zip';
                     Log::info('!!!!!!!!!!! Entro a ZIP !!!!!!!!');
-                    Storage::disk('local')->($attachment->getFilename(), $attachment->getDecodedContent());
+                    Storage::disk('local')->put($attachment->getFilename(), $attachment->getDecodedContent());
+
                     array_push($to_delete_files,$attachment->getFilename());
                     $path = base_path('storage'.DIRECTORY_SEPARATOR.'app');
                     $zip = zip_open($path.DIRECTORY_SEPARATOR.$attachment->getFilename());
