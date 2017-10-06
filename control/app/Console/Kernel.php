@@ -126,8 +126,11 @@ class Kernel extends ConsoleKernel
                     array_push($to_delete_files,$attachment->getFilename());
                     $path = base_path('storage'.DIRECTORY_SEPARATOR.'app');
                     $zip = zip_open($path.DIRECTORY_SEPARATOR.$attachment->getFilename());
+                    Log::info($path);
+                    Log::info($zip);
                     if($zip){
                       while ($zip_entry = zip_read($zip)){
+                        Log::info($zip_entry);
                         $zip_complete_file_name = zip_entry_name($zip_entry);
                         $zip_file_name = '';
                         $zip_list_xml = explode('.xml',$zip_complete_file_name);
