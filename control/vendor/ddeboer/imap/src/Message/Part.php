@@ -163,16 +163,16 @@ class Part implements \RecursiveIterator
     {
         //TODO make right inheritance for this method
         if (null === $this->decodedContent) {
-            Log::info($this->getEncoding());
-            Log::info($this->getFilename());
             switch ($this->getEncoding()) {
                 case self::ENCODING_BASE64:
                     $aux_file_name = $this->getFilename();
                     $aux_list_zip = explode('.zip',$aux_file_name);
                     if(count($list_zip) > 1){
                         //Original method call
+                        Log::info(1);
                         $this->decodedContent = base64_decode($this->getContent($keepUnseen));
                     }else{
+                        Log::info(2);
                         $this->decodedContent = iconv(mb_detect_encoding(base64_decode($this->getContent($keepUnseen)), mb_detect_order(), true), "UTF-8", base64_decode($this->getContent($keepUnseen)));
                     }
                     
