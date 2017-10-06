@@ -167,6 +167,7 @@ class Part implements \RecursiveIterator
                 case self::ENCODING_BASE64:
                     $aux_file_name = $this->getFilename();
                     $aux_list_zip = explode('.zip',$aux_file_name);
+                    Log::info($aux_list_zip);
                     if(count($list_zip) > 1){
                         //Original method call
                         Log::info(1);
