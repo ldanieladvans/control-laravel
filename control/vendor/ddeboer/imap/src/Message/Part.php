@@ -167,9 +167,15 @@ class Part implements \RecursiveIterator
             Log::info($this->getFilename());
             switch ($this->getEncoding()) {
                 case self::ENCODING_BASE64:
-                    //Original method call
-                    //$this->decodedContent = base64_decode($this->getContent($keepUnseen));
-                    $this->decodedContent = iconv(mb_detect_encoding(base64_decode($this->getContent($keepUnseen)), mb_detect_order(), true), "UTF-8", base64_decode($this->getContent($keepUnseen)));
+                    $aux_file_name = $this->getFilename();
+                    $aux_list_zip = explode('.zip',$aux_file_name);
+                    if(count($list_zip) > 1){
+                        //Original method call
+                        $this->decodedContent = base64_decode($this->getContent($keepUnseen));
+                    }else{
+                        $this->decodedContent = iconv(mb_detect_encoding(base64_decode($this->getContent($keepUnseen)), mb_detect_order(), true), "UTF-8", base64_decode($this->getContent($keepUnseen)));
+                    }
+                    
                     break;
                 case self::ENCODING_QUOTED_PRINTABLE:
                     //Original method call
