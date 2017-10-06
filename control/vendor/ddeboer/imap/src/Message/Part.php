@@ -164,6 +164,7 @@ class Part implements \RecursiveIterator
         //TODO make right inheritance for this method
         if (null === $this->decodedContent) {
             Log::info($this->getEncoding());
+            Log::info($this->getFilename());
             switch ($this->getEncoding()) {
                 case self::ENCODING_BASE64:
                     //Original method call
