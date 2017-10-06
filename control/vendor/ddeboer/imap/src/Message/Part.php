@@ -4,6 +4,7 @@ namespace Ddeboer\Imap\Message;
 
 use Ddeboer\Imap\Parameters;
 use Ddeboer\Transcoder\Transcoder;
+use Illuminate\Support\Facades\Log;
 
 /**
  * A message part
@@ -162,6 +163,7 @@ class Part implements \RecursiveIterator
     {
         //TODO make right inheritance for this method
         if (null === $this->decodedContent) {
+            Log::info($this->getEncoding());
             switch ($this->getEncoding()) {
                 case self::ENCODING_BASE64:
                     //Original method call
