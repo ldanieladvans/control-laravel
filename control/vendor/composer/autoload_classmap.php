@@ -3823,6 +3823,7 @@ return array(
     'TijsVerkoyen\\CssToInlineStyles\\Css\\Property\\Property' => $vendorDir . '/tijsverkoyen/css-to-inline-styles/src/Css/Property/Property.php',
     'TijsVerkoyen\\CssToInlineStyles\\Css\\Rule\\Processor' => $vendorDir . '/tijsverkoyen/css-to-inline-styles/src/Css/Rule/Processor.php',
     'TijsVerkoyen\\CssToInlineStyles\\Css\\Rule\\Rule' => $vendorDir . '/tijsverkoyen/css-to-inline-styles/src/Css/Rule/Rule.php',
+    'UpdateDomFields' => $baseDir . '/database/migrations/2017_10_09_110850_update_dom_fields.php',
     'Webmozart\\Assert\\Assert' => $vendorDir . '/webmozart/assert/src/Assert.php',
     'XdgBaseDir\\Xdg' => $vendorDir . '/dnoegel/php-xdg-base-dir/src/Xdg.php',
     'Zend\\Diactoros\\AbstractSerializer' => $vendorDir . '/zendframework/zend-diactoros/src/AbstractSerializer.php',

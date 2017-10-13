@@ -17,15 +17,15 @@ class CreateDom extends Migration
             $table->increments('id');
             $table->timestamps();
             //Added
-            $table->string('dom_calle',25);
-            $table->string('dom_numext',10)->nullable();
-            $table->string('dom_numint',10)->nullable();
-            $table->string('dom_col',30)->nullable();
-            $table->string('dom_ciudad',25)->nullable();
-            $table->string('dom_munic',25)->nullable();
-            $table->string('dom_estado',25)->nullable();
-            $table->string('dom_pais',25)->nullable();
-            $table->string('dom_cp',10)->nullable();
+            $table->string('dom_calle',255)->nullable();
+            $table->string('dom_numext',255)->nullable();
+            $table->string('dom_numint',255)->nullable();
+            $table->string('dom_col',255)->nullable();
+            $table->string('dom_ciudad',255)->nullable();
+            $table->string('dom_munic',255)->nullable();
+            $table->string('dom_estado',255)->nullable();
+            $table->string('dom_pais',255)->nullable();
+            $table->string('dom_cp',255)->nullable();
         });
     }
 
