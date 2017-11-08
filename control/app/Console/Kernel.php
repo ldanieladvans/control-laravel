@@ -173,8 +173,9 @@ class Kernel extends ConsoleKernel
                     array_push($to_delete_files,$attachment->getFilename());
                     $path = base_path('storage'.DIRECTORY_SEPARATOR.'app');
 
-                    $uzip = $this->unzip($path.DIRECTORY_SEPARATOR.$attachment->getFilename());
-                    Log::info($uzip);
+                    //$uzip = $this->unzip($path.DIRECTORY_SEPARATOR.$attachment->getFilename());
+                    //Log::info($uzip);
+                    exec('unzip '.$path.DIRECTORY_SEPARATOR.$attachment->getFilename());
                     Log::info('Hereeeeeeeeeeeeeeeeeeee');
 
                     /*$zip = zip_open($path.DIRECTORY_SEPARATOR.$attachment->getFilename());
