@@ -197,7 +197,7 @@ class Kernel extends ConsoleKernel
           }
         }
         
-        Storage::delete($to_delete_files);
+        //Storage::delete($to_delete_files);
         Log::info('************************************* End Cron *****************************************');
     }
 
