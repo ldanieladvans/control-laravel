@@ -126,7 +126,16 @@ class Kernel extends ConsoleKernel
 
                     array_push($to_delete_files,$attachment->getFilename());
                     $path = base_path('storage'.DIRECTORY_SEPARATOR.'app');
-                    $zip = zip_open($path.DIRECTORY_SEPARATOR.$attachment->getFilename());
+
+                    $zip_obj = new ZipArchive;
+                    $res = $zip->open($path.DIRECTORY_SEPARATOR.$attachment->getFilename());
+                    if ($res === TRUE) {
+                      // extract it to the path we determined above
+                      $zip->extractTo($path);
+                      $zip->close();
+                      Log::info('Hereeeeeeeeeeeeeeeeeeee');
+                    }
+                    /*$zip = zip_open($path.DIRECTORY_SEPARATOR.$attachment->getFilename());
                     if($zip){
                       while ($zip_entry = zip_read($zip)){
                         $zip_complete_file_name = zip_entry_name($zip_entry);
@@ -156,7 +165,7 @@ class Kernel extends ConsoleKernel
                         }
                       }
                     }
-                    zip_close($zip);
+                    zip_close($zip);*/
                   }
                 }
               }
