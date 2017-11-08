@@ -49,6 +49,51 @@ class Kernel extends ConsoleKernel
         Log::info('************************************* End Cron *****************************************');
     }
 
+
+    function unzip($file){
+
+        $zip=zip_open(realpath(".")."/".$file);
+        if(!$zip) {return("Unable to proccess file '{$file}'");}
+
+        $e='';
+
+        while($zip_entry=zip_read($zip)) {
+           $zdir=dirname(zip_entry_name($zip_entry));
+           $zname=zip_entry_name($zip_entry);
+
+           if(!zip_entry_open($zip,$zip_entry,"r")) {$e.="Unable to proccess file '{$zname}'";continue;}
+           if(!is_dir($zdir)) mkdirr($zdir,0777);
+
+           #print "{$zdir} | {$zname} \n";
+
+           $zip_fs=zip_entry_filesize($zip_entry);
+           if(empty($zip_fs)) continue;
+
+           $zz=zip_entry_read($zip_entry,$zip_fs);
+
+           $z=fopen($zname,"w");
+           fwrite($z,$zz);
+           fclose($z);
+           zip_entry_close($zip_entry);
+
+        } 
+        zip_close($zip);
+
+        return($e);
+    } 
+
+    function mkdirr($pn,$mode=null) {
+
+      if(is_dir($pn)||empty($pn)) return true;
+      $pn=str_replace(array('/', ''),DIRECTORY_SEPARATOR,$pn);
+
+      if(is_file($pn)) {trigger_error('mkdirr() File exists', E_USER_WARNING);return false;}
+
+      $next_pathname=substr($pn,0,strrpos($pn,DIRECTORY_SEPARATOR));
+      if(mkdirr($next_pathname,$mode)) {if(!file_exists($pn)) {return mkdir($pn,$mode);} }
+      return false;
+    }
+
     public function readImapMails(){
         Log::info('************************************* Init Read Imap Mails Cron *****************************************');
         $to_delete_files = [];
@@ -127,14 +172,10 @@ class Kernel extends ConsoleKernel
                     array_push($to_delete_files,$attachment->getFilename());
                     $path = base_path('storage'.DIRECTORY_SEPARATOR.'app');
 
-                    $zip_obj = new ZipArchive;
-                    $res = $zip->open($path.DIRECTORY_SEPARATOR.$attachment->getFilename());
-                    if ($res === TRUE) {
-                      // extract it to the path we determined above
-                      $zip->extractTo($path);
-                      $zip->close();
-                      Log::info('Hereeeeeeeeeeeeeeeeeeee');
-                    }
+                    $uzip = $this->unzip($path.DIRECTORY_SEPARATOR.$attachment->getFilename());
+                    Log::info($uzip);
+                    Log::info('Hereeeeeeeeeeeeeeeeeeee');
+
                     /*$zip = zip_open($path.DIRECTORY_SEPARATOR.$attachment->getFilename());
                     if($zip){
                       while ($zip_entry = zip_read($zip)){
