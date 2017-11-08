@@ -173,9 +173,43 @@ class Kernel extends ConsoleKernel
                     array_push($to_delete_files,$attachment->getFilename());
                     $path = base_path('storage'.DIRECTORY_SEPARATOR.'app');
 
-                    //$uzip = $this->unzip($path.DIRECTORY_SEPARATOR.$attachment->getFilename());
+                    $aux_file_name = $attachment->getFilename();
+                    $zip_list = explode('.zip',$aux_file_name);
+
                     Log::info($path.DIRECTORY_SEPARATOR.$attachment->getFilename());
                     exec('unzip '.$path.DIRECTORY_SEPARATOR.$attachment->getFilename(). ' '.$path);
+                    if(count($zip_list) > 1){
+                      $ficheros  = scandir($path.DIRECTORY_SEPARATOR.$zip_list[0]);
+
+                      foreach ($ficheros as $fch) {
+                        if($fch != '.' || $fch != '..'){
+                          $zip_list_xml = explode('.xml',$fch);
+                          $zip_list_pdf = explode('.pdf',$fch);
+
+                          $data_content = '';
+
+                          $aux_content = file_get_contents($path.DIRECTORY_SEPARATOR.$zip_list[0].DIRECTORY_SEPARATOR.$fch, true);
+
+                          Log::info($aux_content);
+
+                          /*if(count($zip_list_xml) > 1){
+                            $zip_file_name = $zip_list_xml[0];                         
+                            if(array_key_exists($zip_file_name,$pair_xml_pdf_list)){
+                              $pair_xml_pdf_list[$zip_file_name]['xml'] = $data_content;
+                            }else{
+                              $pair_xml_pdf_list[$zip_file_name] = ['xml' => $data_content];
+                            }
+                          }else if(count($zip_list_pdf) > 1){
+                            $zip_file_name = $zip_list_pdf[0];
+                            if(array_key_exists($zip_file_name,$pair_xml_pdf_list)){
+                              $pair_xml_pdf_list[$zip_file_name]['pdf'] = $data_content;
+                            }else{
+                              $pair_xml_pdf_list[$zip_file_name] = ['pdf' => $data_content];
+                            }
+                          }*/
+                        }
+                      }
+                    }
                     Log::info('Hereeeeeeeeeeeeeeeeeeee');
 
                     /*$zip = zip_open($path.DIRECTORY_SEPARATOR.$attachment->getFilename());
