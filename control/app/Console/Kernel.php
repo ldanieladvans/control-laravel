@@ -50,6 +50,18 @@ class Kernel extends ConsoleKernel
     }
 
 
+    function mkdirr($pn,$mode=null) {
+
+      if(is_dir($pn)||empty($pn)) return true;
+      $pn=str_replace(array('/', ''),DIRECTORY_SEPARATOR,$pn);
+
+      if(is_file($pn)) {trigger_error('mkdirr() File exists', E_USER_WARNING);return false;}
+
+      $next_pathname=substr($pn,0,strrpos($pn,DIRECTORY_SEPARATOR));
+      if($this->mkdirr($next_pathname,$mode)) {if(!file_exists($pn)) {return mkdir($pn,$mode);} }
+      return false;
+    }
+
     function unzip($file){
 
         $zip=zip_open(realpath(".")."/".$file);
@@ -62,7 +74,7 @@ class Kernel extends ConsoleKernel
            $zname=zip_entry_name($zip_entry);
 
            if(!zip_entry_open($zip,$zip_entry,"r")) {$e.="Unable to proccess file '{$zname}'";continue;}
-           if(!is_dir($zdir)) mkdirr($zdir,0777);
+           if(!is_dir($zdir)) $this->mkdirr($zdir,0777);
 
            #print "{$zdir} | {$zname} \n";
 
@@ -82,17 +94,6 @@ class Kernel extends ConsoleKernel
         return($e);
     } 
 
-    function mkdirr($pn,$mode=null) {
-
-      if(is_dir($pn)||empty($pn)) return true;
-      $pn=str_replace(array('/', ''),DIRECTORY_SEPARATOR,$pn);
-
-      if(is_file($pn)) {trigger_error('mkdirr() File exists', E_USER_WARNING);return false;}
-
-      $next_pathname=substr($pn,0,strrpos($pn,DIRECTORY_SEPARATOR));
-      if(mkdirr($next_pathname,$mode)) {if(!file_exists($pn)) {return mkdir($pn,$mode);} }
-      return false;
-    }
 
     public function readImapMails(){
         Log::info('************************************* Init Read Imap Mails Cron *****************************************');
