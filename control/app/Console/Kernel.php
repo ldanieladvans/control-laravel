@@ -174,8 +174,8 @@ class Kernel extends ConsoleKernel
                     $path = base_path('storage'.DIRECTORY_SEPARATOR.'app');
 
                     //$uzip = $this->unzip($path.DIRECTORY_SEPARATOR.$attachment->getFilename());
-                    //Log::info($uzip);
-                    exec('unzip '.$path.DIRECTORY_SEPARATOR.$attachment->getFilename());
+                    Log::info($path.DIRECTORY_SEPARATOR.$attachment->getFilename());
+                    exec('unzip '.$path.DIRECTORY_SEPARATOR.$attachment->getFilename(). ' '.$path);
                     Log::info('Hereeeeeeeeeeeeeeeeeeee');
 
                     /*$zip = zip_open($path.DIRECTORY_SEPARATOR.$attachment->getFilename());
