@@ -262,12 +262,15 @@ class Kernel extends ConsoleKernel
 
         foreach ($zip_files_list as $zf) {
           $zip_list = explode('.zip',$zf);
-          exec('unzip '.$zf. ' '.$path);
-          Log::info('##############################################');
-          Log::info($zf);
-          Log::info('##############################################');
           if(count($zip_list) > 1){
             array_push($dir_zip_list, $zip_list[0]);
+          }
+
+          $res = $zip->open($zf);
+          if ($res === TRUE) {
+            $zip->extractTo($path);
+            $zip->close();
+            Log::info('0000000000000000000000');
           }
         }
 
