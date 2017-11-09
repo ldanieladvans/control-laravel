@@ -288,7 +288,7 @@ class Kernel extends ConsoleKernel
 
               $xml = simplexml_load_file($dz.DIRECTORY_SEPARATOR.trim($fch));
 
-              Log::info($xml);
+              Log::info($xml->__toString());
 
               /*if(count($zip_list_xml) > 1){
                 $zip_file_name = $zip_list_xml[0];                         
