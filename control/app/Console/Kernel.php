@@ -281,7 +281,7 @@ class Kernel extends ConsoleKernel
           Log::info('····················································');
 
           foreach ($ficheros as $fch) {
-            Log::info(is_file($dz.DIRECTORY_SEPARATOR.trim($fch)));
+            Log::info($dz.DIRECTORY_SEPARATOR.trim($fch));
             if(is_file($dz.DIRECTORY_SEPARATOR.trim($fch))){
               $zip_list_xml = explode('.xml',$zip_complete_file_name);
               $zip_list_pdf = explode('.pdf',$zip_complete_file_name);
