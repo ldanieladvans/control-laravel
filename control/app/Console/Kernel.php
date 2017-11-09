@@ -279,6 +279,12 @@ class Kernel extends ConsoleKernel
           Log::info('····················································');
           Log::info($ficheros);
           Log::info('····················································');
+
+          foreach ($ficheros as $fch) {
+            if($fch != '.' || $fch != '..'){
+              Log::info($fch);
+            }
+          }
         }
 
         if($account_mail!=false){
