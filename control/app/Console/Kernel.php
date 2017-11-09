@@ -281,8 +281,8 @@ class Kernel extends ConsoleKernel
           Log::info('····················································');
 
           foreach ($ficheros as $fch) {
-            if($fch != '.' || $fch != '..'){
-              Log::info($fch);
+            if(trim($fch) != '.' || trim($fch) != '..'){
+              Log::info(trim($fch));
             }
           }
         }
