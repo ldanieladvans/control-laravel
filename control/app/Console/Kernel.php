@@ -282,8 +282,30 @@ class Kernel extends ConsoleKernel
 
           foreach ($ficheros as $fch) {
             Log::info(is_file($dz.DIRECTORY_SEPARATOR.trim($fch)));
-            if(trim($fch) != '.' || trim($fch) != '..'){
-              Log::info(trim($fch));
+            if(is_file($dz.DIRECTORY_SEPARATOR.trim($fch))){
+              $zip_list_xml = explode('.xml',$zip_complete_file_name);
+              $zip_list_pdf = explode('.pdf',$zip_complete_file_name);
+
+              $xml = simplexml_load_file($dz.DIRECTORY_SEPARATOR.trim($fch));
+
+              Log::info($xml);
+
+              /*if(count($zip_list_xml) > 1){
+                $zip_file_name = $zip_list_xml[0];                         
+                if(array_key_exists($zip_file_name,$pair_xml_pdf_list)){
+                  $pair_xml_pdf_list[$zip_file_name]['xml'] = $data_content;
+                }else{
+                  $pair_xml_pdf_list[$zip_file_name] = ['xml' => $data_content];
+                }
+              }else if(count($zip_list_pdf) > 1){
+                $zip_file_name = $zip_list_pdf[0];
+                if(array_key_exists($zip_file_name,$pair_xml_pdf_list)){
+                  $pair_xml_pdf_list[$zip_file_name]['pdf'] = $data_content;
+                }else{
+                  $pair_xml_pdf_list[$zip_file_name] = ['pdf' => $data_content];
+                }
+              }*/
+
             }
           }
         }
