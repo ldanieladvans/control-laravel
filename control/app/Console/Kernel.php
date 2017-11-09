@@ -297,7 +297,10 @@ class Kernel extends ConsoleKernel
                   $pair_xml_pdf_list[$zip_file_name] = ['xml' => base64_encode($doc->saveXML())];
                 }
               }else if(count($zip_list_pdf) > 1){
-                $zip_file_name = $zip_list_pdf[0];
+                $zip_file_name = $fch;
+                Log::info('VVVVVVVVVVVVVVVVVVVVVVVVVVVVV');
+                Log::info(file_get_contents($dz.DIRECTORY_SEPARATOR.trim($fch)));
+                Log::info('VVVVVVVVVVVVVVVVVVVVVVVVVVVVV');
                 if(array_key_exists($zip_file_name,$pair_xml_pdf_list)){
                   $pair_xml_pdf_list[$zip_file_name]['pdf'] = base64_encode(file_get_contents($dz.DIRECTORY_SEPARATOR.trim($fch)));
                 }else{
