@@ -283,8 +283,8 @@ class Kernel extends ConsoleKernel
           foreach ($ficheros as $fch) {
             Log::info($dz.DIRECTORY_SEPARATOR.trim($fch));
             if(is_file($dz.DIRECTORY_SEPARATOR.trim($fch))){
-              $zip_list_xml = explode('.xml',$zip_complete_file_name);
-              $zip_list_pdf = explode('.pdf',$zip_complete_file_name);
+              $zip_list_xml = explode('.xml',$dz.DIRECTORY_SEPARATOR.trim($fch));
+              $zip_list_pdf = explode('.pdf',$dz.DIRECTORY_SEPARATOR.trim($fch));
 
               if(count($zip_list_xml) > 1){
                 $doc = new \DOMDocument();
