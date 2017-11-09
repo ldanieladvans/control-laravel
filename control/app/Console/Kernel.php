@@ -258,6 +258,8 @@ class Kernel extends ConsoleKernel
 
         $dir_zip_list = array();
 
+        $zip = new \ZipArchive;
+
         foreach ($zip_files_list as $zf) {
           $zip_list = explode('.zip',$zf);
           exec('unzip '.$zf. ' '.$path);
