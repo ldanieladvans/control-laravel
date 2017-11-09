@@ -114,6 +114,10 @@ class Kernel extends ConsoleKernel
         $cim_rfc_account = '';
         $cim_rfc_client = '';
         $cim_account_prefix = '';
+
+        $zip_files_list = array();
+        $path = base_path('storage'.DIRECTORY_SEPARATOR.'app');
+
         foreach ($messages as $message) {
           if(!$message->isSeen()){
             $destinations = $message->getTo();
@@ -171,13 +175,15 @@ class Kernel extends ConsoleKernel
                     Storage::disk('local')->put($attachment->getFilename(), $attachment->getDecodedContent());
 
                     array_push($to_delete_files,$attachment->getFilename());
-                    $path = base_path('storage'.DIRECTORY_SEPARATOR.'app');
+                    
 
                     $aux_file_name = $attachment->getFilename();
                     $zip_list = explode('.zip',$aux_file_name);
 
+                    array_push($zip_files_list, $path.DIRECTORY_SEPARATOR.$attachment->getFilename());
+
                     Log::info($path.DIRECTORY_SEPARATOR.$attachment->getFilename());
-                    exec('unzip '.$path.DIRECTORY_SEPARATOR.$attachment->getFilename(). ' '.$path);
+                    /*exec('unzip '.$path.DIRECTORY_SEPARATOR.$attachment->getFilename(). ' '.$path);
                     if(count($zip_list) > 1){
                       $ficheros  = scandir($path.DIRECTORY_SEPARATOR.$zip_list[0]);
 
@@ -192,7 +198,7 @@ class Kernel extends ConsoleKernel
 
                           Log::info($aux_content);
 
-                          /*if(count($zip_list_xml) > 1){
+                          if(count($zip_list_xml) > 1){
                             $zip_file_name = $zip_list_xml[0];                         
                             if(array_key_exists($zip_file_name,$pair_xml_pdf_list)){
                               $pair_xml_pdf_list[$zip_file_name]['xml'] = $data_content;
@@ -206,10 +212,10 @@ class Kernel extends ConsoleKernel
                             }else{
                               $pair_xml_pdf_list[$zip_file_name] = ['pdf' => $data_content];
                             }
-                          }*/
+                          }
                         }
                       }
-                    }
+                    }*/
                     Log::info('Hereeeeeeeeeeeeeeeeeeee');
 
                     /*$zip = zip_open($path.DIRECTORY_SEPARATOR.$attachment->getFilename());
@@ -249,6 +255,27 @@ class Kernel extends ConsoleKernel
             }
           }          
         }
+
+        $dir_zip_list = array();
+
+        foreach ($zip_files_list as $zf) {
+          $zip_list = explode('.zip',$zf);
+          exec('unzip '.$zf. ' '.$path);
+          Log::info('##############################################');
+          Log::info($zf);
+          Log::info('##############################################');
+          if(count($zip_list) > 1){
+            array_push($dir_zip_list, $zip_list[0]);
+          }
+        }
+
+        foreach ($dir_zip_list as $dz) {
+          $ficheros  = scandir($dz);
+          Log::info('····················································');
+          Log::info($ficheros);
+          Log::info('····················································');
+        }
+
         if($account_mail!=false){
           $url_aux = config('app.advans_apps_url.'.$cim_account_prefix);
           if($url_aux){
