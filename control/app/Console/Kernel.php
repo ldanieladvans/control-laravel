@@ -294,7 +294,7 @@ class Kernel extends ConsoleKernel
                 if(array_key_exists($zip_file_name,$pair_xml_pdf_list)){
                   $pair_xml_pdf_list[$zip_file_name]['xml'] = base64_encode($doc->saveXML());
                 }else{
-                  $pair_xml_pdf_list[$zip_file_name] = ['xml' => base64_encode($doc->saveXML()];
+                  $pair_xml_pdf_list[$zip_file_name] = ['xml' => base64_encode($doc->saveXML())];
                 }
               }else if(count($zip_list_pdf) > 1){
                 $zip_file_name = $zip_list_pdf[0];
