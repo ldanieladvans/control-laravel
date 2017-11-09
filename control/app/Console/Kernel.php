@@ -281,6 +281,7 @@ class Kernel extends ConsoleKernel
           Log::info('····················································');
 
           foreach ($ficheros as $fch) {
+            Log::info(is_file($dz.DIRECTORY_SEPARATOR.trim($fch)));
             if(trim($fch) != '.' || trim($fch) != '..'){
               Log::info(trim($fch));
             }
