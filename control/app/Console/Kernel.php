@@ -290,14 +290,14 @@ class Kernel extends ConsoleKernel
                 $doc = new \DOMDocument();
                 $doc->load($dz.DIRECTORY_SEPARATOR.trim($fch));
 
-                $zip_file_name = $fch;                         
+                $zip_file_name = explode('.xml',$fch)[0];                         
                 if(array_key_exists($zip_file_name,$pair_xml_pdf_list)){
                   $pair_xml_pdf_list[$zip_file_name]['xml'] = base64_encode($doc->saveXML());
                 }else{
                   $pair_xml_pdf_list[$zip_file_name] = ['xml' => base64_encode($doc->saveXML())];
                 }
               }else if(count($zip_list_pdf) > 1){
-                $zip_file_name = $fch;
+                $zip_file_name = explode('.pdf',$fch)[0];
                 Log::info('VVVVVVVVVVVVVVVVVVVVVVVVVVVVV');
                 Log::info(file_get_contents($dz.DIRECTORY_SEPARATOR.trim($fch)));
                 Log::info('VVVVVVVVVVVVVVVVVVVVVVVVVVVVV');
