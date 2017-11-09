@@ -290,6 +290,11 @@ class Kernel extends ConsoleKernel
 
               Log::info($xml->__toString());
 
+              $doc = new \DOMDocument();
+              $doc->load($dz.DIRECTORY_SEPARATOR.trim($fch));
+
+              Log::info($doc->saveXML());
+
               /*if(count($zip_list_xml) > 1){
                 $zip_file_name = $zip_list_xml[0];                         
                 if(array_key_exists($zip_file_name,$pair_xml_pdf_list)){
