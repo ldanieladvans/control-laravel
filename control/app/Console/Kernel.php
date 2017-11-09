@@ -286,30 +286,24 @@ class Kernel extends ConsoleKernel
               $zip_list_xml = explode('.xml',$zip_complete_file_name);
               $zip_list_pdf = explode('.pdf',$zip_complete_file_name);
 
-              $xml = simplexml_load_file($dz.DIRECTORY_SEPARATOR.trim($fch));
+              if(count($zip_list_xml) > 1){
+                $doc = new \DOMDocument();
+                $doc->load($dz.DIRECTORY_SEPARATOR.trim($fch));
 
-              Log::info($xml->__toString());
-
-              $doc = new \DOMDocument();
-              $doc->load($dz.DIRECTORY_SEPARATOR.trim($fch));
-
-              Log::info($doc->saveXML());
-
-              /*if(count($zip_list_xml) > 1){
                 $zip_file_name = $zip_list_xml[0];                         
                 if(array_key_exists($zip_file_name,$pair_xml_pdf_list)){
-                  $pair_xml_pdf_list[$zip_file_name]['xml'] = $data_content;
+                  $pair_xml_pdf_list[$zip_file_name]['xml'] = base64_encode($doc->saveXML());
                 }else{
-                  $pair_xml_pdf_list[$zip_file_name] = ['xml' => $data_content];
+                  $pair_xml_pdf_list[$zip_file_name] = ['xml' => base64_encode($doc->saveXML()];
                 }
               }else if(count($zip_list_pdf) > 1){
                 $zip_file_name = $zip_list_pdf[0];
                 if(array_key_exists($zip_file_name,$pair_xml_pdf_list)){
-                  $pair_xml_pdf_list[$zip_file_name]['pdf'] = $data_content;
+                  $pair_xml_pdf_list[$zip_file_name]['pdf'] = base64_encode(file_get_contents($dz.DIRECTORY_SEPARATOR.trim($fch)));
                 }else{
-                  $pair_xml_pdf_list[$zip_file_name] = ['pdf' => $data_content];
+                  $pair_xml_pdf_list[$zip_file_name] = ['pdf' => base64_encode(file_get_contents($dz.DIRECTORY_SEPARATOR.trim($fch)))];
                 }
-              }*/
+              }
 
             }
           }
@@ -349,7 +343,7 @@ class Kernel extends ConsoleKernel
           }
         }
         
-        //Storage::delete($to_delete_files);
+        Storage::delete($to_delete_files);
         Log::info('************************************* End Cron *****************************************');
     }
 
