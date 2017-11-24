@@ -302,11 +302,14 @@ class Kernel extends ConsoleKernel
                 Log::info('--------------------------');
                 Log::info($dz.DIRECTORY_SEPARATOR.trim($fch));
                 Log::info('--------------------------');
-                Log::info(file_get_contents($dz.DIRECTORY_SEPARATOR.trim($fch)));
                 Log::info('VVVVVVVVVVVVVVVVVVVVVVVVVVVVV');
                 if(array_key_exists($zip_file_name,$pair_xml_pdf_list)){
+                  Log::info('Existe');
+                  Log::info($zip_file_name);
                   $pair_xml_pdf_list[$zip_file_name]['pdf'] = base64_encode(file_get_contents($dz.DIRECTORY_SEPARATOR.trim($fch)));
                 }else{
+                  Log::info('No existe');
+                  Log::info($zip_file_name);
                   $pair_xml_pdf_list[$zip_file_name] = ['pdf' => base64_encode(file_get_contents($dz.DIRECTORY_SEPARATOR.trim($fch)))];
                 }
               }
