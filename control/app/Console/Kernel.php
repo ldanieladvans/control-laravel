@@ -299,6 +299,9 @@ class Kernel extends ConsoleKernel
               }else if(count($zip_list_pdf) > 1){
                 $zip_file_name = explode('.pdf',$fch)[0];
                 Log::info('VVVVVVVVVVVVVVVVVVVVVVVVVVVVV');
+                Log::info('--------------------------');
+                Log::info($dz.DIRECTORY_SEPARATOR.trim($fch));
+                Log::info('--------------------------');
                 Log::info(file_get_contents($dz.DIRECTORY_SEPARATOR.trim($fch)));
                 Log::info('VVVVVVVVVVVVVVVVVVVVVVVVVVVVV');
                 if(array_key_exists($zip_file_name,$pair_xml_pdf_list)){
