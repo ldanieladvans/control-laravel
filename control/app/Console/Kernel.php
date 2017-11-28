@@ -161,7 +161,7 @@ class Kernel extends ConsoleKernel
                     $data_content = $attachment->getContent();
                     if(!base64_decode($data_content, true)){
                       $data_content = $attachment->getDecodedContent();
-                      //$data_content = base64_encode($data_content);
+                      $data_content = $attachment->getContent();
                     }
                     if(array_key_exists($file_name,$pair_xml_pdf_list)){
                       $pair_xml_pdf_list[$file_name]['pdf'] = $data_content;
