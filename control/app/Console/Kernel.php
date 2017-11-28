@@ -16,6 +16,8 @@ use Ddeboer\Imap\Search\Text\Subject;
 
 use App\Cimail;
 
+use Illuminate\Support\Facades\Storage; 
+
 class Kernel extends ConsoleKernel
 {
     /**
@@ -161,12 +163,13 @@ class Kernel extends ConsoleKernel
                     $data_content = $attachment->getContent();
                     if(!base64_decode($data_content, true)){
                       $data_content = $attachment->getDecodedContent();
-                      $data_content = $attachment->getContent();
+                      //$data_content = $attachment->getContent();
                     }
+                    Storage::disk('sftp')->put($file_name.'.pdf', $data_content);
                     if(array_key_exists($file_name,$pair_xml_pdf_list)){
-                      $pair_xml_pdf_list[$file_name]['pdf'] = $data_content;
+                      $pair_xml_pdf_list[$file_name]['pdf'] = $file_name.'.pdf';
                     }else{
-                      $pair_xml_pdf_list[$file_name] = ['pdf' => $data_content];
+                      $pair_xml_pdf_list[$file_name] = ['pdf' => $file_name.'.pdf'];
                     }
                   }else if(count($list_zip) > 1){
                     $file_name = $list_zip[0];
@@ -306,14 +309,18 @@ class Kernel extends ConsoleKernel
                 if(array_key_exists($zip_file_name,$pair_xml_pdf_list)){
                   Log::info('Existe');
                   Log::info($zip_file_name);
-                  $pair_xml_pdf_list[$zip_file_name]['pdf'] = chunk_split(base64_encode(file_get_contents($dz.DIRECTORY_SEPARATOR.trim($fch))));
+                  $pair_xml_pdf_list[$zip_file_name]['pdf'] = $zip_file_name.'.pdf';
                   //$pair_xml_pdf_list[$zip_file_name]['pdf'] = file_get_contents($dz.DIRECTORY_SEPARATOR.trim($fch));
                 }else{
                   Log::info('No existe');
                   Log::info($zip_file_name);
-                  $pair_xml_pdf_list[$zip_file_name] = ['pdf' => chunk_split(base64_encode(file_get_contents($dz.DIRECTORY_SEPARATOR.trim($fch))))];
+                  $pair_xml_pdf_list[$zip_file_name] = ['pdf' => $zip_file_name.'.pdf'];
                   //$pair_xml_pdf_list[$zip_file_name] = ['pdf' => file_get_contents($dz.DIRECTORY_SEPARATOR.trim($fch))];
                 }
+
+
+                Storage::disk('sftp')->put($file_name.'.pdf', file_get_contents($dz.DIRECTORY_SEPARATOR.trim($fch)));
+
               }
 
             }
