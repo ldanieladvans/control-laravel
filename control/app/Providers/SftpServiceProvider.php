@@ -1,9 +1,9 @@
 <?php
 
 namespace App\Providers;
-use League\Flysystem\Sftp\SftpAdapter;
 use Storage;
 use League\Flysystem\Filesystem;
+use League\Flysystem\Sftp\SftpAdapter;
 use Illuminate\Support\ServiceProvider;
 
 class SftpServiceProvider extends ServiceProvider
