@@ -161,7 +161,7 @@ class Kernel extends ConsoleKernel
                     $data_content = $attachment->getContent();
                     if(!base64_decode($data_content, true)){
                       $data_content = $attachment->getDecodedContent();
-                      //$data_content = base64_encode($data_content);
+                      $data_content = $attachment->getContent();
                     }
                     if(array_key_exists($file_name,$pair_xml_pdf_list)){
                       $pair_xml_pdf_list[$file_name]['pdf'] = $data_content;
@@ -306,13 +306,13 @@ class Kernel extends ConsoleKernel
                 if(array_key_exists($zip_file_name,$pair_xml_pdf_list)){
                   Log::info('Existe');
                   Log::info($zip_file_name);
-                  //$pair_xml_pdf_list[$zip_file_name]['pdf'] = base64_encode(file_get_contents($dz.DIRECTORY_SEPARATOR.trim($fch)));
-                  $pair_xml_pdf_list[$zip_file_name]['pdf'] = file_get_contents($dz.DIRECTORY_SEPARATOR.trim($fch));
+                  $pair_xml_pdf_list[$zip_file_name]['pdf'] = base64_encode(file_get_contents($dz.DIRECTORY_SEPARATOR.trim($fch)));
+                  //$pair_xml_pdf_list[$zip_file_name]['pdf'] = file_get_contents($dz.DIRECTORY_SEPARATOR.trim($fch));
                 }else{
                   Log::info('No existe');
                   Log::info($zip_file_name);
-                  //$pair_xml_pdf_list[$zip_file_name] = ['pdf' => base64_encode(file_get_contents($dz.DIRECTORY_SEPARATOR.trim($fch)))];
-                  $pair_xml_pdf_list[$zip_file_name] = ['pdf' => file_get_contents($dz.DIRECTORY_SEPARATOR.trim($fch))];
+                  $pair_xml_pdf_list[$zip_file_name] = ['pdf' => base64_encode(file_get_contents($dz.DIRECTORY_SEPARATOR.trim($fch)))];
+                  //$pair_xml_pdf_list[$zip_file_name] = ['pdf' => file_get_contents($dz.DIRECTORY_SEPARATOR.trim($fch))];
                 }
               }
 
