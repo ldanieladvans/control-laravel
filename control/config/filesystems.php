@@ -64,39 +64,39 @@ return [
         ],
 
         'sftp' => [
-            'type' => 'Sftp',
-            'host' => '13.58.170.3',
+            'driver' => 'sftp',
+            'host' => 'lab1.advans.mx',
             'username' => 'bitnami',
             'password' => 'Advan$97120',
             'port' => 22,
-            'timeout' => 10,
-            'privateKey' => '-----BEGIN RSA PRIVATE KEY-----
-    MIIEowIBAAKCAQEA0dVJuaaJGwW4WFEtcdHvfXj+pj0n/VfEDfN1FMhrRXsOG8UY
-    IwiKojV/HJjLIxx8PGIkesTeHfdKTRc8eCL6yBYVXKEmC3i5GZoEX9KBXFb2JuT4
-    6IA6Y+NkFooV/l0HODdTWhsf3bqfEbC8OUNH+IBJN/NyXrYPGcodyWPOTEWaCTpA
-    5v2ETMd8qCHcPooWzylw6dfqlT4tt7ebz01xJMmYb6hOkVwaTxi13sd7jfr/6d6j
-    u6y/qXYh23Xkx3fCr2q/LuXnV6zE4L+eTZOxsVbAhjFqW8IELxweBIrHbceBsldT
-    NFeEC3WXYAy8bLgV52Rnt54+pUTdwmG4j0MScQIDAQABAoIBAFW9XFmytdVH2hKk
-    YPhgOwa/GPaeiKeZZC/7Kf0rA8IpTROFzp4KEHPFfkIWIPMg4Zbe118e8E+4SzEC
-    7J9+U5DMjUADTQNk+eV/LIhnAJrVodE0wIxoUPOd57jaBbChHKEY4kMwUC4O4o6c
-    89xGJLNi4Agvvqz6oWL9VnyC/rnk/WNvexcarZk1gpd5ETmG0zLAO2Al5fADUK5u
-    b3p7EDe3a00tI4QpaGMRVrR1UB/W550Y/UCkOjyp8Wt2yHMcmvmaGKTdm5hxhMms
-    8Wl/44kEjY71hlW1KrOMPZ7oRsjjeryfvee7VMlbNugN8e9B5m58itZILDgecl+G
-    Ums9RFECgYEA665KY91oUesK+fd6SKCzAm0/XuivHWrw2uzdtpwJYqVjc7GXAyQr
-    GdxJWadHqTW6xGZ/+Y1qEjkSk/4jfWRsD8MAcpL7AFR+1R/9/C/c+tubH+/asqSE
-    jw3ednT3fkYx/9aaQMlMRPQb/PTw89q8BdJlNp6x8FEb2DZG5l3W6wUCgYEA4+yD
-    hw03u/KG6TfjyWTYNdYFz7ucF0hdbzm21zSjI/1yj7qwUtxywgTWZfquHSXtn11Q
-    +M2u+KV90F4gtCInWrkz/PK8lMKQay1AmF7XXrHwwTgi6SC3ovPN0r2gIxEsaUKb
-    Ml8tlH3DbUjKX3f5Y5oHwRP/7WPq+W0Ch8Pj3X0CgYEAgknZ6hdOQmsTqFh9i4T7
-    MQ5ACDHODQ8/k2d6sibUsWoI7r5wY1YtVaCIFD37yblgRI79lHHu/5/5e0L1T66i
-    ZpxAtRY4GFidvShwemfjW/LncOJiHnwApCzgnM/QukgIAA0dPU+LEFt61X57bfOw
-    Ge/T8DwO1nGgWQi4bUXXOBkCgYBR81xnVq1PeqhfeqUAaK4EzWtRgddh17cgotPH
-    FToDWsGyRCHZ6UGp2Stth3DLMjP6NQdELlBXPsm5/d4sZotX53d136FGq55Zqu+q
-    2Y7+kWRLVO/YetcMVDURLPVDJo2dW0GKHwa4eW+m/6EkKnMVCPD4z0QaCu8Vt8hN
-    IHXx0QKBgCoekexUPsz6N57c5ZIIHyheh8A/3HrCSoQqmqoSZl+6ikAzKBf9IcPU
-    /Ncmln0L4fUwCoZI1gW5ozlX/wOlBxGlqgxw+LkklL4LdnDd6xylxFlUC5D9UjHO
-    V/VmXR686Z5/VmghvS0ZJsv8f9AQbxZ0N9ikB0izKUKCpwe7qF+J
-    -----END RSA PRIVATE KEY-----',
+            'timeout' => 20,
+            'privateKey' => 'PuTTY-User-Key-File-2: ssh-rsa
+                        Encryption: aes256-cbc
+                        Comment: imported-openssh-key
+                        Public-Lines: 6
+                        AAAAB3NzaC1yc2EAAAADAQABAAABAQDR1Um5pokbBbhYUS1x0e99eP6mPSf9V8QN
+                        83UUyGtFew4bxRgjCIqiNX8cmMsjHHw8YiR6xN4d90pNFzx4IvrIFhVcoSYLeLkZ
+                        mgRf0oFcVvYm5PjogDpj42QWihX+XQc4N1NaGx/dup8RsLw5Q0f4gEk383Jetg8Z
+                        yh3JY85MRZoJOkDm/YRMx3yoIdw+ihbPKXDp1+qVPi23t5vPTXEkyZhvqE6RXBpP
+                        GLXex3uN+v/p3qO7rL+pdiHbdeTHd8Kvar8u5edXrMTgv55Nk7GxVsCGMWpbwgQv
+                        HB4Eisdtx4GyV1M0V4QLdZdgDLxsuBXnZGe3nj6lRN3CYbiPQxJx
+                        Private-Lines: 14
+                        4EqOGqunViJTuIIPYCwYgXNFBefVEBxfgaIsKCYocIIB5ZI4K00WPYo7ASoKMFpp
+                        xqZjRvv0rd7YxX6hIRwGp5d9o7nPvYdJPsGYz+VmmjJsuLGNvQv0GfPRZE5BRaFP
+                        lTsBnJ/C26roPo0cz11XQuQEIs8buMj3fk+1c5plPOXMVAjSZK0xXpWHEPG/dkXe
+                        YZF4VF0o+bIHOv//EOyl7ZUW7+TYaTxFVaNtfsEr0odB1vp83n68WlNQ2kCaktjZ
+                        SsETbVek3ialVhJ56wDSdzEZZgBP6Uc5PfAhIue8b8f7y4t8z67gEv7LLht7gdNY
+                        PwYwUhNep5DmxQiE3RwqYgTH2sOqRKTBQJah6U7gkL+SdgVbQp5C/k8koWOyaBLZ
+                        lWWGcOaYftPQhfJSW3rZdvx+0XPk8GjWXYMpVhi4U+EjOteV1+6dVXZJgQlp+F2K
+                        xKgYD2ARkl4T6RwC7G+sIXafQhDuNYpnMA9WAfFuncCPUWb6DH2iCM4tkCklxIad
+                        NHYv3z9d6A9I6/vHkuWxQMqxL+yJD4fcYrZe69VtlfwFZj0RaZhKZFIg34MploJi
+                        abUF0VFVU+rJEdyigt4yhRUMSHnmgJ08lUK5sZv7NW+xLseeySg3P5ag0mqtYUZ+
+                        +jpDYxPr96UtINPVtv+8Oc/T5jQBA3zuE0zXCGFcZJ5ElZjhkAtMNSm4DvqHiYOU
+                        qdaynjKZJXEf/Sc6psEU+SuCAzCxlBiPXw8bfxYLbd7nUDbtHsxn+AysxMvwv2bH
+                        y1o7BzqOosjTOd937Hc3UxwQWMaVCPWemLRXuC7h9bivN3gOQtupfBWXnsqii5u2
+                        V7qfQeeX9A9ZZOUg3nhpXIt38eE873rUAjPQz3+vgIubISkFR/3DVAcGopPYOAkO
+                        Private-MAC: 720ea9f92b8fcd4ffdc696ea41ed46ed3ac907f4
+                        ',
             'root' => '/opt/bitnami/apache2/htdocs/mabel/',
         ],
 
