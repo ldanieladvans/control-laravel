@@ -116,6 +116,8 @@ class Kernel extends ConsoleKernel
         $cim_rfc_client = '';
         $cim_account_prefix = '';
 
+        $pdf_complete_list_name = array();
+
         $zip_files_list = array();
         $path = base_path('storage'.DIRECTORY_SEPARATOR.'app');
 
@@ -335,6 +337,7 @@ class Kernel extends ConsoleKernel
             Log::info($key);
             Log::info($value['xml']);
             Log::info($value['pdf']);
+            array_push($pdf_complete_list_name, $value['pdf'].'pdf');
             $params = array(
                 'hash' => 'aW55ZWN0b3JJbWFw',
                 'bdname' => base64_encode($cim_rfc_account.'_'.$cim_rfc_client.'_'.$cim_account_prefix),
@@ -360,6 +363,7 @@ class Kernel extends ConsoleKernel
           }
         }
         
+        Storage::disk('sftp')->delete($pdf_complete_list_name);
         Storage::delete($to_delete_files);
         Log::info('************************************* End Cron *****************************************');
     }
