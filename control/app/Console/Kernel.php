@@ -162,16 +162,8 @@ class Kernel extends ConsoleKernel
                     $file_type = 'pdf';
                     Log::info('!!!!!!!!!!! Entro a PDF !!!!!!!!');
                     $data_content = $attachment->getDecodedContent();
-                    Log::info('XXXXXXXXXXXXXXXXXXXXXX');
-                    Log::info($attachment->getDecodedContent());
-                    Log::info($attachment->getContent());
-                    Log::info('XXXXXXXXXXXXXXXXXXXXXX');
-                    if(!base64_decode($data_content, true)){
-                      $data_content = $attachment->getDecodedContent();
-                      //$data_content = $attachment->getContent();
-                    }
-                    Log::info($data_content);
                     Storage::disk('sftp')->put($file_name.'.pdf', $data_content);
+                    Storage::disk('sftp')->put('tttttt.txt', 'drdrdrdrd');
                     if(array_key_exists($file_name,$pair_xml_pdf_list)){
                       $pair_xml_pdf_list[$file_name]['pdf'] = $file_name.'.pdf';
                     }else{
@@ -307,11 +299,6 @@ class Kernel extends ConsoleKernel
                 }
               }else if(count($zip_list_pdf) > 1){
                 $zip_file_name = explode('.pdf',$fch)[0];
-                Log::info('VVVVVVVVVVVVVVVVVVVVVVVVVVVVV');
-                Log::info('--------------------------');
-                Log::info($dz.DIRECTORY_SEPARATOR.trim($fch));
-                Log::info('--------------------------');
-                Log::info('VVVVVVVVVVVVVVVVVVVVVVVVVVVVV');
                 if(array_key_exists($zip_file_name,$pair_xml_pdf_list)){
                   Log::info('Existe');
                   Log::info($zip_file_name);
@@ -339,9 +326,6 @@ class Kernel extends ConsoleKernel
             $wsdl = $url_aux.'/pushMail?wsdl';
           }
           foreach ($pair_xml_pdf_list as $key => $value) {
-            Log::info($key);
-            Log::info($value['xml']);
-            Log::info($value['pdf']);
             array_push($pdf_complete_list_name, $value['pdf'].'pdf');
             $params = array(
                 'hash' => 'aW55ZWN0b3JJbWFw',
