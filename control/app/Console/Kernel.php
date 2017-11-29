@@ -184,72 +184,8 @@ class Kernel extends ConsoleKernel
                     array_push($zip_files_list, $path.DIRECTORY_SEPARATOR.$attachment->getFilename());
 
                     Log::info($path.DIRECTORY_SEPARATOR.$attachment->getFilename());
-                    /*exec('unzip '.$path.DIRECTORY_SEPARATOR.$attachment->getFilename(). ' '.$path);
-                    if(count($zip_list) > 1){
-                      $ficheros  = scandir($path.DIRECTORY_SEPARATOR.$zip_list[0]);
 
-                      foreach ($ficheros as $fch) {
-                        if($fch != '.' || $fch != '..'){
-                          $zip_list_xml = explode('.xml',$fch);
-                          $zip_list_pdf = explode('.pdf',$fch);
-
-                          $data_content = '';
-
-                          $aux_content = file_get_contents($path.DIRECTORY_SEPARATOR.$zip_list[0].DIRECTORY_SEPARATOR.$fch, true);
-
-                          Log::info($aux_content);
-
-                          if(count($zip_list_xml) > 1){
-                            $zip_file_name = $zip_list_xml[0];                         
-                            if(array_key_exists($zip_file_name,$pair_xml_pdf_list)){
-                              $pair_xml_pdf_list[$zip_file_name]['xml'] = $data_content;
-                            }else{
-                              $pair_xml_pdf_list[$zip_file_name] = ['xml' => $data_content];
-                            }
-                          }else if(count($zip_list_pdf) > 1){
-                            $zip_file_name = $zip_list_pdf[0];
-                            if(array_key_exists($zip_file_name,$pair_xml_pdf_list)){
-                              $pair_xml_pdf_list[$zip_file_name]['pdf'] = $data_content;
-                            }else{
-                              $pair_xml_pdf_list[$zip_file_name] = ['pdf' => $data_content];
-                            }
-                          }
-                        }
-                      }
-                    }*/
-                    Log::info('Hereeeeeeeeeeeeeeeeeeee');
-
-                    /*$zip = zip_open($path.DIRECTORY_SEPARATOR.$attachment->getFilename());
-                    if($zip){
-                      while ($zip_entry = zip_read($zip)){
-                        $zip_complete_file_name = zip_entry_name($zip_entry);
-                        $zip_file_name = '';
-                        $zip_list_xml = explode('.xml',$zip_complete_file_name);
-                        $zip_list_pdf = explode('.pdf',$zip_complete_file_name);
-                        $data_content = zip_entry_read($zip_entry);
-                        Log::info('!!!!!!!!!!!!!!!!!!!!!!!!!!!! Data Content !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!');
-                        Log::info($zip_entry);
-                        Log::info('------------------------------------------------------------');
-                        Log::info($data_content);
-                        Log::info('!!!!!!!!!!!!!!!!!!!!!!!!!!!! Data Content !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!');
-                        if(count($zip_list_xml) > 1){
-                          $zip_file_name = $zip_list_xml[0];                         
-                          if(array_key_exists($zip_file_name,$pair_xml_pdf_list)){
-                            $pair_xml_pdf_list[$zip_file_name]['xml'] = $data_content;
-                          }else{
-                            $pair_xml_pdf_list[$zip_file_name] = ['xml' => $data_content];
-                          }
-                        }else if(count($zip_list_pdf) > 1){
-                          $zip_file_name = $zip_list_pdf[0];
-                          if(array_key_exists($zip_file_name,$pair_xml_pdf_list)){
-                            $pair_xml_pdf_list[$zip_file_name]['pdf'] = $data_content;
-                          }else{
-                            $pair_xml_pdf_list[$zip_file_name] = ['pdf' => $data_content];
-                          }
-                        }
-                      }
-                    }
-                    zip_close($zip);*/
+                    
                   }
                 }
               }
@@ -271,9 +207,12 @@ class Kernel extends ConsoleKernel
           if ($res === TRUE) {
             $zip->extractTo($path);
             $zip->close();
-            Log::info('0000000000000000000000');
           }
         }
+
+        Log::info('***************************');
+        Log::info($dir_zip_list);
+        Log::info('***************************');
 
         foreach ($dir_zip_list as $dz) {
           $ficheros  = scandir($dz);
@@ -312,7 +251,7 @@ class Kernel extends ConsoleKernel
                 }
 
 
-                Storage::disk('sftp')->put($file_name.'.pdf', file_get_contents($dz.DIRECTORY_SEPARATOR.trim($fch)));
+                Storage::disk('sftp')->put($zip_file_name.'.pdf', file_get_contents($dz.DIRECTORY_SEPARATOR.trim($fch)));
 
               }
 
