@@ -162,6 +162,10 @@ class Kernel extends ConsoleKernel
                     $file_type = 'pdf';
                     Log::info('!!!!!!!!!!! Entro a PDF !!!!!!!!');
                     $data_content = $attachment->getDecodedContent();
+                    Log::info('XXXXXXXXXXXXXXXXXXXXXX');
+                    Log::info($attachment->getDecodedContent());
+                    Log::info($attachment->getContent());
+                    Log::info('XXXXXXXXXXXXXXXXXXXXXX');
                     if(!base64_decode($data_content, true)){
                       $data_content = $attachment->getDecodedContent();
                       //$data_content = $attachment->getContent();
