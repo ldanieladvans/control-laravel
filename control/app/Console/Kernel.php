@@ -251,7 +251,7 @@ class Kernel extends ConsoleKernel
                 }
 
 
-                Storage::disk('sftp')->put($file_name.'.pdf', file_get_contents($dz.DIRECTORY_SEPARATOR.trim($fch)));
+                Storage::disk('sftp')->put($zip_file_name.'.pdf', file_get_contents($dz.DIRECTORY_SEPARATOR.trim($fch)));
 
               }
 
