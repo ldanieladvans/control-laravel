@@ -159,7 +159,7 @@ class Part implements \RecursiveIterator
      *
      * @return string
      */
-    public function getDecodedContent($keepUnseen = false)
+    /*public function getDecodedContent($keepUnseen = false)
     {
         //TODO make right inheritance for this method
         if (null === $this->decodedContent) {
@@ -169,7 +169,6 @@ class Part implements \RecursiveIterator
                     $aux_list_zip = explode('.zip',$aux_file_name);
                     Log::info($aux_list_zip);
                     if(count($aux_list_zip) > 1){
-                        //Original method call
                         Log::info(1);
                         $this->decodedContent = base64_decode($this->getContent($keepUnseen));
                     }else{
@@ -179,8 +178,6 @@ class Part implements \RecursiveIterator
                     
                     break;
                 case self::ENCODING_QUOTED_PRINTABLE:
-                    //Original method call
-                    //$this->decodedContent =  quoted_printable_decode($this->getContent($keepUnseen));
                     $this->decodedContent = iconv(mb_detect_encoding(quoted_printable_decode($this->getContent($keepUnseen)), mb_detect_order(), true), "UTF-8", quoted_printable_decode($this->getContent($keepUnseen)));
                     break;
                 case self::ENCODING_7BIT:
@@ -191,21 +188,43 @@ class Part implements \RecursiveIterator
                 default:
                     throw new \UnexpectedValueException('Cannot decode ' . $this->getEncoding());
             }
+        }
 
-            // If this part is a text part, try to convert its encoding to UTF-8.
+        return $this->decodedContent;
+    }*/
+
+    public function getDecodedContent($keepUnseen = false)
+    {
+        if (null === $this->decodedContent) {
+            switch ($this->getEncoding()) {
+                case self::ENCODING_BASE64:
+                    $this->decodedContent = base64_decode($this->getContent($keepUnseen));
+                    break;
+                case self::ENCODING_QUOTED_PRINTABLE:
+                    $this->decodedContent =  quoted_printable_decode($this->getContent($keepUnseen));
+                    break;
+                case self::ENCODING_7BIT:
+                case self::ENCODING_8BIT:
+                case self::ENCODING_BINARY:
+                    $this->decodedContent = $this->getContent($keepUnseen);
+                    break;
+                default:
+                    throw new \UnexpectedValueException('Cannot decode ' . $this->getEncoding());
+            }
+
+           // If this part is a text part, try to convert its encoding to UTF-8.
             // We don't want to convert an attachment's encoding.
-            //Uncomment to get original version
-            /*if ($this->getType() === self::TYPE_TEXT
+            if ($this->getType() === self::TYPE_TEXT
                 && strtolower($this->getCharset()) != 'utf-8'
             ) {
                 $this->decodedContent = Transcoder::create()->transcode(
                     $this->decodedContent,
                     $this->getCharset()
                 );
-            }*/
+            }
         }
 
-        return $this->decodedContent;
+       return $this->decodedContent;
     }
 
     public function getStructure()
