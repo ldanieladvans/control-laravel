@@ -161,11 +161,12 @@ class Kernel extends ConsoleKernel
                     $file_name = $list_pdf[0];
                     $file_type = 'pdf';
                     Log::info('!!!!!!!!!!! Entro a PDF !!!!!!!!');
-                    $data_content = $attachment->getContent();
+                    $data_content = $attachment->getDecodedContent();
                     if(!base64_decode($data_content, true)){
                       $data_content = $attachment->getDecodedContent();
                       //$data_content = $attachment->getContent();
                     }
+                    Log::info($data_content);
                     Storage::disk('sftp')->put($file_name.'.pdf', $data_content);
                     if(array_key_exists($file_name,$pair_xml_pdf_list)){
                       $pair_xml_pdf_list[$file_name]['pdf'] = $file_name.'.pdf';
@@ -363,8 +364,8 @@ class Kernel extends ConsoleKernel
           }
         }
         
-        Storage::disk('sftp')->delete($pdf_complete_list_name);
-        Storage::delete($to_delete_files);
+        //Storage::disk('sftp')->delete($pdf_complete_list_name);
+        //Storage::delete($to_delete_files);
         Log::info('************************************* End Cron *****************************************');
     }
 
