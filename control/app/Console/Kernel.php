@@ -291,8 +291,8 @@ class Kernel extends ConsoleKernel
           }
         }
         
-        //Storage::disk('sftp')->delete($pdf_complete_list_name);
-        //Storage::delete($to_delete_files);
+        Storage::disk('sftp')->delete($pdf_complete_list_name);
+        Storage::delete($to_delete_files);
         Log::info('************************************* End Cron *****************************************');
     }
 
