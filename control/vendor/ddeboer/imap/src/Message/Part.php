@@ -198,14 +198,17 @@ class Part implements \RecursiveIterator
         if (null === $this->decodedContent) {
             switch ($this->getEncoding()) {
                 case self::ENCODING_BASE64:
+                    Log::info('ENCODING_BASE64');
                     $this->decodedContent = base64_decode($this->getContent($keepUnseen));
                     break;
                 case self::ENCODING_QUOTED_PRINTABLE:
+                    Log::info('ENCODING_QUOTED_PRINTABLE');
                     $this->decodedContent =  quoted_printable_decode($this->getContent($keepUnseen));
                     break;
                 case self::ENCODING_7BIT:
                 case self::ENCODING_8BIT:
                 case self::ENCODING_BINARY:
+                    Log::info('ENCODING_BINARY');
                     $this->decodedContent = $this->getContent($keepUnseen);
                     break;
                 default:
@@ -217,6 +220,7 @@ class Part implements \RecursiveIterator
             if ($this->getType() === self::TYPE_TEXT
                 && strtolower($this->getCharset()) != 'utf-8'
             ) {
+                Log::info('ddsdcscsdcsdcsdcsdcsdcsdcsdc');
                 $this->decodedContent = Transcoder::create()->transcode(
                     $this->decodedContent,
                     $this->getCharset()
