@@ -220,11 +220,12 @@ class Part implements \RecursiveIterator
             if ($this->getType() === self::TYPE_TEXT
                 && strtolower($this->getCharset()) != 'utf-8'
             ) {
-                Log::info('ddsdcscsdcsdcsdcsdcsdcsdcsdc');
-                $this->decodedContent = Transcoder::create()->transcode(
-                    $this->decodedContent,
-                    $this->getCharset()
-                );
+                try {
+                    $this->decodedContent = Transcoder::create()->transcode($this->decodedContent,$this->getCharset());
+                } catch (Exception $e) {
+                    $this->decodedContent = iconv(mb_detect_encoding(quoted_printable_decode($this->getContent($keepUnseen)), mb_detect_order(), true), "UTF-8", quoted_printable_decode($this->getContent($keepUnseen)));
+                }
+                
             }
         }
 
