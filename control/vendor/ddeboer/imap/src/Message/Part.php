@@ -221,8 +221,10 @@ class Part implements \RecursiveIterator
                 && strtolower($this->getCharset()) != 'utf-8'
             ) {
                 try {
+                    Log::info('ENTRO TRY');
                     $this->decodedContent = Transcoder::create()->transcode($this->decodedContent,$this->getCharset());
                 } catch (Exception $e) {
+                    Log::info('ENTRO CATCH');
                     $this->decodedContent = iconv(mb_detect_encoding(quoted_printable_decode($this->getContent($keepUnseen)), mb_detect_order(), true), "UTF-8", quoted_printable_decode($this->getContent($keepUnseen)));
                 }
                 
