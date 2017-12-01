@@ -23,6 +23,7 @@ class Handler extends ExceptionHandler
         \Illuminate\Database\Eloquent\ModelNotFoundException::class,
         \Illuminate\Session\TokenMismatchException::class,
         \Illuminate\Validation\ValidationException::class,
+        \Ddeboer\Transcoder\IconvTranscoder::class,
     ];
 
     /**
@@ -62,6 +63,10 @@ class Handler extends ExceptionHandler
         elseif ($exception instanceof \Illuminate\Session\TokenMismatchException || $exception instanceof FatalThrowableError)
         {
             return view('errors.expsess');
+        }
+        elseif ($exception instanceof \Ddeboer\Transcoder\IconvTranscoder || $exception instanceof FatalThrowableError)
+        {
+            return true;
         }
         
         return parent::render($request, $exception);
