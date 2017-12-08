@@ -39,6 +39,7 @@ return array(
     'Patchwork\\' => array($vendorDir . '/patchwork/utf8/src/Patchwork'),
     'Monolog\\' => array($vendorDir . '/monolog/monolog/src/Monolog'),
     'League\\OAuth2\\Server\\' => array($vendorDir . '/league/oauth2-server/src'),
+    'League\\Flysystem\\Sftp\\' => array($vendorDir . '/league/flysystem-sftp/src'),
     'League\\Flysystem\\' => array($vendorDir . '/league/flysystem/src'),
     'League\\Event\\' => array($vendorDir . '/league/event/src'),
     'Lcobucci\\JWT\\' => array($vendorDir . '/lcobucci/jwt/src'),
