@@ -87,8 +87,6 @@ class ConsoleLogger extends AbstractLogger
 
     /**
      * Returns true when any messages have been logged at error levels.
-     *
-     * @return bool
      */
     public function hasErrored()
     {
@@ -107,23 +105,15 @@ class ConsoleLogger extends AbstractLogger
      */
     private function interpolate($message, array $context)
     {
-        if (false === strpos($message, '{')) {
-            return $message;
-        }
-
-        $replacements = array();
+        // build a replacement array with braces around the context keys
+        $replace = array();
         foreach ($context as $key => $val) {
-            if (null === $val || is_scalar($val) || (\is_object($val) && method_exists($val, '__toString'))) {
-                $replacements["{{$key}}"] = $val;
-            } elseif ($val instanceof \DateTimeInterface) {
-                $replacements["{{$key}}"] = $val->format(\DateTime::RFC3339);
-            } elseif (\is_object($val)) {
-                $replacements["{{$key}}"] = '[object '.\get_class($val).']';
-            } else {
-                $replacements["{{$key}}"] = '['.\gettype($val).']';
+            if (!is_array($val) && (!is_object($val) || method_exists($val, '__toString'))) {
+                $replace[sprintf('{%s}', $key)] = $val;
             }
         }
 
-        return strtr($message, $replacements);
+        // interpolate replacement values into the message and return
+        return strtr($message, $replace);
     }
 }

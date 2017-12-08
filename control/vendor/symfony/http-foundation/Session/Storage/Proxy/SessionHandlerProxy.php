@@ -18,6 +18,9 @@ class SessionHandlerProxy extends AbstractProxy implements \SessionHandlerInterf
 {
     protected $handler;
 
+    /**
+     * @param \SessionHandlerInterface $handler
+     */
     public function __construct(\SessionHandlerInterface $handler)
     {
         $this->handler = $handler;

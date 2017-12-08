@@ -29,11 +29,6 @@ use Symfony\Component\Console\Exception\LogicException;
  */
 class Command
 {
-    /**
-     * @var string|null The default command name
-     */
-    protected static $defaultName;
-
     private $application;
     private $name;
     private $processTitle;
@@ -51,17 +46,6 @@ class Command
     private $helperSet;
 
     /**
-     * @return string|null The default command name or null when no default name is set
-     */
-    public static function getDefaultName()
-    {
-        $class = get_called_class();
-        $r = new \ReflectionProperty($class, 'defaultName');
-
-        return $class === $r->class ? static::$defaultName : null;
-    }
-
-    /**
      * @param string|null $name The name of the command; passing null means it must be set in configure()
      *
      * @throws LogicException When the command name is empty
@@ -70,11 +54,15 @@ class Command
     {
         $this->definition = new InputDefinition();
 
-        if (null !== $name || null !== $name = static::getDefaultName()) {
+        if (null !== $name) {
             $this->setName($name);
         }
 
         $this->configure();
+
+        if (!$this->name) {
+            throw new LogicException(sprintf('The command defined in "%s" cannot have an empty name.', get_class($this)));
+        }
     }
 
     /**

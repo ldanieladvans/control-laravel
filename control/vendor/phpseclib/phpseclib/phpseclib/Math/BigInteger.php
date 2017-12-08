@@ -3443,7 +3443,7 @@ class BigInteger
                     break;
                 }
             }
-            $s = 26 * $i + $j;
+            $s = 26 * $i + $j - 1;
             $r->_rshift($s);
         }
 

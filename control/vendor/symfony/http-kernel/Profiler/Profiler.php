@@ -33,17 +33,16 @@ class Profiler
     private $collectors = array();
 
     private $logger;
-    private $initiallyEnabled = true;
-    private $enabled = true;
 
     /**
-     * @param bool $enable  The initial enabled state
+     * @var bool
      */
-    public function __construct(ProfilerStorageInterface $storage, LoggerInterface $logger = null, $enable = true)
+    private $enabled = true;
+
+    public function __construct(ProfilerStorageInterface $storage, LoggerInterface $logger = null)
     {
         $this->storage = $storage;
         $this->logger = $logger;
-        $this->initiallyEnabled = $this->enabled = (bool) $enable;
     }
 
     /**
@@ -171,18 +170,6 @@ class Profiler
         return $profile;
     }
 
-    public function reset()
-    {
-        foreach ($this->collectors as $collector) {
-            if (!method_exists($collector, 'reset')) {
-                continue;
-            }
-
-            $collector->reset();
-        }
-        $this->enabled = $this->initiallyEnabled;
-    }
-
     /**
      * Gets the Collectors associated with this profiler.
      *
@@ -211,10 +198,6 @@ class Profiler
      */
     public function add(DataCollectorInterface $collector)
     {
-        if (!method_exists($collector, 'reset')) {
-            @trigger_error(sprintf('Implementing "%s" without the "reset()" method is deprecated since version 3.4 and will be unsupported in 4.0 for class "%s".', DataCollectorInterface::class, \get_class($collector)), E_USER_DEPRECATED);
-        }
-
         $this->collectors[$collector->getName()] = $collector;
     }
 
